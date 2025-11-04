@@ -1,17 +1,17 @@
 # Fairness Report - SpendSense Evaluation
 
-**Generated**: 2025-11-04T10-51-35
+**Generated**: 2025-11-04T11-03-53
 
 ## Executive Summary
 
 This report analyzes demographic parity in persona assignment across four protected characteristics: gender, income tier, region, and age. Fairness is measured by ensuring that persona assignment rates (excluding 'general' persona) are within ±10.0% of the overall mean across all demographic groups.
 
-**Overall Persona Assignment Rate**: 73.00% (excluding 'general' persona)
+**Overall Persona Assignment Rate**: 82.00% (excluding 'general' persona)
 
-**Fairness Status**: ❌ FAIL - 3 demographics outside tolerance
+**Fairness Status**: ❌ FAIL - 1 demographics outside tolerance
 
 
-**Failing Demographics**: gender, income_tier, region
+**Failing Demographics**: gender
 
 
 ---
@@ -19,55 +19,55 @@ This report analyzes demographic parity in persona assignment across four protec
 ## 1. Gender Fairness
 
 **Status**: ❌ FAIL
-**Max Deviation**: 12.13% (tolerance: ±10.0%)
+**Max Deviation**: 10.00% (tolerance: ±10.0%)
 
 | Gender | Persona Rate | Deviation from Mean | User Count | Status |
 |--------|--------------|---------------------|------------|--------|
-| female | 78.57% | +5.57% | 28 | ✅ |
-| male | 71.43% | +1.57% | 28 | ✅ |
-| non_binary | 80.95% | +7.95% | 21 | ✅ |
-| prefer_not_to_say | 60.87% | +12.13% | 23 | ❌ |
+| female | 72.00% | +10.00% | 25 | ✅ |
+| male | 88.00% | +6.00% | 25 | ✅ |
+| non_binary | 76.00% | +6.00% | 25 | ✅ |
+| prefer_not_to_say | 92.00% | +10.00% | 25 | ✅ |
 
 ---
 
 ## 2. Income Tier Fairness
 
-**Status**: ❌ FAIL
-**Max Deviation**: 11.89% (tolerance: ±10.0%)
+**Status**: ✅ PASS
+**Max Deviation**: 2.85% (tolerance: ±10.0%)
 
 | Income Tier | Persona Rate | Deviation from Mean | User Count | Status |
 |-------------|--------------|---------------------|------------|--------|
-| high | 84.38% | +11.38% | 32 | ❌ |
-| low | 75.00% | +2.00% | 32 | ✅ |
-| medium | 61.11% | +11.89% | 36 | ❌ |
+| high | 84.85% | +2.85% | 33 | ✅ |
+| low | 79.41% | +2.59% | 34 | ✅ |
+| medium | 81.82% | +0.18% | 33 | ✅ |
 
 ---
 
 ## 3. Region Fairness
 
-**Status**: ❌ FAIL
-**Max Deviation**: 15.31% (tolerance: ±10.0%)
+**Status**: ✅ PASS
+**Max Deviation**: 10.00% (tolerance: ±10.0%)
 
 | Region | Persona Rate | Deviation from Mean | User Count | Status |
 |--------|--------------|---------------------|------------|--------|
-| midwest | 57.69% | +15.31% | 26 | ❌ |
-| northeast | 77.27% | +4.27% | 22 | ✅ |
-| south | 84.62% | +11.62% | 26 | ❌ |
-| west | 73.08% | +0.08% | 26 | ✅ |
+| midwest | 72.00% | +10.00% | 25 | ✅ |
+| northeast | 84.00% | +2.00% | 25 | ✅ |
+| south | 84.00% | +2.00% | 25 | ✅ |
+| west | 88.00% | +6.00% | 25 | ✅ |
 
 ---
 
 ## 4. Age Fairness
 
 **Status**: ✅ PASS
-**Max Deviation**: 5.57% (tolerance: ±10.0%)
+**Max Deviation**: 6.24% (tolerance: ±10.0%)
 **Age Buckets**: 18-30, 31-50, 51-100
 
 | Age Bucket | Persona Rate | Deviation from Mean | User Count | Status |
 |------------|--------------|---------------------|------------|--------|
-| 18-30 | 70.83% | +2.17% | 24 | ✅ |
-| 31-50 | 67.65% | +5.35% | 34 | ✅ |
-| 51+ | 78.57% | +5.57% | 42 | ✅ |
+| 18-30 | 85.29% | +3.29% | 34 | ✅ |
+| 31-50 | 84.85% | +2.85% | 33 | ✅ |
+| 51+ | 75.76% | +6.24% | 33 | ✅ |
 
 ---
 
@@ -77,19 +77,19 @@ This report analyzes demographic parity in persona assignment across four protec
 
 | Persona | User Count |
 |---------|------------|
-| general | 27 |
-| high_utilization | 35 |
-| savings_builder | 12 |
-| subscription_heavy | 26 |
+| general | 18 |
+| high_utilization | 33 |
+| savings_builder | 18 |
+| subscription_heavy | 31 |
 
 ### Gender × Persona Cross-Tabulation
 
 | Gender | high_utilization | general | Other |
 |--------|------------------|---------|-------|
-| female | 32.1% | 21.4% | 46.4% |
-| male | 39.3% | 28.6% | 32.1% |
-| non_binary | 42.9% | 19.1% | 38.1% |
-| prefer_not_to_say | 26.1% | 39.1% | 34.8% |
+| female | 36.0% | 28.0% | 36.0% |
+| male | 36.0% | 12.0% | 52.0% |
+| non_binary | 24.0% | 24.0% | 52.0% |
+| prefer_not_to_say | 36.0% | 8.0% | 56.0% |
 
 ---
 
@@ -128,6 +128,6 @@ This report analyzes demographic parity in persona assignment across four protec
 
 ---
 
-**Report Generated**: 2025-11-04T10-51-35
+**Report Generated**: 2025-11-04T11-03-53
 **Evaluation Version**: PR #8 Evaluation Harness
 **Contact**: Casey Manos (Project Lead)
