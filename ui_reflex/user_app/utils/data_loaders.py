@@ -309,7 +309,7 @@ def get_persona_description(persona: str) -> Dict[str, str]:
         },
         "general": {
             "title": "Getting Started",
-            "description": "We're learning about your financial patterns. Keep using your accounts to unlock personalized insights!",
+            "description": "Welcome to SpendSense! Your personalized financial insights will appear as you build your transaction history.",
             "icon": "🌱",
             "color": "#A8DADC",
         },

@@ -402,6 +402,44 @@ class UserAppState(rx.State):
         return self.recommendations_data.get("recommendations", [])[:3]
 
     # ==========================================================================
+    # SIGNAL COMPUTED PROPERTIES (Safe value extraction from Var dictionaries)
+    # ==========================================================================
+
+    @rx.var
+    def credit_num_cards(self) -> int:
+        """Get number of credit cards."""
+        return int(self.signals.get("credit_num_cards", 0))
+
+    @rx.var
+    def subscriptions_count(self) -> int:
+        """Get number of subscriptions."""
+        return int(self.signals.get("sub_180d_recurring_count", 0))
+
+    @rx.var
+    def savings_net_inflow(self) -> float:
+        """Get savings net inflow amount."""
+        val = self.signals.get("sav_180d_net_inflow", 0)
+        return float(val) if val is not None else 0.0
+
+    @rx.var
+    def persona_name(self) -> str:
+        """Get persona display name."""
+        info = get_persona_description(self.persona)
+        return info.get("title", "Unknown")
+
+    @rx.var
+    def persona_description(self) -> str:
+        """Get persona description."""
+        info = get_persona_description(self.persona)
+        return info.get("description", "No description available")
+
+    @rx.var
+    def persona_icon(self) -> str:
+        """Get persona emoji icon."""
+        info = get_persona_description(self.persona)
+        return info.get("icon", "🌱")
+
+    # ==========================================================================
     # THEME COMPUTED PROPERTIES
     # ==========================================================================
 

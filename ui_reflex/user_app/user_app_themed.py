@@ -93,6 +93,7 @@ def metric_card_themed(label: str, value: str, help_text: str, color: str, theme
         rx.vstack(
             rx.text(
                 label,
+                as_="div",
                 font_size="0.875rem",
                 font_weight="500",
                 color=theme.text_secondary,
@@ -100,6 +101,7 @@ def metric_card_themed(label: str, value: str, help_text: str, color: str, theme
             ),
             rx.text(
                 value,
+                as_="div",
                 font_size="2rem",
                 font_weight="700",
                 color=color,
@@ -108,6 +110,7 @@ def metric_card_themed(label: str, value: str, help_text: str, color: str, theme
             ),
             rx.text(
                 help_text,
+                as_="div",
                 font_size="0.75rem",
                 color=theme.text_muted,
             ),
