@@ -27,8 +27,8 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 
-# Database path
-DB_PATH = Path("data/users.sqlite")
+# Database path - use absolute path to project root
+DB_PATH = Path(__file__).parent.parent / "data" / "users.sqlite"
 
 
 def grant_consent(user_id: str) -> Dict[str, Any]:
