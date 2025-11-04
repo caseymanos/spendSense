@@ -25,10 +25,10 @@ PERSONA_THRESHOLDS = {
     "subscription_heavy": {
         "min_recurring_count": 3,       # At least 3 recurring merchants
         "recurring_spend_min": 50.0,    # At least $50/month OR
-        "recurring_spend_pct": 0.10,    # 10% of total spend (decimal form: 0.10 = 10%)
+        "recurring_spend_pct": 10.0,    # 10% of total spend (percentage form to match feature output)
     },
     "savings_builder": {
-        "growth_rate_pct": 0.02,        # 2% or higher savings growth rate (decimal form: 0.02 = 2%)
+        "growth_rate_pct": 2.0,         # 2% or higher savings growth rate (percentage form to match feature output)
         "net_inflow_min": 200.0,        # At least $200 net inflow OR
         "max_utilization": 30.0,        # Credit utilization below 30% (percentage form: 30.0 = 30%)
     },

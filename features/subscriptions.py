@@ -67,8 +67,9 @@ def detect_subscriptions(
 
         # Check if pattern spans long enough to be considered recurring
         days_span = (row['last_date'] - row['first_date']).days
-        # Enforce configured lookback window for detection (e.g., 90 days)
-        if days_span > lookback_days:
+        # Require at least 30 days of history to confirm recurring pattern
+        min_span_days = 30  # At least 1 month of recurring behavior
+        if days_span < min_span_days:
             continue
 
         # Amount should be relatively consistent (low variance)

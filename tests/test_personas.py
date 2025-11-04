@@ -143,7 +143,7 @@ class TestSubscriptionHeavyPersona:
         signals = pd.Series({
             'sub_180d_recurring_count': 5,  # >= 3 ✓
             'sub_180d_monthly_spend': 75.0,  # >= $50 ✓
-            'sub_180d_share_pct': 0.08,  # 8% (below 10%)
+            'sub_180d_share_pct': 8.0,  # 8% (below 10%) (percentage format: 8.0 = 8%)
         })
 
         matches, criteria_met = check_subscription_heavy(signals)
@@ -159,7 +159,7 @@ class TestSubscriptionHeavyPersona:
         signals = pd.Series({
             'sub_180d_recurring_count': 4,  # >= 3 ✓
             'sub_180d_monthly_spend': 35.0,  # < $50
-            'sub_180d_share_pct': 0.12,  # >= 10% ✓
+            'sub_180d_share_pct': 12.0,  # >= 10% ✓ (percentage format: 12.0 = 12%)
         })
 
         matches, criteria_met = check_subscription_heavy(signals)
@@ -188,7 +188,7 @@ class TestSavingsBuilderPersona:
     def test_savings_builder_by_growth_and_low_utilization(self):
         """Test: User with 3.5% savings growth and 20% utilization."""
         signals = pd.Series({
-            'sav_180d_growth_rate_pct': 0.035,  # >= 2% (0.02) ✓
+            'sav_180d_growth_rate_pct': 3.5,  # >= 2% ✓ (percentage format: 3.5 = 3.5%)
             'sav_180d_net_inflow': 150.0,  # < $200
             'credit_max_util_pct': 20.0,  # < 30% ✓
         })
@@ -203,7 +203,7 @@ class TestSavingsBuilderPersona:
     def test_savings_builder_by_inflow_and_low_utilization(self):
         """Test: User with $250 net inflow and 15% utilization."""
         signals = pd.Series({
-            'sav_180d_growth_rate_pct': 0.01,  # < 2% (0.02)
+            'sav_180d_growth_rate_pct': 1.0,  # < 2% (percentage format: 1.0 = 1%)
             'sav_180d_net_inflow': 250.0,  # >= $200 ✓
             'credit_max_util_pct': 15.0,  # < 30% ✓
         })
@@ -218,7 +218,7 @@ class TestSavingsBuilderPersona:
     def test_savings_builder_high_utilization_blocks(self):
         """Test: User with good savings but high utilization should not match."""
         signals = pd.Series({
-            'sav_180d_growth_rate_pct': 0.05,  # >= 2% (0.02) ✓
+            'sav_180d_growth_rate_pct': 5.0,  # >= 2% ✓ (percentage format: 5.0 = 5%)
             'sav_180d_net_inflow': 300.0,  # >= $200 ✓
             'credit_max_util_pct': 75.0,  # >= 30% ✗
         })
@@ -244,7 +244,7 @@ class TestPersonaPriorityOrdering:
             'credit_min_payment_only': False,
             'credit_is_overdue': False,
             # Also matches Savings Builder (Priority 4)
-            'sav_180d_growth_rate_pct': 0.05,  # >= 2% (0.02)
+            'sav_180d_growth_rate_pct': 5.0,  # >= 2% (percentage format: 5.0 = 5%)
             'sav_180d_net_inflow': 400.0,  # >= $200
             # Note: utilization check for Savings Builder will fail due to 65% > 30%
         })
@@ -297,8 +297,8 @@ class TestEdgeCaseNoPersona:
             'inc_180d_cash_buffer_months': 3.0,  # >= 1 month
             'sub_180d_recurring_count': 1,  # < 3
             'sub_180d_monthly_spend': 15.0,  # < $50
-            'sub_180d_share_pct': 0.03,  # < 10% (0.10)
-            'sav_180d_growth_rate_pct': 0.005,  # < 2% (0.02)
+            'sub_180d_share_pct': 3.0,  # < 10% (percentage format: 3.0 = 3%)
+            'sav_180d_growth_rate_pct': 0.5,  # < 2% (percentage format: 0.5 = 0.5%)
             'sav_180d_net_inflow': 50.0,  # < $200
         })
 
