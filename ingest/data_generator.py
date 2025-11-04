@@ -80,7 +80,12 @@ class SyntheticDataGenerator:
         account_counter = 0
 
         for user in users:
-            num_accounts = int(self.rng.integers(2, 5))  # 2-4 accounts per user
+            # Bias toward 3-4 accounts so most users have a credit card available
+            # ~75% -> 3-4 accounts, ~25% -> 2 accounts
+            if float(self.rng.random()) < 0.75:
+                num_accounts = int(self.rng.choice([3, 4]))
+            else:
+                num_accounts = 2  # Checking + Savings only
 
             # Every user gets a checking account
             checking = Account(
@@ -182,7 +187,8 @@ class SyntheticDataGenerator:
             # Optional: generate monthly savings transfers for a subset of users
             savings_accs = [a for a in user_accs if a.account_subtype == AccountSubtype.SAVINGS]
             has_savings_transfer = False
-            if primary_checking and savings_accs and float(self.rng.random()) < 0.15:
+            # Increase savings transfer adoption to improve savings behavior coverage
+            if primary_checking and savings_accs and float(self.rng.random()) < 0.40:
                 monthly_transfer = float(self.rng.uniform(100, 400))
                 has_savings_transfer = True
                 for month_offset in range(self.config.months_history):
@@ -205,8 +211,8 @@ class SyntheticDataGenerator:
                     )
                     transaction_counter += 1
 
-            # Generate recurring subscriptions (reduced probability if saving-focused)
-            has_subscriptions = float(self.rng.random()) < (0.15 if has_savings_transfer else 0.45)
+            # Generate recurring subscriptions (increase adoption; still reduced if saving-focused)
+            has_subscriptions = float(self.rng.random()) < (0.35 if has_savings_transfer else 0.60)
             if has_subscriptions and primary_checking:
                 num_subs = int(self.rng.integers(3, 6))
                 selected_subs = self.rng.choice(
@@ -424,8 +430,8 @@ class SyntheticDataGenerator:
                 continue
 
             utilization = acc.balance_current / acc.balance_limit
-            if utilization <= 0.6:
-                # Skip low utilization cards to avoid noise
+            # Post interest for moderately utilized cards as well to reflect real-world behavior
+            if utilization <= 0.4:
                 continue
 
             apr = 0.0
@@ -440,8 +446,8 @@ class SyntheticDataGenerator:
             base_monthly_rate = (apr / 100.0) / 12.0
             base_interest = max(0.0, acc.balance_current * base_monthly_rate)
 
-            # With some probability, post interest each month
-            if float(self.rng.random()) < 0.6:
+            # With some probability, post interest each month (slightly higher to improve coverage)
+            if float(self.rng.random()) < 0.8:
                 for month in range(self.config.months_history):
                     post_date = self.start_date + timedelta(
                         days=30 * (month + 1) - int(self.rng.integers(1, 5))
