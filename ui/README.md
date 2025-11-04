@@ -39,6 +39,11 @@ uv run streamlit run ui/app_operator.py
 
 **Default URL:** http://localhost:8502 (or next available port)
 
+**Operator Identity (required for approvals):**
+- Enter your name in the sidebar under "Operator Identity" before approving recommendations.
+- Approvals are blocked until a non-empty operator name is provided.
+- Overrides and flags collect the operator name in their respective forms.
+
 ---
 
 ## User Dashboard Guide
@@ -344,6 +349,7 @@ All operator actions (approve/override/flag) are logged to two locations:
 - [ ] Multiple filters work together
 - [ ] Bulk consent shows preview count
 - [ ] Bulk consent grant button works
+- [ ] Bulk consent success toast shows correct count
 
 **Behavioral Signals Tab:**
 - [ ] Aggregate metrics display
@@ -358,6 +364,7 @@ All operator actions (approve/override/flag) are logged to two locations:
 - [ ] Metadata shows counts and tone check status
 - [ ] Inline guardrail checks display
 - [ ] Approve button logs to decision_log.md
+- [ ] Approve requires operator name (warning shown if missing)
 - [ ] Override form collects operator name and reason
 - [ ] Override submission logs correctly
 - [ ] Flag form works

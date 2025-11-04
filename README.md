@@ -63,6 +63,9 @@ uv run streamlit run ui/app_operator.py
 uv run uvicorn api.main:app --reload
 ```
 
+Note for Operator Dashboard:
+- Enter your name in the sidebar under "Operator Identity" before approving recommendations. Approvals are blocked until a non-empty operator name is provided to ensure every action is attributable for audit/compliance.
+
 ### Run Evaluation
 
 ```bash
