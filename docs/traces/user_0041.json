@@ -1,6 +1,6 @@
 {
   "user_id": "user_0041",
-  "timestamp": "2025-11-04T00:34:43.759841",
+  "timestamp": "2025-11-04T11:02:05.926604",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -19,30 +19,38 @@
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.55,
-        "savings_balance": 15930.53
+        "net_inflow": 210.4,
+        "growth_rate_pct": 0.46,
+        "emergency_fund_months": 4.82,
+        "savings_balance": 45849.64
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.62,
-        "savings_balance": 15930.53
+        "net_inflow": 1262.39,
+        "growth_rate_pct": 2.83,
+        "emergency_fund_months": 6.98,
+        "savings_balance": 45849.64
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 0.0,
-        "avg_utilization_pct": 0.0,
+        "max_utilization_pct": 8.02,
+        "avg_utilization_pct": 8.02,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
-        "has_interest": false,
+        "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 0,
-        "utilization_by_card": [],
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000125",
+            "mask": "2209",
+            "balance": 401.12500490747556,
+            "limit": 5000.0,
+            "utilization_pct": 8.02
+          }
+        ],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
@@ -50,33 +58,39 @@
     "income": {
       "30d": {
         "median_pay_gap_days": 2,
-        "income_variability": 0.7294,
-        "cash_buffer_months": 3.28,
+        "income_variability": 0.4386,
+        "cash_buffer_months": -0.73,
         "pay_frequency": "variable",
-        "num_paychecks": 6,
-        "avg_paycheck": 2044.87
+        "num_paychecks": 4,
+        "avg_paycheck": 647.73
       },
       "180d": {
-        "median_pay_gap_days": 5,
-        "income_variability": 0.8106,
-        "cash_buffer_months": 7.59,
-        "pay_frequency": "weekly",
-        "num_paychecks": 29,
-        "avg_paycheck": 2845.2
+        "median_pay_gap_days": 3,
+        "income_variability": 0.8555,
+        "cash_buffer_months": 9.17,
+        "pay_frequency": "variable",
+        "num_paychecks": 36,
+        "avg_paycheck": 2768.66
       }
     }
   },
   "persona_assignment": {
-    "persona": "general",
-    "criteria_met": {},
+    "persona": "savings_builder",
+    "criteria_met": {
+      "growth_rate_pct": 2.83,
+      "net_inflow": 1262.39,
+      "low_utilization": 8.02
+    },
     "all_checks": {
       "high_utilization": {},
       "variable_income": {},
       "subscription_heavy": {},
       "savings_builder": {
-        "low_utilization": 0.0
+        "growth_rate_pct": 2.83,
+        "net_inflow": 1262.39,
+        "low_utilization": 8.02
       }
     },
-    "timestamp": "2025-11-04T10:18:44.371629"
+    "timestamp": "2025-11-04T11:02:58.577477"
   }
 }

@@ -1,54 +1,65 @@
 {
   "user_id": "user_0081",
-  "timestamp": "2025-11-04T00:34:44.326263",
+  "timestamp": "2025-11-04T11:02:07.347864",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 35.98,
+        "subscription_share_pct": 0.7,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 3,
+        "monthly_recurring_spend": 36.02,
+        "subscription_share_pct": 0.57,
+        "recurring_merchants": [
+          "Apple Music",
+          "Hulu",
+          "NYT Subscription"
+        ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 127.19,
-        "growth_rate_pct": 0.58,
-        "emergency_fund_months": 4.46,
-        "savings_balance": 22135.02
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 1.99,
+        "savings_balance": 10174.71
       },
       "180d": {
-        "net_inflow": 763.12,
-        "growth_rate_pct": 3.57,
-        "emergency_fund_months": 3.73,
-        "savings_balance": 22135.02
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 1.61,
+        "savings_balance": 10174.71
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 16.72,
-        "avg_utilization_pct": 16.72,
-        "flag_30": false,
+        "max_utilization_pct": 38.37,
+        "avg_utilization_pct": 29.37,
+        "flag_30": true,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 1,
+        "num_credit_cards": 2,
         "utilization_by_card": [
           {
-            "account_id": "acc_000227",
-            "mask": "3060",
-            "balance": 2507.352668052938,
-            "limit": 15000.0,
-            "utilization_pct": 16.72
+            "account_id": "acc_000236",
+            "mask": "4337",
+            "balance": 9593.164618229546,
+            "limit": 25000.0,
+            "utilization_pct": 38.37
+          },
+          {
+            "account_id": "acc_000237",
+            "mask": "2375",
+            "balance": 5090.604508044436,
+            "limit": 25000.0,
+            "utilization_pct": 20.36
           }
         ],
         "interest_charges_present": false,
@@ -57,40 +68,34 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 2,
-        "income_variability": 0.9435,
-        "cash_buffer_months": 1.72,
+        "median_pay_gap_days": 3,
+        "income_variability": 0.7876,
+        "cash_buffer_months": 1.49,
         "pay_frequency": "variable",
-        "num_paychecks": 6,
-        "avg_paycheck": 2251.29
+        "num_paychecks": 5,
+        "avg_paycheck": 2543.48
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.8643,
-        "cash_buffer_months": 12.46,
-        "pay_frequency": "variable",
-        "num_paychecks": 40,
-        "avg_paycheck": 2738.49
+        "median_pay_gap_days": 4,
+        "income_variability": 0.6021,
+        "cash_buffer_months": 12.28,
+        "pay_frequency": "weekly",
+        "num_paychecks": 35,
+        "avg_paycheck": 3296.98
       }
     }
   },
   "persona_assignment": {
-    "persona": "savings_builder",
-    "criteria_met": {
-      "growth_rate_pct": 3.57,
-      "net_inflow": 763.12,
-      "low_utilization": 16.72
-    },
+    "persona": "general",
+    "criteria_met": {},
     "all_checks": {
       "high_utilization": {},
       "variable_income": {},
-      "subscription_heavy": {},
-      "savings_builder": {
-        "growth_rate_pct": 3.57,
-        "net_inflow": 763.12,
-        "low_utilization": 16.72
-      }
+      "subscription_heavy": {
+        "recurring_count": 3
+      },
+      "savings_builder": {}
     },
-    "timestamp": "2025-11-04T10:18:44.379523"
+    "timestamp": "2025-11-04T11:02:58.583709"
   }
 }

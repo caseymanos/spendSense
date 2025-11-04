@@ -1,54 +1,65 @@
 {
   "user_id": "user_0016",
-  "timestamp": "2025-11-04T00:34:43.397310",
+  "timestamp": "2025-11-04T11:02:05.061413",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 63.19,
+        "subscription_share_pct": 0.94,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 3,
+        "monthly_recurring_spend": 63.94,
+        "subscription_share_pct": 1.03,
+        "recurring_merchants": [
+          "LinkedIn Premium",
+          "Microsoft 365",
+          "NYT Subscription"
+        ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.56,
-        "savings_balance": 14056.7
+        "net_inflow": 356.58,
+        "growth_rate_pct": 0.73,
+        "emergency_fund_months": 7.63,
+        "savings_balance": 49021.33
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.2,
-        "savings_balance": 14056.7
+        "net_inflow": 2139.47,
+        "growth_rate_pct": 4.56,
+        "emergency_fund_months": 7.88,
+        "savings_balance": 49021.33
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 15.47,
-        "avg_utilization_pct": 15.47,
-        "flag_30": false,
+        "max_utilization_pct": 33.64,
+        "avg_utilization_pct": 26.1,
+        "flag_30": true,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 1,
+        "num_credit_cards": 2,
         "utilization_by_card": [
           {
-            "account_id": "acc_000046",
-            "mask": "5300",
-            "balance": 1546.5647323799317,
+            "account_id": "acc_000047",
+            "mask": "8853",
+            "balance": 3363.8375394849963,
             "limit": 10000.0,
-            "utilization_pct": 15.47
+            "utilization_pct": 33.64
+          },
+          {
+            "account_id": "acc_000048",
+            "mask": "2306",
+            "balance": 1856.0418463162307,
+            "limit": 10000.0,
+            "utilization_pct": 18.56
           }
         ],
         "interest_charges_present": false,
@@ -57,34 +68,41 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.5345,
-        "cash_buffer_months": 0.74,
-        "pay_frequency": "weekly",
-        "num_paychecks": 6,
-        "avg_paycheck": 1594.33
+        "median_pay_gap_days": 3,
+        "income_variability": 0.9621,
+        "cash_buffer_months": 1.71,
+        "pay_frequency": "variable",
+        "num_paychecks": 7,
+        "avg_paycheck": 2487.59
       },
       "180d": {
         "median_pay_gap_days": 3,
-        "income_variability": 0.8197,
-        "cash_buffer_months": 3.79,
+        "income_variability": 0.784,
+        "cash_buffer_months": 14.96,
         "pay_frequency": "variable",
-        "num_paychecks": 22,
-        "avg_paycheck": 2848.3
+        "num_paychecks": 44,
+        "avg_paycheck": 2963.64
       }
     }
   },
   "persona_assignment": {
-    "persona": "general",
-    "criteria_met": {},
+    "persona": "subscription_heavy",
+    "criteria_met": {
+      "recurring_count": 3,
+      "monthly_spend": 63.19
+    },
     "all_checks": {
       "high_utilization": {},
       "variable_income": {},
-      "subscription_heavy": {},
+      "subscription_heavy": {
+        "recurring_count": 3,
+        "monthly_spend": 63.19
+      },
       "savings_builder": {
-        "low_utilization": 15.47
+        "growth_rate_pct": 4.56,
+        "net_inflow": 2139.47
       }
     },
-    "timestamp": "2025-11-04T10:18:44.367661"
+    "timestamp": "2025-11-04T11:02:58.573088"
   }
 }

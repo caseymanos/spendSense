@@ -1,34 +1,40 @@
 {
   "user_id": "user_0012",
-  "timestamp": "2025-11-04T00:34:43.346025",
+  "timestamp": "2025-11-04T11:02:04.926900",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 83.16,
+        "subscription_share_pct": 1.17,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 5,
+        "monthly_recurring_spend": 83.69,
+        "subscription_share_pct": 1.39,
+        "recurring_merchants": [
+          "Amazon Prime",
+          "Apple Music",
+          "Disney+",
+          "LinkedIn Premium",
+          "Planet Fitness"
+        ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 311.84,
-        "growth_rate_pct": 1.48,
-        "emergency_fund_months": 2.8,
-        "savings_balance": 21396.86
+        "net_inflow": 311.28,
+        "growth_rate_pct": 0.78,
+        "emergency_fund_months": 5.64,
+        "savings_balance": 40247.23
       },
       "180d": {
-        "net_inflow": 1871.06,
-        "growth_rate_pct": 9.58,
-        "emergency_fund_months": 2.5,
-        "savings_balance": 21396.86
+        "net_inflow": 1867.66,
+        "growth_rate_pct": 4.87,
+        "emergency_fund_months": 6.69,
+        "savings_balance": 40247.23
       }
     },
     "credit": {
@@ -49,40 +55,42 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.7118,
-        "cash_buffer_months": 1.04,
-        "pay_frequency": "variable",
-        "num_paychecks": 7,
-        "avg_paycheck": 2223.9
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 1,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 2,
-        "income_variability": 0.8313,
-        "cash_buffer_months": 13.0,
+        "median_pay_gap_days": 3,
+        "income_variability": 0.9581,
+        "cash_buffer_months": 6.89,
         "pay_frequency": "variable",
-        "num_paychecks": 62,
-        "avg_paycheck": 2627.72
+        "num_paychecks": 35,
+        "avg_paycheck": 2217.61
       }
     }
   },
   "persona_assignment": {
-    "persona": "savings_builder",
+    "persona": "subscription_heavy",
     "criteria_met": {
-      "growth_rate_pct": 9.58,
-      "net_inflow": 1871.06,
-      "low_utilization": 0.0
+      "recurring_count": 5,
+      "monthly_spend": 83.16
     },
     "all_checks": {
       "high_utilization": {},
       "variable_income": {},
-      "subscription_heavy": {},
+      "subscription_heavy": {
+        "recurring_count": 5,
+        "monthly_spend": 83.16
+      },
       "savings_builder": {
-        "growth_rate_pct": 9.58,
-        "net_inflow": 1871.06,
+        "growth_rate_pct": 4.87,
+        "net_inflow": 1867.66,
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-04T10:18:44.367027"
+    "timestamp": "2025-11-04T11:02:58.572368"
   }
 }

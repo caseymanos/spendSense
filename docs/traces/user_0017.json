@@ -1,47 +1,41 @@
 {
   "user_id": "user_0017",
-  "timestamp": "2025-11-04T00:34:43.411195",
+  "timestamp": "2025-11-04T11:02:05.097134",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 103.31,
-        "subscription_share_pct": 1.06,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 5,
-        "monthly_recurring_spend": 103.39,
-        "subscription_share_pct": 1.14,
-        "recurring_merchants": [
-          "Dropbox",
-          "LA Fitness",
-          "LinkedIn Premium",
-          "Microsoft 365",
-          "Netflix"
-        ]
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.02,
-        "savings_balance": 19593.74
+        "net_inflow": 330.55,
+        "growth_rate_pct": 4.16,
+        "emergency_fund_months": 1.1,
+        "savings_balance": 8273.51
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.16,
-        "savings_balance": 19593.74
+        "net_inflow": 1983.28,
+        "growth_rate_pct": 31.53,
+        "emergency_fund_months": 0.95,
+        "savings_balance": 8273.51
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 47.7,
-        "avg_utilization_pct": 47.7,
-        "flag_30": true,
+        "max_utilization_pct": 26.34,
+        "avg_utilization_pct": 26.34,
+        "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
@@ -50,11 +44,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000049",
-            "mask": "7036",
-            "balance": 7154.791005328549,
-            "limit": 15000.0,
-            "utilization_pct": 47.7
+            "account_id": "acc_000051",
+            "mask": "2163",
+            "balance": 2633.7592826717814,
+            "limit": 10000.0,
+            "utilization_pct": 26.34
           }
         ],
         "interest_charges_present": false,
@@ -63,38 +57,40 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.9626,
-        "cash_buffer_months": 0.94,
+        "median_pay_gap_days": 1,
+        "income_variability": 0.7498,
+        "cash_buffer_months": 2.68,
         "pay_frequency": "variable",
-        "num_paychecks": 8,
-        "avg_paycheck": 2350.25
+        "num_paychecks": 11,
+        "avg_paycheck": 2512.94
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.8982,
-        "cash_buffer_months": 6.35,
+        "median_pay_gap_days": 2,
+        "income_variability": 0.7441,
+        "cash_buffer_months": 14.51,
         "pay_frequency": "variable",
-        "num_paychecks": 42,
-        "avg_paycheck": 2670.91
+        "num_paychecks": 69,
+        "avg_paycheck": 2595.58
       }
     }
   },
   "persona_assignment": {
-    "persona": "subscription_heavy",
+    "persona": "savings_builder",
     "criteria_met": {
-      "recurring_count": 5,
-      "monthly_spend": 103.31
+      "growth_rate_pct": 31.53,
+      "net_inflow": 1983.28,
+      "low_utilization": 26.34
     },
     "all_checks": {
       "high_utilization": {},
       "variable_income": {},
-      "subscription_heavy": {
-        "recurring_count": 5,
-        "monthly_spend": 103.31
-      },
-      "savings_builder": {}
+      "subscription_heavy": {},
+      "savings_builder": {
+        "growth_rate_pct": 31.53,
+        "net_inflow": 1983.28,
+        "low_utilization": 26.34
+      }
     },
-    "timestamp": "2025-11-04T10:18:44.367804"
+    "timestamp": "2025-11-04T11:02:58.573269"
   }
 }

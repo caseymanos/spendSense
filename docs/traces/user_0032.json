@@ -1,25 +1,24 @@
 {
   "user_id": "user_0032",
-  "timestamp": "2025-11-04T00:34:43.636132",
+  "timestamp": "2025-11-04T11:02:05.613049",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 74.14,
-        "subscription_share_pct": 0.71,
+        "monthly_recurring_spend": 80.47,
+        "subscription_share_pct": 1.46,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 5,
-        "monthly_recurring_spend": 74.29,
-        "subscription_share_pct": 0.76,
+        "recurring_count": 4,
+        "monthly_recurring_spend": 79.98,
+        "subscription_share_pct": 1.25,
         "recurring_merchants": [
-          "Apple Music",
-          "Microsoft 365",
-          "Netflix",
-          "Spotify",
-          "WSJ"
+          "Amazon Prime",
+          "Disney+",
+          "LinkedIn Premium",
+          "NYT Subscription"
         ]
       }
     },
@@ -27,14 +26,14 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.27,
-        "savings_balance": 2771.97
+        "emergency_fund_months": 4.41,
+        "savings_balance": 24397.79
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.28,
-        "savings_balance": 2771.97
+        "emergency_fund_months": 3.81,
+        "savings_balance": 24397.79
       }
     },
     "credit": {
@@ -56,39 +55,39 @@
     "income": {
       "30d": {
         "median_pay_gap_days": 2,
-        "income_variability": 0.6692,
-        "cash_buffer_months": 2.28,
+        "income_variability": 0.7202,
+        "cash_buffer_months": 3.87,
         "pay_frequency": "variable",
-        "num_paychecks": 10,
-        "avg_paycheck": 3415.5
+        "num_paychecks": 8,
+        "avg_paycheck": 3363.4
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.5843,
-        "cash_buffer_months": 9.11,
-        "pay_frequency": "variable",
-        "num_paychecks": 40,
-        "avg_paycheck": 3699.67
+        "median_pay_gap_days": 4,
+        "income_variability": 0.6181,
+        "cash_buffer_months": 12.46,
+        "pay_frequency": "weekly",
+        "num_paychecks": 33,
+        "avg_paycheck": 3579.93
       }
     }
   },
   "persona_assignment": {
     "persona": "subscription_heavy",
     "criteria_met": {
-      "recurring_count": 5,
-      "monthly_spend": 74.14
+      "recurring_count": 4,
+      "monthly_spend": 80.47
     },
     "all_checks": {
       "high_utilization": {},
       "variable_income": {},
       "subscription_heavy": {
-        "recurring_count": 5,
-        "monthly_spend": 74.14
+        "recurring_count": 4,
+        "monthly_spend": 80.47
       },
       "savings_builder": {
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-04T10:18:44.370219"
+    "timestamp": "2025-11-04T11:02:58.575723"
   }
 }

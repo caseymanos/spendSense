@@ -1,17 +1,17 @@
 # Fairness Report - SpendSense Evaluation
 
-**Generated**: 2025-11-03T23-50-34
+**Generated**: 2025-11-04T10-51-35
 
 ## Executive Summary
 
 This report analyzes demographic parity in persona assignment across four protected characteristics: gender, income tier, region, and age. Fairness is measured by ensuring that persona assignment rates (excluding 'general' persona) are within ±10.0% of the overall mean across all demographic groups.
 
-**Overall Persona Assignment Rate**: 35.00% (excluding 'general' persona)
+**Overall Persona Assignment Rate**: 73.00% (excluding 'general' persona)
 
 **Fairness Status**: ❌ FAIL - 3 demographics outside tolerance
 
 
-**Failing Demographics**: gender, region, age
+**Failing Demographics**: gender, income_tier, region
 
 
 ---
@@ -19,55 +19,55 @@ This report analyzes demographic parity in persona assignment across four protec
 ## 1. Gender Fairness
 
 **Status**: ❌ FAIL
-**Max Deviation**: 21.96% (tolerance: ±10.0%)
+**Max Deviation**: 12.13% (tolerance: ±10.0%)
 
 | Gender | Persona Rate | Deviation from Mean | User Count | Status |
 |--------|--------------|---------------------|------------|--------|
-| female | 42.86% | +7.86% | 28 | ✅ |
-| male | 39.29% | +4.29% | 28 | ✅ |
-| non_binary | 42.86% | +7.86% | 21 | ✅ |
-| prefer_not_to_say | 13.04% | +21.96% | 23 | ❌ |
+| female | 78.57% | +5.57% | 28 | ✅ |
+| male | 71.43% | +1.57% | 28 | ✅ |
+| non_binary | 80.95% | +7.95% | 21 | ✅ |
+| prefer_not_to_say | 60.87% | +12.13% | 23 | ❌ |
 
 ---
 
 ## 2. Income Tier Fairness
 
-**Status**: ✅ PASS
-**Max Deviation**: 6.87% (tolerance: ±10.0%)
+**Status**: ❌ FAIL
+**Max Deviation**: 11.89% (tolerance: ±10.0%)
 
 | Income Tier | Persona Rate | Deviation from Mean | User Count | Status |
 |-------------|--------------|---------------------|------------|--------|
-| high | 34.38% | +0.62% | 32 | ✅ |
-| low | 28.12% | +6.87% | 32 | ✅ |
-| medium | 41.67% | +6.67% | 36 | ✅ |
+| high | 84.38% | +11.38% | 32 | ❌ |
+| low | 75.00% | +2.00% | 32 | ✅ |
+| medium | 61.11% | +11.89% | 36 | ❌ |
 
 ---
 
 ## 3. Region Fairness
 
 **Status**: ❌ FAIL
-**Max Deviation**: 15.77% (tolerance: ±10.0%)
+**Max Deviation**: 15.31% (tolerance: ±10.0%)
 
 | Region | Persona Rate | Deviation from Mean | User Count | Status |
 |--------|--------------|---------------------|------------|--------|
-| midwest | 19.23% | +15.77% | 26 | ❌ |
-| northeast | 27.27% | +7.73% | 22 | ✅ |
-| south | 46.15% | +11.15% | 26 | ❌ |
-| west | 46.15% | +11.15% | 26 | ❌ |
+| midwest | 57.69% | +15.31% | 26 | ❌ |
+| northeast | 77.27% | +4.27% | 22 | ✅ |
+| south | 84.62% | +11.62% | 26 | ❌ |
+| west | 73.08% | +0.08% | 26 | ✅ |
 
 ---
 
 ## 4. Age Fairness
 
-**Status**: ❌ FAIL
-**Max Deviation**: 14.17% (tolerance: ±10.0%)
+**Status**: ✅ PASS
+**Max Deviation**: 5.57% (tolerance: ±10.0%)
 **Age Buckets**: 18-30, 31-50, 51-100
 
 | Age Bucket | Persona Rate | Deviation from Mean | User Count | Status |
 |------------|--------------|---------------------|------------|--------|
-| 18-30 | 20.83% | +14.17% | 24 | ❌ |
-| 31-50 | 41.18% | +6.18% | 34 | ✅ |
-| 51+ | 38.10% | +3.10% | 42 | ✅ |
+| 18-30 | 70.83% | +2.17% | 24 | ✅ |
+| 31-50 | 67.65% | +5.35% | 34 | ✅ |
+| 51+ | 78.57% | +5.57% | 42 | ✅ |
 
 ---
 
@@ -77,17 +77,19 @@ This report analyzes demographic parity in persona assignment across four protec
 
 | Persona | User Count |
 |---------|------------|
-| general | 65 |
+| general | 27 |
 | high_utilization | 35 |
+| savings_builder | 12 |
+| subscription_heavy | 26 |
 
 ### Gender × Persona Cross-Tabulation
 
 | Gender | high_utilization | general | Other |
 |--------|------------------|---------|-------|
-| female | 42.9% | 57.1% | 0.0% |
-| male | 39.3% | 60.7% | 0.0% |
-| non_binary | 42.9% | 57.1% | 0.0% |
-| prefer_not_to_say | 13.0% | 87.0% | 0.0% |
+| female | 32.1% | 21.4% | 46.4% |
+| male | 39.3% | 28.6% | 32.1% |
+| non_binary | 42.9% | 19.1% | 38.1% |
+| prefer_not_to_say | 26.1% | 39.1% | 34.8% |
 
 ---
 
@@ -126,6 +128,6 @@ This report analyzes demographic parity in persona assignment across four protec
 
 ---
 
-**Report Generated**: 2025-11-03T23-50-34
+**Report Generated**: 2025-11-04T10-51-35
 **Evaluation Version**: PR #8 Evaluation Harness
 **Contact**: Casey Manos (Project Lead)

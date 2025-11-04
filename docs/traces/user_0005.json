@@ -1,34 +1,36 @@
 {
   "user_id": "user_0005",
-  "timestamp": "2025-11-04T00:34:43.254990",
+  "timestamp": "2025-11-04T11:02:04.687314",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 250.24,
+        "subscription_share_pct": 2.76,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 1,
+        "monthly_recurring_spend": 92.55,
+        "subscription_share_pct": 0.96,
+        "recurring_merchants": [
+          "Olive Garden"
+        ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 130.1,
-        "growth_rate_pct": 0.48,
-        "emergency_fund_months": 3.62,
-        "savings_balance": 27007.71
+        "net_inflow": 124.01,
+        "growth_rate_pct": 0.63,
+        "emergency_fund_months": 2.27,
+        "savings_balance": 19782.67
       },
       "180d": {
-        "net_inflow": 780.59,
-        "growth_rate_pct": 2.98,
-        "emergency_fund_months": 4.22,
-        "savings_balance": 27007.71
+        "net_inflow": 744.03,
+        "growth_rate_pct": 3.91,
+        "emergency_fund_months": 2.06,
+        "savings_balance": 19782.67
       }
     },
     "credit": {
@@ -49,90 +51,42 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.9974,
-        "cash_buffer_months": -0.25,
-        "pay_frequency": "variable",
-        "num_paychecks": 4,
-        "avg_paycheck": 1393.53
+        "median_pay_gap_days": 4,
+        "income_variability": 0.6763,
+        "cash_buffer_months": 0.21,
+        "pay_frequency": "weekly",
+        "num_paychecks": 5,
+        "avg_paycheck": 2109.65
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.842,
-        "cash_buffer_months": 6.7,
-        "pay_frequency": "weekly",
-        "num_paychecks": 33,
-        "avg_paycheck": 2466.42
+        "median_pay_gap_days": 3,
+        "income_variability": 0.7257,
+        "cash_buffer_months": 7.38,
+        "pay_frequency": "variable",
+        "num_paychecks": 48,
+        "avg_paycheck": 2673.18
       }
     }
   },
   "persona_assignment": {
     "persona": "savings_builder",
     "criteria_met": {
-      "growth_rate_pct": 2.98,
-      "net_inflow": 780.59,
+      "growth_rate_pct": 3.91,
+      "net_inflow": 744.03,
       "low_utilization": 0.0
     },
     "all_checks": {
       "high_utilization": {},
       "variable_income": {},
-      "subscription_heavy": {},
+      "subscription_heavy": {
+        "monthly_spend": 250.24
+      },
       "savings_builder": {
-        "growth_rate_pct": 2.98,
-        "net_inflow": 780.59,
+        "growth_rate_pct": 3.91,
+        "net_inflow": 744.03,
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-04T10:18:44.365820"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T10:18:44.461961",
-    "persona": "savings_builder",
-    "education_count": 5,
-    "offer_count": 0,
-    "total_recommendations": 5,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "SMART Goal Setting for Financial Milestones",
-        "description": "Apply the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound) to savings goals. Includes templates for emergency funds, down payments, and retirement.",
-        "category": "goal_setting",
-        "rationale": "You've grown your savings by 3.0% recently, showing strong momentum. SMART goals help channel that discipline toward specific milestones.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "High-Yield Savings Accounts: Where to Find the Best Rates",
-        "description": "Comparison of online banks offering 4-5% APY vs. traditional banks at 0.01%. Covers FDIC insurance, account minimums, and transfer times.",
-        "category": "savings_optimization",
-        "rationale": "With $781 saved in the last 6 months, moving to a high-yield account could earn you an extra $50-150/year in interest.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Automating Your Savings: Set It and Forget It",
-        "description": "How to automate transfers from checking to savings on payday. Includes tips for starting small and gradually increasing amounts.",
-        "category": "savings_automation",
-        "rationale": "Your savings inflow of $781 over 6 months shows you're already saving consistently. Automation makes it effortless.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Certificates of Deposit (CDs): Locking In Higher Rates",
-        "description": "When CDs make sense for part of your savings. Covers laddering strategies, penalty-free CDs, and how to balance liquidity with returns.",
-        "category": "savings_optimization",
-        "rationale": "With 4.2 months of emergency savings, you may have excess funds that could earn higher rates in CDs.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "The 50/30/20 Rule: Balancing Needs, Wants, and Savings",
-        "description": "Popular budgeting framework: 50% needs, 30% wants, 20% savings/debt. Includes how to adapt percentages to your situation and track progress.",
-        "category": "goal_setting",
-        "rationale": "You're already saving $781 per month. The 50/30/20 rule can help you optimize other spending categories too.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true
+    "timestamp": "2025-11-04T11:02:58.570570"
   }
 }

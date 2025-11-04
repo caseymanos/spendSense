@@ -1,92 +1,108 @@
 {
   "user_id": "user_0090",
-  "timestamp": "2025-11-04T00:34:44.456137",
+  "timestamp": "2025-11-04T11:02:07.680626",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 393.15,
+        "subscription_share_pct": 9.84,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 1,
+        "monthly_recurring_spend": 388.66,
+        "subscription_share_pct": 6.03,
+        "recurring_merchants": [
+          "Credit Card Interest"
+        ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.49,
-        "savings_balance": 31467.81
+        "net_inflow": 130.87,
+        "growth_rate_pct": 0.89,
+        "emergency_fund_months": 3.73,
+        "savings_balance": 14892.52
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 3.47,
-        "savings_balance": 31467.81
+        "net_inflow": 785.22,
+        "growth_rate_pct": 5.57,
+        "emergency_fund_months": 2.34,
+        "savings_balance": 14892.52
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 76.76,
-        "avg_utilization_pct": 76.76,
+        "max_utilization_pct": 74.39,
+        "avg_utilization_pct": 53.42,
         "flag_30": true,
         "flag_50": true,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 1,
+        "num_credit_cards": 2,
         "utilization_by_card": [
           {
-            "account_id": "acc_000255",
-            "mask": "2188",
-            "balance": 3837.777120004445,
-            "limit": 5000.0,
-            "utilization_pct": 76.76
+            "account_id": "acc_000263",
+            "mask": "9192",
+            "balance": 18598.38914319559,
+            "limit": 25000.0,
+            "utilization_pct": 74.39
+          },
+          {
+            "account_id": "acc_000264",
+            "mask": "7709",
+            "balance": 4867.908259488424,
+            "limit": 15000.0,
+            "utilization_pct": 32.45
           }
         ],
-        "interest_charges_present": false,
-        "interest_charges_amount_60d": 0.0
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 779.75
       }
     },
     "income": {
       "30d": {
         "median_pay_gap_days": 2,
-        "income_variability": 0.7479,
-        "cash_buffer_months": 2.9,
+        "income_variability": 0.9798,
+        "cash_buffer_months": 4.95,
         "pay_frequency": "variable",
-        "num_paychecks": 14,
-        "avg_paycheck": 1953.15
+        "num_paychecks": 11,
+        "avg_paycheck": 2161.62
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.8108,
-        "cash_buffer_months": 6.17,
+        "median_pay_gap_days": 2,
+        "income_variability": 0.9067,
+        "cash_buffer_months": 9.5,
         "pay_frequency": "variable",
-        "num_paychecks": 43,
-        "avg_paycheck": 2565.16
+        "num_paychecks": 37,
+        "avg_paycheck": 2668.31
       }
     }
   },
   "persona_assignment": {
     "persona": "high_utilization",
     "criteria_met": {
-      "high_utilization": 76.76
+      "high_utilization": 74.39,
+      "interest_charges": true
     },
     "all_checks": {
       "high_utilization": {
-        "high_utilization": 76.76
+        "high_utilization": 74.39,
+        "interest_charges": true
       },
       "variable_income": {},
-      "subscription_heavy": {},
-      "savings_builder": {}
+      "subscription_heavy": {
+        "monthly_spend": 393.15
+      },
+      "savings_builder": {
+        "growth_rate_pct": 5.57,
+        "net_inflow": 785.22
+      }
     },
-    "timestamp": "2025-11-04T10:18:44.381017"
+    "timestamp": "2025-11-04T11:02:58.585077"
   }
 }

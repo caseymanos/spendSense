@@ -1,25 +1,26 @@
 {
   "user_id": "user_0015",
-  "timestamp": "2025-11-04T00:34:43.384215",
+  "timestamp": "2025-11-04T11:02:05.025946",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 73.88,
-        "subscription_share_pct": 1.27,
+        "monthly_recurring_spend": 133.76,
+        "subscription_share_pct": 2.72,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 5,
-        "monthly_recurring_spend": 73.51,
-        "subscription_share_pct": 1.13,
+        "recurring_count": 6,
+        "monthly_recurring_spend": 133.66,
+        "subscription_share_pct": 2.1,
         "recurring_merchants": [
-          "Apple Music",
-          "Disney+",
-          "Hulu",
-          "Netflix",
-          "WSJ"
+          "Adobe Creative Cloud",
+          "Amazon Prime",
+          "Credit Card Interest",
+          "Dropbox",
+          "Planet Fitness",
+          "Spotify"
         ]
       }
     },
@@ -27,81 +28,79 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 6.93,
-        "savings_balance": 40299.27
+        "emergency_fund_months": 6.3,
+        "savings_balance": 30965.64
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 6.17,
-        "savings_balance": 40299.27
+        "emergency_fund_months": 4.91,
+        "savings_balance": 30965.64
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 43.59,
-        "avg_utilization_pct": 27.32,
+        "max_utilization_pct": 89.79,
+        "avg_utilization_pct": 89.79,
         "flag_30": true,
-        "flag_50": false,
-        "flag_80": false,
+        "flag_50": true,
+        "flag_80": true,
         "min_payment_only": false,
         "has_interest": true,
-        "is_overdue": false,
-        "num_credit_cards": 2,
+        "is_overdue": true,
+        "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000042",
-            "mask": "6781",
-            "balance": 1658.2274067887429,
-            "limit": 15000.0,
-            "utilization_pct": 11.05
-          },
-          {
-            "account_id": "acc_000043",
-            "mask": "8502",
-            "balance": 4359.074648551509,
-            "limit": 10000.0,
-            "utilization_pct": 43.59
+            "account_id": "acc_000044",
+            "mask": "6546",
+            "balance": 1795.7311402301355,
+            "limit": 2000.0,
+            "utilization_pct": 89.79
           }
         ],
-        "interest_charges_present": false,
-        "interest_charges_amount_60d": 0.0
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 71.37
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.3808,
-        "cash_buffer_months": 1.06,
-        "pay_frequency": "weekly",
+        "median_pay_gap_days": 1,
+        "income_variability": 0.3849,
+        "cash_buffer_months": 2.12,
+        "pay_frequency": "variable",
         "num_paychecks": 6,
-        "avg_paycheck": 1995.5
+        "avg_paycheck": 2551.9
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.6666,
-        "cash_buffer_months": 9.67,
-        "pay_frequency": "weekly",
-        "num_paychecks": 37,
-        "avg_paycheck": 2765.5
+        "median_pay_gap_days": 3,
+        "income_variability": 0.4964,
+        "cash_buffer_months": 20.65,
+        "pay_frequency": "variable",
+        "num_paychecks": 42,
+        "avg_paycheck": 4001.3
       }
     }
   },
   "persona_assignment": {
-    "persona": "subscription_heavy",
+    "persona": "high_utilization",
     "criteria_met": {
-      "recurring_count": 5,
-      "monthly_spend": 73.88
+      "high_utilization": 89.79,
+      "interest_charges": true,
+      "is_overdue": true
     },
     "all_checks": {
-      "high_utilization": {},
+      "high_utilization": {
+        "high_utilization": 89.79,
+        "interest_charges": true,
+        "is_overdue": true
+      },
       "variable_income": {},
       "subscription_heavy": {
-        "recurring_count": 5,
-        "monthly_spend": 73.88
+        "recurring_count": 6,
+        "monthly_spend": 133.76
       },
       "savings_builder": {}
     },
-    "timestamp": "2025-11-04T10:18:44.367490"
+    "timestamp": "2025-11-04T11:02:58.572908"
   }
 }

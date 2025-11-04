@@ -1,82 +1,104 @@
 {
   "user_id": "user_0014",
-  "timestamp": "2025-11-04T00:34:43.370529",
+  "timestamp": "2025-11-04T11:02:04.993170",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 548.5,
+        "subscription_share_pct": 4.97,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 6,
+        "monthly_recurring_spend": 563.93,
+        "subscription_share_pct": 5.64,
+        "recurring_merchants": [
+          "Adobe Creative Cloud",
+          "Credit Card Interest",
+          "Disney+",
+          "LinkedIn Premium",
+          "Netflix",
+          "WSJ"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.88,
-        "savings_balance": 5856.54
+        "emergency_fund_months": 3.05,
+        "savings_balance": 31870.58
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.92,
-        "savings_balance": 5856.54
+        "emergency_fund_months": 3.19,
+        "savings_balance": 31870.58
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 0.0,
-        "avg_utilization_pct": 0.0,
-        "flag_30": false,
-        "flag_50": false,
-        "flag_80": false,
+        "max_utilization_pct": 83.06,
+        "avg_utilization_pct": 83.06,
+        "flag_30": true,
+        "flag_50": true,
+        "flag_80": true,
         "min_payment_only": false,
-        "has_interest": false,
+        "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 0,
-        "utilization_by_card": [],
-        "interest_charges_present": false,
-        "interest_charges_amount_60d": 0.0
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000041",
+            "mask": "1477",
+            "balance": 20764.487284270566,
+            "limit": 25000.0,
+            "utilization_pct": 83.06
+          }
+        ],
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 837.0899999999999
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.8421,
-        "cash_buffer_months": 1.62,
-        "pay_frequency": "weekly",
-        "num_paychecks": 6,
-        "avg_paycheck": 2914.8
+        "median_pay_gap_days": 3,
+        "income_variability": 0.7149,
+        "cash_buffer_months": 1.16,
+        "pay_frequency": "variable",
+        "num_paychecks": 7,
+        "avg_paycheck": 3220.65
       },
       "180d": {
-        "median_pay_gap_days": 5,
-        "income_variability": 0.6975,
-        "cash_buffer_months": 10.58,
+        "median_pay_gap_days": 4,
+        "income_variability": 0.7247,
+        "cash_buffer_months": 5.96,
         "pay_frequency": "weekly",
-        "num_paychecks": 31,
-        "avg_paycheck": 3387.9
+        "num_paychecks": 36,
+        "avg_paycheck": 3320.46
       }
     }
   },
   "persona_assignment": {
-    "persona": "general",
-    "criteria_met": {},
-    "all_checks": {
-      "high_utilization": {},
-      "variable_income": {},
-      "subscription_heavy": {},
-      "savings_builder": {
-        "low_utilization": 0.0
-      }
+    "persona": "high_utilization",
+    "criteria_met": {
+      "high_utilization": 83.06,
+      "interest_charges": true
     },
-    "timestamp": "2025-11-04T10:18:44.367334"
+    "all_checks": {
+      "high_utilization": {
+        "high_utilization": 83.06,
+        "interest_charges": true
+      },
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 6,
+        "monthly_spend": 548.5
+      },
+      "savings_builder": {}
+    },
+    "timestamp": "2025-11-04T11:02:58.572731"
   }
 }
