@@ -260,9 +260,18 @@ class TestOutputFileValidation:
         with open(config_path, "r") as f:
             config = json.load(f)
 
-        # Verify essential config fields
-        assert "num_users" in config, "config.json missing 'num_users' field"
-        assert "seed" in config, "config.json missing 'seed' field"
+        # Handle both old flat format and new nested format
+        if "config" in config:
+            # New nested format with operator controls
+            inner_config = config["config"]
+            assert "num_users" in inner_config, "config.json missing 'num_users' field"
+            assert "seed" in inner_config, "config.json missing 'seed' field"
+            # Optional: verify controls section exists
+            assert "controls" in config, "config.json missing 'controls' section"
+        else:
+            # Old flat format (backwards compatibility)
+            assert "num_users" in config, "config.json missing 'num_users' field"
+            assert "seed" in config, "config.json missing 'seed' field"
 
 
 class TestDocumentationQuality:
