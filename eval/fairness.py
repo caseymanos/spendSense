@@ -85,9 +85,8 @@ def calculate_fairness_parity(
     # ========================================
     # 1. GENDER FAIRNESS
     # ========================================
-    gender_rates = merged.groupby("gender", group_keys=False).apply(
-        lambda x: (x["persona"] != "general").mean()
-    )
+    # Use boolean mask grouped by demographic to avoid GroupBy.apply warnings
+    gender_rates = (merged["persona"] != "general").groupby(merged["gender"]).mean()
     gender_deviations = (gender_rates - overall_persona_rate).abs()
     gender_max_deviation = gender_deviations.max()
     gender_passes = gender_max_deviation <= tolerance
@@ -103,9 +102,7 @@ def calculate_fairness_parity(
     # ========================================
     # 2. INCOME TIER FAIRNESS
     # ========================================
-    income_rates = merged.groupby("income_tier", group_keys=False).apply(
-        lambda x: (x["persona"] != "general").mean()
-    )
+    income_rates = (merged["persona"] != "general").groupby(merged["income_tier"]).mean()
     income_deviations = (income_rates - overall_persona_rate).abs()
     income_max_deviation = income_deviations.max()
     income_passes = income_max_deviation <= tolerance
@@ -121,9 +118,7 @@ def calculate_fairness_parity(
     # ========================================
     # 3. REGION FAIRNESS
     # ========================================
-    region_rates = merged.groupby("region", group_keys=False).apply(
-        lambda x: (x["persona"] != "general").mean()
-    )
+    region_rates = (merged["persona"] != "general").groupby(merged["region"]).mean()
     region_deviations = (region_rates - overall_persona_rate).abs()
     region_max_deviation = region_deviations.max()
     region_passes = region_max_deviation <= tolerance
@@ -140,9 +135,7 @@ def calculate_fairness_parity(
     # 4. AGE FAIRNESS (with bucketing)
     # ========================================
     merged["age_bucket"] = merged["age"].apply(bucket_age)
-    age_rates = merged.groupby("age_bucket", group_keys=False).apply(
-        lambda x: (x["persona"] != "general").mean()
-    )
+    age_rates = (merged["persona"] != "general").groupby(merged["age_bucket"]).mean()
     age_deviations = (age_rates - overall_persona_rate).abs()
     age_max_deviation = age_deviations.max()
     age_passes = age_max_deviation <= tolerance
