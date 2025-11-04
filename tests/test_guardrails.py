@@ -559,6 +559,54 @@ def test_guardrails_orchestrator():
     assert result["guardrail_results"]["tone"]["passed"] is True
 
 
+def test_partner_offer_type_survives_guardrails():
+    """Ensure 'partner_offer' items are recognized and not dropped by orchestrator."""
+    # Get a user with consent
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT user_id FROM users LIMIT 1")
+        user_id = cursor.fetchone()[0]
+
+    grant_consent(user_id)
+
+    # Create recommendations including a partner_offer
+    mock_recommendations = [
+        {
+            "type": "education",
+            "title": "Build Emergency Fund",
+            "rationale": "A HYSA can help grow your savings",
+        },
+        {
+            "type": "partner_offer",
+            "title": "High-Yield Savings Account",
+            "product_type": "savings_account",
+            "rationale": "Earn higher interest on savings",
+        },
+    ]
+
+    user_context = {
+        "user_id": user_id,
+        "income_tier": "medium",
+        "signals": {},
+        "existing_account_types": {},
+    }
+
+    result = run_all_guardrails(user_id, mock_recommendations, user_context)
+
+    # Eligibility should see 1 offer and allow it
+    elig = result["guardrail_results"]["eligibility"]
+    assert elig["total_offers"] == 1
+    assert elig["eligible_count"] == 1
+    assert elig["blocked_count"] == 0
+
+    # Filtered recommendations should include the partner_offer
+    filtered = result["filtered_recommendations"]
+    titles = [r["title"] for r in filtered]
+    types = [r["type"] for r in filtered]
+    assert "High-Yield Savings Account" in titles
+    assert "partner_offer" in types
+
+
 # ============================================
 # SUMMARY TEST
 # ============================================

@@ -89,10 +89,10 @@
         "low_utilization": 28.37
       }
     },
-    "timestamp": "2025-11-03T22:45:36.812285"
+    "timestamp": "2025-11-03T22:48:25.319486"
   },
   "recommendations": {
-    "timestamp": "2025-11-03T22:45:36.865321",
+    "timestamp": "2025-11-03T22:48:25.384658",
     "persona": "high_utilization",
     "education_count": 1,
     "offer_count": 0,
@@ -162,6 +162,36 @@
     },
     {
       "timestamp": "2025-11-03T22:45:36.805973",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:48:17.253665",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:48:25.312016",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:48:25.313282",
       "decision_type": "guardrails_complete",
       "details": {
         "total_recommendations": 2,
