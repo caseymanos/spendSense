@@ -625,9 +625,6 @@ def render_recommendation_review_tab():
                             # Operator actions
                             ui.label('Operator Actions:').classes('text-sm font-semibold mb-2')
 
-                            # Get operator name from app storage
-                            operator_name_ref = {'value': app.storage.user.get('operator_name', '')}
-
                             def refresh_after_action():
                                 """Refresh view after operator action."""
                                 load_recommendations()
@@ -635,7 +632,6 @@ def render_recommendation_review_tab():
                             create_operator_actions(
                                 user_id=selected_user_id,
                                 recommendation_title=rec_title,
-                                operator_name_ref=operator_name_ref,
                                 on_action_complete=refresh_after_action,
                                 theme_classes=ThemeManager.get_button_classes()
                             )
@@ -1066,9 +1062,8 @@ async def main_page():
     if 'operator_name' not in app.storage.user:
         app.storage.user['operator_name'] = ''
 
-    # Initial data load
-    if data_cache['users'] is None:
-        refresh_data()
+    # Always refresh data on page load to reflect external changes
+    refresh_data()
 
     # Header
     with ui.header().classes('items-center justify-between px-6'):
@@ -1082,7 +1077,8 @@ async def main_page():
             # Operator name input
             ui.input(label='Operator Name', placeholder='Your name') \
                 .bind_value(app.storage.user, 'operator_name') \
-                .classes('w-48')
+                .props('outlined dense dark label-color=white input-class=text-white color=white clearable') \
+                .classes('w-64')
 
             # Refresh button
             def handle_refresh():

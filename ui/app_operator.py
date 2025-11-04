@@ -41,12 +41,15 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# Resolve project root relative to this file so paths are stable regardless of CWD
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 # Database and data paths
-DB_PATH = Path("data/users.sqlite")
-SIGNALS_PATH = Path("features/signals.parquet")
-TRANSACTIONS_PATH = Path("data/transactions.parquet")
-TRACES_DIR = Path("docs/traces")
-DECISION_LOG_PATH = Path("docs/decision_log.md")
+DB_PATH = PROJECT_ROOT / "data" / "users.sqlite"
+SIGNALS_PATH = PROJECT_ROOT / "features" / "signals.parquet"
+TRANSACTIONS_PATH = PROJECT_ROOT / "data" / "transactions.parquet"
+TRACES_DIR = PROJECT_ROOT / "docs" / "traces"
+DECISION_LOG_PATH = PROJECT_ROOT / "docs" / "decision_log.md"
 
 # Import modules
 try:

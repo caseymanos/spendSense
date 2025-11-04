@@ -96,7 +96,8 @@ class UserAppState(rx.State):
         if not self.consent_granted:
             return "Never granted"
 
-        consent_at = self.user_data.get("consent_granted_at")
+        # Prefer DB column name; fall back to any legacy key if present
+        consent_at = self.user_data.get("consent_timestamp") or self.user_data.get("consent_granted_at")
         if not consent_at:
             return "Unknown date"
 
@@ -113,7 +114,8 @@ class UserAppState(rx.State):
         if not self.consent_granted:
             return "Consent has never been granted for this user"
 
-        consent_at = self.user_data.get("consent_granted_at")
+        # Prefer DB column name; fall back to any legacy key if present
+        consent_at = self.user_data.get("consent_timestamp") or self.user_data.get("consent_granted_at")
         if not consent_at:
             return "Consent granted (date unknown)"
 
