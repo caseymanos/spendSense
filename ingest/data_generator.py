@@ -15,6 +15,7 @@ from ingest.schemas import (
     AccountType, AccountSubtype, PaymentChannel, Gender, IncomeTier, Region,
     TRANSACTION_CATEGORIES, RECURRING_MERCHANTS, GROCERY_MERCHANTS, RESTAURANT_MERCHANTS
 )
+from ingest.constants import SUBSCRIPTION_PRICES
 
 
 class SyntheticDataGenerator:
@@ -170,7 +171,13 @@ class SyntheticDataGenerator:
                     # Generate monthly recurring transaction
                     for month_offset in range(self.config.months_history):
                         trans_date = self.start_date + timedelta(days=30 * month_offset + int(self.rng.integers(1, 28)))
-                        amount = float(self.rng.uniform(5.99, 49.99))
+                        # Use fixed subscription price (with tiny jitter within 2% to be realistic)
+                        base_price = SUBSCRIPTION_PRICES.get(merchant, None)
+                        if base_price is None:
+                            amount = float(self.rng.uniform(5.99, 49.99))
+                        else:
+                            jitter = float(self.rng.uniform(-0.02, 0.02))  # +/-2%
+                            amount = round(base_price * (1.0 + jitter), 2)
 
                         transaction = Transaction(
                             transaction_id=f"txn_{transaction_counter:08d}",
@@ -242,11 +249,35 @@ class SyntheticDataGenerator:
                 transactions.append(transaction)
                 transaction_counter += 1
 
-            # Generate payroll deposits (bi-weekly pattern)
+            # Generate payroll deposits with diversified patterns
             if primary_checking:
-                num_paychecks = (self.config.months_history * 30) // 14  # Every 2 weeks
-                for i in range(num_paychecks):
-                    paycheck_date = self.start_date + timedelta(days=14 * i)
+                # Select pay pattern per user
+                patterns = ["weekly", "biweekly", "monthly", "irregular"]
+                probs = [0.2, 0.4, 0.3, 0.1]
+                pay_pattern = str(self.rng.choice(patterns, p=probs))
+
+                def paycheck_dates():
+                    if pay_pattern == "weekly":
+                        interval = 7
+                        n = (self.config.months_history * 30) // interval
+                        for i in range(n):
+                            yield self.start_date + timedelta(days=interval * i)
+                    elif pay_pattern == "biweekly":
+                        interval = 14
+                        n = (self.config.months_history * 30) // interval
+                        for i in range(n):
+                            yield self.start_date + timedelta(days=interval * i)
+                    elif pay_pattern == "monthly":
+                        for i in range(self.config.months_history):
+                            yield self.start_date + timedelta(days=30 * i + int(self.rng.integers(0, 3)))
+                    else:  # irregular: variable gaps 20-60 days
+                        day = 0
+                        total_days = self.config.months_history * 30
+                        while day < total_days:
+                            yield self.start_date + timedelta(days=day)
+                            day += int(self.rng.integers(20, 61))
+
+                for paycheck_date in paycheck_dates():
                     paycheck_amount = -float(self.rng.uniform(2000, 6000))  # Negative = credit
 
                     payroll = Transaction(

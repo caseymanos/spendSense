@@ -83,6 +83,24 @@ INCOME_DETECTION = {
     "frequency_tolerance_days": 3,  # ±3 days for bi-weekly/monthly detection
 }
 
+# Subscription prices for common recurring merchants (used by generator)
+SUBSCRIPTION_PRICES = {
+    "Netflix": 15.99,
+    "Spotify": 9.99,
+    "Amazon Prime": 14.99,
+    "Apple Music": 10.99,
+    "Hulu": 7.99,
+    "Disney+": 7.99,
+    "NYT Subscription": 17.00,
+    "WSJ": 29.99,
+    "LA Fitness": 29.99,
+    "Planet Fitness": 10.00,
+    "Adobe Creative Cloud": 52.99,
+    "Microsoft 365": 6.99,
+    "Dropbox": 9.99,
+    "LinkedIn Premium": 39.99,
+}
+
 # =============================================================================
 # RECOMMENDATION ENGINE (PRD Part 2, Section 7)
 # =============================================================================

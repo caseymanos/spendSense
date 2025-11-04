@@ -71,7 +71,7 @@ if days_span > max_allowed_span:
 **Impact:** Zero subscriptions detected despite data containing 3,676 subscription transactions
 
 **Problem:**
-Data generator creates highly variable subscription amounts that fail variance checks.
+Data generator created highly variable subscription amounts that failed variance checks.
 
 **Evidence:**
 ```
@@ -81,8 +81,14 @@ WSJ charges for user_0000:
 - Should be: $29.99, $29.99, $29.99... (consistent)
 ```
 
-**File to Fix:**
-- `ingest/data_generator.py` - Subscription transaction generation
+**Fix Applied:**
+- Added fixed prices for common recurring merchants in `ingest/constants.py` (SUBSCRIPTION_PRICES)
+- Generator now uses fixed prices with minor ±2% jitter for realism
+  - Ensures variance stays within 10% threshold for detection
+
+**Files:**
+- `ingest/constants.py`
+- `ingest/data_generator.py`
 
 **Recommended Fix:**
 Create fixed price dictionary for subscription services:
@@ -119,16 +125,11 @@ All users have bi-weekly payroll deposits (14-day intervals).
 **File to Fix:**
 - `ingest/data_generator.py` - Payroll generation logic
 
-**Recommended Fix:**
-Add income pattern diversity:
-```python
-INCOME_PATTERNS = {
-    'weekly': 0.20,      # 20% of users, 7-day intervals
-    'biweekly': 0.40,    # 40% of users, 14-day intervals (current)
-    'monthly': 0.30,     # 30% of users, 30-day intervals
-    'irregular': 0.10    # 10% of users, 20-60 day variance
-}
-```
+**Fix Applied:**
+- Added diversified pay patterns (weekly/biweekly/monthly/irregular) per user with deterministic RNG
+
+**Files:**
+- `ingest/data_generator.py`
 
 **Expected Outcome After Fix (target):**
 - A reasonable share of users assigned to variable_income based on diversified patterns
