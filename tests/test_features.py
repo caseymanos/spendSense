@@ -80,6 +80,63 @@ def test_subscription_detection_netflix_pattern():
     assert result_30d['recurring_count'] >= 0, "30-day window should process without error"
 
 
+def test_subscription_detection_enforces_lookback_window():
+    """
+    Enforce 90-day lookback: three charges spaced beyond 90 days shouldn't count.
+
+    Pattern: same merchant at now-170d, now-120d, now-10d => span=160d > 90d
+    Expectation: Not detected as recurring in 180d window.
+    """
+    user_id = "test_user_lookback"
+    now = datetime.now()
+
+    transactions = [
+        {
+            'transaction_id': 'txn_old_170',
+            'account_id': 'acc_lookback',
+            'user_id': user_id,
+            'date': now - timedelta(days=170),
+            'amount': 20.00,
+            'merchant_name': 'DriftGym',
+            'payment_channel': 'online',
+            'personal_finance_category': 'GENERAL_SERVICES',
+            'personal_finance_subcategory': 'Subscription Services',
+            'pending': False
+        },
+        {
+            'transaction_id': 'txn_old_120',
+            'account_id': 'acc_lookback',
+            'user_id': user_id,
+            'date': now - timedelta(days=120),
+            'amount': 20.00,
+            'merchant_name': 'DriftGym',
+            'payment_channel': 'online',
+            'personal_finance_category': 'GENERAL_SERVICES',
+            'personal_finance_subcategory': 'Subscription Services',
+            'pending': False
+        },
+        {
+            'transaction_id': 'txn_recent_10',
+            'account_id': 'acc_lookback',
+            'user_id': user_id,
+            'date': now - timedelta(days=10),
+            'amount': 20.00,
+            'merchant_name': 'DriftGym',
+            'payment_channel': 'online',
+            'personal_finance_category': 'GENERAL_SERVICES',
+            'personal_finance_subcategory': 'Subscription Services',
+            'pending': False
+        },
+    ]
+
+    df = pd.DataFrame(transactions)
+
+    result_180d = detect_subscriptions(df, user_id, window_days=180)
+
+    assert result_180d['recurring_count'] == 0, \
+        "Should not detect recurring when span exceeds 90-day lookback"
+
+
 # ============================================================================
 # Unit Test 2: Credit Utilization Calculation
 # ============================================================================
