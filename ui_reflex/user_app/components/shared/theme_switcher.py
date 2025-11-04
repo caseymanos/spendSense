@@ -75,13 +75,17 @@ def theme_preview_card(theme_name: str, display_name: str, preview_colors: list[
     )
 
 
-def theme_switcher(current_theme: str, on_theme_change) -> rx.Component:
+def theme_switcher(current_theme: str, on_default, on_dark, on_glass, on_minimal, on_vibrant) -> rx.Component:
     """
     Theme switcher component with preview cards for all themes.
 
     Args:
         current_theme: Current active theme name
-        on_theme_change: Function to call when theme changes (receives theme name)
+        on_default: Event handler for default theme
+        on_dark: Event handler for dark theme
+        on_glass: Event handler for glass theme
+        on_minimal: Event handler for minimal theme
+        on_vibrant: Event handler for vibrant theme
     """
     return rx.box(
         rx.vstack(
@@ -111,7 +115,7 @@ def theme_switcher(current_theme: str, on_theme_change) -> rx.Component:
                     display_name="Default Light",
                     preview_colors=["#3B82F6", "#10B981", "#F59E0B"],
                     is_active=current_theme == "default",
-                    on_click=lambda: on_theme_change("default"),
+                    on_click=on_default,
                 ),
                 # Dark Mode
                 theme_preview_card(
@@ -119,7 +123,7 @@ def theme_switcher(current_theme: str, on_theme_change) -> rx.Component:
                     display_name="Dark Mode",
                     preview_colors=["#0F172A", "#60A5FA", "#34D399"],
                     is_active=current_theme == "dark",
-                    on_click=lambda: on_theme_change("dark"),
+                    on_click=on_dark,
                 ),
                 # Glassmorphism
                 theme_preview_card(
@@ -127,7 +131,7 @@ def theme_switcher(current_theme: str, on_theme_change) -> rx.Component:
                     display_name="Glassmorphism",
                     preview_colors=["#667eea", "#764ba2", "#A78BFA"],
                     is_active=current_theme == "glass",
-                    on_click=lambda: on_theme_change("glass"),
+                    on_click=on_glass,
                 ),
                 # Minimal
                 theme_preview_card(
@@ -135,7 +139,7 @@ def theme_switcher(current_theme: str, on_theme_change) -> rx.Component:
                     display_name="Minimal",
                     preview_colors=["#1A1A1A", "#666666", "#00C853"],
                     is_active=current_theme == "minimal",
-                    on_click=lambda: on_theme_change("minimal"),
+                    on_click=on_minimal,
                 ),
                 # Vibrant
                 theme_preview_card(
@@ -143,7 +147,7 @@ def theme_switcher(current_theme: str, on_theme_change) -> rx.Component:
                     display_name="Vibrant",
                     preview_colors=["#EC4899", "#8B5CF6", "#22C55E"],
                     is_active=current_theme == "vibrant",
-                    on_click=lambda: on_theme_change("vibrant"),
+                    on_click=on_vibrant,
                 ),
                 columns="5",
                 spacing="4",

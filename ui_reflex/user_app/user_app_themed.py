@@ -378,27 +378,13 @@ def themed_dashboard(theme_config) -> rx.Component:
 
 
 def index() -> rx.Component:
-    """Main app entry point with dynamic theming."""
-    # Get current theme config based on state
-    theme_config = rx.cond(
-        UserAppState.current_theme == "dark",
-        get_theme("dark"),
-        rx.cond(
-            UserAppState.current_theme == "glass",
-            get_theme("glass"),
-            rx.cond(
-                UserAppState.current_theme == "minimal",
-                get_theme("minimal"),
-                rx.cond(
-                    UserAppState.current_theme == "vibrant",
-                    get_theme("vibrant"),
-                    get_theme("default"),
-                ),
-            ),
-        ),
-    )
+    """Main app entry point with dynamic theming.
 
-    return themed_dashboard(theme_config)
+    Uses the computed theme_config property from state to ensure consistent
+    theme resolution between server-side rendering and client-side hydration.
+    This prevents hydration errors from nested conditionals.
+    """
+    return themed_dashboard(UserAppState.theme_config)
 
 
 # Create app

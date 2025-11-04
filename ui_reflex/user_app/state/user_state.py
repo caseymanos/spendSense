@@ -339,6 +339,32 @@ class UserAppState(rx.State):
         # Auto-hide theme switcher after selection
         self.show_theme_switcher = False
 
+    # Individual theme change event handlers (prevents hydration errors from lambdas)
+    @rx.event
+    def change_theme_default(self):
+        """Change to default theme."""
+        self.change_theme("default")
+
+    @rx.event
+    def change_theme_dark(self):
+        """Change to dark theme."""
+        self.change_theme("dark")
+
+    @rx.event
+    def change_theme_glass(self):
+        """Change to glass theme."""
+        self.change_theme("glass")
+
+    @rx.event
+    def change_theme_minimal(self):
+        """Change to minimal theme."""
+        self.change_theme("minimal")
+
+    @rx.event
+    def change_theme_vibrant(self):
+        """Change to vibrant theme."""
+        self.change_theme("vibrant")
+
     # ==========================================================================
     # COMPUTED PROPERTIES
     # ==========================================================================
@@ -532,3 +558,50 @@ class UserAppState(rx.State):
     def theme_persona_savings(self) -> str:
         """Get current theme savings persona color."""
         return get_theme(self.current_theme).colors.persona_savings
+
+    @rx.var
+    def theme_config(self) -> ThemeConfig:
+        """Get the full theme configuration object for the current theme.
+
+        This computed property ensures consistent theme resolution between
+        server-side rendering and client-side hydration, preventing hydration errors.
+        """
+        return get_theme(self.current_theme)
+
+    # ==========================================================================
+    # SAFE METRIC VALUE COMPUTED VARS (Prevent hydration errors)
+    # ==========================================================================
+
+    @rx.var
+    def safe_credit_num_cards(self) -> str:
+        """Safely get credit card count as string."""
+        value = self.signals.get("credit_num_cards")
+        return str(value) if value is not None else "0"
+
+    @rx.var
+    def safe_sub_count(self) -> str:
+        """Safely get subscription count as string."""
+        value = self.signals.get("sub_180d_recurring_count")
+        return str(value) if value is not None else "0"
+
+    @rx.var
+    def safe_savings_rate(self) -> str:
+        """Safely get savings rate as string."""
+        value = self.signals.get("savings_30d_rate")
+        if value is not None:
+            try:
+                return f"{float(value):.1%}"
+            except (ValueError, TypeError):
+                return "0.0%"
+        return "0.0%"
+
+    @rx.var
+    def safe_income_cv(self) -> str:
+        """Safely get income coefficient of variation as string."""
+        value = self.signals.get("income_30d_cv")
+        if value is not None:
+            try:
+                return f"{float(value):.2f}"
+            except (ValueError, TypeError):
+                return "0.00"
+        return "0.00"

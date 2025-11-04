@@ -85,11 +85,16 @@ def user_selector() -> rx.Component:
 
 
 def metric_card_themed(label: str, value, help_text: str, color) -> rx.Component:
-    """Themed metric card."""
+    """Themed metric card.
+
+    IMPORTANT: value should be a string or Var, NOT an rx.text() component,
+    to prevent nested <p> tag hydration errors.
+    """
     return rx.box(
         rx.vstack(
             rx.text(
                 label,
+                as_="div",
                 font_size="0.875rem",
                 font_weight="500",
                 color=UserAppState.theme_text_secondary,
@@ -97,6 +102,7 @@ def metric_card_themed(label: str, value, help_text: str, color) -> rx.Component
             ),
             rx.text(
                 value,
+                as_="div",
                 font_size="2rem",
                 font_weight="700",
                 color=color,
@@ -105,6 +111,7 @@ def metric_card_themed(label: str, value, help_text: str, color) -> rx.Component
             ),
             rx.text(
                 help_text,
+                as_="div",
                 font_size="0.75rem",
                 color=UserAppState.theme_text_muted,
             ),
@@ -199,7 +206,11 @@ def index() -> rx.Component:
                 UserAppState.show_theme_switcher,
                 theme_switcher(
                     UserAppState.current_theme,
-                    UserAppState.change_theme,
+                    UserAppState.change_theme_default,
+                    UserAppState.change_theme_dark,
+                    UserAppState.change_theme_glass,
+                    UserAppState.change_theme_minimal,
+                    UserAppState.change_theme_vibrant,
                 ),
                 rx.box(),  # Empty placeholder when hidden
             ),
@@ -269,27 +280,19 @@ def index() -> rx.Component:
                         rx.grid(
                             metric_card_themed(
                                 label="Credit Cards",
-                                value=rx.cond(
-                                    UserAppState.signals.get("credit_num_cards"),
-                                    rx.text(str(UserAppState.signals["credit_num_cards"])),
-                                    rx.text("0"),
-                                ),
+                                value=UserAppState.safe_credit_num_cards,
                                 help_text="Active accounts",
                                 color=UserAppState.theme_persona_high_util,
                             ),
                             metric_card_themed(
                                 label="Subscriptions",
-                                value=rx.cond(
-                                    UserAppState.signals.get("sub_180d_recurring_count"),
-                                    rx.text(str(UserAppState.signals["sub_180d_recurring_count"])),
-                                    rx.text("0"),
-                                ),
+                                value=UserAppState.safe_sub_count,
                                 help_text="Recurring services",
                                 color=UserAppState.theme_persona_subscription,
                             ),
                             metric_card_themed(
                                 label="Savings (6mo)",
-                                value=rx.text("$0"),  # Simplified for now
+                                value="$0",  # Simplified for now - use string not rx.text
                                 help_text="Net inflow",
                                 color=UserAppState.theme_persona_savings,
                             ),
