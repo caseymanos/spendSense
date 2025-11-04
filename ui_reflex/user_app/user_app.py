@@ -5,7 +5,7 @@ from .state.user_state import UserAppState
 from .components.shared.metric_card import metric_card
 from .components.shared.persona_badge import persona_badge
 from .components.shared.status_badge import consent_badge
-from .utils.formatters import format_currency, format_percentage
+from .utils.formatters import format_currency
 from .utils import theme
 
 
@@ -15,9 +15,7 @@ def navbar() -> rx.Component:
         rx.hstack(
             # Logo and title
             rx.heading("💰 SpendSense", size="7", color=theme.PRIMARY),
-
             rx.spacer(),
-
             # Navigation buttons
             rx.button(
                 "Dashboard",
@@ -37,14 +35,12 @@ def navbar() -> rx.Component:
                 variant="ghost",
                 color_scheme="blue",
             ),
-
             # User info
             rx.hstack(
                 rx.text(UserAppState.user_name, font_weight="500", color=theme.GRAY_900),
                 consent_badge(UserAppState.consent_granted, UserAppState.consent_status_text),
                 spacing="3",
             ),
-
             spacing="4",
             width="100%",
         ),
@@ -83,7 +79,6 @@ def simple_dashboard() -> rx.Component:
     """Simplified dashboard page to get started."""
     return rx.box(
         navbar(),
-
         rx.container(
             # User selector
             rx.vstack(
@@ -93,23 +88,25 @@ def simple_dashboard() -> rx.Component:
                 align_items="flex-start",
                 margin_bottom="8",
             ),
-
             # Loading state
             rx.cond(
                 UserAppState.is_loading,
                 rx.spinner(size="3"),
-
                 # Content (when not loading)
                 rx.cond(
                     UserAppState.consent_granted,
-
                     # Dashboard content (consent granted)
                     rx.vstack(
                         # Consent info banner
                         rx.box(
                             rx.hstack(
                                 rx.vstack(
-                                    rx.heading("Data Analysis Active", size="4", color=theme.SUCCESS, margin_bottom="1"),
+                                    rx.heading(
+                                        "Data Analysis Active",
+                                        size="4",
+                                        color=theme.SUCCESS,
+                                        margin_bottom="1",
+                                    ),
                                     rx.text(
                                         UserAppState.consent_status_text,
                                         font_size=theme.FONT_SIZE_SM,
@@ -121,7 +118,7 @@ def simple_dashboard() -> rx.Component:
                                 rx.spacer(),
                                 rx.button(
                                     "Revoke Consent",
-                                    on_click=UserAppState.show_revoke_confirmation,
+                                    on_click=UserAppState.revoke_consent_confirmed,
                                     variant="outline",
                                     color_scheme="red",
                                     size="2",
@@ -136,7 +133,6 @@ def simple_dashboard() -> rx.Component:
                             border_radius="md",
                             margin_bottom="6",
                         ),
-
                         # Persona section
                         rx.box(
                             persona_badge(
@@ -146,9 +142,13 @@ def simple_dashboard() -> rx.Component:
                             ),
                             margin_bottom="6",
                         ),
-
                         # Metrics grid (simple example)
-                        rx.heading("Your Financial Snapshot", size="7", margin_bottom="4", color=theme.GRAY_900),
+                        rx.heading(
+                            "Your Financial Snapshot",
+                            size="7",
+                            margin_bottom="4",
+                            color=theme.GRAY_900,
+                        ),
                         rx.grid(
                             metric_card(
                                 label="Credit Cards",
@@ -183,9 +183,14 @@ def simple_dashboard() -> rx.Component:
                             columns="3",
                             spacing="4",
                         ),
-
                         # Recommendations preview
-                        rx.heading("Your Recommendations", size="7", margin_top="8", margin_bottom="4", color=theme.GRAY_900),
+                        rx.heading(
+                            "Your Recommendations",
+                            size="7",
+                            margin_top="8",
+                            margin_bottom="4",
+                            color=theme.GRAY_900,
+                        ),
                         rx.cond(
                             UserAppState.has_recommendations,
                             rx.vstack(
@@ -195,7 +200,11 @@ def simple_dashboard() -> rx.Component:
                                         rx.heading(rec["title"], size="5", color=theme.GRAY_900),
                                         rx.text(rec["description"], color=theme.GRAY_700),
                                         rx.box(
-                                            rx.text(rec["rationale"], font_style="italic", color=theme.GRAY_600),
+                                            rx.text(
+                                                rec["rationale"],
+                                                font_style="italic",
+                                                color=theme.GRAY_600,
+                                            ),
                                             padding="3",
                                             background=theme.INFO_LIGHT,
                                             border_radius="md",
@@ -212,14 +221,17 @@ def simple_dashboard() -> rx.Component:
                             ),
                             rx.text("No recommendations available", color=theme.GRAY_500),
                         ),
-
                         spacing="4",
                         width="100%",
                     ),
-
                     # Consent banner (no consent)
                     rx.box(
-                        rx.heading("Consent Not Yet Granted", size="7", margin_bottom="3", color=theme.GRAY_900),
+                        rx.heading(
+                            "Consent Not Yet Granted",
+                            size="7",
+                            margin_bottom="3",
+                            color=theme.GRAY_900,
+                        ),
                         rx.text(
                             UserAppState.consent_status_text,
                             margin_bottom="4",
@@ -244,7 +256,6 @@ def simple_dashboard() -> rx.Component:
                     ),
                 ),
             ),
-
             padding="8",
             max_width="1200px",
         ),

@@ -1082,8 +1082,18 @@
 
 ### Files Modified:
 - `guardrails/consent.py` - Fixed DB_PATH to use absolute path
+- `recommend/engine.py` - Fixed all paths (DB_PATH, SIGNALS_PATH, TRANSACTIONS_PATH) to use absolute paths
+- `ui_reflex/user_app/user_app.py` - Fixed revoke consent button to call handler directly
 - `requirements.txt` - Added reflex>=0.8.0
 - `.gitignore` - Added Reflex-specific directories
+
+### Bug Fixes (Post-Implementation):
+- **Fixed Consent Operations**: Updated data_loaders.py to properly extract boolean from consent operation results
+- **Fixed Revoke Consent Button**: Changed to directly call revoke_consent_confirmed() instead of non-existent modal
+- **Fixed Database Path Issues**: All backend modules now use absolute paths for worker process compatibility
+  - guardrails/consent.py: `Path(__file__).parent.parent / "data" / "users.sqlite"`
+  - recommend/engine.py: Added `_PROJECT_ROOT` and fixed all three paths
+- **Fixed Icon Names**: Updated from 'check-circle'/'x-circle' to 'check'/'x' for Reflex compatibility
 
 ### Integration Points:
 - SQLite database (users, persona_assignments, accounts)

@@ -21,9 +21,8 @@ import json
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional
 import pandas as pd
-import numpy as np
 
 from ingest.constants import (
     RECOMMENDATION_LIMITS,
@@ -39,10 +38,11 @@ from guardrails.tone import scan_recommendations
 from guardrails.eligibility import filter_predatory_products
 
 
-# Database path
-DB_PATH = Path("data/users.sqlite")
-SIGNALS_PATH = Path("features/signals.parquet")
-TRANSACTIONS_PATH = Path("data/transactions.parquet")
+# Database path - use absolute paths from project root
+_PROJECT_ROOT = Path(__file__).parent.parent
+DB_PATH = _PROJECT_ROOT / "data" / "users.sqlite"
+SIGNALS_PATH = _PROJECT_ROOT / "features" / "signals.parquet"
+TRANSACTIONS_PATH = _PROJECT_ROOT / "data" / "transactions.parquet"
 
 
 def generate_recommendations(user_id: str) -> Dict[str, Any]:
@@ -158,9 +158,7 @@ def _load_user_context(user_id: str) -> Dict[str, Any]:
     # Load from SQLite
     with sqlite3.connect(DB_PATH) as conn:
         # Get user demographics and consent
-        user_row = pd.read_sql(
-            "SELECT * FROM users WHERE user_id = ?", conn, params=(user_id,)
-        )
+        user_row = pd.read_sql("SELECT * FROM users WHERE user_id = ?", conn, params=(user_id,))
         if len(user_row) > 0:
             context["consent_granted"] = bool(user_row.iloc[0]["consent_granted"])
             context["income_tier"] = user_row.iloc[0].get("income_tier", "low")
@@ -179,9 +177,7 @@ def _load_user_context(user_id: str) -> Dict[str, Any]:
         )
         if len(persona_row) > 0:
             context["persona"] = persona_row.iloc[0]["persona"]
-            context["criteria_met"] = json.loads(
-                persona_row.iloc[0].get("criteria_met", "[]")
-            )
+            context["criteria_met"] = json.loads(persona_row.iloc[0].get("criteria_met", "[]"))
         else:
             context["persona"] = None
             context["criteria_met"] = []
@@ -234,9 +230,7 @@ def _load_user_context(user_id: str) -> Dict[str, Any]:
     return context
 
 
-def _select_education_items(
-    persona: str, user_context: Dict[str, Any]
-) -> List[Dict[str, Any]]:
+def _select_education_items(persona: str, user_context: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
     Select 3-5 educational items for the persona, filtering by eligibility.
 
@@ -282,9 +276,7 @@ def _select_education_items(
     return recommendations
 
 
-def _select_partner_offers(
-    persona: str, user_context: Dict[str, Any]
-) -> List[Dict[str, Any]]:
+def _select_partner_offers(persona: str, user_context: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
     Select 1-3 partner offers for the persona, applying strict eligibility filters.
 
@@ -453,9 +445,7 @@ def _check_offer_eligibility(
 
     # Check max existing savings accounts
     if "max_existing_savings_accounts" in eligibility:
-        existing_savings = user_context.get("existing_account_types", {}).get(
-            "savings", 0
-        )
+        existing_savings = user_context.get("existing_account_types", {}).get("savings", 0)
         if existing_savings >= eligibility["max_existing_savings_accounts"]:
             return False
 
@@ -556,7 +546,9 @@ def _format_rationale(
 
             # Get card with max utilization
             max_util_card = max(credit_cards, key=lambda c: c.get("utilization", 0))
-            replacements["{card_description}"] = f"{max_util_card.get('account_subtype', 'card')} ending in {max_util_card.get('mask', 'XXXX')}"
+            replacements["{card_description}"] = (
+                f"{max_util_card.get('account_subtype', 'card')} ending in {max_util_card.get('mask', 'XXXX')}"
+            )
             replacements["{utilization_pct}"] = f"{max_util_card.get('utilization', 0):.0f}"
             replacements["{balance}"] = f"${max_util_card.get('balance_current', 0):,.0f}"
             replacements["{limit}"] = f"${max_util_card.get('balance_limit', 0):,.0f}"
@@ -591,7 +583,9 @@ def _format_rationale(
     # Savings-related data
     replacements["{net_inflow}"] = f"${signals.get('sav_180d_net_inflow', 0):,.0f}"
     replacements["{growth_rate_pct}"] = f"{signals.get('sav_180d_growth_rate_pct', 0):.1f}"
-    replacements["{emergency_fund_months}"] = f"{signals.get('sav_180d_emergency_fund_months', 0):.1f}"
+    replacements["{emergency_fund_months}"] = (
+        f"{signals.get('sav_180d_emergency_fund_months', 0):.1f}"
+    )
 
     # Apply replacements
     formatted = template
@@ -617,9 +611,7 @@ def _append_disclaimer(recommendations: List[Dict[str, Any]]) -> List[Dict[str, 
     return recommendations
 
 
-def _save_trace(
-    user_id: str, response: Dict[str, Any], user_context: Dict[str, Any]
-) -> None:
+def _save_trace(user_id: str, response: Dict[str, Any], user_context: Dict[str, Any]) -> None:
     """
     Update user's trace JSON with recommendation details.
 
@@ -681,21 +673,23 @@ def _log_blocked_offers(
         trace_data["guardrail_decisions"] = []
 
     # Add blocked offers entry
-    trace_data["guardrail_decisions"].append({
-        "timestamp": datetime.now().isoformat(),
-        "decision_type": "offers_blocked",
-        "reason_type": reason_type,
-        "blocked_count": len(blocked_offers),
-        "blocked_offers": [
-            {
-                "title": b["offer"].get("title", "Unknown"),
-                "product_type": b["offer"].get("product_type", "Unknown"),
-                "reason": b["reason"],
-                "blocked_at": b.get("blocked_at", reason_type),
-            }
-            for b in blocked_offers
-        ],
-    })
+    trace_data["guardrail_decisions"].append(
+        {
+            "timestamp": datetime.now().isoformat(),
+            "decision_type": "offers_blocked",
+            "reason_type": reason_type,
+            "blocked_count": len(blocked_offers),
+            "blocked_offers": [
+                {
+                    "title": b["offer"].get("title", "Unknown"),
+                    "product_type": b["offer"].get("product_type", "Unknown"),
+                    "reason": b["reason"],
+                    "blocked_at": b.get("blocked_at", reason_type),
+                }
+                for b in blocked_offers
+            ],
+        }
+    )
 
     # Save trace
     with open(trace_file, "w") as f:
@@ -724,12 +718,14 @@ def _log_tone_violations(user_id: str, tone_scan: Dict[str, Any]) -> None:
         trace_data["guardrail_decisions"] = []
 
     # Add tone violations entry
-    trace_data["guardrail_decisions"].append({
-        "timestamp": datetime.now().isoformat(),
-        "decision_type": "tone_violations",
-        "violations_found": tone_scan.get("violations_found", 0),
-        "details": tone_scan.get("details", []),
-    })
+    trace_data["guardrail_decisions"].append(
+        {
+            "timestamp": datetime.now().isoformat(),
+            "decision_type": "tone_violations",
+            "violations_found": tone_scan.get("violations_found", 0),
+            "details": tone_scan.get("details", []),
+        }
+    )
 
     # Save trace
     with open(trace_file, "w") as f:
