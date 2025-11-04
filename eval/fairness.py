@@ -86,7 +86,7 @@ def calculate_fairness_parity(
     # 1. GENDER FAIRNESS
     # ========================================
     gender_rates = merged.groupby("gender", group_keys=False).apply(
-        lambda x: (x["persona"] != "general").mean(), include_groups=False
+        lambda x: (x["persona"] != "general").mean()
     )
     gender_deviations = (gender_rates - overall_persona_rate).abs()
     gender_max_deviation = gender_deviations.max()
@@ -104,7 +104,7 @@ def calculate_fairness_parity(
     # 2. INCOME TIER FAIRNESS
     # ========================================
     income_rates = merged.groupby("income_tier", group_keys=False).apply(
-        lambda x: (x["persona"] != "general").mean(), include_groups=False
+        lambda x: (x["persona"] != "general").mean()
     )
     income_deviations = (income_rates - overall_persona_rate).abs()
     income_max_deviation = income_deviations.max()
@@ -122,7 +122,7 @@ def calculate_fairness_parity(
     # 3. REGION FAIRNESS
     # ========================================
     region_rates = merged.groupby("region", group_keys=False).apply(
-        lambda x: (x["persona"] != "general").mean(), include_groups=False
+        lambda x: (x["persona"] != "general").mean()
     )
     region_deviations = (region_rates - overall_persona_rate).abs()
     region_max_deviation = region_deviations.max()
@@ -141,7 +141,7 @@ def calculate_fairness_parity(
     # ========================================
     merged["age_bucket"] = merged["age"].apply(bucket_age)
     age_rates = merged.groupby("age_bucket", group_keys=False).apply(
-        lambda x: (x["persona"] != "general").mean(), include_groups=False
+        lambda x: (x["persona"] != "general").mean()
     )
     age_deviations = (age_rates - overall_persona_rate).abs()
     age_max_deviation = age_deviations.max()
