@@ -3,7 +3,7 @@
 ## P0 Issues (FIXED - 2025-11-03)
 
 ### ✅ Issue #1: Percentage Format Mismatch
-**Status:** FIXED in commit [pending]
+**Status:** FIXED in commit 9f8ca0f
 **Severity:** P0 - Critical
 **Impact:** Thresholds were 100x too low, causing incorrect persona assignments
 
@@ -19,7 +19,8 @@
 **Fix Applied:**
 - Changed `recurring_spend_pct: 0.10 → 10.0`
 - Changed `growth_rate_pct: 0.02 → 2.0`
-- Updated all test values to percentage format
+- Credit utilization thresholds expressed as percentages (e.g., 30.0, 50.0, 80.0)
+- Tests validate percent-form comparisons in `tests/test_personas.py`
 
 **Evidence:**
 ```python
@@ -38,35 +39,27 @@ utilization = (balance / limit) * 100
 
 ---
 
-### ✅ Issue #2: Inverted Subscription Lookback Logic
-**Status:** FIXED in commit [pending]
+### ✅ Issue #2: Subscription Lookback Not Honored (and 30d regression)
+**Status:** FIXED in commits dbf310d, 3887c0d
 **Severity:** P0 - Critical
-**Impact:** Long-term recurring subscriptions were incorrectly rejected
+**Impact:** Long-span occurrences in 180d caused false positives; later a 30-day minimum span broke the 30d signal
 
 **Problem:**
-- Code rejected patterns that spanned MORE than 90 days
-- Should reject patterns that span LESS than 30 days (too short to confirm)
-- Inverted comparison operator
+- Original detector didn’t enforce the configured 90-day lookback in the 180-day window
+- A subsequent change introduced a hard 30-day minimum span, disabling the 30-day window
 
-**File Affected:**
-- `features/subscriptions.py` line 71
-
-**Fix Applied:**
+**Fix Applied (final):** Honor lookback while keeping 30-day window functional
 ```python
-# BEFORE (WRONG):
-if days_span > lookback_days:  # Rejected 146-day Adobe subscription
-    continue
-
-# AFTER (CORRECT):
-min_span_days = 30  # At least 1 month of history
-if days_span < min_span_days:  # Accept long-term patterns
+# Enforce maximum allowed span based on config and window
+days_span = (row['last_date'] - row['first_date']).days
+max_allowed_span = min(lookback_days, window_days)
+if days_span > max_allowed_span:
     continue
 ```
 
 **Impact:**
-- Users with 6-month subscription history (Adobe, Netflix, WSJ) were rejected
-- Only very recent subscriptions (<90 days) were detected
-- After fix: Long-term patterns correctly detected
+- Prevents false positives from sparse occurrences across long windows
+- Preserves short-window (30d) detection behavior
 
 ---
 
@@ -104,9 +97,9 @@ SUBSCRIPTION_PRICES = {
 }
 ```
 
-**Expected Outcome After Fix:**
-- 40-50% of users assigned to subscription_heavy persona
-- Currently: 0% (zero subscriptions detected)
+**Expected Outcome After Fix (target):**
+- A meaningful portion of users classified as subscription_heavy when consistent recurring charges exist
+- Current synthetic data under-detects due to amount variability
 
 ---
 
@@ -137,9 +130,8 @@ INCOME_PATTERNS = {
 }
 ```
 
-**Expected Outcome After Fix:**
-- 10-15% of users assigned to variable_income persona
-- Currently: 0%
+**Expected Outcome After Fix (target):**
+- A reasonable share of users assigned to variable_income based on diversified patterns
 
 ---
 
@@ -207,8 +199,8 @@ Criteria: `(growth ≥2% OR inflow ≥$200) AND utilization <30%`
 ## Summary
 
 ### Fixed (P0):
-- ✅ Percentage format inconsistency
-- ✅ Subscription lookback logic bug
+- ✅ Percentage format inconsistency (9f8ca0f)
+- ✅ Subscription lookback honored and 30d window preserved (dbf310d, 3887c0d)
 
 ### Open (P1 - Data Generation):
 - ⏳ Variable subscription amounts (blocks subscription_heavy detection)
@@ -219,11 +211,7 @@ Criteria: `(growth ≥2% OR inflow ≥$200) AND utilization <30%`
 - ⏳ Savings builder blocked by combined requirements
 
 ### Current Persona Distribution:
-- High Utilization: 67% (design as intended, but broad)
-- General: 33% (users without credit cards)
-- Variable Income: 0% (blocked by uniform bi-weekly income)
-- Subscription Heavy: 0% (blocked by variable subscription amounts)
-- Savings Builder: 0% (blocked by utilization requirement + priority order)
+- Note: Distribution varies with data generation. Prior runs showed high share for high_utilization and low/zero for others due to generator constraints noted above.
 
 ### Test Status:
 - 39/39 tests passing ✅
