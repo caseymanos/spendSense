@@ -166,7 +166,7 @@ def recommendation_card_themed(rec) -> rx.Component:
             rx.text(rec["description"], color=UserAppState.theme_text_secondary, margin_bottom="2"),
             rx.box(
                 rx.text(
-                    "💡 " + rec["rationale"],
+                    f"💡 {rec['rationale']}",
                     font_style="italic",
                     color=UserAppState.theme_text_secondary,
                 ),

@@ -39,7 +39,7 @@ def theme_preview_card(theme_name: str, display_name: str, preview_colors: list[
             # Theme name
             rx.text(
                 display_name,
-                font_weight="600" if is_active else "500",
+                font_weight=rx.cond(is_active, "600", "500"),
                 font_size="0.875rem",
                 color=rx.cond(is_active, "#3B82F6", "#4B5563"),
             ),
@@ -91,14 +91,6 @@ def theme_switcher(current_theme: str, on_theme_change) -> rx.Component:
                     "🎨 Choose Your Theme",
                     size="6",
                     color="#111827",
-                ),
-                rx.spacer(),
-                rx.button(
-                    "×",
-                    variant="ghost",
-                    size="2",
-                    color_scheme="gray",
-                    on_click=lambda: None,  # Close handler would go here
                 ),
                 width="100%",
                 align_items="center",
