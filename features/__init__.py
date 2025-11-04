@@ -47,6 +47,61 @@ def load_data(db_path: str = "data/users.sqlite", parquet_path: str = "data/tran
     return transactions_df, accounts_df, liabilities_df, users_df
 
 
+def _detect_interest_charges(transactions_df: pd.DataFrame, accounts_df: pd.DataFrame, user_id: str, window_days: int = 60) -> Dict[str, float | bool]:
+    """
+    Detect posted interest/finance charges on the user's credit accounts.
+
+    Heuristic: look back `window_days`, filter to user's credit account_ids and
+    debits whose merchant/category suggest interest/finance charges.
+
+    Returns a dict with:
+    - present: bool
+    - amount_sum: float (sum over window)
+    """
+    from datetime import datetime, timedelta
+
+    cutoff_date = datetime.now() - timedelta(days=window_days)
+
+    # Identify user's credit account_ids
+    credit_ids = (
+        accounts_df[
+            (accounts_df['user_id'] == user_id)
+        ]
+        .query("account_type == 'credit' and account_subtype == 'credit card'")
+        .get('account_id', pd.Series(dtype=str))
+        .tolist()
+    )
+
+    if len(credit_ids) == 0 or 'merchant_name' not in transactions_df.columns:
+        return {"present": False, "amount_sum": 0.0}
+
+    user_txns = transactions_df[
+        (transactions_df['user_id'] == user_id) &
+        (transactions_df['date'] >= cutoff_date) &
+        (transactions_df['account_id'].isin(credit_ids)) &
+        (transactions_df['amount'] > 0)  # Debits (charges)
+    ].copy()
+
+    if len(user_txns) == 0:
+        return {"present": False, "amount_sum": 0.0}
+
+    # Match by merchant text or category hints
+    text = user_txns['merchant_name'].astype('string').str.lower()
+    cat = user_txns.get('personal_finance_category', pd.Series([], dtype='string')).astype('string').str.lower()
+
+    interest_mask = (
+        text.str.contains('interest', na=False) |
+        text.str.contains('finance charge', na=False) |
+        text.str.contains('finance fee', na=False) |
+        cat.str.contains('fee', na=False) |
+        cat.str.contains('interest', na=False)
+    )
+
+    hits = user_txns[interest_mask]
+    amount_sum = float(hits['amount'].sum()) if len(hits) > 0 else 0.0
+    return {"present": amount_sum > 0, "amount_sum": amount_sum}
+
+
 def compute_all_signals(user_id: str, transactions_df: pd.DataFrame, accounts_df: pd.DataFrame, liabilities_df: pd.DataFrame) -> Dict:
     """
     Compute all behavioral signals for a single user.
@@ -69,6 +124,11 @@ def compute_all_signals(user_id: str, transactions_df: pd.DataFrame, accounts_df
     subscription_signals = compute_subscription_signals(transactions_df, user_id)
     savings_signals = compute_savings_signals(transactions_df, accounts_df, user_id)
     credit_signals = compute_credit_signals(accounts_df, liabilities_df, user_id)
+
+    # Augment credit signals with posted interest detection (spec-accurate)
+    interest = _detect_interest_charges(transactions_df, accounts_df, user_id)
+    credit_signals.setdefault('current', {})['interest_charges_present'] = bool(interest['present'])
+    credit_signals['current']['interest_charges_amount_60d'] = float(interest['amount_sum'])
     income_signals = compute_income_signals(transactions_df, user_id)
 
     return {
@@ -150,6 +210,7 @@ def flatten_signals_for_parquet(signals: Dict) -> Dict:
     flat['credit_flag_80'] = credit_signals.get('flag_80', False)
     flat['credit_min_payment_only'] = credit_signals.get('min_payment_only', False)
     flat['credit_has_interest'] = credit_signals.get('has_interest', False)
+    flat['credit_interest_charges'] = credit_signals.get('interest_charges_present', False)
     flat['credit_is_overdue'] = credit_signals.get('is_overdue', False)
     flat['credit_num_cards'] = credit_signals.get('num_credit_cards', 0)
 

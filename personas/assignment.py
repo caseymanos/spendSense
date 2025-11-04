@@ -35,10 +35,10 @@ def check_high_utilization(signals: pd.Series) -> Tuple[bool, Dict]:
     if utilization >= PERSONA_THRESHOLDS['high_utilization']['utilization_threshold']:
         criteria_met['high_utilization'] = float(utilization)
 
-    # Check interest > 0
-    has_interest = signals.get('credit_has_interest', False)
-    if has_interest:
-        criteria_met['has_interest'] = True
+    # Interest charges posted > 0 (spec-accurate)
+    interest_charges = signals.get('credit_interest_charges', False)
+    if interest_charges:
+        criteria_met['interest_charges'] = True
 
     # Check min-payment-only pattern
     min_payment_only = signals.get('credit_min_payment_only', False)
@@ -100,14 +100,14 @@ def check_subscription_heavy(signals: pd.Series) -> Tuple[bool, Dict]:
     """
     criteria_met = {}
 
-    # Check recurring count ≥ 3 (using 180-day window)
+    # Check recurring count ≥ 3 (detector enforces 90d cadence)
     recurring_count = signals.get('sub_180d_recurring_count', 0)
     if recurring_count >= PERSONA_THRESHOLDS['subscription_heavy']['min_recurring_count']:
         criteria_met['recurring_count'] = int(recurring_count)
 
-    # Check recurring spend ≥ $50 OR ≥ 10%
-    monthly_spend = signals.get('sub_180d_monthly_spend', 0)
-    share_pct = signals.get('sub_180d_share_pct', 0)
+    # Check 30d window for monthly spend/share per spec
+    monthly_spend = signals.get('sub_30d_monthly_spend', signals.get('sub_180d_monthly_spend', 0))
+    share_pct = signals.get('sub_30d_share_pct', signals.get('sub_180d_share_pct', 0))
 
     if monthly_spend >= PERSONA_THRESHOLDS['subscription_heavy']['recurring_spend_min']:
         criteria_met['monthly_spend'] = float(monthly_spend)

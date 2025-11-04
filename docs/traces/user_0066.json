@@ -1,6 +1,6 @@
 {
   "user_id": "user_0066",
-  "timestamp": "2025-11-03T20:58:01.222690",
+  "timestamp": "2025-11-04T00:26:47.031902",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -57,7 +57,9 @@
             "limit": 10000.0,
             "utilization_pct": 87.06
           }
-        ]
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
@@ -83,13 +85,11 @@
     "persona": "high_utilization",
     "criteria_met": {
       "high_utilization": 87.06,
-      "has_interest": true,
       "is_overdue": true
     },
     "all_checks": {
       "high_utilization": {
         "high_utilization": 87.06,
-        "has_interest": true,
         "is_overdue": true
       },
       "variable_income": {
@@ -98,6 +98,6 @@
       "subscription_heavy": {},
       "savings_builder": {}
     },
-    "timestamp": "2025-11-03T22:50:32.206241"
+    "timestamp": "2025-11-04T00:26:52.191392"
   }
 }

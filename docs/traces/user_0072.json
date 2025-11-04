@@ -1,6 +1,6 @@
 {
   "user_id": "user_0072",
-  "timestamp": "2025-11-03T20:58:01.264771",
+  "timestamp": "2025-11-04T00:26:47.081838",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -42,7 +42,9 @@
         "has_interest": false,
         "is_overdue": false,
         "num_credit_cards": 0,
-        "utilization_by_card": []
+        "utilization_by_card": [],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
@@ -77,6 +79,6 @@
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-03T22:50:32.207489"
+    "timestamp": "2025-11-04T00:26:52.192265"
   }
 }

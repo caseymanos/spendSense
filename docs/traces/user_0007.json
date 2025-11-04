@@ -1,6 +1,6 @@
 {
   "user_id": "user_0007",
-  "timestamp": "2025-11-03T20:58:00.803745",
+  "timestamp": "2025-11-04T00:26:46.491416",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -57,7 +57,9 @@
             "limit": 5000.0,
             "utilization_pct": 29.83
           }
-        ]
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
@@ -79,27 +81,8 @@
       }
     }
   },
-  "persona_assignment": {
-    "persona": "high_utilization",
-    "criteria_met": {
-      "high_utilization": 62.15,
-      "has_interest": true
-    },
-    "all_checks": {
-      "high_utilization": {
-        "high_utilization": 62.15,
-        "has_interest": true
-      },
-      "variable_income": {
-        "cash_buffer_months": 0.0
-      },
-      "subscription_heavy": {},
-      "savings_builder": {}
-    },
-    "timestamp": "2025-11-03T22:50:32.192806"
-  },
   "recommendations": {
-    "timestamp": "2025-11-03T22:50:32.311178",
+    "timestamp": "2025-11-04T00:26:52.292386",
     "persona": "high_utilization",
     "education_count": 5,
     "offer_count": 2,
@@ -163,5 +146,22 @@
       }
     ],
     "consent_granted": true
+  },
+  "persona_assignment": {
+    "persona": "high_utilization",
+    "criteria_met": {
+      "high_utilization": 62.15
+    },
+    "all_checks": {
+      "high_utilization": {
+        "high_utilization": 62.15
+      },
+      "variable_income": {
+        "cash_buffer_months": 0.0
+      },
+      "subscription_heavy": {},
+      "savings_builder": {}
+    },
+    "timestamp": "2025-11-04T00:26:52.181417"
   }
 }

@@ -351,6 +351,7 @@ def test_full_feature_pipeline(temp_data_dir):
     # Check for credit signal columns
     assert 'credit_max_util_pct' in signals_df.columns, "Should have credit signals"
     assert 'credit_flag_30' in signals_df.columns, "Should have utilization flags"
+    assert 'credit_interest_charges' in signals_df.columns, "Should include interest charges flag"
 
     # Check for income signal columns
     assert 'inc_30d_median_pay_gap_days' in signals_df.columns, "Should have 30d income signals"

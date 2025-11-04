@@ -1,0 +1,229 @@
+{
+  "metadata": {
+    "timestamp": "2025-11-03T23-50-34",
+    "version": "PR #8 Evaluation Harness",
+    "total_users": 100,
+    "total_personas": 100,
+    "total_traces": 101
+  },
+  "metrics": {
+    "coverage": {
+      "value": 0.0,
+      "target": 100.0,
+      "passes": false,
+      "users_with_both": 0
+    },
+    "explainability": {
+      "value": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "total_recommendations": 39
+    },
+    "relevance": {
+      "value": 100.0,
+      "target": 90.0,
+      "passes": true,
+      "total_recommendations": 38
+    },
+    "latency": {
+      "value": 0.010158279095776379,
+      "target": 5.0,
+      "passes": true,
+      "mean_seconds": 0.0102,
+      "p95_seconds": 0.0111
+    },
+    "auditability": {
+      "value": 97.0,
+      "target": 100.0,
+      "passes": false,
+      "completeness_percentage": 97.0
+    },
+    "fairness": {
+      "value": false,
+      "target": true,
+      "passes": false,
+      "overall_persona_rate": 0.35,
+      "failing_demographics": [
+        "gender",
+        "region",
+        "age"
+      ]
+    }
+  },
+  "detailed_results": {
+    "coverage": {
+      "total_users": 100,
+      "users_with_meaningful_persona": 35,
+      "users_with_3_behaviors": 0,
+      "users_with_both": 0,
+      "coverage_percentage": 0.0,
+      "target": 100.0,
+      "passes": false
+    },
+    "explainability": {
+      "total_recommendations": 39,
+      "recommendations_with_rationale": 39,
+      "recommendations_without_rationale": 0,
+      "explainability_percentage": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "missing_rationales_sample": []
+    },
+    "relevance": {
+      "total_recommendations": 38,
+      "relevant_recommendations": 38,
+      "irrelevant_recommendations": 0,
+      "relevance_percentage": 100.0,
+      "target": 90.0,
+      "passes": true,
+      "irrelevant_sample": []
+    },
+    "latency": {
+      "users_tested": 10,
+      "mean_seconds": 0.0102,
+      "median_seconds": 0.0101,
+      "p95_seconds": 0.0111,
+      "p99_seconds": 0.0112,
+      "min_seconds": 0.0091,
+      "max_seconds": 0.0112,
+      "target": 5.0,
+      "passes": true
+    },
+    "auditability": {
+      "total_users": 100,
+      "users_with_trace_file": 100,
+      "users_with_complete_trace": 97,
+      "auditability_percentage": 100.0,
+      "completeness_percentage": 97.0,
+      "target": 100.0,
+      "passes": false,
+      "incomplete_traces_sample": [
+        {
+          "user_id": "user_0001",
+          "consent": true,
+          "has_signals": true,
+          "has_persona": true,
+          "has_recommendations": false
+        },
+        {
+          "user_id": "user_0008",
+          "consent": true,
+          "has_signals": true,
+          "has_persona": true,
+          "has_recommendations": false
+        },
+        {
+          "user_id": "user_0009",
+          "consent": true,
+          "has_signals": true,
+          "has_persona": true,
+          "has_recommendations": false
+        }
+      ]
+    },
+    "fairness": {
+      "overall_persona_rate": 0.35,
+      "tolerance": 0.1,
+      "demographics": {
+        "gender": {
+          "passes": false,
+          "max_deviation": 0.2196,
+          "group_rates": {
+            "female": 0.4286,
+            "male": 0.3929,
+            "non_binary": 0.4286,
+            "prefer_not_to_say": 0.1304
+          },
+          "group_counts": {
+            "male": 28,
+            "female": 28,
+            "prefer_not_to_say": 23,
+            "non_binary": 21
+          },
+          "deviations": {
+            "female": 0.0786,
+            "male": 0.0429,
+            "non_binary": 0.0786,
+            "prefer_not_to_say": 0.2196
+          }
+        },
+        "income_tier": {
+          "passes": true,
+          "max_deviation": 0.0687,
+          "group_rates": {
+            "high": 0.3438,
+            "low": 0.2812,
+            "medium": 0.4167
+          },
+          "group_counts": {
+            "medium": 36,
+            "low": 32,
+            "high": 32
+          },
+          "deviations": {
+            "high": 0.0062,
+            "low": 0.0687,
+            "medium": 0.0667
+          }
+        },
+        "region": {
+          "passes": false,
+          "max_deviation": 0.1577,
+          "group_rates": {
+            "midwest": 0.1923,
+            "northeast": 0.2727,
+            "south": 0.4615,
+            "west": 0.4615
+          },
+          "group_counts": {
+            "south": 26,
+            "midwest": 26,
+            "west": 26,
+            "northeast": 22
+          },
+          "deviations": {
+            "midwest": 0.1577,
+            "northeast": 0.0773,
+            "south": 0.1115,
+            "west": 0.1115
+          }
+        },
+        "age": {
+          "passes": false,
+          "max_deviation": 0.1417,
+          "group_rates": {
+            "18-30": 0.2083,
+            "31-50": 0.4118,
+            "51+": 0.381
+          },
+          "group_counts": {
+            "51+": 42,
+            "31-50": 34,
+            "18-30": 24
+          },
+          "deviations": {
+            "18-30": 0.1417,
+            "31-50": 0.0618,
+            "51+": 0.031
+          },
+          "buckets": [
+            "18-30",
+            "31-50",
+            "51-100"
+          ]
+        }
+      },
+      "all_demographics_pass": false,
+      "failing_demographics": [
+        "gender",
+        "region",
+        "age"
+      ]
+    }
+  },
+  "summary": {
+    "all_metrics_pass": false,
+    "metrics_passing": 3,
+    "metrics_total": 6
+  }
+}

@@ -430,17 +430,10 @@ def render_overview_tab():
         fig.update_layout(margin=dict(l=10, r=10, t=10, b=10))
         st.plotly_chart(fig, use_container_width=True)
 
-        # Table with details
+        # Persona definitions
         col1, col2 = st.columns(2)
 
         with col1:
-            st.dataframe(
-                persona_df.style.format({"Count": "{:,.0f}"}),
-                hide_index=True,
-                use_container_width=True
-            )
-
-        with col2:
             # Persona descriptions
             persona_descriptions = {
                 "High Utilization": "Credit utilization ≥50% or carrying interest",
@@ -454,6 +447,13 @@ def render_overview_tab():
             for persona, desc in persona_descriptions.items():
                 if persona.lower().replace(" ", "_") in persona_dist:
                     st.caption(f"**{persona}:** {desc}")
+        with col2:
+            # Optional: show counts in a compact table
+            st.dataframe(
+                persona_df.style.format({"Count": "{:,.0f}"}),
+                hide_index=True,
+                use_container_width=True
+            )
     else:
         st.info("No persona assignments found. Run feature pipeline and persona assignment.")
 
@@ -733,7 +733,8 @@ def render_signals_tab():
                 "Count": util_counts.values
             })
 
-            col1, col2 = st.columns([2, 1])
+            # Show chart only; remove duplicate table
+            col1, _ = st.columns([2, 1])
 
             with col1:
                 # Plotly Express bar chart
@@ -747,9 +748,6 @@ def render_signals_tab():
                 fig_util.update_traces(textposition="outside")
                 fig_util.update_layout(margin=dict(l=10, r=10, t=10, b=10))
                 st.plotly_chart(fig_util, use_container_width=True)
-
-            with col2:
-                st.dataframe(util_df, hide_index=True, use_container_width=True)
 
     st.divider()
 
@@ -767,7 +765,8 @@ def render_signals_tab():
                 "Count": sub_counts.values
             })
 
-            col1, col2 = st.columns([2, 1])
+            # Show chart only; remove duplicate table
+            col1, _ = st.columns([2, 1])
 
             with col1:
                 # Plotly Express bar chart
@@ -781,9 +780,6 @@ def render_signals_tab():
                 fig_sub.update_traces(textposition="outside")
                 fig_sub.update_layout(margin=dict(l=10, r=10, t=10, b=10))
                 st.plotly_chart(fig_sub, use_container_width=True)
-
-            with col2:
-                st.dataframe(sub_df, hide_index=True, use_container_width=True)
 
     st.divider()
 

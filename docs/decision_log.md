@@ -1199,6 +1199,206 @@ Reason: Description
 
 ---
 
+## PR #8: Evaluation Harness
+
+### Date: 2025-11-03
+
+---
+
+### Decision 51: Coverage Excludes 'General' Persona
+
+**Context:** Coverage metric measures "% of users with meaningful persona + ≥3 behaviors".
+
+**Decision:** Exclude users with 'general' persona from coverage numerator.
+
+**Rationale:**
+- 'general' persona is assigned when NO persona criteria are met (catch-all default)
+- Coverage should measure meaningful behavioral classification, not catch-all assignment
+- A user with 'general' persona by definition has insufficient behavioral signals
+- PRD states "≥1 persona" implies a substantive classification, not a default
+
+**Calculation:**
+```python
+coverage = (users_with_non_general_persona_AND_3behaviors / total_users) * 100
+```
+
+**Expected Result:** ~67% coverage (67 high_utilization users from current data), not 100%.
+
+**Alternatives Considered:**
+- Include 'general' persona: Inflates coverage metric artificially
+- No default persona: Fails gracefully but loses audit trail for unclassified users
+
+**Impact:** Coverage metric accurately reflects behavioral signal quality, not just persona table population.
+
+---
+
+### Decision 52: Age Bucketing Strategy (3 Ranges)
+
+**Context:** Fairness analysis requires age grouping for meaningful demographic parity.
+
+**Decision:** Use 3 life-stage age buckets: **18-30**, **31-50**, **51+**.
+
+**Rationale:**
+- **18-30**: Young adults (early career, student loans, building credit, subscription-heavy)
+- **31-50**: Mid-career (mortgages, family finances, retirement planning, savings focus)
+- **51+**: Pre-retirement/retirement (wealth preservation, fixed income, lower utilization)
+- Sample size: 100 users → ~33 per bucket ensures statistical validity
+- Life-stage relevance: Financial behaviors differ meaningfully across these ranges
+
+**Alternatives Considered:**
+- 4 buckets (18-29, 30-44, 45-59, 60+): Smaller sample sizes (~25 users/bucket)
+- 5 buckets (very granular): Risk of <20 users/bucket, insufficient for parity checks
+- 2 buckets (18-40, 41+): Too coarse, misses mid-career dynamics
+
+**Impact:** Fairness metric can detect age-based bias without over-segmenting sample.
+
+---
+
+### Decision 53: Timestamped Outputs with Symlinks
+
+**Context:** Need longitudinal tracking of evaluation results while maintaining easy access to latest run.
+
+**Decision:** Generate timestamped files + symlinks to latest:
+- `eval/results_2025-11-03T15-30-00.json` → `eval/results.json` (symlink)
+- `eval/results_2025-11-03T15-30-00.csv` → `eval/results.csv` (symlink)
+
+**Rationale:**
+- **Historical tracking**: All runs preserved for comparison over time
+- **Easy access**: Operator dashboard / scripts can always read `eval/results.json` (latest)
+- **Git-friendly**: Symlinks don't bloat repository, timestamped files can be `.gitignore`d
+- **Timestamp format**: ISO 8601 (`YYYY-MM-DDTHH-MM-SS`) ensures sortable filenames
+
+**Alternatives Considered:**
+- Overwrite single file: No historical tracking
+- Timestamped only (no symlinks): Requires manual "find latest" logic
+- Database storage: Over-engineered for MVP
+
+**Impact:** Evaluation history preserved; easy integration with dashboards/CI.
+
+---
+
+### Decision 54: Relevance Scoring via Content Category Alignment
+
+**Context:** Relevance metric measures "persona → recommendation alignment" but content catalog has diverse items.
+
+**Decision:** Use rule-based category mapping:
+- **high_utilization** → `credit_basics`, `debt_paydown`, `payment_automation`, `counseling`
+- **variable_income** → `budgeting`, `emergency_fund`, `tax_planning`
+- **subscription_heavy** → `subscription_management`
+- **savings_builder** → `goal_setting`, `savings_optimization`, `savings_automation`
+
+**Rationale:**
+- Deterministic: No ML/NLP needed for MVP
+- Auditable: Clear rules for why a recommendation is "relevant"
+- Based on content catalog structure from PR #4 (`content_catalog.py`)
+- Partner offers included (e.g., `budgeting_app` for variable_income)
+
+**Calculation:**
+```python
+relevance = (recommendations_with_matching_category / total_recommendations) * 100
+```
+
+**Target:** ≥90% (allows 10% flexibility for multi-persona edge cases).
+
+**Alternatives Considered:**
+- Semantic similarity (NLP): Too complex for MVP
+- Manual review scores: Not scalable, subjective
+- Exact title matching: Too brittle (titles may change)
+
+**Impact:** Relevance metric objectively verifies persona→content mapping logic.
+
+---
+
+### Decision 55: Fairness Tolerance at ±10%
+
+**Context:** Demographic parity must balance statistical rigor with sample size limitations.
+
+**Decision:** Set fairness tolerance at **±10%** of overall persona assignment rate.
+
+**Rationale:**
+- **Industry standard**: ±10% commonly used in bias detection (see: ML fairness literature)
+- **Sample size**: With 100 users, ±10% allows ~7-10 user variance per demographic group
+- **Statistical validity**: Tighter tolerances (±5%) risk false positives with small samples
+- **Actionable threshold**: >10% deviation indicates systematic bias worth investigating
+
+**Example:** If overall persona rate = 50%:
+- **Pass:** Group A = 45%, Group B = 55% (within ±10%)
+- **Fail:** Group C = 35%, Group D = 65% (outside ±10%)
+
+**Alternatives Considered:**
+- ±5%: Too strict for 100-user sample, many false positives
+- ±15%: Too loose, misses meaningful bias
+- Statistical significance testing (chi-square): Over-engineered for MVP
+
+**Impact:** Fairness metric flags meaningful demographic imbalances without over-sensitivity.
+
+---
+
+### Decision 56: Latency Measurement with `time.perf_counter()`
+
+**Context:** Latency metric requires high-precision timing for sub-second measurements.
+
+**Decision:** Use `time.perf_counter()` (not `time.time()` or `time.process_time()`).
+
+**Rationale:**
+- **Precision**: `perf_counter()` has nanosecond resolution vs. microseconds for `time()`
+- **Monotonic**: Not affected by system clock adjustments (DST, NTP)
+- **Wall-clock time**: Measures actual user-perceived latency (includes I/O, not just CPU)
+- **Python 3.3+**: Standard library, no dependencies
+
+**Measurement Points:**
+```python
+start = time.perf_counter()
+result = generate_recommendations(user_id)
+end = time.perf_counter()
+latency = end - start
+```
+
+**Metrics Tracked:**
+- Mean, median, p95, p99, min, max latency
+- Sample size: 10 users for tests (configurable), all consented users for full eval
+
+**Target:** <5 seconds mean latency per user (easily met at ~0.01s with local data).
+
+**Alternatives Considered:**
+- `time.time()`: Less precise, subject to clock drift
+- `time.process_time()`: Only CPU time, excludes disk I/O (misleading for data loading)
+- Manual profiling: Over-engineered, not needed for simple benchmark
+
+**Impact:** Accurate, reproducible latency benchmarking for performance tracking.
+
+---
+
+### Decision 57: Auditability Requires Complete Trace JSONs
+
+**Context:** Auditability metric ensures all recommendations are traceable to source data.
+
+**Decision:** Define "complete trace" based on consent status:
+- **Consent granted**: Must have `signals`, `persona_assignment`, AND `recommendations` sections
+- **Consent not granted**: Must have `signals` and `persona_assignment` (NO recommendations)
+
+**Strict Validation:**
+- Trace file must exist in `docs/traces/{user_id}.json`
+- All required sections present (no null/empty objects)
+- Recommendations section ONLY if consent granted (violation = incomplete)
+
+**Rationale:**
+- Enforces consent compliance: No recs without permission
+- Auditability ≠ just file existence; structure matters
+- Detects data pipeline failures (missing phases)
+- PRD requirement: "100% of recommendations with decision traces"
+
+**Current Data:** 97% auditability (97/100 users have complete traces) → 3 users incomplete.
+
+**Alternatives Considered:**
+- File existence only: Too weak, doesn't verify structure
+- Recommendations required for all: Violates consent enforcement
+- Separate metrics for trace existence vs. completeness: Confusing, redundant
+
+**Impact:** Auditability metric ensures full transparency from signals → persona → recommendations.
+
+---
+
 ## Revision History
 
 | Date | PR | Changes |
@@ -1209,3 +1409,4 @@ Reason: Description
 | 2025-11-03 | #5 | Added guardrails decisions (28-34): integrated architecture, consent CRUD, account checks, predatory filtering, tone validation, non-blocking validation, execution order |
 | 2025-11-03 | #6 | Added user interface decisions (35-43): single-file app, user selector, consent banner, manual refresh, recommendations-only feed, user-friendly personas, data export placeholder, 4-column metrics, tone compliance |
 | 2025-11-03 | #7 | Added operator dashboard decisions (44-50): six-tab interface, dual-write override logging, inline guardrail checks, bar charts, expandable trace viewer, bulk consent operations, no authentication in MVP |
+| 2025-11-03 | #8 | Added evaluation harness decisions (51-57): coverage excludes general persona, age bucketing strategy, timestamped outputs with symlinks, relevance scoring via categories, fairness tolerance ±10%, latency measurement precision, auditability completeness checks |

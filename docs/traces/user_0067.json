@@ -1,6 +1,6 @@
 {
   "user_id": "user_0067",
-  "timestamp": "2025-11-03T20:58:01.229839",
+  "timestamp": "2025-11-04T00:26:47.040809",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -40,7 +40,7 @@
         "flag_80": true,
         "min_payment_only": false,
         "has_interest": true,
-        "is_overdue": false,
+        "is_overdue": true,
         "num_credit_cards": 2,
         "utilization_by_card": [
           {
@@ -57,7 +57,9 @@
             "limit": 10000.0,
             "utilization_pct": 88.77
           }
-        ]
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
@@ -83,12 +85,12 @@
     "persona": "high_utilization",
     "criteria_met": {
       "high_utilization": 88.77,
-      "has_interest": true
+      "is_overdue": true
     },
     "all_checks": {
       "high_utilization": {
         "high_utilization": 88.77,
-        "has_interest": true
+        "is_overdue": true
       },
       "variable_income": {
         "cash_buffer_months": 0.0
@@ -96,6 +98,6 @@
       "subscription_heavy": {},
       "savings_builder": {}
     },
-    "timestamp": "2025-11-03T22:50:32.206521"
+    "timestamp": "2025-11-04T00:26:52.191558"
   }
 }

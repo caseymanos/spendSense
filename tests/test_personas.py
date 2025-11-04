@@ -33,7 +33,7 @@ class TestHighUtilizationPersona:
         # Create mock signals with high utilization
         signals = pd.Series({
             'credit_max_util_pct': 68.0,
-            'credit_has_interest': True,
+            'credit_interest_charges': True,
             'credit_min_payment_only': False,
             'credit_is_overdue': False,
         })
@@ -44,13 +44,13 @@ class TestHighUtilizationPersona:
         assert matches is True, "Should match high_utilization criteria"
         assert 'high_utilization' in criteria_met, "Should flag high utilization"
         assert criteria_met['high_utilization'] == 68.0
-        assert 'has_interest' in criteria_met, "Should flag interest charges"
+        assert 'interest_charges' in criteria_met, "Should flag interest charges"
 
     def test_high_utilization_by_interest_only(self):
         """Test: User with low utilization but has interest charges."""
         signals = pd.Series({
             'credit_max_util_pct': 25.0,
-            'credit_has_interest': True,  # This alone should trigger
+            'credit_interest_charges': True,  # This alone should trigger per spec
             'credit_min_payment_only': False,
             'credit_is_overdue': False,
         })
@@ -58,14 +58,14 @@ class TestHighUtilizationPersona:
         matches, criteria_met = check_high_utilization(signals)
 
         assert matches is True
-        assert 'has_interest' in criteria_met
+        assert 'interest_charges' in criteria_met
         assert 'high_utilization' not in criteria_met  # Utilization is below 50%
 
     def test_high_utilization_by_overdue(self):
         """Test: User with overdue status triggers high utilization."""
         signals = pd.Series({
             'credit_max_util_pct': 10.0,
-            'credit_has_interest': False,
+            'credit_interest_charges': False,
             'credit_min_payment_only': False,
             'credit_is_overdue': True,  # This alone should trigger
         })
@@ -79,7 +79,7 @@ class TestHighUtilizationPersona:
         """Test: User with good credit behavior should not match."""
         signals = pd.Series({
             'credit_max_util_pct': 15.0,
-            'credit_has_interest': False,
+            'credit_interest_charges': False,
             'credit_min_payment_only': False,
             'credit_is_overdue': False,
         })
@@ -141,9 +141,9 @@ class TestSubscriptionHeavyPersona:
     def test_subscription_heavy_by_count_and_spend(self):
         """Test: User with 5 subscriptions totaling $75/month."""
         signals = pd.Series({
-            'sub_180d_recurring_count': 5,  # >= 3 ✓
-            'sub_180d_monthly_spend': 75.0,  # >= $50 ✓
-            'sub_180d_share_pct': 8.0,  # 8% (below 10%) (percentage format: 8.0 = 8%)
+            'sub_180d_recurring_count': 5,  # >= 3 ✓ (cadence enforced by detector)
+            'sub_30d_monthly_spend': 75.0,  # >= $50 ✓ (30d per spec)
+            'sub_30d_share_pct': 8.0,  # 8% (below 10%)
         })
 
         matches, criteria_met = check_subscription_heavy(signals)
@@ -158,8 +158,8 @@ class TestSubscriptionHeavyPersona:
         """Test: User with 4 subscriptions at 12% of total spend."""
         signals = pd.Series({
             'sub_180d_recurring_count': 4,  # >= 3 ✓
-            'sub_180d_monthly_spend': 35.0,  # < $50
-            'sub_180d_share_pct': 12.0,  # >= 10% ✓ (percentage format: 12.0 = 12%)
+            'sub_30d_monthly_spend': 35.0,  # < $50
+            'sub_30d_share_pct': 12.0,  # >= 10% ✓ (percentage format)
         })
 
         matches, criteria_met = check_subscription_heavy(signals)
@@ -172,8 +172,8 @@ class TestSubscriptionHeavyPersona:
         """Test: User with only 2 subscriptions should not match."""
         signals = pd.Series({
             'sub_180d_recurring_count': 2,  # < 3 ✗
-            'sub_180d_monthly_spend': 100.0,  # Even with high spend
-            'sub_180d_share_pct': 0.15,
+            'sub_30d_monthly_spend': 100.0,  # Even with high spend
+            'sub_30d_share_pct': 8.0,
         })
 
         matches, criteria_met = check_subscription_heavy(signals)
@@ -240,7 +240,7 @@ class TestPersonaPriorityOrdering:
         signals = pd.Series({
             # Matches High Utilization (Priority 1)
             'credit_max_util_pct': 65.0,  # Triggers high utilization
-            'credit_has_interest': True,
+            'credit_interest_charges': True,
             'credit_min_payment_only': False,
             'credit_is_overdue': False,
             # Also matches Savings Builder (Priority 4)
@@ -264,11 +264,11 @@ class TestPersonaPriorityOrdering:
             'inc_180d_cash_buffer_months': 0.7,
             # Also matches Subscription Heavy (Priority 3)
             'sub_180d_recurring_count': 5,
-            'sub_180d_monthly_spend': 100.0,
-            'sub_180d_share_pct': 0.15,
+            'sub_30d_monthly_spend': 100.0,
+            'sub_30d_share_pct': 12.0,
             # Low credit utilization
             'credit_max_util_pct': 10.0,
-            'credit_has_interest': False,
+            'credit_interest_charges': False,
             'credit_min_payment_only': False,
             'credit_is_overdue': False,
         })
@@ -290,14 +290,14 @@ class TestEdgeCaseNoPersona:
         signals = pd.Series({
             # All values below thresholds
             'credit_max_util_pct': 10.0,  # < 50%
-            'credit_has_interest': False,
+            'credit_interest_charges': False,
             'credit_min_payment_only': False,
             'credit_is_overdue': False,
             'inc_180d_median_pay_gap_days': 14,  # < 45 days
             'inc_180d_cash_buffer_months': 3.0,  # >= 1 month
             'sub_180d_recurring_count': 1,  # < 3
-            'sub_180d_monthly_spend': 15.0,  # < $50
-            'sub_180d_share_pct': 3.0,  # < 10% (percentage format: 3.0 = 3%)
+            'sub_30d_monthly_spend': 15.0,  # < $50
+            'sub_30d_share_pct': 3.0,  # < 10% (percentage format: 3.0 = 3%)
             'sav_180d_growth_rate_pct': 0.5,  # < 2% (percentage format: 0.5 = 0.5%)
             'sav_180d_net_inflow': 50.0,  # < $200
         })

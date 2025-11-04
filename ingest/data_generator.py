@@ -333,6 +333,65 @@ class SyntheticDataGenerator:
 
         return liabilities
 
+    def generate_interest_transactions(self, accounts: List[Account], liabilities: List[Liability]) -> List[Transaction]:
+        """Generate monthly interest charge transactions for revolving credit balances.
+
+        Creates a positive (debit) transaction on each credit card for each month
+        of history where utilization is meaningful and APR > 0.
+        """
+        # Map liabilities by account_id for APR lookup
+        liab_by_account = {l.account_id: l for l in liabilities}
+
+        interest_txns: List[Transaction] = []
+
+        # For each credit account, post a monthly interest charge
+        for acc in accounts:
+            if acc.account_type != AccountType.CREDIT or acc.account_subtype != AccountSubtype.CREDIT_CARD:
+                continue
+
+            if not acc.balance_limit or acc.balance_limit <= 0:
+                continue
+
+            utilization = acc.balance_current / acc.balance_limit
+            if utilization <= 0.3:
+                # Skip low utilization cards to avoid noise
+                continue
+
+            apr = 0.0
+            liab = liab_by_account.get(acc.account_id)
+            if liab and liab.apr:
+                apr = float(liab.apr)
+            else:
+                # Fallback APR if liability not found (kept realistic)
+                apr = float(self.rng.uniform(12.99, 29.99))
+
+            # Approximate monthly interest = balance * (APR/100)/12 with small jitter
+            base_monthly_rate = (apr / 100.0) / 12.0
+            base_interest = max(0.0, acc.balance_current * base_monthly_rate)
+
+            # One interest post per month of history
+            for month in range(self.config.months_history):
+                post_date = self.start_date + timedelta(days=30 * (month + 1) - int(self.rng.integers(1, 5)))
+                jitter = float(self.rng.uniform(-0.05, 0.05))  # ±5%
+                amount = round(base_interest * (1.0 + jitter), 2)
+                if amount <= 0:
+                    continue
+
+                interest_txns.append(Transaction(
+                    transaction_id=f"txn_interest_{acc.account_id}_{month:02d}",
+                    account_id=acc.account_id,
+                    user_id=acc.user_id,
+                    date=post_date,
+                    amount=amount,  # Positive = debit/charge
+                    merchant_name="Credit Card Interest",
+                    payment_channel=PaymentChannel.OTHER,
+                    personal_finance_category="FEES_AND_CHARGES",
+                    personal_finance_subcategory="Interest",
+                    pending=False
+                ))
+
+        return interest_txns
+
     def generate_all(self) -> Tuple[List[User], List[Account], List[Transaction], List[Liability]]:
         """Generate complete synthetic dataset"""
         print(f"Generating synthetic data with seed={self.config.seed}...")
@@ -349,6 +408,11 @@ class SyntheticDataGenerator:
 
         liabilities = self.generate_liabilities(accounts)
         print(f"✓ Generated {len(liabilities)} liabilities")
+
+        # Generate posted interest charges on credit cards
+        interest_txns = self.generate_interest_transactions(accounts, liabilities)
+        transactions.extend(interest_txns)
+        print(f"✓ Generated {len(interest_txns)} interest transactions")
 
         return users, accounts, transactions, liabilities
 

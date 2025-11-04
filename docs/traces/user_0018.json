@@ -1,6 +1,6 @@
 {
   "user_id": "user_0018",
-  "timestamp": "2025-11-03T20:58:00.881038",
+  "timestamp": "2025-11-04T00:26:46.585821",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -50,7 +50,9 @@
             "limit": 2000.0,
             "utilization_pct": 28.61
           }
-        ]
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
@@ -73,14 +75,10 @@
     }
   },
   "persona_assignment": {
-    "persona": "high_utilization",
-    "criteria_met": {
-      "has_interest": true
-    },
+    "persona": "general",
+    "criteria_met": {},
     "all_checks": {
-      "high_utilization": {
-        "has_interest": true
-      },
+      "high_utilization": {},
       "variable_income": {
         "cash_buffer_months": 0.0
       },
@@ -89,6 +87,6 @@
         "low_utilization": 28.61
       }
     },
-    "timestamp": "2025-11-03T22:50:32.196624"
+    "timestamp": "2025-11-04T00:26:52.184508"
   }
 }
