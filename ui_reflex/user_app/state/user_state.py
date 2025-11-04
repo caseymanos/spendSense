@@ -26,6 +26,7 @@ from utils.data_loaders import (
     revoke_user_consent,
     get_persona_description,
 )
+from utils.themes import get_theme, ThemeConfig
 
 
 class UserAppState(rx.State):
@@ -79,6 +80,12 @@ class UserAppState(rx.State):
 
     show_revoke_modal: bool = False
     """Whether to show the revoke consent confirmation modal"""
+
+    show_theme_switcher: bool = False
+    """Whether to show the theme switcher panel"""
+
+    current_theme: str = "default"
+    """Currently selected theme name"""
 
     # ==========================================================================
     # COMPUTED PROPERTIES
@@ -313,6 +320,26 @@ class UserAppState(rx.State):
             self.is_loading = False
 
     # ==========================================================================
+    # THEME MANAGEMENT EVENTS
+    # ==========================================================================
+
+    @rx.event
+    def toggle_theme_switcher(self):
+        """Toggle the theme switcher panel visibility."""
+        self.show_theme_switcher = not self.show_theme_switcher
+
+    @rx.event
+    def change_theme(self, theme_name: str):
+        """Change the current theme.
+
+        Args:
+            theme_name: Name of the theme to apply
+        """
+        self.current_theme = theme_name
+        # Auto-hide theme switcher after selection
+        self.show_theme_switcher = False
+
+    # ==========================================================================
     # COMPUTED PROPERTIES
     # ==========================================================================
 
@@ -373,3 +400,97 @@ class UserAppState(rx.State):
         if not self.recommendations_data:
             return []
         return self.recommendations_data.get("recommendations", [])[:3]
+
+    # ==========================================================================
+    # THEME COMPUTED PROPERTIES
+    # ==========================================================================
+
+    @rx.var
+    def theme_background(self) -> str:
+        """Get current theme background color."""
+        return get_theme(self.current_theme).colors.background
+
+    @rx.var
+    def theme_surface(self) -> str:
+        """Get current theme surface color."""
+        return get_theme(self.current_theme).colors.surface
+
+    @rx.var
+    def theme_border(self) -> str:
+        """Get current theme border color."""
+        return get_theme(self.current_theme).colors.border
+
+    @rx.var
+    def theme_text_primary(self) -> str:
+        """Get current theme primary text color."""
+        return get_theme(self.current_theme).colors.text_primary
+
+    @rx.var
+    def theme_text_secondary(self) -> str:
+        """Get current theme secondary text color."""
+        return get_theme(self.current_theme).colors.text_secondary
+
+    @rx.var
+    def theme_text_muted(self) -> str:
+        """Get current theme muted text color."""
+        return get_theme(self.current_theme).colors.text_muted
+
+    @rx.var
+    def theme_primary(self) -> str:
+        """Get current theme primary color."""
+        return get_theme(self.current_theme).colors.primary
+
+    @rx.var
+    def theme_success(self) -> str:
+        """Get current theme success color."""
+        return get_theme(self.current_theme).colors.success
+
+    @rx.var
+    def theme_success_light(self) -> str:
+        """Get current theme success light color."""
+        return get_theme(self.current_theme).colors.success_light
+
+    @rx.var
+    def theme_warning(self) -> str:
+        """Get current theme warning color."""
+        return get_theme(self.current_theme).colors.warning
+
+    @rx.var
+    def theme_warning_light(self) -> str:
+        """Get current theme warning light color."""
+        return get_theme(self.current_theme).colors.warning_light
+
+    @rx.var
+    def theme_shadow(self) -> str:
+        """Get current theme shadow style."""
+        return get_theme(self.current_theme).colors.shadow
+
+    @rx.var
+    def theme_shadow_lg(self) -> str:
+        """Get current theme large shadow style."""
+        return get_theme(self.current_theme).colors.shadow_lg
+
+    @rx.var
+    def theme_border_radius(self) -> str:
+        """Get current theme border radius."""
+        return get_theme(self.current_theme).border_radius
+
+    @rx.var
+    def theme_info_light(self) -> str:
+        """Get current theme info light color."""
+        return get_theme(self.current_theme).colors.info_light
+
+    @rx.var
+    def theme_persona_high_util(self) -> str:
+        """Get current theme high utilization persona color."""
+        return get_theme(self.current_theme).colors.persona_high_util
+
+    @rx.var
+    def theme_persona_subscription(self) -> str:
+        """Get current theme subscription persona color."""
+        return get_theme(self.current_theme).colors.persona_subscription
+
+    @rx.var
+    def theme_persona_savings(self) -> str:
+        """Get current theme savings persona color."""
+        return get_theme(self.current_theme).colors.persona_savings
