@@ -594,11 +594,13 @@ def render_user_management_tab():
 
     with col1:
         st.markdown("**Grant Consent to Filtered Users**")
-        st.caption(f"This will grant consent to {len(filtered_df[~filtered_df['consent_granted'].str.contains('Yes')])} users")
+        st.caption(
+            f"This will grant consent to {len(filtered_df[~filtered_df['consent_granted']])} users"
+        )
 
         if st.button("Grant Consent to Filtered Users", type="secondary"):
             if MODULES_AVAILABLE:
-                user_ids = filtered_df[~filtered_df["consent_granted"].str.contains("Yes")]["user_id"].tolist()
+                user_ids = filtered_df[~filtered_df["consent_granted"]]["user_id"].tolist()
                 if user_ids:
                     result = batch_grant_consent(user_ids)
                     st.success(f"✅ Granted consent to {result.get('granted_count', 0)} users")
