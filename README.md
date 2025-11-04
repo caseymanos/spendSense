@@ -113,10 +113,12 @@ See `docs/decision_log.md` for rationale behind key choices.
 - ✅ PR #2: Behavioral Signal Detection
 - ✅ PR #3: Persona Assignment System
 - ✅ PR #4: Recommendation Engine
+- ✅ PR #5: Guardrails & Consent Management
 - ✅ PR #6: User Interface (Streamlit App)
+- ✅ PR #7: Operator Dashboard (Streamlit App)
 
 **In Progress:**
-- 🔄 PR #5: Guardrails & Consent Management
+- 🔄 PR #8: Evaluation Harness
 
 See `docs/taskList.md` for full 10-PR implementation roadmap.
 

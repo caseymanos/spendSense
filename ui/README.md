@@ -21,21 +21,23 @@ uv run streamlit run ui/app_user.py
 
 ---
 
-### 2. Operator Dashboard (`app_operator.py`) 🚧
-**Compliance and oversight interface** (Coming in PR #7)
+### 2. Operator Dashboard (`app_operator.py`) ✅
+**Compliance and oversight interface**
 
-**Planned Features:**
-- User management and filtering
-- Signal visualization
-- Persona distribution analysis
-- Recommendation review and approval
-- Decision trace viewer
-- Evaluation metrics summary
+**Features:**
+- 📊 **Overview:** System health metrics and persona distribution
+- 👥 **User Management:** Filterable user directory with bulk operations
+- 📈 **Behavioral Signals:** Aggregate analytics with charts
+- ✅ **Recommendation Review:** Approve/override/flag workflow
+- 🔍 **Decision Trace Viewer:** Full audit trail per user
+- 🛡️ **Guardrails Monitor:** Compliance enforcement summary
 
-**Launch:** (Not yet implemented)
+**Launch:**
 ```bash
 uv run streamlit run ui/app_operator.py
 ```
+
+**Default URL:** http://localhost:8502 (or next available port)
 
 ---
 
@@ -207,6 +209,102 @@ All recommendations include:
 
 ---
 
+## Operator Dashboard Guide
+
+### Purpose
+The operator dashboard provides compliance teams and analysts with full oversight into the SpendSense system, including user management, behavioral analytics, recommendation review, and audit trails.
+
+### Six Main Tabs
+
+#### 📊 Overview
+**System health at a glance**
+- Total users and consent status
+- Persona distribution bar chart
+- Guardrails summary (tone violations, blocked offers)
+- Quick stats in sidebar
+
+#### 👥 User Management
+**Filterable user directory**
+- Filter by: consent status, persona, gender, income tier
+- Bulk consent operations (with safety warnings)
+- User detail view (links to trace viewer)
+- 100 users displayed in searchable table
+
+#### 📈 Behavioral Signals
+**Aggregate analytics and distributions**
+- System-wide metrics (avg credit utilization, median savings, etc.)
+- Distribution charts: credit utilization histogram, subscription counts
+- 30d vs 180d metric comparison
+- Per-user signal drill-down
+
+#### ✅ Recommendation Review
+**Approve/override/flag workflow**
+- Select user and load their recommendations
+- View all recommendations with rationales and guardrail checks
+- Inline tone validation and eligibility status
+- Three actions:
+  - **Approve:** Log approval to decision_log.md and trace JSON
+  - **Override:** Provide operator name + reason, log to both locations
+  - **Flag:** Mark for manual review with explanation
+- Operator name remembered across session
+
+#### 🔍 Decision Trace Viewer
+**Full audit trail per user**
+- Expandable sections:
+  - Behavioral Signals (subscriptions, savings, credit, income)
+  - Persona Assignment (criteria met, all checks)
+  - Recommendations (education items + partner offers)
+  - Guardrail Decisions (consent, tone, eligibility, overrides)
+  - Raw JSON (complete trace data)
+- Progressive disclosure design (important data shown first)
+
+#### 🛡️ Guardrails Monitor
+**Compliance enforcement summary**
+- Total users and consent status
+- Tone violations grouped by prohibited phrase
+- Blocked offers with reasons
+- Consent audit trail with timestamps
+
+### Override Logging
+
+All operator actions (approve/override/flag) are logged to two locations:
+
+**1. `docs/decision_log.md` (human-readable)**
+```markdown
+### Operator Override - 2025-11-03 14:32:15
+**Operator:** Jane Doe
+**User:** user_0042
+**Action:** OVERRIDE
+**Recommendation:** Lower Credit Utilization
+**Reason:** User recently paid down balance; utilization outdated
+```
+
+**2. `docs/traces/{user_id}.json` (machine-readable)**
+```json
+{
+  "decision_type": "operator_override",
+  "operator": "Jane Doe",
+  "action": "override",
+  "recommendation_title": "Lower Credit Utilization",
+  "reason": "User recently paid down balance; utilization outdated",
+  "timestamp": "2025-11-03T14:32:15"
+}
+```
+
+### Performance Expectations
+- Page load: < 2 seconds
+- Tab switching: < 0.5 seconds
+- Recommendation generation: < 1 second per user
+- Trace loading: < 0.1 seconds per user
+- Bulk consent (100 users): < 2 seconds
+
+### Known Limitations (MVP)
+- No authentication (local-only deployment)
+- No real-time updates (manual refresh required)
+- Evaluation summary shows "coming soon" until PR #8
+
+---
+
 ## Testing
 
 **Manual testing checklist for `app_user.py`:**
@@ -225,6 +323,58 @@ All recommendations include:
 - [ ] All disclaimers present on recommendations
 - [ ] No shaming language in any text
 - [ ] Error handling for missing data
+
+**Manual testing checklist for `app_operator.py`:**
+
+- [ ] App launches without errors
+- [ ] Sidebar shows total users, consent count, most common persona
+- [ ] All 6 tabs navigate correctly
+
+**Overview Tab:**
+- [ ] Total users displays (100)
+- [ ] Consent percentage shown
+- [ ] Persona distribution bar chart renders
+- [ ] Guardrails metrics display
+
+**User Management Tab:**
+- [ ] All 100 users in table
+- [ ] Consent filter works (All/Granted/Not Granted)
+- [ ] Persona filter works
+- [ ] Gender and income tier filters work
+- [ ] Multiple filters work together
+- [ ] Bulk consent shows preview count
+- [ ] Bulk consent grant button works
+
+**Behavioral Signals Tab:**
+- [ ] Aggregate metrics display
+- [ ] Credit utilization histogram shows 4 bins
+- [ ] Subscription count chart renders
+- [ ] 30d vs 180d comparison table works
+- [ ] Per-user drill-down displays signals
+
+**Recommendation Review Tab:**
+- [ ] User selector loads all users
+- [ ] Load Recommendations button works
+- [ ] Metadata shows counts and tone check status
+- [ ] Inline guardrail checks display
+- [ ] Approve button logs to decision_log.md
+- [ ] Override form collects operator name and reason
+- [ ] Override submission logs correctly
+- [ ] Flag form works
+- [ ] Operator name remembered in session
+
+**Decision Trace Viewer Tab:**
+- [ ] User selector works
+- [ ] User info displays correctly
+- [ ] All 5 expanders show correct data
+- [ ] Raw JSON expander shows complete trace
+- [ ] Operator overrides appear in Guardrail Decisions
+
+**Guardrails Monitor Tab:**
+- [ ] Summary metrics display
+- [ ] Tone violations table works (if violations exist)
+- [ ] Blocked offers list shows (if any blocked)
+- [ ] Consent audit trail displays recent changes
 
 ---
 

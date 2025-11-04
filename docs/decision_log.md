@@ -973,6 +973,232 @@ Reason: Description
 
 ---
 
+---
+
+## PR #7: Operator Dashboard
+
+### Date: 2025-11-03
+
+---
+
+### Decision 44: Six-Tab Analytical Interface
+
+**Context:** Operator dashboard must support multiple workflows: oversight, review, audit, compliance.
+
+**Decision:** Build 6 specialized tabs in single Streamlit app:
+1. Overview - System health and metrics
+2. User Management - Filterable user directory
+3. Behavioral Signals - Aggregate analytics and distributions
+4. Recommendation Review - Approve/override/flag workflow
+5. Decision Trace Viewer - Full audit trail per user
+6. Guardrails Monitor - Compliance enforcement summary
+
+**Rationale:**
+- Tab-based navigation matches operator mental model (analysis vs. action vs. audit)
+- Each tab focused on single task, reducing cognitive load
+- Mirrors industry standard admin dashboards (AWS Console, Google Admin, etc.)
+- Sidebar navigation allows quick context switching
+
+**Alternatives Considered:**
+- Multi-page app: More complex state management, harder to deploy
+- Accordion layout: Too much scrolling, poor discoverability
+- Separate apps per function: Deployment complexity, data loading duplication
+
+**Impact:** ~950 lines of code in single file; fast load time; manual testing focused on tab navigation.
+
+---
+
+### Decision 45: Override Logging to decision_log.md + Trace JSON
+
+**Context:** Operator overrides must be auditable and traceable to specific users.
+
+**Decision:** Dual-write overrides to both `docs/decision_log.md` (human-readable) and user trace JSON (machine-readable).
+
+**Markdown format:**
+```markdown
+### Operator Override - 2025-11-03 14:32:15
+**Operator:** Jane Doe
+**User:** user_0042
+**Action:** OVERRIDE
+**Recommendation:** Lower Credit Utilization
+**Reason:** User recently paid down balance; utilization outdated
+```
+
+**Trace JSON format:**
+```json
+{
+  "timestamp": "2025-11-03T14:32:15",
+  "decision_type": "operator_override",
+  "operator": "Jane Doe",
+  "action": "override",
+  "recommendation_title": "Lower Credit Utilization",
+  "reason": "User recently paid down balance; utilization outdated"
+}
+```
+
+**Rationale:**
+- Markdown: Easy to read/search, version control friendly, compliant with PRD requirement
+- Trace JSON: Programmatic access for future analytics, preserves user-level audit trail
+- Both: Redundancy ensures auditability even if one file corrupted
+
+**Alternatives Considered:**
+- SQLite table: Requires migration, complicates backup/restore
+- Markdown only: Hard to parse programmatically
+- JSON only: Not human-friendly for quick review
+
+**Impact:** `log_operator_override()` function handles both writes atomically; <1ms overhead.
+
+---
+
+### Decision 46: Inline Tone/Eligibility Checks in Review Tab
+
+**Context:** Operators need to see guardrail results when reviewing recommendations.
+
+**Decision:** Re-run `validate_tone()` and display eligibility status inline for each recommendation during review.
+
+**Display:**
+- Green checkmark: "✅ Tone: Passed"
+- Red warning: "⚠️ Tone: 2 violations detected" with list of prohibited phrases
+- Blue badge: "💼 Partner Offer - Eligibility Checked"
+
+**Rationale:**
+- Immediate visual feedback on compliance issues
+- No need to navigate to separate Guardrails Monitor tab
+- Operator can make informed approve/override decision with full context
+- Matches PR #5 guardrails integration pattern
+
+**Alternatives Considered:**
+- Link to Guardrails Monitor: Extra clicks, breaks flow
+- Trust trace JSON only: Stale data if recommendation re-generated
+- No inline checks: Operator flying blind
+
+**Impact:** ~0.01s per recommendation for tone validation; negligible UX impact.
+
+---
+
+### Decision 47: Bar Charts for Distribution Analysis
+
+**Context:** Operators need to understand system-wide patterns (persona distribution, utilization ranges).
+
+**Decision:** Use Streamlit's built-in `st.bar_chart()` for persona distribution, utilization histograms, subscription counts.
+
+**Rationale:**
+- Simple, fast, no additional dependencies (no matplotlib/plotly)
+- Interactive hover tooltips built-in
+- Automatically responsive
+- Consistent with Streamlit design language
+- Sufficient for MVP; can upgrade to plotly post-MVP if needed
+
+**Alternatives Considered:**
+- Plotly: More features but larger dependency, slower load
+- Matplotlib: Static images, poor interactivity in Streamlit
+- Tables only: Less engaging, harder to spot patterns
+
+**Impact:** Faster rendering, lighter bundle; charts auto-update on data refresh.
+
+---
+
+### Decision 48: User Trace Viewer with Expandable Sections
+
+**Context:** Trace JSONs contain 4 phases (signals, persona, recommendations, guardrails) with nested structure.
+
+**Decision:** Use `st.expander()` for each pipeline phase; default first phase (signals) to expanded.
+
+**Structure:**
+```
+📊 Behavioral Signals [expanded]
+  - Subscriptions (30d, 180d)
+  - Savings (30d, 180d)
+  - Credit (current)
+  - Income (30d, 180d)
+
+🎭 Persona Assignment [collapsed]
+  - Assigned persona
+  - Criteria met
+  - All checks
+
+💡 Recommendations [collapsed]
+  - Metadata
+  - List of recommendations
+
+🛡️ Guardrail Decisions [collapsed]
+  - Consent checks
+  - Tone violations
+  - Blocked offers
+  - Operator overrides
+
+📄 Raw JSON [collapsed]
+```
+
+**Rationale:**
+- Progressive disclosure: Show most important data first (signals drive everything)
+- Reduce cognitive overload: Collapsed sections hide complexity until needed
+- Consistent with PRD's "decision trace" requirement
+- Works well on laptop screens without scrolling
+
+**Alternatives Considered:**
+- Flat view: Too much data at once, overwhelming
+- Tabs within trace viewer: Over-engineered, harder to compare phases
+- Raw JSON only: Hard to navigate, not operator-friendly
+
+**Impact:** Faster comprehension; operators can drill down as needed; supports auditability.
+
+---
+
+### Decision 49: Bulk Consent Operations with Warning
+
+**Context:** Operators may need to grant consent to multiple users for testing/setup.
+
+**Decision:** Provide "Grant Consent to Filtered Users" button with count preview and "⚠️ Use with caution" warning.
+
+**Safety Rails:**
+- Shows exact count of users affected before action
+- Only operates on currently filtered users (not all users)
+- Uses existing `batch_grant_consent()` from PR #5
+- No bulk revocation (requires individual action)
+
+**Rationale:**
+- Testing efficiency: Setup 100 users for demo without clicking 100 times
+- Controlled scope: Filter to specific demographics/personas before bulk action
+- Audit trail: `batch_grant_consent()` logs each individual grant with timestamp
+- Safety: Warning prevents accidental bulk changes
+
+**Alternatives Considered:**
+- No bulk operations: Tedious for testing, poor DX
+- Confirmation dialog: Extra click but adds safety (consider post-MVP)
+- Bulk revocation: Too dangerous, omit from MVP
+
+**Impact:** Faster testing/demo setup; operators warned of potential impact.
+
+---
+
+### Decision 50: No Authentication in MVP
+
+**Context:** Production operator dashboard requires role-based access control (RBAC).
+
+**Decision:** Omit authentication from PR #7; document as post-MVP enhancement.
+
+**Rationale:**
+- MVP runs locally on operator's machine (localhost:8501)
+- No network exposure in current deployment model
+- Authentication adds complexity: user management, session handling, password storage
+- Focus PR #7 on core functionality: oversight, review, audit
+- Post-MVP: Add Streamlit auth, LDAP integration, or OAuth
+
+**Security Mitigations for MVP:**
+- Local-only deployment (no public URL)
+- Operator logs include name (honor system) for auditability
+- All overrides traced to decision_log.md
+
+**Alternatives Considered:**
+- Basic password protection: Still requires session management
+- Streamlit Cloud authentication: Not applicable for local deployment
+- Skip MVP entirely: Blocks critical oversight functionality
+
+**Impact:** Faster MVP delivery; clear post-MVP roadmap for auth enhancement.
+
+---
+
 ## Revision History
 
 | Date | PR | Changes |
@@ -982,3 +1208,4 @@ Reason: Description
 | 2025-11-03 | #2 | Added behavioral signal decisions (14-21): amount convention, subscription detection, normalization, credit metrics, income detection, edge cases, storage format |
 | 2025-11-03 | #5 | Added guardrails decisions (28-34): integrated architecture, consent CRUD, account checks, predatory filtering, tone validation, non-blocking validation, execution order |
 | 2025-11-03 | #6 | Added user interface decisions (35-43): single-file app, user selector, consent banner, manual refresh, recommendations-only feed, user-friendly personas, data export placeholder, 4-column metrics, tone compliance |
+| 2025-11-03 | #7 | Added operator dashboard decisions (44-50): six-tab interface, dual-write override logging, inline guardrail checks, bar charts, expandable trace viewer, bulk consent operations, no authentication in MVP |
