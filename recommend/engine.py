@@ -35,6 +35,8 @@ from recommend.content_catalog import (
     get_education_items,
     get_partner_offers,
 )
+from guardrails.tone import scan_recommendations
+from guardrails.eligibility import filter_predatory_products
 
 
 # Database path
@@ -98,6 +100,12 @@ def generate_recommendations(user_id: str) -> Dict[str, Any]:
     # Combine recommendations
     all_recommendations = education_recs + offer_recs
 
+    # GUARDRAIL: Tone validation (scan for prohibited phrases)
+    tone_scan = scan_recommendations(all_recommendations)
+    if not tone_scan["passed"]:
+        # Log tone violations for operator review
+        _log_tone_violations(user_id, tone_scan)
+
     # Append disclaimer to all
     all_recommendations = _append_disclaimer(all_recommendations)
 
@@ -111,6 +119,8 @@ def generate_recommendations(user_id: str) -> Dict[str, Any]:
             "education_count": len(education_recs),
             "offer_count": len(offer_recs),
             "total_count": len(all_recommendations),
+            "tone_check_passed": tone_scan["passed"],
+            "tone_violations_count": tone_scan.get("violations_found", 0),
         },
     }
 
@@ -289,9 +299,17 @@ def _select_partner_offers(
     signals = user_context.get("signals", {})
     income_tier = user_context.get("income_tier", "low")
 
+    # GUARDRAIL: Filter out predatory products
+    safe_offers, blocked_offers = filter_predatory_products(all_offers)
+
+    # Log blocked predatory products if any
+    if blocked_offers:
+        user_id = user_context.get("user_id", "unknown")
+        _log_blocked_offers(user_id, blocked_offers, "predatory_product")
+
     # Filter by eligibility
     eligible_offers = []
-    for offer in all_offers:
+    for offer in safe_offers:
         if _check_offer_eligibility(offer, signals, user_context, income_tier):
             eligible_offers.append(offer)
 
@@ -632,6 +650,86 @@ def _save_trace(
         "recommendations": response["recommendations"],
         "consent_granted": user_context.get("consent_granted", False),
     }
+
+    # Save trace
+    with open(trace_file, "w") as f:
+        json.dump(trace_data, f, indent=2)
+
+
+def _log_blocked_offers(
+    user_id: str, blocked_offers: List[Dict[str, Any]], reason_type: str
+) -> None:
+    """
+    Log blocked partner offers to user's trace file.
+
+    Args:
+        user_id: User identifier
+        blocked_offers: List of blocked offer dicts from guardrails
+        reason_type: Type of block (e.g., "predatory_product", "eligibility")
+    """
+    trace_file = Path(TRACE_CONFIG["trace_dir"]) / f"{user_id}.json"
+
+    # Load existing trace if it exists
+    if trace_file.exists():
+        with open(trace_file, "r") as f:
+            trace_data = json.load(f)
+    else:
+        trace_data = {"user_id": user_id}
+
+    # Ensure guardrail_decisions list exists
+    if "guardrail_decisions" not in trace_data:
+        trace_data["guardrail_decisions"] = []
+
+    # Add blocked offers entry
+    trace_data["guardrail_decisions"].append({
+        "timestamp": datetime.now().isoformat(),
+        "decision_type": "offers_blocked",
+        "reason_type": reason_type,
+        "blocked_count": len(blocked_offers),
+        "blocked_offers": [
+            {
+                "title": b["offer"].get("title", "Unknown"),
+                "product_type": b["offer"].get("product_type", "Unknown"),
+                "reason": b["reason"],
+                "blocked_at": b.get("blocked_at", reason_type),
+            }
+            for b in blocked_offers
+        ],
+    })
+
+    # Save trace
+    with open(trace_file, "w") as f:
+        json.dump(trace_data, f, indent=2)
+
+
+def _log_tone_violations(user_id: str, tone_scan: Dict[str, Any]) -> None:
+    """
+    Log tone violations to user's trace file for operator review.
+
+    Args:
+        user_id: User identifier
+        tone_scan: Tone scan result dict from guardrails
+    """
+    trace_file = Path(TRACE_CONFIG["trace_dir"]) / f"{user_id}.json"
+
+    # Load existing trace if it exists
+    if trace_file.exists():
+        with open(trace_file, "r") as f:
+            trace_data = json.load(f)
+    else:
+        trace_data = {"user_id": user_id}
+
+    # Ensure guardrail_decisions list exists
+    if "guardrail_decisions" not in trace_data:
+        trace_data["guardrail_decisions"] = []
+
+    # Add tone violations entry
+    trace_data["guardrail_decisions"].append({
+        "timestamp": datetime.now().isoformat(),
+        "decision_type": "tone_violations",
+        "violations_found": tone_scan.get("violations_found", 0),
+        "details": tone_scan.get("details", []),
+    })
 
     # Save trace
     with open(trace_file, "w") as f:

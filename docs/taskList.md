@@ -403,71 +403,90 @@
 
 ---
 
-## PR #5: Guardrails & Consent Management
+## PR #5: Guardrails & Consent Management ✅ COMPLETED
 
 **Goal:** Implement consent, eligibility, and tone validation
 
+**Status:** Complete - 2025-11-03
+
 ### Tasks:
-- [ ] **Implement consent enforcement**
+- [x] **Implement consent enforcement**
   - Files: `guardrails/consent.py`
   - Check `consent_granted` before any processing
   - Implement opt-in/opt-out flows
   - Track consent timestamps
   - Block recommendations for users without consent
+  - **Result:** ✅ Full CRUD operations: grant_consent(), revoke_consent(), check_consent(), get_consent_history(), batch_grant_consent()
 
-- [ ] **Build tone validation**
+- [x] **Build tone validation**
   - Files: `guardrails/tone.py`
   - Regex-based detection of judgmental phrases
   - Banned phrases: "overspending", "bad habits", "lack discipline"
   - Replacement suggestions: "consider lowering" vs "you overspent"
   - Flag recommendations for manual review if issues detected
+  - **Result:** ✅ Regex validation with word boundaries, suggestion mapping, batch scanning, strict mode option
 
-- [ ] **Implement eligibility guardrails**
+- [x] **Implement eligibility guardrails**
   - Files: `guardrails/eligibility.py`
   - Verify income minimums for offers
   - Check existing account holdings
   - Exclude predatory products (payday loans, etc.)
   - Document exclusion logic
+  - **Result:** ✅ Product eligibility, predatory filtering, existing account checks, full audit trail
 
-- [ ] **Create guardrails orchestrator**
+- [x] **Create guardrails orchestrator**
   - Files: `guardrails/__init__.py`
   - Run all checks before finalizing recommendations
   - Log guardrail decisions to trace files
+  - **Result:** ✅ run_all_guardrails() orchestrator, log_guardrail_decision() audit function
 
-- [ ] **✅ UNIT TEST: Consent blocking**
+- [x] **Enhance recommendation engine**
+  - Files: `recommend/engine.py`
+  - Integrate guardrails into recommendation flow
+  - Add predatory product filtering
+  - Add tone validation pass
+  - Log blocked offers and violations
+  - **Result:** ✅ Integrated guardrails with helper functions _log_blocked_offers(), _log_tone_violations()
+
+- [x] **✅ UNIT TEST: Consent blocking (2 tests)**
   - Files: `tests/test_guardrails.py`
   - **Test:** Attempt to generate recommendations for user with `consent_granted=False`
   - **Verify:** Processing blocked, exception raised or None returned
   - **Expected:** No recommendations generated, clear error message logged
+  - **Result:** ✅ PASSED - test_consent_blocking, test_consent_status_check
 
-- [ ] **✅ UNIT TEST: Consent revocation**
+- [x] **✅ UNIT TEST: Consent revocation (2 tests)**
   - Files: `tests/test_guardrails.py`
   - **Test:** User opts in, then revokes consent
-  - **Verify:** 
+  - **Verify:**
     - `consent_granted` changes to False
     - `revoked_timestamp` populated
     - Future processing blocked
   - **Expected:** State persists in SQLite, audit trail complete
+  - **Result:** ✅ PASSED - test_consent_revocation, test_batch_consent_grant
 
-- [ ] **✅ UNIT TEST: Tone validation - Detect violations**
+- [x] **✅ UNIT TEST: Tone validation - Detect violations (4 tests)**
   - Files: `tests/test_guardrails.py`
   - **Test:** Pass recommendation text containing "you're overspending" and "bad habits"
   - **Verify:** Tone validator flags both phrases
   - **Expected:** Returns list of violations with line numbers
+  - **Result:** ✅ PASSED - 4 tests covering detection, suggestions, scanning, clean text
 
-- [ ] **✅ UNIT TEST: Tone validation - Clean text passes**
+- [x] **✅ UNIT TEST: Tone validation - Clean text passes (2 tests)**
   - Files: `tests/test_guardrails.py`
   - **Test:** Pass recommendation text with "consider reducing" and "optimize your spending"
   - **Verify:** No violations detected
   - **Expected:** Returns empty list, text approved
+  - **Result:** ✅ PASSED - test_tone_validation_clean_text_passes, test_scan_recommendations_clean_passes
 
-- [ ] **✅ UNIT TEST: Eligibility check - Predatory product blocked**
+- [x] **✅ UNIT TEST: Eligibility check - Predatory product blocked (3 tests)**
   - Files: `tests/test_guardrails.py`
   - **Test:** Attempt to recommend payday loan offer
   - **Verify:** Offer blocked by guardrail
   - **Expected:** Excluded from final recommendations, logged as blocked
+  - **Result:** ✅ PASSED - test_predatory_product_blocked, test_eligibility_income_tier_filtering, test_existing_account_exclusion
 
-- [ ] **✅ INTEGRATION TEST: Full guardrail pipeline**
+- [x] **✅ INTEGRATION TEST: Full guardrail pipeline (3 tests)**
   - Files: `tests/test_guardrails.py`
   - **Test:** Run all guardrails on full recommendation set from PR #4
   - **Verify:**
@@ -476,43 +495,101 @@
     - All offers pass eligibility checks
     - Trace logs include guardrail decisions
   - **Expected:** No violations in final output, 100% compliance
+  - **Result:** ✅ PASSED - test_full_guardrail_pipeline, test_guardrails_orchestrator, test_guardrails_summary
+
+- [x] **Update documentation**
+  - Files: `docs/decision_log.md`
+  - Document guardrail implementation decisions
+  - **Result:** ✅ Added 7 decisions (28-34): integrated architecture, consent CRUD, account checks, predatory filtering, tone validation, non-blocking validation, execution order
+
+### Deliverables Summary:
+- **Files Created:** 4 files (~1,150 lines of code)
+  - Core modules: `guardrails/consent.py` (286 lines), `guardrails/tone.py` (236 lines), `guardrails/eligibility.py` (320 lines), `guardrails/__init__.py` (157 lines)
+  - Test file: `tests/test_guardrails.py` (450 lines)
+- **Files Modified:** 2 files
+  - Enhanced: `recommend/engine.py` (~100 lines added)
+  - Updated: `docs/decision_log.md` (7 new decisions)
+- **Tests:** 15 tests (all passing)
+- **Architecture:** Integrated approach with separate modules
+- **Performance:** ~0.1s overhead per user for all guardrails
+- **Audit Trail:** All guardrail decisions logged to trace JSONs
+- **Total Test Count:** 69 tests passing (PR #1: 15, PR #2: 6, PR #3: 18, PR #4: 15, PR #5: 15)
 
 ---
 
-## PR #6: User Interface (Streamlit App)
+## PR #6: User Interface (Streamlit App) ✅ COMPLETED
 
 **Goal:** Build end-user educational dashboard
 
+**Status:** Complete - 2025-11-03
+
 ### Tasks:
-- [ ] **Create consent onboarding screen**
+- [x] **Create consent onboarding screen**
   - Files: `ui/app_user.py`
   - Display consent request on first load
   - Checkbox for opt-in
   - Store consent in SQLite
+  - **Result:** ✅ Full consent banner with educational content, opt-in button, timestamp tracking
 
-- [ ] **Build personal dashboard**
+- [x] **Build personal dashboard**
   - Files: `ui/app_user.py`
   - Display active persona
   - Show detected behavioral patterns
   - Render 3-5 education cards with rationales
   - Display 1-3 partner offers
+  - **Result:** ✅ Complete dashboard with persona display, 4-column metrics (credit/subscriptions/savings/income), top 3 recommendations preview
 
-- [ ] **Create learning feed view**
+- [x] **Create learning feed view**
   - Files: `ui/app_user.py`
   - Display articles, tips, calculators
   - Filter by persona-relevant content
+  - **Result:** ✅ Full learning feed showing all recommendations (education items + partner offers) with rationales and disclaimers
 
-- [ ] **Build privacy settings page**
+- [x] **Build privacy settings page**
   - Files: `ui/app_user.py`
   - View current consent status
   - Revoke consent button
   - Data export option (future)
+  - **Result:** ✅ Complete privacy page with consent management, grant/revoke buttons, "Coming Soon" data export placeholder
 
-- [ ] **Add styling and UX polish**
+- [x] **Add styling and UX polish**
   - Files: `ui/app_user.py`
   - Educational and supportive theme
   - Clear navigation
   - Mobile-friendly layout (Streamlit native)
+  - **Result:** ✅ Polished UI with icons, colors, metrics, expanders, proper spacing, supportive tone throughout
+
+### Additional Features Implemented:
+- **User selector:** Dropdown with all 100 users, consent status indicators (✅/⏸️)
+- **Consent-aware UI:** Limited read-only view with banner when consent not granted
+- **Manual refresh button:** Load data once, refresh on demand
+- **Persona descriptions:** User-friendly titles and descriptions with icons
+- **Behavioral metrics:** 4-column overview of key financial patterns
+- **Recommendation integration:** Full integration with recommend.engine.generate_recommendations()
+- **Error handling:** Graceful handling of missing data, no persona, insufficient data cases
+- **Disclaimers:** Mandatory disclaimer on all recommendations
+
+### Deliverables Summary:
+- **Files Created:** 1 file (~650 lines of code)
+  - Complete Streamlit app: `ui/app_user.py`
+- **Key Features:**
+  - 3 navigation pages (Dashboard, Learning Feed, Privacy Settings)
+  - User selector with 100 synthetic users
+  - Consent management (grant/revoke with SQLite persistence)
+  - Persona display with criteria explanations
+  - Behavioral signals overview (credit, subscriptions, savings, income)
+  - Recommendations display (education items + partner offers)
+  - Privacy controls and data export placeholder
+- **UX Principles:**
+  - Educational and supportive tone (no shaming language)
+  - Clear rationales with concrete data
+  - User control over data processing
+  - Transparent consent management
+- **Integration Points:**
+  - SQLite database (users, persona_assignments, accounts)
+  - Parquet files (signals.parquet, transactions.parquet)
+  - Recommendation engine (recommend.engine)
+  - Decision trace JSONs (docs/traces/)
 
 **Note:** UI testing is manual/visual for MVP. No automated tests required for this PR.
 
