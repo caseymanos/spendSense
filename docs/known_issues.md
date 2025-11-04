@@ -136,6 +136,28 @@ All users have bi-weekly payroll deposits (14-day intervals).
 
 ---
 
+### Issue #7: Education Padding Bypassed Eligibility Filters
+**Status:** FIXED in commit d9e3022
+**Severity:** P1 - High
+**Impact:** Ineligible education items could be surfaced; misleading rationales (e.g., zeros) when signals missing
+
+**Problem:**
+- Fallback logic appended items from the full catalog without re-checking `_check_content_eligibility`
+- When `features/signals.parquet` was missing or empty, `eligible_items` could be empty but padding still forced the minimum count
+- Result: misleading recommendations and violation of strict eligibility guardrail
+
+**Fix Applied:**
+- Removed padding fallback; selection now returns only eligible items and may be fewer than the minimum
+- Added explicit metadata when short of minimum due to missing/insufficient signals:
+  - `reason: insufficient_data`
+  - `education_eligibility_shortfall: <min - actual>`
+  - `signals_present: <bool>`
+
+**Files:**
+- `recommend/engine.py`
+- `tests/test_recommendations.py`
+
+---
 ### Issue #5: Overly Broad High Utilization Criteria
 **Status:** OPEN (P2)
 **Severity:** P2 - Medium
@@ -212,7 +234,7 @@ Criteria: `(growth ≥2% OR inflow ≥$200) AND utilization <30%`
 - Note: Distribution varies with data generation. Prior runs showed high share for high_utilization and low/zero for others due to generator constraints noted above.
 
 ### Test Status:
-- 39/39 tests passing ✅
+- 54/54 tests passing ✅
 - All P0 fixes validated
 
 ---
@@ -222,6 +244,7 @@ Criteria: `(growth ≥2% OR inflow ≥$200) AND utilization <30%`
 - 06060da docs(known-issues): Resolve inconsistent OPEN statuses; mark income patterns fixed and dedupe summary.
 - 79f2c58 docs(known-issues): Mark P1 data-generation issues as fixed (cf295b6) and clarify open items as P2.
 - f0bd257 docs(known-issues): Update fixed statuses, commits, and correct subscription lookback fix description.
+- d9e3022 fix(recommendations): Stop padding education with ineligible items and flag insufficient data.
 - cf295b6 feat(generator): Stable subscription prices and diversified income patterns; keep deterministic output and tests passing.
 - dbf310d fix(subscriptions): Restore short-window detection while honoring 90-day lookback.
 - 3887c0d fix(subscriptions): Honor 90-day lookback for recurring detection (prevent long-window false positives).
