@@ -1,6 +1,6 @@
 {
   "user_id": "user_0060",
-  "timestamp": "2025-11-03T19:53:28.614991",
+  "timestamp": "2025-11-03T20:58:01.179715",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -77,6 +77,6 @@
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-03T20:37:50.775283"
+    "timestamp": "2025-11-03T21:15:25.211492"
   }
 }

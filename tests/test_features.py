@@ -133,11 +133,9 @@ def test_subscription_detection_enforces_lookback_window():
 
     result_180d = detect_subscriptions(df, user_id, window_days=180)
 
-    # After fix: We now correctly detect long-term recurring patterns
-    # The 2 DriftGym charges span 110 days (120 days ago to 10 days ago)
-    # This SHOULD be detected since it spans > 30 days minimum
-    assert result_180d['recurring_count'] == 1, \
-        "Should detect recurring pattern that spans >30 days (was: broken lookback logic)"
+    # Expect no detection since span (110d) exceeds 90-day lookback
+    assert result_180d['recurring_count'] == 0, \
+        "Should not detect recurring when span exceeds 90-day lookback"
 
 
 # ============================================================================
