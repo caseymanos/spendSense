@@ -89,10 +89,10 @@
         "low_utilization": 28.37
       }
     },
-    "timestamp": "2025-11-03T22:48:25.319486"
+    "timestamp": "2025-11-03T22:50:32.191039"
   },
   "recommendations": {
-    "timestamp": "2025-11-03T22:48:25.384658",
+    "timestamp": "2025-11-03T22:50:32.240014",
     "persona": "high_utilization",
     "education_count": 1,
     "offer_count": 0,
@@ -198,6 +198,74 @@
         "filtered_count": 2,
         "tone_passed": true,
         "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:50:23.262231",
+      "decision_type": "offers_blocked",
+      "details": {
+        "blocked_count": 1,
+        "blocked_offers": [
+          {
+            "title": "Premium Rewards Card",
+            "reason": "Credit utilization too high (90%)",
+            "blocked_at": "product_eligibility"
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:50:23.262479",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 1,
+        "tone_passed": true,
+        "eligibility_blocks": 1
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:50:32.177042",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:50:32.182650",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:50:32.184127",
+      "decision_type": "offers_blocked",
+      "details": {
+        "blocked_count": 1,
+        "blocked_offers": [
+          {
+            "title": "Premium Rewards Card",
+            "reason": "Credit utilization too high (90%)",
+            "blocked_at": "product_eligibility"
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2025-11-03T22:50:32.184377",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 1,
+        "tone_passed": true,
+        "eligibility_blocks": 1
       }
     }
   ]

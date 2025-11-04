@@ -607,6 +607,53 @@ def test_partner_offer_type_survives_guardrails():
     assert "partner_offer" in types
 
 
+def test_ineligible_partner_offer_is_blocked_and_logged():
+    """Ineligible 'partner_offer' should be blocked by eligibility filters and excluded."""
+    # Get a user with consent
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT user_id FROM users LIMIT 1")
+        user_id = cursor.fetchone()[0]
+
+    grant_consent(user_id)
+
+    # Create an ineligible credit card offer (requires utilization <= 80%) with user at 90%
+    mock_recommendations = [
+        {
+            "type": "education",
+            "title": "Lower Credit Utilization",
+            "rationale": "Reducing utilization can improve credit health",
+        },
+        {
+            "type": "partner_offer",
+            "title": "Premium Rewards Card",
+            "product_type": "credit_card",
+            "rationale": "Earn rewards on everyday purchases",
+        },
+    ]
+
+    user_context = {
+        "user_id": user_id,
+        "income_tier": "medium",
+        # Simulate high utilization over the limit (0.90 > 0.80)
+        "signals": {"credit_utilization_30d": 0.90, "credit_utilization_180d": 0.90},
+        "existing_account_types": {},
+    }
+
+    result = run_all_guardrails(user_id, mock_recommendations, user_context)
+
+    elig = result["guardrail_results"]["eligibility"]
+    assert elig["total_offers"] == 1
+    assert elig["eligible_count"] == 0
+    assert elig["blocked_count"] == 1
+
+    # Filtered recommendations should exclude the ineligible offer
+    filtered = result["filtered_recommendations"]
+    titles = [r["title"] for r in filtered]
+    assert "Premium Rewards Card" not in titles
+    assert "Lower Credit Utilization" in titles
+
+
 # ============================================
 # SUMMARY TEST
 # ============================================
