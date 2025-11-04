@@ -63,10 +63,10 @@ if days_span > max_allowed_span:
 
 ---
 
-## P1 Issues (Data Generation - TO BE FIXED)
+## P1 Issues (FIXED - 2025-11-03)
 
 ### Issue #3: Variable Subscription Amounts
-**Status:** OPEN
+**Status:** FIXED in commit cf295b6
 **Severity:** P1 - High
 **Impact:** Zero subscriptions detected despite data containing 3,676 subscription transactions
 
@@ -122,9 +122,10 @@ All users have bi-weekly payroll deposits (14-day intervals).
 - Threshold: >45 days required
 - Result: 0% match variable_income criteria
 
-**File to Fix:**
+**Files Affected:**
 - `ingest/data_generator.py` - Payroll generation logic
 
+**Status:** FIXED in commit cf295b6
 **Fix Applied:**
 - Added diversified pay patterns (weekly/biweekly/monthly/irregular) per user with deterministic RNG
 
@@ -137,7 +138,7 @@ All users have bi-weekly payroll deposits (14-day intervals).
 ---
 
 ### Issue #5: Overly Broad High Utilization Criteria
-**Status:** OPEN
+**Status:** OPEN (P2)
 **Severity:** P2 - Medium
 **Impact:** 67% of users assigned to high_utilization (may be too high)
 
@@ -149,11 +150,9 @@ Persona criteria: `utilization ≥50% OR interest >0 OR min-payment OR overdue`
 - This alone triggers high_utilization persona
 - Works as designed per PRD, but very broad
 
-**Analysis:**
-- 82 users (82%) have credit cards
-- All 82 have APR > 0 → triggers "has_interest" check
-- 67 users (67%) assigned high_utilization
-- 15 users without credit cards → general persona
+**Analysis (prior runs, generator‑dependent):**
+- Many users have credit cards with APR > 0 → triggers "has_interest" check
+- A high share can be assigned to high_utilization; this is tunable and depends on generator distributions
 
 **Potential Fix (Optional):**
 Consider checking for ACTUAL interest charges in transactions, not just APR > 0:
@@ -203,10 +202,12 @@ Criteria: `(growth ≥2% OR inflow ≥$200) AND utilization <30%`
 - ✅ Percentage format inconsistency (9f8ca0f)
 - ✅ Subscription lookback honored and 30d window preserved (dbf310d, 3887c0d)
 
-### Open (P1 - Data Generation):
-- ⏳ Variable subscription amounts (blocks subscription_heavy detection)
-- ⏳ Uniform income patterns (blocks variable_income detection)
-- ⏳ Overly broad high_utilization criteria
+### Open (P1):
+- None — addressed in cf295b6
+
+### Open (P2 - Design/Data):
+- Overly broad high_utilization criteria (optional refinement)
+- Savings builder blocked by combined requirements
 
 ### Open (P2 - Design):
 - ⏳ Savings builder blocked by combined requirements
