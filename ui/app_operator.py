@@ -24,6 +24,7 @@ Design Principles:
 """
 
 import streamlit as st
+import plotly.express as px
 import sqlite3
 import json
 import pandas as pd
@@ -407,8 +408,17 @@ def render_overview_tab():
             for k, v in persona_dist.items()
         ])
 
-        # Bar chart
-        st.bar_chart(persona_df.set_index("Persona"))
+        # Plotly Express bar chart (Python 3.14 compatible)
+        fig = px.bar(
+            persona_df,
+            x="Persona",
+            y="Count",
+            text="Count",
+            labels={"Persona": "Persona", "Count": "Count"},
+        )
+        fig.update_traces(textposition="outside")
+        fig.update_layout(margin=dict(l=10, r=10, t=10, b=10))
+        st.plotly_chart(fig, use_container_width=True)
 
         # Table with details
         col1, col2 = st.columns(2)
@@ -716,7 +726,17 @@ def render_signals_tab():
             col1, col2 = st.columns([2, 1])
 
             with col1:
-                st.bar_chart(util_df.set_index("Range"))
+                # Plotly Express bar chart
+                fig_util = px.bar(
+                    util_df,
+                    x="Range",
+                    y="Count",
+                    text="Count",
+                    labels={"Range": "Utilization Range", "Count": "Users"},
+                )
+                fig_util.update_traces(textposition="outside")
+                fig_util.update_layout(margin=dict(l=10, r=10, t=10, b=10))
+                st.plotly_chart(fig_util, use_container_width=True)
 
             with col2:
                 st.dataframe(util_df, hide_index=True, use_container_width=True)
@@ -740,7 +760,17 @@ def render_signals_tab():
             col1, col2 = st.columns([2, 1])
 
             with col1:
-                st.bar_chart(sub_df.set_index("Subscriptions"))
+                # Plotly Express bar chart
+                fig_sub = px.bar(
+                    sub_df,
+                    x="Subscriptions",
+                    y="Count",
+                    text="Count",
+                    labels={"Subscriptions": "Subscriptions", "Count": "Users"},
+                )
+                fig_sub.update_traces(textposition="outside")
+                fig_sub.update_layout(margin=dict(l=10, r=10, t=10, b=10))
+                st.plotly_chart(fig_sub, use_container_width=True)
 
             with col2:
                 st.dataframe(sub_df, hide_index=True, use_container_width=True)
