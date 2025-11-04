@@ -1,0 +1,7 @@
+{
+  "seed": 42,
+  "num_users": 100,
+  "months_history": 6,
+  "avg_transactions_per_month": 30,
+  "generation_timestamp": "2025-11-03T19:32:38.993803"
+}

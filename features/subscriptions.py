@@ -67,6 +67,9 @@ def detect_subscriptions(
 
         # Check if pattern spans long enough to be considered recurring
         days_span = (row['last_date'] - row['first_date']).days
+        # Enforce configured lookback window for detection (e.g., 90 days)
+        if days_span > lookback_days:
+            continue
 
         # Amount should be relatively consistent (low variance)
         if pd.notna(row['std_amount']) and row['mean_amount'] > 0:
