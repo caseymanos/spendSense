@@ -57,14 +57,14 @@ def detect_income_signals(
     payroll_pattern = '|'.join(payroll_keywords)
     payroll_txns = user_txns[
         (user_txns['amount'] < 0) &  # Credits only (money in)
-        (user_txns['merchant_name'].str.contains(payroll_pattern, case=False, na=False))
+        (user_txns['merchant_name'].astype('string').str.contains(payroll_pattern, case=False, na=False))
     ].copy()
 
     # Also check personal_finance_category for income indicators
     income_category_pattern = 'INCOME|TRANSFER_IN'
     income_txns = user_txns[
         (user_txns['amount'] < 0) &  # Credits only
-        (user_txns['personal_finance_category'].str.contains(income_category_pattern, case=False, na=False))
+        (user_txns['personal_finance_category'].astype('string').str.contains(income_category_pattern, case=False, na=False))
     ]
 
     # Combine both detection methods
