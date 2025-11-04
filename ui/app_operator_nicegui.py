@@ -1061,6 +1061,9 @@ async def main_page():
     # Initialize operator name from storage
     if 'operator_name' not in app.storage.user:
         app.storage.user['operator_name'] = ''
+    # Initialize auto-refresh preference (enabled by default)
+    if 'auto_refresh_enabled' not in app.storage.user:
+        app.storage.user['auto_refresh_enabled'] = True
 
     # Always refresh data on page load to reflect external changes
     refresh_data()
@@ -1093,6 +1096,24 @@ async def main_page():
                 render_data_generation_tab.refresh()
 
             ui.button(icon='refresh', on_click=handle_refresh).props('flat round')
+
+            # Auto-refresh toggle (silent refresh, no notifications)
+            ui.switch('Auto Refresh').bind_value(app.storage.user, 'auto_refresh_enabled')
+
+    # Silent refresh helper for timer
+    def _silent_refresh():
+        if app.storage.user.get('auto_refresh_enabled', True):
+            refresh_data()
+            render_overview_tab.refresh()
+            render_user_management_tab.refresh()
+            render_behavioral_signals_tab.refresh()
+            render_recommendation_review_tab.refresh()
+            render_decision_trace_viewer_tab.refresh()
+            render_guardrails_monitor_tab.refresh()
+            render_data_generation_tab.refresh()
+
+    # Auto-refresh timer (every 15 seconds)
+    ui.timer(15.0, _silent_refresh)
 
     # Main content with tabs
     with ui.tabs().classes('w-full') as tabs:
