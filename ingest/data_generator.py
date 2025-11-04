@@ -35,10 +35,10 @@ class SyntheticDataGenerator:
         # Instance-local NumPy generator
         self.rng = np.random.default_rng(config.seed)
 
-        # Date range for transactions (deterministic anchor from seed)
-        base_anchor = datetime(2024, 1, 1)
-        offset_days = int(config.seed) % 365
-        self.end_date = base_anchor + timedelta(days=offset_days)
+        # Date range for transactions anchored to config timestamp for determinism
+        # Use generation_timestamp instead of datetime.now() so multiple generators
+        # with the same config produce identical outputs.
+        self.end_date = config.generation_timestamp
         self.start_date = self.end_date - timedelta(days=30 * config.months_history)
 
     def generate_users(self) -> List[User]:
@@ -111,7 +111,11 @@ class SyntheticDataGenerator:
             num_credit_cards = min(num_accounts - 2, int(self.rng.integers(1, 3)))
             for _ in range(num_credit_cards):
                 credit_limit = float(self.rng.choice([2000, 5000, 10000, 15000, 25000]))
-                utilization = float(self.rng.uniform(0.1, 0.9))  # 10-90% utilization
+                # Shape utilization: ~25% above 50%, rest below
+                if float(self.rng.random()) < 0.25:
+                    utilization = float(self.rng.uniform(0.5, 0.95))
+                else:
+                    utilization = float(self.rng.uniform(0.05, 0.5))
                 balance = credit_limit * utilization
 
                 credit_card = Account(
@@ -148,7 +152,6 @@ class SyntheticDataGenerator:
         for user_id, user_accs in user_accounts.items():
             # Determine user spending profile
             is_high_spender = float(self.rng.random()) < 0.3
-            has_subscriptions = float(self.rng.random()) < 0.7
             num_transactions = int(self.config.avg_transactions_per_month * self.config.months_history)
 
             # Adjust for spending profile
@@ -162,9 +165,32 @@ class SyntheticDataGenerator:
             primary_checking = checking_accs[0] if checking_accs else None
             primary_credit = credit_accs[0] if credit_accs else None
 
-            # Generate recurring subscriptions
+            # Optional: generate monthly savings transfers for a subset of users
+            savings_accs = [a for a in user_accs if a.account_subtype == AccountSubtype.SAVINGS]
+            has_savings_transfer = False
+            if primary_checking and savings_accs and float(self.rng.random()) < 0.15:
+                monthly_transfer = float(self.rng.uniform(100, 400))
+                has_savings_transfer = True
+                for month_offset in range(self.config.months_history):
+                    trans_date = self.start_date + timedelta(days=30 * month_offset + int(self.rng.integers(1, 5)))
+                    # Deposit into savings (negative = credit)
+                    transactions.append(Transaction(
+                        transaction_id=f"txn_{transaction_counter:08d}",
+                        account_id=savings_accs[0].account_id,
+                        date=trans_date,
+                        amount=-monthly_transfer,
+                        merchant_name="Transfer from Checking",
+                        payment_channel=PaymentChannel.OTHER,
+                        personal_finance_category="TRANSFER_IN",
+                        personal_finance_subcategory="Savings",
+                        pending=False
+                    ))
+                    transaction_counter += 1
+
+            # Generate recurring subscriptions (reduced probability if saving-focused)
+            has_subscriptions = float(self.rng.random()) < (0.15 if has_savings_transfer else 0.45)
             if has_subscriptions and primary_checking:
-                num_subs = int(self.rng.integers(3, 8))
+                num_subs = int(self.rng.integers(3, 6))
                 selected_subs = self.rng.choice(RECURRING_MERCHANTS, size=min(num_subs, len(RECURRING_MERCHANTS)), replace=False)
 
                 for merchant in selected_subs:
@@ -251,10 +277,14 @@ class SyntheticDataGenerator:
 
             # Generate payroll deposits with diversified patterns
             if primary_checking:
-                # Select pay pattern per user
+                # Select pay pattern per user (increase irregular share)
                 patterns = ["weekly", "biweekly", "monthly", "irregular"]
-                probs = [0.2, 0.4, 0.3, 0.1]
+                probs = [0.15, 0.30, 0.25, 0.30]
                 pay_pattern = str(self.rng.choice(patterns, p=probs))
+
+                # If irregular pay, boost expenses to reduce cash buffer
+                if pay_pattern == "irregular":
+                    num_transactions = int(num_transactions * 1.8)
 
                 def paycheck_dates():
                     if pay_pattern == "weekly":
@@ -278,7 +308,11 @@ class SyntheticDataGenerator:
                             day += int(self.rng.integers(20, 61))
 
                 for paycheck_date in paycheck_dates():
-                    paycheck_amount = -float(self.rng.uniform(2000, 6000))  # Negative = credit
+                    # Smaller, more variable paychecks for irregular pattern to lower cash buffer
+                    if pay_pattern == "irregular":
+                        paycheck_amount = -float(self.rng.uniform(1000, 3000))
+                    else:
+                        paycheck_amount = -float(self.rng.uniform(2000, 6000))
 
                     payroll = Transaction(
                         transaction_id=f"txn_{transaction_counter:08d}",
@@ -353,7 +387,7 @@ class SyntheticDataGenerator:
                 continue
 
             utilization = acc.balance_current / acc.balance_limit
-            if utilization <= 0.3:
+            if utilization <= 0.6:
                 # Skip low utilization cards to avoid noise
                 continue
 
@@ -369,26 +403,27 @@ class SyntheticDataGenerator:
             base_monthly_rate = (apr / 100.0) / 12.0
             base_interest = max(0.0, acc.balance_current * base_monthly_rate)
 
-            # One interest post per month of history
-            for month in range(self.config.months_history):
-                post_date = self.start_date + timedelta(days=30 * (month + 1) - int(self.rng.integers(1, 5)))
-                jitter = float(self.rng.uniform(-0.05, 0.05))  # ±5%
-                amount = round(base_interest * (1.0 + jitter), 2)
-                if amount <= 0:
-                    continue
+            # With some probability, post interest each month
+            if float(self.rng.random()) < 0.6:
+                for month in range(self.config.months_history):
+                    post_date = self.start_date + timedelta(days=30 * (month + 1) - int(self.rng.integers(1, 5)))
+                    jitter = float(self.rng.uniform(-0.05, 0.05))  # ±5%
+                    amount = round(base_interest * (1.0 + jitter), 2)
+                    if amount <= 0:
+                        continue
 
-                interest_txns.append(Transaction(
-                    transaction_id=f"txn_interest_{acc.account_id}_{month:02d}",
-                    account_id=acc.account_id,
-                    user_id=acc.user_id,
-                    date=post_date,
-                    amount=amount,  # Positive = debit/charge
-                    merchant_name="Credit Card Interest",
-                    payment_channel=PaymentChannel.OTHER,
-                    personal_finance_category="FEES_AND_CHARGES",
-                    personal_finance_subcategory="Interest",
-                    pending=False
-                ))
+                    interest_txns.append(Transaction(
+                        transaction_id=f"txn_interest_{acc.account_id}_{month:02d}",
+                        account_id=acc.account_id,
+                        user_id=acc.user_id,
+                        date=post_date,
+                        amount=amount,  # Positive = debit/charge
+                        merchant_name="Credit Card Interest",
+                        payment_channel=PaymentChannel.OTHER,
+                        personal_finance_category="FEES_AND_CHARGES",
+                        personal_finance_subcategory="Interest",
+                        pending=False
+                    ))
 
         return interest_txns
 

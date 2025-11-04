@@ -30,13 +30,23 @@ def detect_subscriptions(
         - subscription_share_pct: Percentage of total spend on subscriptions
         - recurring_merchants: List of detected recurring merchant names
     """
-    # Filter to user's transactions in window
-    cutoff_date = datetime.now() - timedelta(days=window_days)
-    user_txns = transactions_df[
-        (transactions_df['user_id'] == user_id) &
-        (transactions_df['date'] >= cutoff_date) &
-        (transactions_df['amount'] > 0)  # Only debits (positive = money out)
+    # Normalize to day-level to avoid time-of-day edge effects
+    txns = transactions_df.copy()
+    txns['date'] = pd.to_datetime(txns['date']).dt.normalize()
+
+    # Filter to user's transactions in window (compare at day precision)
+    cutoff_date = pd.Timestamp(datetime.now().date() - timedelta(days=window_days))
+    user_txns = txns[
+        (txns['user_id'] == user_id) &
+        (txns['date'] >= cutoff_date) &
+        (txns['amount'] > 0)  # Only debits (positive = money out)
     ].copy()
+
+    # Analyze recurring cadence within the last lookback horizon (sliding window)
+    lookback_days = SUBSCRIPTION_DETECTION['lookback_days']
+    analysis_horizon = min(lookback_days, window_days)
+    analysis_cutoff = pd.Timestamp(datetime.now().date() - timedelta(days=analysis_horizon))
+    txns_for_detection = user_txns[user_txns['date'] >= analysis_cutoff].copy()
 
     if len(user_txns) == 0:
         return {
@@ -47,7 +57,7 @@ def detect_subscriptions(
         }
 
     # Group by merchant and analyze patterns
-    merchant_groups = user_txns.groupby('merchant_name').agg({
+    merchant_groups = txns_for_detection.groupby('merchant_name').agg({
         'amount': ['count', 'mean', 'std'],
         'date': ['min', 'max']
     }).reset_index()
@@ -58,7 +68,6 @@ def detect_subscriptions(
     recurring_merchants = []
     min_occurrences = SUBSCRIPTION_DETECTION['min_occurrences']
     amount_variance_pct = SUBSCRIPTION_DETECTION['amount_variance_pct']
-    lookback_days = SUBSCRIPTION_DETECTION['lookback_days']
 
     for _, row in merchant_groups.iterrows():
         # Need minimum occurrences
@@ -67,7 +76,7 @@ def detect_subscriptions(
 
         # Check pattern span and honor lookback without breaking short windows
         days_span = (row['last_date'] - row['first_date']).days
-        max_allowed_span = min(lookback_days, window_days)
+        max_allowed_span = analysis_horizon
         # If occurrences are spread wider than allowed horizon, skip
         if days_span > max_allowed_span:
             continue
@@ -118,17 +127,35 @@ def compute_subscription_signals(
     Returns:
         Dictionary with signals for both windows
     """
+    signals_180d = detect_subscriptions(
+        transactions_df,
+        user_id,
+        window_days=TIME_WINDOWS["long_term_days"]
+    )
+
+    # For 30d, compute spend/share for the merchants detected as recurring in 180d
     signals_30d = detect_subscriptions(
         transactions_df,
         user_id,
         window_days=TIME_WINDOWS["short_term_days"]
     )
 
-    signals_180d = detect_subscriptions(
-        transactions_df,
-        user_id,
-        window_days=TIME_WINDOWS["long_term_days"]
-    )
+    try:
+        from datetime import datetime, timedelta
+        cutoff_30 = pd.Timestamp(datetime.now().date() - timedelta(days=TIME_WINDOWS["short_term_days"]))
+        txns2 = transactions_df.copy()
+        txns2['date'] = pd.to_datetime(txns2['date']).dt.normalize()
+        user_30 = txns2[(txns2['user_id'] == user_id) & (txns2['date'] >= cutoff_30)].copy()
+        rec_merchants = signals_180d.get('recurring_merchants', [])
+        if rec_merchants:
+            rec_txns_30 = user_30[user_30['merchant_name'].isin(rec_merchants)]
+            total_rec_spend_30 = float(rec_txns_30[rec_txns_30['amount'] > 0]['amount'].sum())
+            total_spend_30 = float(user_30[user_30['amount'] > 0]['amount'].sum())
+            signals_30d['monthly_recurring_spend'] = round(total_rec_spend_30, 2)
+            signals_30d['subscription_share_pct'] = round((total_rec_spend_30 / total_spend_30 * 100) if total_spend_30 > 0 else 0.0, 2)
+    except Exception:
+        # Fall back silently if any issue arises
+        pass
 
     return {
         '30d': signals_30d,
