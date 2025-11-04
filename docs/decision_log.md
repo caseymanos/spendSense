@@ -312,7 +312,185 @@ CREATE TABLE persona_assignments (
 Design decisions for subsequent PRs will be logged here as they are made.
 
 ### PR #2: Behavioral Signal Detection
-TBD
+
+### Date: 2025-11-03
+
+---
+
+### Decision 14: Transaction Amount Sign Convention
+
+**Context:** Need consistent interpretation of transaction amounts across all feature modules.
+
+**Decision:** Positive amounts = debits (money out), negative amounts = credits (money in).
+
+**Rationale:**
+- Aligns with Plaid API convention
+- Intuitive for bank transactions: spending is positive, income is negative
+- Consistent with accounting debit/credit principles
+- Simplifies filtering: `amount > 0` for expenses, `amount < 0` for income
+
+**Alternatives Considered:**
+- Opposite convention (positive = credit): Conflicts with Plaid
+- Absolute values with type flag: More complex, requires extra column
+
+**Impact:** All feature modules (subscriptions, savings, credit, income) use this convention. Tests verify correct sign handling.
+
+---
+
+### Decision 15: Subscription Detection Without Strict Temporal Spacing
+
+**Context:** Need to identify recurring merchants from transaction history.
+
+**Decision:** Detect subscriptions based on occurrence count (≥3) and amount consistency (≤10% variance), without requiring exact monthly/weekly spacing.
+
+**Rationale:**
+- Real-world subscriptions may have billing date drift (28-31 days)
+- Payment method changes can cause date shifts
+- Focus on "repeated similar charges" rather than "perfect periodicity"
+- More robust to data quality issues
+
+**Alternatives Considered:**
+- Strict 30±3 day spacing: Too brittle, misses legitimate subscriptions
+- Frequency detection via FFT: Overkill for MVP
+- Manual merchant category list: Inflexible, high maintenance
+
+**Implementation:** Check `count ≥ 3` and `std/mean ≤ 0.10` across 90-day lookback window.
+
+**Impact:** Higher recall for subscription detection, may catch some false positives (handled by variance threshold).
+
+---
+
+### Decision 16: Normalize Monthly Spend to 30-Day Window
+
+**Context:** Subscription spend varies by time window (30d vs 180d), need consistent "monthly" metric.
+
+**Decision:** Calculate total spend in window, then multiply by `(30 / window_days)` to normalize.
+
+**Rationale:**
+- Provides apples-to-apples comparison across windows
+- User-facing metric should be "per month" (intuitive)
+- Handles partial months correctly
+- Simple linear scaling (no complex averaging)
+
+**Formula:** `monthly_spend = total_spend_in_window * (30 / window_days)`
+
+**Example:** $63.96 over 180 days → $63.96 × (30/180) = $10.66/month
+
+**Impact:** Monthly spend values differ between 30d and 180d windows (expected behavior).
+
+---
+
+### Decision 17: Credit Utilization as Point-in-Time Metric
+
+**Context:** Credit utilization is account balance divided by limit.
+
+**Decision:** Calculate utilization from current snapshot only, not time-windowed.
+
+**Rationale:**
+- Utilization is a snapshot metric (current balance / limit)
+- No historical trend needed for persona assignment
+- Reduces complexity vs. tracking utilization over time
+- Aligns with credit scoring industry practice
+
+**Alternatives Considered:**
+- Average utilization over 30/180 days: Requires balance history tracking
+- Peak utilization: More complex, marginal value for MVP
+
+**Impact:** Credit signals stored under 'current' key, not '30d'/'180d' like other signals.
+
+---
+
+### Decision 18: Income Detection via Keywords + Category Matching
+
+**Context:** Need to identify payroll deposits from transaction data.
+
+**Decision:** Detect income via dual criteria: (1) merchant name contains payroll keywords OR (2) category matches INCOME pattern, AND (3) amount is negative (credit).
+
+**Rationale:**
+- Keyword matching: Catches "Payroll", "Direct Dep", "Salary"
+- Category matching: Catches structured Plaid categories
+- Redundancy increases recall without sacrificing precision
+- Negative amount filter prevents false positives
+
+**Keywords:** `["payroll", "direct dep", "salary", "wages"]`
+**Categories:** `INCOME`, `TRANSFER_IN`
+
+**Impact:** High-confidence income detection across varied data formats.
+
+---
+
+### Decision 19: Graceful Degradation for Zero Transactions
+
+**Context:** Edge case where user has no transactions in analysis window.
+
+**Decision:** Return zero/null values for all signals without throwing errors.
+
+**Rationale:**
+- New users may have zero history
+- Data quality issues may result in missing transactions
+- Silent failures cause debugging nightmares
+- Explicit zero signals allow downstream processing
+
+**Behavior:**
+- `recurring_count = 0`
+- `emergency_fund_months = 0.0`
+- `median_pay_gap_days = 0`
+- `pay_frequency = 'unknown'`
+
+**Impact:** All 4 feature modules handle empty data gracefully. Test coverage for edge case.
+
+---
+
+### Decision 20: Flatten Signals for Parquet Storage
+
+**Context:** Feature modules return nested dictionaries (30d/180d), but Parquet prefers flat columns.
+
+**Decision:** Create flattened column names like `sub_30d_recurring_count`, `sav_180d_net_inflow`, etc.
+
+**Rationale:**
+- Parquet/pandas work best with flat schemas
+- Column names are self-documenting (module_window_metric)
+- Easier to query and visualize
+- Standard analytics pattern
+
+**Naming Convention:** `{module}_{window}_{metric}`
+**Examples:**
+- `sub_30d_recurring_count`
+- `credit_max_util_pct`
+- `inc_180d_median_pay_gap_days`
+
+**Impact:** signals.parquet has 35+ columns. Easy to filter by window or module.
+
+---
+
+### Decision 21: Generate Trace JSONs in Pipeline, Not in Individual Modules
+
+**Context:** Need per-user decision traces for auditability.
+
+**Decision:** Orchestrator (`features/__init__.py`) aggregates all signals and writes trace JSON, rather than each module writing separately.
+
+**Rationale:**
+- Single trace file per user (not 4 separate files)
+- Consistent trace format across modules
+- Atomic write (no partial traces)
+- Orchestrator knows full context
+
+**Trace Structure:**
+```json
+{
+  "user_id": "U001",
+  "timestamp": "2025-11-03T...",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {...},
+    "savings": {...},
+    "credit": {...},
+    "income": {...}
+  }
+}
+```
+
+**Impact:** 100 trace files in `docs/traces/`, one per user. Operator dashboard loads these for review.
 
 ### PR #3: Persona Assignment
 TBD
@@ -346,3 +524,4 @@ Reason: Description
 |------|-------|---------|
 | 2025-11-03 | #1 | Initial decision log created (Decisions 1-10) |
 | 2025-11-03 | #1 | Added infrastructure decisions (11-13): constants, persona table, traces dir |
+| 2025-11-03 | #2 | Added behavioral signal decisions (14-21): amount convention, subscription detection, normalization, credit metrics, income detection, edge cases, storage format |

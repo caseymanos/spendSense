@@ -1,0 +1,82 @@
+{
+  "user_id": "user_0081",
+  "timestamp": "2025-11-03T19:53:28.767085",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 0.0,
+        "savings_balance": 37373.58
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 0.0,
+        "savings_balance": 37373.58
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 35.8,
+        "avg_utilization_pct": 34.88,
+        "flag_30": true,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 2,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000232",
+            "mask": "6880",
+            "balance": 5092.599498177907,
+            "limit": 15000.0,
+            "utilization_pct": 33.95
+          },
+          {
+            "account_id": "acc_000233",
+            "mask": "2596",
+            "balance": 1789.969388674661,
+            "limit": 5000.0,
+            "utilization_pct": 35.8
+          }
+        ]
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 0,
+        "avg_paycheck": 0.0
+      },
+      "180d": {
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 0,
+        "avg_paycheck": 0.0
+      }
+    }
+  }
+}

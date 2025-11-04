@@ -187,3 +187,4 @@ Follow the 10-PR roadmap in `docs/taskList.md`:
 
 - Project Lead: Casey Manos
 - Technical Spec Origin: Bryce Harris (bharris@peak6.com)
+- use uv over python3
