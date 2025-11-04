@@ -52,12 +52,16 @@ def load_all_users() -> pd.DataFrame:
                 p.persona,
                 p.assigned_at as persona_assigned_at
             FROM users u
-            LEFT JOIN persona_assignments p ON u.user_id = p.user_id
-            WHERE p.assignment_id IN (
-                SELECT MAX(assignment_id)
-                FROM persona_assignments
-                GROUP BY user_id
-            ) OR p.assignment_id IS NULL
+            LEFT JOIN (
+                SELECT pa.user_id, pa.persona, pa.assigned_at
+                FROM persona_assignments pa
+                JOIN (
+                    SELECT user_id, MAX(assigned_at) AS max_assigned_at
+                    FROM persona_assignments
+                    GROUP BY user_id
+                ) latest
+                ON pa.user_id = latest.user_id AND pa.assigned_at = latest.max_assigned_at
+            ) p ON u.user_id = p.user_id
             ORDER BY u.user_id
             """
             users_df = pd.read_sql(query, conn)
@@ -143,12 +147,16 @@ def load_persona_distribution() -> Dict[str, int]:
         with sqlite3.connect(DB_PATH) as conn:
             query = """
             SELECT persona, COUNT(*) as count
-            FROM persona_assignments
-            WHERE assignment_id IN (
-                SELECT MAX(assignment_id)
-                FROM persona_assignments
-                GROUP BY user_id
-            )
+            FROM (
+                SELECT pa.user_id, pa.persona
+                FROM persona_assignments pa
+                JOIN (
+                    SELECT user_id, MAX(assigned_at) AS max_assigned_at
+                    FROM persona_assignments
+                    GROUP BY user_id
+                ) latest
+                ON pa.user_id = latest.user_id AND pa.assigned_at = latest.max_assigned_at
+            ) latest_personas
             GROUP BY persona
             ORDER BY count DESC
             """
