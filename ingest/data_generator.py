@@ -80,7 +80,7 @@ class SyntheticDataGenerator:
                 balance_limit=None,
                 iso_currency_code="USD",
                 holder_category="consumer",
-                mask=f"{np.random.randint(1000, 9999)}",
+                mask=f"{int(self.rng.integers(1000, 9999))}",
                 name="Checking Account",
                 official_name=f"{self.fake.company()} Bank Checking"
             )
@@ -99,7 +99,7 @@ class SyntheticDataGenerator:
                     balance_limit=None,
                     iso_currency_code="USD",
                     holder_category="consumer",
-                    mask=f"{np.random.randint(1000, 9999)}",
+                    mask=f"{int(self.rng.integers(1000, 9999))}",
                     name="Savings Account",
                     official_name=f"{self.fake.company()} Bank Savings"
                 )
@@ -123,7 +123,7 @@ class SyntheticDataGenerator:
                     balance_limit=float(credit_limit),
                     iso_currency_code="USD",
                     holder_category="consumer",
-                    mask=f"{np.random.randint(1000, 9999)}",
+                    mask=f"{int(self.rng.integers(1000, 9999))}",
                     name="Credit Card",
                     official_name=f"{self.rng.choice(['Visa', 'Mastercard', 'Amex'])} {self.fake.company()}"
                 )
@@ -205,24 +205,24 @@ class SyntheticDataGenerator:
 
                 # Special handling for income
                 if category == "INCOME":
-                    amount = -float(np.random.uniform(2000, 8000))  # Negative = credit
+                    amount = -float(self.rng.uniform(2000, 8000))  # Negative = credit
                     merchant_name = f"{self.fake.company()} Payroll"
                     payment_channel = PaymentChannel.OTHER
                 elif category == "TRANSFER_IN":
-                    amount = -float(np.random.uniform(100, 2000))
+                    amount = -float(self.rng.uniform(100, 2000))
                     merchant_name = "Transfer from Savings"
                     payment_channel = PaymentChannel.OTHER
                 else:
                     # Regular spending
                     if subcategory == "Groceries":
                         merchant_name = self.fake.random_element(GROCERY_MERCHANTS)
-                        amount = float(np.random.uniform(50, 300))
+                        amount = float(self.rng.uniform(50, 300))
                     elif subcategory == "Restaurants":
                         merchant_name = self.fake.random_element(RESTAURANT_MERCHANTS)
-                        amount = float(np.random.uniform(15, 150))
+                        amount = float(self.rng.uniform(15, 150))
                     else:
                         merchant_name = self.fake.company()
-                        amount = float(np.random.uniform(10, 500))
+                        amount = float(self.rng.uniform(10, 500))
 
                     payment_channel = self.fake.random_element(list(PaymentChannel))
 
@@ -292,8 +292,8 @@ class SyntheticDataGenerator:
                 apr=apr,
                 minimum_payment=min_payment,
                 last_payment_amount=float(self.rng.uniform(min_payment, account.balance_current * 0.5)) if float(self.rng.random()) < 0.9 else None,
-                last_payment_date=datetime.now() - timedelta(days=int(self.rng.integers(1, 30))),
-                next_due_date=datetime.now() + timedelta(days=int(self.rng.integers(1, 30))),
+                last_payment_date=self.end_date - timedelta(days=int(self.rng.integers(1, 30))),
+                next_due_date=self.end_date + timedelta(days=int(self.rng.integers(1, 30))),
                 is_overdue=is_overdue,
                 overdue_amount=float(self.rng.uniform(25, 200)) if is_overdue else None
             )
