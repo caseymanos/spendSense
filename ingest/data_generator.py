@@ -57,17 +57,48 @@ class SyntheticDataGenerator:
         """Generate synthetic users with demographic diversity"""
         users = []
 
-        for i in range(self.config.num_users):
+        n = self.config.num_users
+
+        # Balanced categorical distributions
+        gender_vals = [g.value for g in Gender]
+        region_vals = [r.value for r in Region]
+        income_vals = [t.value for t in IncomeTier]
+
+        def balanced_list(values: list[str], total: int) -> list[str]:
+            # Repeat values evenly and trim, then shuffle deterministically via rng
+            k = len(values)
+            full = (values * (total // k)) + values[: (total % k)]
+            # Shuffle with numpy RNG for determinism under seed
+            arr = np.array(full, dtype=object)
+            self.rng.shuffle(arr)
+            return arr.tolist()
+
+        genders = balanced_list(gender_vals, n)
+        regions = balanced_list(region_vals, n)
+        incomes = balanced_list(income_vals, n)
+
+        # Balanced age buckets: 18-30, 31-50, 51-75
+        age_buckets = balanced_list(["18_30", "31_50", "51_75"], n)
+
+        for i in range(n):
+            bucket = age_buckets[i]
+            if bucket == "18_30":
+                age = int(self.rng.integers(18, 31))
+            elif bucket == "31_50":
+                age = int(self.rng.integers(31, 51))
+            else:
+                age = int(self.rng.integers(51, 76))  # up to 75
+
             user = User(
                 user_id=f"user_{i:04d}",
                 name=self.fake.name(),
                 consent_granted=False,  # Default to no consent per PRD
                 consent_timestamp=None,
                 revoked_timestamp=None,
-                age=int(self.rng.integers(18, 76)),  # 18-75 inclusive
-                gender=str(self.rng.choice([g.value for g in Gender])),
-                income_tier=str(self.rng.choice([t.value for t in IncomeTier])),
-                region=str(self.rng.choice([r.value for r in Region])),
+                age=age,
+                gender=genders[i],
+                income_tier=incomes[i],
+                region=regions[i],
                 created_at=datetime.now(),
             )
             users.append(user)
