@@ -89,10 +89,10 @@
       "subscription_heavy": {},
       "savings_builder": {}
     },
-    "timestamp": "2025-11-03T22:13:00.516585"
+    "timestamp": "2025-11-03T22:45:36.812826"
   },
   "recommendations": {
-    "timestamp": "2025-11-03T22:13:00.588619",
+    "timestamp": "2025-11-03T22:45:36.887428",
     "persona": "high_utilization",
     "education_count": 4,
     "offer_count": 2,

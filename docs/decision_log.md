@@ -706,6 +706,258 @@ pattern = r'\b' + re.escape(phrase.lower()) + r'\b'
 
 ---
 
+## PR #6: User Interface (Streamlit App)
+
+### Date: 2025-11-03
+
+---
+
+### Decision 35: Single-File Streamlit App for MVP
+
+**Context:** User dashboard could be split into multiple modules or kept as single file.
+
+**Decision:** Implement entire user dashboard in single `ui/app_user.py` file (~650 lines).
+
+**Rationale:**
+- **Simplicity:** Easier to navigate for MVP; all UI logic in one place
+- **Streamlit Pattern:** Streamlit apps commonly use single-file structure for small apps
+- **Performance:** No import overhead across multiple modules
+- **Maintainability:** Clear separation between app_user.py (end user) and app_operator.py (compliance team)
+
+**Alternatives Considered:**
+- **Multi-Page Streamlit App:** Built-in pages/ directory structure - adds complexity for 3 simple pages
+- **Component Library:** Separate files for components - premature abstraction for MVP
+- **Class-Based Structure:** OOP approach - Streamlit is functional by design
+
+**Impact:** All user dashboard code in single file; easy to locate and modify.
+
+---
+
+### Decision 36: User Selector in Sidebar (Not Authentication)
+
+**Context:** With 100 synthetic users, how should users switch between profiles?
+
+**Decision:** Dropdown selector in sidebar showing all users with consent indicators (✅/⏸️).
+
+**Rationale:**
+- **MVP Scope:** No authentication required per PRD
+- **Demo-Friendly:** Easy to show different personas during presentations
+- **Testing:** Allows manual testing of all 100 user profiles
+- **Transparency:** Consent status visible at a glance
+- **User Experience:** Familiar dropdown pattern; no login friction
+
+**Alternatives Considered:**
+- **Fixed Demo User:** Would limit testing to single profile
+- **URL Parameters:** `?user_id=user_0001` - requires manual URL editing
+- **Login Screen:** Adds authentication complexity not needed for MVP
+
+**Implementation:**
+```python
+user_options = [
+    f"{row['user_id']} - {row['name']}" +
+    (" ✅" if row['consent_granted'] else " ⏸️")
+    for _, row in users_df.iterrows()
+]
+```
+
+**Impact:** Easy profile switching for testing; clear consent visibility.
+
+---
+
+### Decision 37: Consent Banner with Limited UI View
+
+**Context:** Per PRD, users without consent should see limited UI with consent banner, not complete blocking.
+
+**Decision:** Show persona profile section (read-only) + consent banner + privacy info when consent not granted.
+
+**Rationale:**
+- **Transparency:** Users see what they'll get if they opt in
+- **Education:** Explains data usage clearly before consent
+- **Reduced Friction:** No hard wall; users can explore UI structure
+- **Compliance:** No processing occurs; banner makes requirements clear
+- **User Control:** Easy opt-in button prominently displayed
+
+**Alternatives Considered:**
+- **Complete Block:** Would hide all UI until consent - too restrictive
+- **No Visual Change:** Would be confusing; unclear why no recommendations
+- **Modal Dialog:** Would be intrusive; users can't dismiss to explore
+
+**Implementation:**
+- Check `consent_granted` in each render function
+- If False: Display info card + consent banner + return early
+- No recommendations generated without consent
+- Grant consent button calls `grant_consent(user_id)` → updates SQLite → reruns app
+
+**Impact:** Balanced UX - transparency without hard blocking.
+
+---
+
+### Decision 38: Manual Refresh Button (Not Auto-Refresh)
+
+**Context:** Should data reload automatically or require user action?
+
+**Decision:** Load data once on page navigation, with manual "🔄 Refresh Data" button in top-right corner.
+
+**Rationale:**
+- **Performance:** Avoid unnecessary database/file reads on every interaction
+- **User Control:** Explicit refresh gives users predictable behavior
+- **Streamlit Pattern:** Session state persists; rerun only when needed
+- **MVP Scope:** No real-time data; synthetic data doesn't change during session
+
+**Alternatives Considered:**
+- **Auto-Refresh on Sidebar Change:** Would reload on every user selection - too aggressive
+- **Polling (Every N Seconds):** Unnecessary for static synthetic data
+- **No Refresh Button:** Would require app restart to see updates - poor UX
+
+**Implementation:**
+```python
+if st.button("🔄 Refresh Data", use_container_width=True):
+    st.cache_data.clear()
+    st.rerun()
+```
+
+**Impact:** Efficient data loading; users control when to refresh.
+
+---
+
+### Decision 39: Recommendations-Only Learning Feed (Not Browsable Catalog)
+
+**Context:** Learning feed could show (1) all catalog content, or (2) only personalized recommendations.
+
+**Decision:** Display only personalized recommendations from `generate_recommendations(user_id)`.
+
+**Rationale:**
+- **Personalization:** Focus on what's relevant to user's specific situation
+- **Simplicity:** Avoids overwhelming users with 20+ catalog items
+- **Rationales:** Each item includes concrete data explaining relevance
+- **MVP Scope:** Content catalog is implementation detail; users see curated results
+- **Alignment:** Matches PRD requirement for 3-5 education items + 1-3 offers
+
+**Alternatives Considered:**
+- **Full Catalog Browser:** Would show all content regardless of persona - too generic
+- **Hybrid View:** "More articles you might like..." section - adds complexity
+- **Tabbed Interface:** Separate tabs for "For You" vs "Browse All" - feature creep
+
+**Implementation:**
+- Learning Feed calls `generate_recommendations(user_id)`
+- Separates education items and partner offers
+- Displays with rationales and disclaimers
+- Metadata expander shows generation details
+
+**Impact:** Focused, personalized content; clear rationale for each item.
+
+---
+
+### Decision 40: Persona Descriptions Use User-Friendly Language
+
+**Context:** Personas have technical names (high_utilization, variable_income). How should they appear in UI?
+
+**Decision:** Map technical persona IDs to friendly titles and descriptions with icons.
+
+**Rationale:**
+- **User Experience:** "Credit Optimizer" is clearer than "high_utilization"
+- **Supportive Tone:** Avoids labels that sound negative or judgmental
+- **Engagement:** Icons and colors make personas visually distinct
+- **Education:** Descriptions explain what persona means without jargon
+
+**Mapping:**
+```python
+"high_utilization" → "💳 Credit Optimizer"
+  "You're focused on optimizing credit utilization and managing card balances effectively."
+
+"variable_income" → "📊 Flexible Budgeter"
+  "You're managing variable income with smart budgeting strategies."
+```
+
+**Alternatives Considered:**
+- **Use Technical Names:** Would confuse non-technical users
+- **Generic Labels:** "Profile A", "Profile B" - meaningless to users
+- **Problem-Focused:** "High Debt User" - shaming language, violates tone guardrails
+
+**Impact:** Clear, supportive persona communication; users understand their profile.
+
+---
+
+### Decision 41: Privacy Settings with "Coming Soon" Data Export
+
+**Context:** PRD specifies data export as future feature. How to handle in MVP?
+
+**Decision:** Include Privacy Settings page with disabled "Export My Data" button and explanatory text.
+
+**Rationale:**
+- **Transparency:** Users see we plan to offer this feature
+- **Completeness:** Privacy page feels complete even without export
+- **Roadmap Visibility:** "Coming Soon" sets expectations for future releases
+- **No Broken Promises:** Disabled button prevents user frustration
+
+**Alternatives Considered:**
+- **Hide Export Feature:** Would seem like we don't care about user data rights
+- **Build Export Now:** Out of scope for PR #6; adds complexity
+- **Placeholder Text Only:** Button makes feature more tangible
+
+**Implementation:**
+```python
+st.info("Coming Soon: Download your complete data package including...")
+st.button("📦 Export My Data", disabled=True, help="This feature is coming soon!")
+```
+
+**Impact:** Complete privacy page; clear roadmap communication.
+
+---
+
+### Decision 42: 4-Column Behavioral Metrics Layout
+
+**Context:** How to display behavioral signals (credit, subscriptions, savings, income) effectively?
+
+**Decision:** 4-column responsive grid using `st.columns(4)` with `st.metric()` widgets.
+
+**Rationale:**
+- **Scannable:** Users see all key metrics at a glance
+- **Responsive:** Streamlit collapses columns on mobile automatically
+- **Consistent:** Each column follows same pattern (2 metrics per category)
+- **Focused:** Shows most important signals; detailed data in expanders
+
+**Metrics Selection:**
+- **Credit:** num_cards, avg_utilization_pct
+- **Subscriptions:** recurring_count, monthly_spend
+- **Savings:** net_inflow, emergency_fund_months
+- **Income:** median_pay_gap_days, cash_buffer_months
+
+**Alternatives Considered:**
+- **Single Column List:** Would require scrolling; less scannable
+- **Tabs:** Would hide data behind clicks; less discoverable
+- **Chart Visualizations:** Too complex for MVP; metrics suffice
+
+**Impact:** Clear, scannable overview of financial patterns.
+
+---
+
+### Decision 43: Tone Compliance in UI Text
+
+**Context:** UI contains explanatory text, labels, and messages. How to ensure no shaming language?
+
+**Decision:** Manual review of all UI text against prohibited phrases list; use supportive alternatives.
+
+**Prohibited:** "overspending", "bad habits", "lack discipline", "you're failing"
+
+**Preferred:** "consider reducing", "optimize your spending", "explore strategies", "getting to know you"
+
+**Examples:**
+- ❌ "You're overspending on subscriptions"
+- ✅ "You have 3 recurring services - here's how to optimize them"
+
+- ❌ "Your bad credit habits are costly"
+- ✅ "Bringing utilization below 30% could reduce interest charges"
+
+**Implementation:**
+- All user-facing strings reviewed against `PROHIBITED_PHRASES` from constants
+- Supportive framing: "We noticed..." instead of "You're doing wrong..."
+- Growth mindset: "Getting to know you..." for users with insufficient data
+
+**Impact:** 100% tone compliance in UI; educational and supportive throughout.
+
+---
+
 ## Operator Overrides
 
 This section will track manual operator interventions once the operator dashboard is implemented (PR #7).
@@ -729,3 +981,4 @@ Reason: Description
 | 2025-11-03 | #1 | Added infrastructure decisions (11-13): constants, persona table, traces dir |
 | 2025-11-03 | #2 | Added behavioral signal decisions (14-21): amount convention, subscription detection, normalization, credit metrics, income detection, edge cases, storage format |
 | 2025-11-03 | #5 | Added guardrails decisions (28-34): integrated architecture, consent CRUD, account checks, predatory filtering, tone validation, non-blocking validation, execution order |
+| 2025-11-03 | #6 | Added user interface decisions (35-43): single-file app, user selector, consent banner, manual refresh, recommendations-only feed, user-friendly personas, data export placeholder, 4-column metrics, tone compliance |

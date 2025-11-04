@@ -107,7 +107,8 @@ def run_all_guardrails(
     # GUARDRAIL 3: Eligibility Filtering
     # Separate education items from offers
     education_items = [r for r in recommendations if r.get("type") == "education"]
-    offers = [r for r in recommendations if r.get("type") == "offer"]
+    # Accept both legacy 'offer' and current 'partner_offer' types
+    offers = [r for r in recommendations if r.get("type") in ("offer", "partner_offer")]
 
     # Apply eligibility filters to offers only
     eligibility_result = apply_all_filters(offers, user_context)

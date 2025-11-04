@@ -108,7 +108,15 @@ See `docs/decision_log.md` for rationale behind key choices.
 
 ## Current Status
 
-**PR #1: Project Setup & Data Foundation** ✅ (In Progress)
+**Completed PRs:**
+- ✅ PR #1: Project Setup & Data Foundation
+- ✅ PR #2: Behavioral Signal Detection
+- ✅ PR #3: Persona Assignment System
+- ✅ PR #4: Recommendation Engine
+- ✅ PR #6: User Interface (Streamlit App)
+
+**In Progress:**
+- 🔄 PR #5: Guardrails & Consent Management
 
 See `docs/taskList.md` for full 10-PR implementation roadmap.
 
