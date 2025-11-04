@@ -1,0 +1,101 @@
+{
+  "user_id": "user_0092",
+  "timestamp": "2025-11-04T00:34:44.490513",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 78.15,
+        "subscription_share_pct": 0.9,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 6,
+        "monthly_recurring_spend": 236.45,
+        "subscription_share_pct": 2.62,
+        "recurring_merchants": [
+          "Amazon Prime",
+          "Dropbox",
+          "Hulu",
+          "LA Fitness",
+          "Netflix",
+          "Safeway"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 3.92,
+        "savings_balance": 34203.42
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 3.78,
+        "savings_balance": 34203.42
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 39.13,
+        "avg_utilization_pct": 39.13,
+        "flag_30": true,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000261",
+            "mask": "7457",
+            "balance": 5869.3501009970905,
+            "limit": 15000.0,
+            "utilization_pct": 39.13
+          }
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.6399,
+        "cash_buffer_months": 1.43,
+        "pay_frequency": "variable",
+        "num_paychecks": 7,
+        "avg_paycheck": 3027.2
+      },
+      "180d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.6817,
+        "cash_buffer_months": 8.24,
+        "pay_frequency": "variable",
+        "num_paychecks": 43,
+        "avg_paycheck": 2994.31
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "subscription_heavy",
+    "criteria_met": {
+      "recurring_count": 6,
+      "monthly_spend": 78.15
+    },
+    "all_checks": {
+      "high_utilization": {},
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 6,
+        "monthly_spend": 78.15
+      },
+      "savings_builder": {}
+    },
+    "timestamp": "2025-11-04T10:18:44.381330"
+  }
+}

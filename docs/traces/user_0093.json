@@ -1,0 +1,92 @@
+{
+  "user_id": "user_0093",
+  "timestamp": "2025-11-04T00:34:44.504671",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 61.72,
+        "subscription_share_pct": 1.16,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 3,
+        "monthly_recurring_spend": 61.94,
+        "subscription_share_pct": 1.06,
+        "recurring_merchants": [
+          "Amazon Prime",
+          "NYT Subscription",
+          "WSJ"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 0.3,
+        "savings_balance": 1611.02
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 0.28,
+        "savings_balance": 1611.02
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
+        "flag_30": false,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": false,
+        "is_overdue": false,
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 1,
+        "income_variability": 0.6324,
+        "cash_buffer_months": 6.41,
+        "pay_frequency": "variable",
+        "num_paychecks": 10,
+        "avg_paycheck": 3955.07
+      },
+      "180d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.5856,
+        "cash_buffer_months": 26.21,
+        "pay_frequency": "variable",
+        "num_paychecks": 54,
+        "avg_paycheck": 3490.01
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "subscription_heavy",
+    "criteria_met": {
+      "recurring_count": 3,
+      "monthly_spend": 61.72
+    },
+    "all_checks": {
+      "high_utilization": {},
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 3,
+        "monthly_spend": 61.72
+      },
+      "savings_builder": {
+        "low_utilization": 0.0
+      }
+    },
+    "timestamp": "2025-11-04T10:18:44.381498"
+  }
+}

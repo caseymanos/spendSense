@@ -1,0 +1,94 @@
+{
+  "user_id": "user_0050",
+  "timestamp": "2025-11-04T00:34:43.896249",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 24.71,
+        "subscription_share_pct": 0.26,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 3,
+        "monthly_recurring_spend": 25.03,
+        "subscription_share_pct": 0.28,
+        "recurring_merchants": [
+          "Disney+",
+          "Microsoft 365",
+          "Planet Fitness"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 4.34,
+        "savings_balance": 41978.91
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 4.63,
+        "savings_balance": 41978.91
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 42.76,
+        "avg_utilization_pct": 42.76,
+        "flag_30": true,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000141",
+            "mask": "8213",
+            "balance": 10689.534472419276,
+            "limit": 25000.0,
+            "utilization_pct": 42.76
+          }
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 4,
+        "income_variability": 0.5469,
+        "cash_buffer_months": 1.47,
+        "pay_frequency": "weekly",
+        "num_paychecks": 8,
+        "avg_paycheck": 2987.18
+      },
+      "180d": {
+        "median_pay_gap_days": 2,
+        "income_variability": 0.6416,
+        "cash_buffer_months": 10.04,
+        "pay_frequency": "variable",
+        "num_paychecks": 47,
+        "avg_paycheck": 3091.68
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "general",
+    "criteria_met": {},
+    "all_checks": {
+      "high_utilization": {},
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 3
+      },
+      "savings_builder": {}
+    },
+    "timestamp": "2025-11-04T10:18:44.374658"
+  }
+}

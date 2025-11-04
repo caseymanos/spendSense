@@ -1,0 +1,314 @@
+{
+  "metadata": {
+    "timestamp": "2025-11-04T10-51-35",
+    "version": "PR #8 Evaluation Harness",
+    "total_users": 100,
+    "total_personas": 100,
+    "total_traces": 101
+  },
+  "metrics": {
+    "coverage": {
+      "value": 57.99999999999999,
+      "target": 100.0,
+      "passes": false,
+      "users_with_both": 58
+    },
+    "explainability": {
+      "value": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "total_recommendations": 173
+    },
+    "relevance": {
+      "value": 70.51282051282051,
+      "target": 90.0,
+      "passes": false,
+      "total_recommendations": 156
+    },
+    "latency": {
+      "value": 0.008748073322931305,
+      "target": 5.0,
+      "passes": true,
+      "mean_seconds": 0.0087,
+      "p95_seconds": 0.0095
+    },
+    "auditability": {
+      "value": 90.0,
+      "target": 100.0,
+      "passes": false,
+      "completeness_percentage": 90.0
+    },
+    "fairness": {
+      "value": false,
+      "target": true,
+      "passes": false,
+      "overall_persona_rate": 0.73,
+      "failing_demographics": [
+        "gender",
+        "income_tier",
+        "region"
+      ]
+    }
+  },
+  "detailed_results": {
+    "coverage": {
+      "total_users": 100,
+      "users_with_meaningful_persona": 73,
+      "users_with_3_behaviors": 64,
+      "users_with_both": 58,
+      "coverage_percentage": 58.0,
+      "target": 100.0,
+      "passes": false
+    },
+    "explainability": {
+      "total_recommendations": 173,
+      "recommendations_with_rationale": 173,
+      "recommendations_without_rationale": 0,
+      "explainability_percentage": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "missing_rationales_sample": []
+    },
+    "relevance": {
+      "total_recommendations": 156,
+      "relevant_recommendations": 110,
+      "irrelevant_recommendations": 46,
+      "relevance_percentage": 70.51,
+      "target": 90.0,
+      "passes": false,
+      "irrelevant_sample": [
+        {
+          "user_id": "user_0012",
+          "persona": "high_utilization",
+          "title": "SMART Goal Setting for Financial Milestones",
+          "category": "goal_setting",
+          "expected_categories": [
+            "credit_basics",
+            "debt_paydown",
+            "payment_automation",
+            "counseling",
+            "credit_card",
+            "budgeting_app"
+          ]
+        },
+        {
+          "user_id": "user_0012",
+          "persona": "high_utilization",
+          "title": "High-Yield Savings Accounts: Where to Find the Best Rates",
+          "category": "savings_optimization",
+          "expected_categories": [
+            "credit_basics",
+            "debt_paydown",
+            "payment_automation",
+            "counseling",
+            "credit_card",
+            "budgeting_app"
+          ]
+        },
+        {
+          "user_id": "user_0012",
+          "persona": "high_utilization",
+          "title": "Automating Your Savings: Set It and Forget It",
+          "category": "savings_automation",
+          "expected_categories": [
+            "credit_basics",
+            "debt_paydown",
+            "payment_automation",
+            "counseling",
+            "credit_card",
+            "budgeting_app"
+          ]
+        },
+        {
+          "user_id": "user_0012",
+          "persona": "high_utilization",
+          "title": "The 50/30/20 Rule: Balancing Needs, Wants, and Savings",
+          "category": "goal_setting",
+          "expected_categories": [
+            "credit_basics",
+            "debt_paydown",
+            "payment_automation",
+            "counseling",
+            "credit_card",
+            "budgeting_app"
+          ]
+        },
+        {
+          "user_id": "user_0012",
+          "persona": "high_utilization",
+          "title": "Ally Bank High-Yield Savings Account",
+          "category": "savings_account",
+          "expected_categories": [
+            "credit_basics",
+            "debt_paydown",
+            "payment_automation",
+            "counseling",
+            "credit_card",
+            "budgeting_app"
+          ]
+        }
+      ]
+    },
+    "latency": {
+      "users_tested": 100,
+      "mean_seconds": 0.0087,
+      "median_seconds": 0.0087,
+      "p95_seconds": 0.0095,
+      "p99_seconds": 0.0099,
+      "min_seconds": 0.0079,
+      "max_seconds": 0.0113,
+      "target": 5.0,
+      "passes": true
+    },
+    "auditability": {
+      "total_users": 100,
+      "users_with_trace_file": 100,
+      "users_with_complete_trace": 90,
+      "auditability_percentage": 100.0,
+      "completeness_percentage": 90.0,
+      "target": 100.0,
+      "passes": false,
+      "incomplete_traces_sample": [
+        {
+          "user_id": "user_0002",
+          "consent": true,
+          "has_signals": true,
+          "has_persona": true,
+          "has_recommendations": false
+        },
+        {
+          "user_id": "user_0006",
+          "consent": true,
+          "has_signals": true,
+          "has_persona": true,
+          "has_recommendations": false
+        },
+        {
+          "user_id": "user_0014",
+          "consent": true,
+          "has_signals": true,
+          "has_persona": true,
+          "has_recommendations": false
+        },
+        {
+          "user_id": "user_0024",
+          "consent": true,
+          "has_signals": true,
+          "has_persona": true,
+          "has_recommendations": false
+        },
+        {
+          "user_id": "user_0045",
+          "consent": true,
+          "has_signals": true,
+          "has_persona": true,
+          "has_recommendations": false
+        }
+      ]
+    },
+    "fairness": {
+      "overall_persona_rate": 0.73,
+      "tolerance": 0.1,
+      "demographics": {
+        "gender": {
+          "passes": false,
+          "max_deviation": 0.1213,
+          "group_rates": {
+            "female": 0.7857,
+            "male": 0.7143,
+            "non_binary": 0.8095,
+            "prefer_not_to_say": 0.6087
+          },
+          "group_counts": {
+            "male": 28,
+            "female": 28,
+            "prefer_not_to_say": 23,
+            "non_binary": 21
+          },
+          "deviations": {
+            "female": 0.0557,
+            "male": 0.0157,
+            "non_binary": 0.0795,
+            "prefer_not_to_say": 0.1213
+          }
+        },
+        "income_tier": {
+          "passes": false,
+          "max_deviation": 0.1189,
+          "group_rates": {
+            "high": 0.8438,
+            "low": 0.75,
+            "medium": 0.6111
+          },
+          "group_counts": {
+            "medium": 36,
+            "low": 32,
+            "high": 32
+          },
+          "deviations": {
+            "high": 0.1138,
+            "low": 0.02,
+            "medium": 0.1189
+          }
+        },
+        "region": {
+          "passes": false,
+          "max_deviation": 0.1531,
+          "group_rates": {
+            "midwest": 0.5769,
+            "northeast": 0.7727,
+            "south": 0.8462,
+            "west": 0.7308
+          },
+          "group_counts": {
+            "south": 26,
+            "midwest": 26,
+            "west": 26,
+            "northeast": 22
+          },
+          "deviations": {
+            "midwest": 0.1531,
+            "northeast": 0.0427,
+            "south": 0.1162,
+            "west": 0.0008
+          }
+        },
+        "age": {
+          "passes": true,
+          "max_deviation": 0.0557,
+          "group_rates": {
+            "18-30": 0.7083,
+            "31-50": 0.6765,
+            "51+": 0.7857
+          },
+          "group_counts": {
+            "51+": 42,
+            "31-50": 34,
+            "18-30": 24
+          },
+          "deviations": {
+            "18-30": 0.0217,
+            "31-50": 0.0535,
+            "51+": 0.0557
+          },
+          "buckets": [
+            "18-30",
+            "31-50",
+            "51-100"
+          ]
+        }
+      },
+      "all_demographics_pass": false,
+      "failing_demographics": [
+        "gender",
+        "income_tier",
+        "region"
+      ]
+    }
+  },
+  "summary": {
+    "all_metrics_pass": false,
+    "metrics_passing": 2,
+    "metrics_total": 6
+  }
+}

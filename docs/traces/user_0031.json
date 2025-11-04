@@ -1,0 +1,98 @@
+{
+  "user_id": "user_0031",
+  "timestamp": "2025-11-04T00:34:43.622466",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 75.21,
+        "subscription_share_pct": 0.88,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 1,
+        "monthly_recurring_spend": 76.69,
+        "subscription_share_pct": 1.16,
+        "recurring_merchants": [
+          "Credit Card Interest"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 0.28,
+        "savings_balance": 2420.98
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 0.37,
+        "savings_balance": 2420.98
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 84.95,
+        "avg_utilization_pct": 84.95,
+        "flag_30": true,
+        "flag_50": true,
+        "flag_80": true,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000089",
+            "mask": "8274",
+            "balance": 4247.727866557491,
+            "limit": 5000.0,
+            "utilization_pct": 84.95
+          }
+        ],
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 151.07999999999998
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 4,
+        "income_variability": 0.475,
+        "cash_buffer_months": -0.79,
+        "pay_frequency": "weekly",
+        "num_paychecks": 2,
+        "avg_paycheck": 873.56
+      },
+      "180d": {
+        "median_pay_gap_days": 6,
+        "income_variability": 0.7264,
+        "cash_buffer_months": 1.9,
+        "pay_frequency": "weekly",
+        "num_paychecks": 22,
+        "avg_paycheck": 2380.97
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "high_utilization",
+    "criteria_met": {
+      "high_utilization": 84.95,
+      "interest_charges": true
+    },
+    "all_checks": {
+      "high_utilization": {
+        "high_utilization": 84.95,
+        "interest_charges": true
+      },
+      "variable_income": {},
+      "subscription_heavy": {
+        "monthly_spend": 75.21
+      },
+      "savings_builder": {}
+    },
+    "timestamp": "2025-11-04T10:18:44.370081"
+  }
+}

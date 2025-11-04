@@ -1,0 +1,99 @@
+{
+  "user_id": "user_0088",
+  "timestamp": "2025-11-04T00:34:44.427640",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 3.99,
+        "savings_balance": 35696.47
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 5.56,
+        "savings_balance": 35696.47
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 81.19,
+        "avg_utilization_pct": 56.46,
+        "flag_30": true,
+        "flag_50": true,
+        "flag_80": true,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 2,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000248",
+            "mask": "3854",
+            "balance": 7930.593665320036,
+            "limit": 25000.0,
+            "utilization_pct": 31.72
+          },
+          {
+            "account_id": "acc_000249",
+            "mask": "1541",
+            "balance": 1623.7858842367311,
+            "limit": 2000.0,
+            "utilization_pct": 81.19
+          }
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 5,
+        "income_variability": 0.7783,
+        "cash_buffer_months": 0.61,
+        "pay_frequency": "weekly",
+        "num_paychecks": 5,
+        "avg_paycheck": 2889.73
+      },
+      "180d": {
+        "median_pay_gap_days": 4,
+        "income_variability": 0.6739,
+        "cash_buffer_months": 10.85,
+        "pay_frequency": "weekly",
+        "num_paychecks": 34,
+        "avg_paycheck": 3182.48
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "high_utilization",
+    "criteria_met": {
+      "high_utilization": 81.19
+    },
+    "all_checks": {
+      "high_utilization": {
+        "high_utilization": 81.19
+      },
+      "variable_income": {},
+      "subscription_heavy": {},
+      "savings_builder": {}
+    },
+    "timestamp": "2025-11-04T10:18:44.380719"
+  }
+}

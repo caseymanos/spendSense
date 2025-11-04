@@ -1,0 +1,82 @@
+{
+  "user_id": "user_0029",
+  "timestamp": "2025-11-04T00:34:43.589801",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 5.95,
+        "savings_balance": 39283.41
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 6.16,
+        "savings_balance": 39283.41
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
+        "flag_30": false,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": false,
+        "is_overdue": false,
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.5736,
+        "cash_buffer_months": 1.64,
+        "pay_frequency": "variable",
+        "num_paychecks": 5,
+        "avg_paycheck": 3481.76
+      },
+      "180d": {
+        "median_pay_gap_days": 6,
+        "income_variability": 0.6014,
+        "cash_buffer_months": 7.32,
+        "pay_frequency": "weekly",
+        "num_paychecks": 25,
+        "avg_paycheck": 3399.77
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "general",
+    "criteria_met": {},
+    "all_checks": {
+      "high_utilization": {},
+      "variable_income": {},
+      "subscription_heavy": {},
+      "savings_builder": {
+        "low_utilization": 0.0
+      }
+    },
+    "timestamp": "2025-11-04T10:18:44.369788"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "user_id": "user_0069",
+  "timestamp": "2025-11-04T00:34:44.162800",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 2.31,
+        "savings_balance": 17754.42
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 2.05,
+        "savings_balance": 17754.42
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 49.94,
+        "avg_utilization_pct": 49.94,
+        "flag_30": true,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000193",
+            "mask": "6743",
+            "balance": 7491.517747950663,
+            "limit": 15000.0,
+            "utilization_pct": 49.94
+          }
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 2,
+        "income_variability": 0.7327,
+        "cash_buffer_months": 1.01,
+        "pay_frequency": "variable",
+        "num_paychecks": 7,
+        "avg_paycheck": 2205.73
+      },
+      "180d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.748,
+        "cash_buffer_months": 11.54,
+        "pay_frequency": "variable",
+        "num_paychecks": 51,
+        "avg_paycheck": 2977.3
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "general",
+    "criteria_met": {},
+    "all_checks": {
+      "high_utilization": {},
+      "variable_income": {},
+      "subscription_heavy": {},
+      "savings_builder": {}
+    },
+    "timestamp": "2025-11-04T10:18:44.377677"
+  }
+}
