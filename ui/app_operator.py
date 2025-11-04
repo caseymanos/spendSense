@@ -300,6 +300,16 @@ def render_sidebar() -> str:
 
         st.divider()
 
+        # Operator identity (required for approvals)
+        st.subheader("Operator Identity")
+        st.text_input(
+            "Your Name",
+            key="operator_name",
+            help="Used for audit logging of approvals, overrides, and flags",
+        )
+
+        st.divider()
+
         # Navigation
         st.subheader("Navigation")
         tab = st.radio(
@@ -613,7 +623,7 @@ def render_user_management_tab():
                 user_ids = filtered_df[~filtered_df["consent_granted"]]["user_id"].tolist()
                 if user_ids:
                     result = batch_grant_consent(user_ids)
-                    st.success(f"✅ Granted consent to {result.get('granted_count', 0)} users")
+                    st.success(f"✅ Granted consent to {result.get('success_count', 0)} users")
                     st.rerun()
                 else:
                     st.info("All filtered users already have consent")
@@ -995,18 +1005,21 @@ def render_recommendations_tab():
 
             with col1:
                 if st.button(f"✅ Approve #{idx}", key=f"approve_{idx}", use_container_width=True):
-                    operator = st.session_state.get("operator_name", "Unknown Operator")
-                    success = log_operator_override(
-                        user_id=selected_user,
-                        operator_name=operator,
-                        action="approve",
-                        reason="Recommendation approved after review",
-                        recommendation_title=rec.get("title")
-                    )
-                    if success:
-                        st.success(f"✅ Approved recommendation #{idx}")
+                    operator = (st.session_state.get("operator_name", "") or "").strip()
+                    if not operator:
+                        st.warning("Please enter your name in the sidebar under 'Operator Identity' before approving.")
                     else:
-                        st.error("Failed to log approval")
+                        success = log_operator_override(
+                            user_id=selected_user,
+                            operator_name=operator,
+                            action="approve",
+                            reason="Recommendation approved after review",
+                            recommendation_title=rec.get("title")
+                        )
+                        if success:
+                            st.success(f"✅ Approved recommendation #{idx}")
+                        else:
+                            st.error("Failed to log approval")
 
             with col2:
                 if st.button(f"⚠️ Override #{idx}", key=f"override_{idx}", use_container_width=True):
