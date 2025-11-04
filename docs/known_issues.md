@@ -214,3 +214,16 @@ Criteria: `(growth ≥2% OR inflow ≥$200) AND utilization <30%`
 ### Test Status:
 - 39/39 tests passing ✅
 - All P0 fixes validated
+
+---
+
+## Changelog (recent fixes)
+
+- 06060da docs(known-issues): Resolve inconsistent OPEN statuses; mark income patterns fixed and dedupe summary.
+- 79f2c58 docs(known-issues): Mark P1 data-generation issues as fixed (cf295b6) and clarify open items as P2.
+- f0bd257 docs(known-issues): Update fixed statuses, commits, and correct subscription lookback fix description.
+- cf295b6 feat(generator): Stable subscription prices and diversified income patterns; keep deterministic output and tests passing.
+- dbf310d fix(subscriptions): Restore short-window detection while honoring 90-day lookback.
+- 3887c0d fix(subscriptions): Honor 90-day lookback for recurring detection (prevent long-window false positives).
+- 9f8ca0f fix(p0): Correct percentage format and persona thresholds (use percent units for comparisons).
+- 778213b fix(validator): Guard revoked vs consent comparison; prevent TypeError and record proper validation error.
