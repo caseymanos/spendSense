@@ -210,67 +210,91 @@
 
 ---
 
-## PR #3: Persona Assignment System
+## PR #3: Persona Assignment System ✅ COMPLETED
 
 **Goal:** Classify users into personas based on behavioral signals
 
+**Status:** Complete - 2025-11-03
+
 ### Tasks:
-- [ ] **Define persona criteria**
+- [x] **Define persona criteria**
   - Files: `personas/assignment.py`
   - Implement 4 required personas:
     - High Utilization (utilization ≥50% OR interest > 0 OR min-payment-only OR overdue)
     - Variable Income Budgeter (median pay gap > 45 days AND buffer < 1 month)
     - Subscription Heavy (recurring ≥3 AND spend ≥$50 OR ≥10%)
     - Savings Builder (growth ≥2% OR inflow ≥$200 AND utilization < 30%)
+  - **Result:** ✅ All 4 personas + general (default) implemented
 
-- [ ] **Implement persona priority logic**
+- [x] **Implement persona priority logic**
   - Files: `personas/assignment.py`
-  - Priority order: High Utilization → Variable Income → Subscription Heavy → Savings Builder → Custom
+  - Priority order: High Utilization → Variable Income → Subscription Heavy → Savings Builder → General
   - Handle multi-persona matches
   - Return single primary persona per user
+  - **Result:** ✅ Priority-based assignment working correctly
 
-- [ ] **Create persona assignment storage**
+- [x] **Create persona assignment storage**
   - Files: `personas/assignment.py`
-  - SQLite table: `persona_assignments` with fields: `user_id`, `persona`, `criteria_met`, `timestamp`
+  - SQLite table: `persona_assignments` with fields: `assignment_id`, `user_id`, `persona`, `criteria_met`, `assigned_at`
   - Generate decision trace JSON per user
+  - **Result:** ✅ 100 assignments stored in SQLite, 100 trace JSONs updated
 
-- [ ] **Document custom persona slot**
-  - Files: `docs/decision_log.md`
+- [x] **Document custom persona slot**
+  - Files: `docs/decision_log.md`, `personas/assignment.py`
   - Reserve Persona 5 for post-MVP customization
   - Document extensibility pattern
+  - **Result:** ✅ Using 'general' as default persona for users with minimal signals
 
-- [ ] **✅ UNIT TEST: High Utilization persona criteria**
+- [x] **✅ UNIT TEST: High Utilization persona criteria**
   - Files: `tests/test_personas.py`
   - **Test:** Mock signal data with `utilization=68%`, `interest=$87`
   - **Verify:** Assigned to "high_utilization" persona
   - **Expected:** Criteria_met includes both flags
+  - **Result:** ✅ PASSED (4 tests for high utilization)
 
-- [ ] **✅ UNIT TEST: Variable Income persona criteria**
+- [x] **✅ UNIT TEST: Variable Income persona criteria**
   - Files: `tests/test_personas.py`
   - **Test:** Mock signal data with `median_pay_gap=50 days`, `cash_buffer=0.8 months`
   - **Verify:** Assigned to "variable_income" persona
   - **Expected:** Both conditions satisfied
+  - **Result:** ✅ PASSED (3 tests for variable income)
 
-- [ ] **✅ UNIT TEST: Persona priority ordering**
+- [x] **✅ UNIT TEST: Persona priority ordering**
   - Files: `tests/test_personas.py`
   - **Test:** Mock user matching BOTH High Utilization AND Savings Builder criteria
   - **Verify:** Assigned to "high_utilization" (higher priority)
   - **Expected:** Only one persona assigned, follows priority rules
+  - **Result:** ✅ PASSED (2 priority tests)
 
-- [ ] **✅ UNIT TEST: Edge case - No persona match**
+- [x] **✅ UNIT TEST: Edge case - No persona match**
   - Files: `tests/test_personas.py`
   - **Test:** Mock user with no signals meeting any persona threshold
-  - **Verify:** Returns `None` or default persona gracefully
+  - **Verify:** Returns 'general' persona gracefully
   - **Expected:** No crash, logged for manual review
+  - **Result:** ✅ PASSED (2 edge case tests)
 
-- [ ] **✅ INTEGRATION TEST: Full persona assignment**
+- [x] **✅ INTEGRATION TEST: Full persona assignment**
   - Files: `tests/test_personas.py`
   - **Test:** Assign personas to all synthetic users from PR #2
-  - **Verify:** 
+  - **Verify:**
     - 100% of users with ≥3 behaviors have assigned persona
     - `persona_assignments` table populated in SQLite
     - Trace JSONs updated with persona logic
   - **Expected:** Coverage metric = 100%, all assignments traceable
+  - **Result:** ✅ PASSED
+
+### Deliverables Summary:
+- **Files Created:** 3 files (~650 lines of code)
+  - Core module: `personas/assignment.py` (320 lines)
+  - Module init: `personas/__init__.py` (28 lines)
+  - Tests: `tests/test_personas.py` (330 lines)
+- **Tests:** 18 tests (all passing)
+- **Persona Distribution:**
+  - High Utilization: 67 users (67%)
+  - General (default): 33 users (33%)
+- **Database:** 100 persona assignments in SQLite
+- **Trace Files:** 100 trace JSONs updated with persona assignment data
+- **Total Test Count:** 39 tests passing (PR #1: 15, PR #2: 6, PR #3: 18)
 
 ---
 

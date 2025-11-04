@@ -12,7 +12,7 @@ This is the single source of truth for tunable parameters.
 
 PERSONA_THRESHOLDS = {
     "high_utilization": {
-        "utilization_threshold": 0.50,  # 50% or higher credit utilization
+        "utilization_threshold": 50.0,  # 50% or higher credit utilization
         "interest_threshold": 0.01,     # Any interest charges (> $0)
         "min_payment_only": True,       # Flag for minimum payment pattern
         "overdue_flag": True,           # Flag for overdue status
@@ -20,17 +20,17 @@ PERSONA_THRESHOLDS = {
     "variable_income": {
         "median_pay_gap_days": 45,      # More than 45 days between paychecks
         "cash_buffer_months": 1.0,      # Less than 1 month cash buffer
-        "income_variability_threshold": 0.25,  # 25% std dev in income
+        "income_variability_threshold": 25.0,  # 25% std dev in income
     },
     "subscription_heavy": {
         "min_recurring_count": 3,       # At least 3 recurring merchants
         "recurring_spend_min": 50.0,    # At least $50/month OR
-        "recurring_spend_pct": 0.10,    # 10% of total spend
+        "recurring_spend_pct": 0.10,    # 10% of total spend (decimal form: 0.10 = 10%)
     },
     "savings_builder": {
-        "growth_rate_pct": 0.02,        # 2% or higher savings growth rate
+        "growth_rate_pct": 0.02,        # 2% or higher savings growth rate (decimal form: 0.02 = 2%)
         "net_inflow_min": 200.0,        # At least $200 net inflow OR
-        "max_utilization": 0.30,        # Credit utilization below 30%
+        "max_utilization": 30.0,        # Credit utilization below 30% (percentage form: 30.0 = 30%)
     },
 }
 
@@ -71,9 +71,9 @@ SAVINGS_ANALYSIS = {
 
 # Credit Utilization Flags (PRD Part 2, Section 5.3)
 CREDIT_UTILIZATION_FLAGS = {
-    "warning_threshold": 0.30,   # 30% utilization - yellow flag
-    "high_threshold": 0.50,      # 50% utilization - orange flag
-    "critical_threshold": 0.80,  # 80% utilization - red flag
+    "warning_threshold": 30.0,   # 30% utilization - yellow flag
+    "high_threshold": 50.0,      # 50% utilization - orange flag
+    "critical_threshold": 80.0,  # 80% utilization - red flag
 }
 
 # Income Stability Detection

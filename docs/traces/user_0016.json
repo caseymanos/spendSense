@@ -78,5 +78,24 @@
         "avg_paycheck": 0.0
       }
     }
+  },
+  "persona_assignment": {
+    "persona": "high_utilization",
+    "criteria_met": {
+      "high_utilization": 61.4,
+      "has_interest": true
+    },
+    "all_checks": {
+      "high_utilization": {
+        "high_utilization": 61.4,
+        "has_interest": true
+      },
+      "variable_income": {
+        "cash_buffer_months": 0.0
+      },
+      "subscription_heavy": {},
+      "savings_builder": {}
+    },
+    "timestamp": "2025-11-03T20:37:50.765725"
   }
 }

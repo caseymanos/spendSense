@@ -83,10 +83,10 @@ def calculate_credit_signals(
         max_utilization = 0.0
         avg_utilization = 0.0
 
-    # Check threshold flags
-    flag_30 = max_utilization >= (CREDIT_UTILIZATION_FLAGS['warning_threshold'] * 100)
-    flag_50 = max_utilization >= (CREDIT_UTILIZATION_FLAGS['high_threshold'] * 100)
-    flag_80 = max_utilization >= (CREDIT_UTILIZATION_FLAGS['critical_threshold'] * 100)
+    # Check threshold flags (thresholds are already in percentage form: 30.0 = 30%)
+    flag_30 = max_utilization >= CREDIT_UTILIZATION_FLAGS['warning_threshold']
+    flag_50 = max_utilization >= CREDIT_UTILIZATION_FLAGS['high_threshold']
+    flag_80 = max_utilization >= CREDIT_UTILIZATION_FLAGS['critical_threshold']
 
     # Check liabilities for minimum payment and interest patterns
     credit_account_ids = credit_cards['account_id'].tolist()
