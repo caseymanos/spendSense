@@ -11,9 +11,21 @@ import numpy as np
 from faker import Faker
 
 from ingest.schemas import (
-    User, Account, Transaction, Liability, DataGenerationConfig,
-    AccountType, AccountSubtype, PaymentChannel, Gender, IncomeTier, Region,
-    TRANSACTION_CATEGORIES, RECURRING_MERCHANTS, GROCERY_MERCHANTS, RESTAURANT_MERCHANTS
+    User,
+    Account,
+    Transaction,
+    Liability,
+    DataGenerationConfig,
+    AccountType,
+    AccountSubtype,
+    PaymentChannel,
+    Gender,
+    IncomeTier,
+    Region,
+    TRANSACTION_CATEGORIES,
+    RECURRING_MERCHANTS,
+    GROCERY_MERCHANTS,
+    RESTAURANT_MERCHANTS,
 )
 from ingest.constants import SUBSCRIPTION_PRICES
 
@@ -56,7 +68,7 @@ class SyntheticDataGenerator:
                 gender=str(self.rng.choice([g.value for g in Gender])),
                 income_tier=str(self.rng.choice([t.value for t in IncomeTier])),
                 region=str(self.rng.choice([r.value for r in Region])),
-                created_at=datetime.now()
+                created_at=datetime.now(),
             )
             users.append(user)
 
@@ -83,7 +95,7 @@ class SyntheticDataGenerator:
                 holder_category="consumer",
                 mask=f"{int(self.rng.integers(1000, 9999))}",
                 name="Checking Account",
-                official_name=f"{self.fake.company()} Bank Checking"
+                official_name=f"{self.fake.company()} Bank Checking",
             )
             accounts.append(checking)
             account_counter += 1
@@ -102,7 +114,7 @@ class SyntheticDataGenerator:
                     holder_category="consumer",
                     mask=f"{int(self.rng.integers(1000, 9999))}",
                     name="Savings Account",
-                    official_name=f"{self.fake.company()} Bank Savings"
+                    official_name=f"{self.fake.company()} Bank Savings",
                 )
                 accounts.append(savings)
                 account_counter += 1
@@ -130,7 +142,7 @@ class SyntheticDataGenerator:
                     holder_category="consumer",
                     mask=f"{int(self.rng.integers(1000, 9999))}",
                     name="Credit Card",
-                    official_name=f"{self.rng.choice(['Visa', 'Mastercard', 'Amex'])} {self.fake.company()}"
+                    official_name=f"{self.rng.choice(['Visa', 'Mastercard', 'Amex'])} {self.fake.company()}",
                 )
                 accounts.append(credit_card)
                 account_counter += 1
@@ -152,7 +164,9 @@ class SyntheticDataGenerator:
         for user_id, user_accs in user_accounts.items():
             # Determine user spending profile
             is_high_spender = float(self.rng.random()) < 0.3
-            num_transactions = int(self.config.avg_transactions_per_month * self.config.months_history)
+            num_transactions = int(
+                self.config.avg_transactions_per_month * self.config.months_history
+            )
 
             # Adjust for spending profile
             if is_high_spender:
@@ -172,31 +186,39 @@ class SyntheticDataGenerator:
                 monthly_transfer = float(self.rng.uniform(100, 400))
                 has_savings_transfer = True
                 for month_offset in range(self.config.months_history):
-                    trans_date = self.start_date + timedelta(days=30 * month_offset + int(self.rng.integers(1, 5)))
+                    trans_date = self.start_date + timedelta(
+                        days=30 * month_offset + int(self.rng.integers(1, 5))
+                    )
                     # Deposit into savings (negative = credit)
-                    transactions.append(Transaction(
-                        transaction_id=f"txn_{transaction_counter:08d}",
-                        account_id=savings_accs[0].account_id,
-                        date=trans_date,
-                        amount=-monthly_transfer,
-                        merchant_name="Transfer from Checking",
-                        payment_channel=PaymentChannel.OTHER,
-                        personal_finance_category="TRANSFER_IN",
-                        personal_finance_subcategory="Savings",
-                        pending=False
-                    ))
+                    transactions.append(
+                        Transaction(
+                            transaction_id=f"txn_{transaction_counter:08d}",
+                            account_id=savings_accs[0].account_id,
+                            date=trans_date,
+                            amount=-monthly_transfer,
+                            merchant_name="Transfer from Checking",
+                            payment_channel=PaymentChannel.OTHER,
+                            personal_finance_category="TRANSFER_IN",
+                            personal_finance_subcategory="Savings",
+                            pending=False,
+                        )
+                    )
                     transaction_counter += 1
 
             # Generate recurring subscriptions (reduced probability if saving-focused)
             has_subscriptions = float(self.rng.random()) < (0.15 if has_savings_transfer else 0.45)
             if has_subscriptions and primary_checking:
                 num_subs = int(self.rng.integers(3, 6))
-                selected_subs = self.rng.choice(RECURRING_MERCHANTS, size=min(num_subs, len(RECURRING_MERCHANTS)), replace=False)
+                selected_subs = self.rng.choice(
+                    RECURRING_MERCHANTS, size=min(num_subs, len(RECURRING_MERCHANTS)), replace=False
+                )
 
                 for merchant in selected_subs:
                     # Generate monthly recurring transaction
                     for month_offset in range(self.config.months_history):
-                        trans_date = self.start_date + timedelta(days=30 * month_offset + int(self.rng.integers(1, 28)))
+                        trans_date = self.start_date + timedelta(
+                            days=30 * month_offset + int(self.rng.integers(1, 28))
+                        )
                         # Use fixed subscription price (with tiny jitter within 2% to be realistic)
                         base_price = SUBSCRIPTION_PRICES.get(merchant, None)
                         if base_price is None:
@@ -214,7 +236,7 @@ class SyntheticDataGenerator:
                             payment_channel=PaymentChannel.ONLINE,
                             personal_finance_category="GENERAL_SERVICES",
                             personal_finance_subcategory="Subscription Services",
-                            pending=False
+                            pending=False,
                         )
                         transactions.append(transaction)
                         transaction_counter += 1
@@ -270,7 +292,9 @@ class SyntheticDataGenerator:
                     personal_finance_subcategory=subcategory,
                     pending=False,
                     location_city=self.fake.city() if float(self.rng.random()) < 0.5 else None,
-                    location_state=self.fake.state_abbr() if float(self.rng.random()) < 0.5 else None
+                    location_state=(
+                        self.fake.state_abbr() if float(self.rng.random()) < 0.5 else None
+                    ),
                 )
                 transactions.append(transaction)
                 transaction_counter += 1
@@ -299,7 +323,9 @@ class SyntheticDataGenerator:
                             yield self.start_date + timedelta(days=interval * i)
                     elif pay_pattern == "monthly":
                         for i in range(self.config.months_history):
-                            yield self.start_date + timedelta(days=30 * i + int(self.rng.integers(0, 3)))
+                            yield self.start_date + timedelta(
+                                days=30 * i + int(self.rng.integers(0, 3))
+                            )
                     else:  # irregular: variable gaps 20-60 days
                         day = 0
                         total_days = self.config.months_history * 30
@@ -323,7 +349,7 @@ class SyntheticDataGenerator:
                         payment_channel=PaymentChannel.OTHER,
                         personal_finance_category="INCOME",
                         personal_finance_subcategory="Payroll",
-                        pending=False
+                        pending=False,
                     )
                     transactions.append(payroll)
                     transaction_counter += 1
@@ -339,7 +365,9 @@ class SyntheticDataGenerator:
 
         for account in credit_accounts:
             # Calculate utilization
-            utilization = account.balance_current / account.balance_limit if account.balance_limit else 0
+            utilization = (
+                account.balance_current / account.balance_limit if account.balance_limit else 0
+            )
 
             # Higher utilization = higher chance of issues
             is_overdue = utilization > 0.8 and float(self.rng.random()) < 0.3
@@ -356,18 +384,24 @@ class SyntheticDataGenerator:
                 user_id=account.user_id,
                 apr=apr,
                 minimum_payment=min_payment,
-                last_payment_amount=float(self.rng.uniform(min_payment, account.balance_current * 0.5)) if float(self.rng.random()) < 0.9 else None,
+                last_payment_amount=(
+                    float(self.rng.uniform(min_payment, account.balance_current * 0.5))
+                    if float(self.rng.random()) < 0.9
+                    else None
+                ),
                 last_payment_date=self.end_date - timedelta(days=int(self.rng.integers(1, 30))),
                 next_due_date=self.end_date + timedelta(days=int(self.rng.integers(1, 30))),
                 is_overdue=is_overdue,
-                overdue_amount=float(self.rng.uniform(25, 200)) if is_overdue else None
+                overdue_amount=float(self.rng.uniform(25, 200)) if is_overdue else None,
             )
             liabilities.append(liability)
             liability_counter += 1
 
         return liabilities
 
-    def generate_interest_transactions(self, accounts: List[Account], liabilities: List[Liability]) -> List[Transaction]:
+    def generate_interest_transactions(
+        self, accounts: List[Account], liabilities: List[Liability]
+    ) -> List[Transaction]:
         """Generate monthly interest charge transactions for revolving credit balances.
 
         Creates a positive (debit) transaction on each credit card for each month
@@ -380,7 +414,10 @@ class SyntheticDataGenerator:
 
         # For each credit account, post a monthly interest charge
         for acc in accounts:
-            if acc.account_type != AccountType.CREDIT or acc.account_subtype != AccountSubtype.CREDIT_CARD:
+            if (
+                acc.account_type != AccountType.CREDIT
+                or acc.account_subtype != AccountSubtype.CREDIT_CARD
+            ):
                 continue
 
             if not acc.balance_limit or acc.balance_limit <= 0:
@@ -406,24 +443,28 @@ class SyntheticDataGenerator:
             # With some probability, post interest each month
             if float(self.rng.random()) < 0.6:
                 for month in range(self.config.months_history):
-                    post_date = self.start_date + timedelta(days=30 * (month + 1) - int(self.rng.integers(1, 5)))
+                    post_date = self.start_date + timedelta(
+                        days=30 * (month + 1) - int(self.rng.integers(1, 5))
+                    )
                     jitter = float(self.rng.uniform(-0.05, 0.05))  # ±5%
                     amount = round(base_interest * (1.0 + jitter), 2)
                     if amount <= 0:
                         continue
 
-                    interest_txns.append(Transaction(
-                        transaction_id=f"txn_interest_{acc.account_id}_{month:02d}",
-                        account_id=acc.account_id,
-                        user_id=acc.user_id,
-                        date=post_date,
-                        amount=amount,  # Positive = debit/charge
-                        merchant_name="Credit Card Interest",
-                        payment_channel=PaymentChannel.OTHER,
-                        personal_finance_category="FEES_AND_CHARGES",
-                        personal_finance_subcategory="Interest",
-                        pending=False
-                    ))
+                    interest_txns.append(
+                        Transaction(
+                            transaction_id=f"txn_interest_{acc.account_id}_{month:02d}",
+                            account_id=acc.account_id,
+                            user_id=acc.user_id,
+                            date=post_date,
+                            amount=amount,  # Positive = debit/charge
+                            merchant_name="Credit Card Interest",
+                            payment_channel=PaymentChannel.OTHER,
+                            personal_finance_category="FEES_AND_CHARGES",
+                            personal_finance_subcategory="Interest",
+                            pending=False,
+                        )
+                    )
 
         return interest_txns
 
@@ -466,15 +507,15 @@ def main():
     # Save config
     config_path = data_dir / "config.json"
     with open(config_path, "w") as f:
-        json.dump(config.model_dump(mode='json'), f, indent=2, default=str)
+        json.dump(config.model_dump(mode="json"), f, indent=2, default=str)
     print(f"✓ Saved config to {config_path}")
 
     # Prepare data for loader
     data = {
-        "users": [u.model_dump(mode='json') for u in users],
-        "accounts": [a.model_dump(mode='json') for a in accounts],
-        "transactions": [t.model_dump(mode='json') for t in transactions],
-        "liabilities": [l.model_dump(mode='json') for l in liabilities]
+        "users": [u.model_dump(mode="json") for u in users],
+        "accounts": [a.model_dump(mode="json") for a in accounts],
+        "transactions": [t.model_dump(mode="json") for t in transactions],
+        "liabilities": [l.model_dump(mode="json") for l in liabilities],
     }
 
     # Save intermediate JSON (for validation)
@@ -484,7 +525,7 @@ def main():
     print(f"✓ Saved JSON data to {json_path}")
 
     print("\n✅ Data generation complete!")
-    print(f"Next step: Run 'uv run python -m ingest.loader' to load into SQLite and Parquet")
+    print("Next step: Run 'uv run python -m ingest.loader' to load into SQLite and Parquet")
 
 
 if __name__ == "__main__":

@@ -184,7 +184,7 @@ def load_guardrail_summary() -> Dict[str, Any]:
         return summary
 
     trace_files = list(TRACES_DIR.glob("*.json"))
-    summary["total_users"] = len([f for f in trace_files if not f.name.startswith('user_missing')])
+    summary["total_users"] = len([f for f in trace_files if not f.name.startswith("user_missing")])
 
     for trace_file in trace_files:
         try:
@@ -228,7 +228,7 @@ def load_config() -> Dict[str, Any]:
             "num_users": 100,
             "months_history": 6,
             "avg_transactions_per_month": 30,
-            "generation_timestamp": datetime.now().isoformat()
+            "generation_timestamp": datetime.now().isoformat(),
         }
 
     try:
@@ -265,7 +265,7 @@ def log_operator_override(
     operator_name: str,
     action: str,  # "approve", "override", "flag"
     reason: str,
-    recommendation_title: str = None
+    recommendation_title: str = None,
 ) -> tuple[bool, str]:
     """
     Log operator override to decision_log.md and update trace JSON.

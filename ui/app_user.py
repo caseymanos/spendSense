@@ -23,7 +23,7 @@ import json
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 
 # Configure Streamlit page
 st.set_page_config(
@@ -60,8 +60,7 @@ def load_all_users() -> pd.DataFrame:
 
     with sqlite3.connect(DB_PATH) as conn:
         users_df = pd.read_sql(
-            "SELECT user_id, name, consent_granted FROM users ORDER BY user_id",
-            conn
+            "SELECT user_id, name, consent_granted FROM users ORDER BY user_id", conn
         )
     return users_df
 
@@ -69,11 +68,7 @@ def load_all_users() -> pd.DataFrame:
 def load_user_data(user_id: str) -> Dict[str, Any]:
     """Load user demographics and consent status."""
     with sqlite3.connect(DB_PATH) as conn:
-        user_df = pd.read_sql(
-            "SELECT * FROM users WHERE user_id = ?",
-            conn,
-            params=(user_id,)
-        )
+        user_df = pd.read_sql("SELECT * FROM users WHERE user_id = ?", conn, params=(user_id,))
 
         if len(user_df) == 0:
             return {}
@@ -90,7 +85,7 @@ def load_persona_assignment(user_id: str) -> Optional[Dict[str, Any]]:
         persona_df = pd.read_sql(
             "SELECT * FROM persona_assignments WHERE user_id = ? ORDER BY assigned_at DESC LIMIT 1",
             conn,
-            params=(user_id,)
+            params=(user_id,),
         )
 
         if len(persona_df) == 0:
@@ -129,7 +124,7 @@ def grant_consent(user_id: str) -> bool:
         with sqlite3.connect(DB_PATH) as conn:
             conn.execute(
                 "UPDATE users SET consent_granted = 1, consent_timestamp = ? WHERE user_id = ?",
-                (datetime.now().isoformat(), user_id)
+                (datetime.now().isoformat(), user_id),
             )
             conn.commit()
         return True
@@ -144,7 +139,7 @@ def revoke_consent(user_id: str) -> bool:
         with sqlite3.connect(DB_PATH) as conn:
             conn.execute(
                 "UPDATE users SET consent_granted = 0, revoked_timestamp = ? WHERE user_id = ?",
-                (datetime.now().isoformat(), user_id)
+                (datetime.now().isoformat(), user_id),
             )
             conn.commit()
         return True
@@ -210,7 +205,8 @@ def render_consent_banner(user_id: str):
     """Render consent banner for users who haven't opted in."""
     st.warning("⚠️ **Consent Required**")
 
-    st.markdown("""
+    st.markdown(
+        """
     ### Welcome to SpendSense!
 
     To provide you with personalized financial education and insights, we need your consent to analyze your transaction data.
@@ -229,7 +225,8 @@ def render_consent_banner(user_id: str):
     - You can revoke consent at any time
     - All processing stops immediately upon revocation
     - Your data is stored securely and used only for generating insights
-    """)
+    """
+    )
 
     col1, col2, col3 = st.columns([1, 2, 1])
 
@@ -258,8 +255,7 @@ def render_sidebar():
 
         # Format user options
         user_options = [
-            f"{row['user_id']} - {row['name']}" +
-            (" ✅" if row['consent_granted'] else " ⏸️")
+            f"{row['user_id']} - {row['name']}" + (" ✅" if row["consent_granted"] else " ⏸️")
             for _, row in users_df.iterrows()
         ]
 
@@ -267,7 +263,7 @@ def render_sidebar():
             "Choose a user profile:",
             range(len(user_options)),
             format_func=lambda i: user_options[i],
-            key="user_selector"
+            key="user_selector",
         )
 
         selected_user_id = users_df.iloc[selected_idx]["user_id"]
@@ -277,20 +273,25 @@ def render_sidebar():
         # Navigation
         st.subheader("Navigation")
         page = st.radio(
-            "Go to:",
-            ["🏠 Dashboard", "📚 Learning Feed", "🔒 Privacy Settings"],
-            key="navigation"
+            "Go to:", ["🏠 Dashboard", "📚 Learning Feed", "🔒 Privacy Settings"], key="navigation"
         )
 
         st.divider()
 
         # Disclaimer
-        st.caption("**Disclaimer:** This is educational content, not financial advice. Consult a licensed advisor for personalized guidance.")
+        st.caption(
+            "**Disclaimer:** This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+        )
 
         return selected_user_id, page
 
 
-def render_dashboard(user_id: str, user_data: Dict[str, Any], persona_data: Optional[Dict[str, Any]], signals: Dict[str, Any]):
+def render_dashboard(
+    user_id: str,
+    user_data: Dict[str, Any],
+    persona_data: Optional[Dict[str, Any]],
+    signals: Dict[str, Any],
+):
     """Render main dashboard page."""
     st.title("🏠 Your Financial Dashboard")
 
@@ -329,7 +330,9 @@ def render_dashboard(user_id: str, user_data: Dict[str, Any], persona_data: Opti
                 for criterion in persona_data.get("criteria_met", []):
                     st.markdown(f"- {criterion}")
     else:
-        st.warning("No persona assigned yet. We need more data to understand your financial patterns.")
+        st.warning(
+            "No persona assigned yet. We need more data to understand your financial patterns."
+        )
 
     st.divider()
 
@@ -343,13 +346,13 @@ def render_dashboard(user_id: str, user_data: Dict[str, Any], persona_data: Opti
         st.metric(
             label="Credit Cards",
             value=int(signals.get("credit_num_cards", 0)),
-            help="Number of credit card accounts"
+            help="Number of credit card accounts",
         )
         if signals.get("credit_avg_util_pct"):
             st.metric(
                 label="Avg Utilization",
                 value=format_percentage(signals.get("credit_avg_util_pct", 0)),
-                help="Average credit utilization across all cards"
+                help="Average credit utilization across all cards",
             )
 
     # Subscription metrics
@@ -357,13 +360,13 @@ def render_dashboard(user_id: str, user_data: Dict[str, Any], persona_data: Opti
         st.metric(
             label="Recurring Services",
             value=int(signals.get("sub_180d_recurring_count", 0)),
-            help="Number of detected recurring subscriptions (180-day window)"
+            help="Number of detected recurring subscriptions (180-day window)",
         )
         if signals.get("sub_180d_monthly_spend"):
             st.metric(
                 label="Monthly Recurring",
                 value=format_currency(signals.get("sub_180d_monthly_spend", 0)),
-                help="Estimated monthly recurring spend"
+                help="Estimated monthly recurring spend",
             )
 
     # Savings metrics
@@ -372,13 +375,13 @@ def render_dashboard(user_id: str, user_data: Dict[str, Any], persona_data: Opti
             st.metric(
                 label="Savings Growth (6mo)",
                 value=format_currency(signals.get("sav_180d_net_inflow", 0)),
-                help="Net inflow to savings accounts (180-day window)"
+                help="Net inflow to savings accounts (180-day window)",
             )
         if signals.get("sav_180d_emergency_fund_months"):
             st.metric(
                 label="Emergency Fund",
                 value=f"{signals.get('sav_180d_emergency_fund_months', 0):.1f} mo",
-                help="Months of expenses covered by savings"
+                help="Months of expenses covered by savings",
             )
 
     # Income metrics
@@ -387,13 +390,13 @@ def render_dashboard(user_id: str, user_data: Dict[str, Any], persona_data: Opti
             st.metric(
                 label="Typical Pay Gap",
                 value=f"{int(signals.get('inc_180d_median_pay_gap_days', 0))} days",
-                help="Median days between paychecks (180-day window)"
+                help="Median days between paychecks (180-day window)",
             )
         if signals.get("inc_180d_cash_buffer_months"):
             st.metric(
                 label="Cash Buffer",
                 value=f"{signals.get('inc_180d_cash_buffer_months', 0):.1f} mo",
-                help="Months of expenses available in checking"
+                help="Months of expenses available in checking",
             )
 
     st.divider()
@@ -416,11 +419,15 @@ def render_dashboard(user_id: str, user_data: Dict[str, Any], persona_data: Opti
                     st.divider()
 
             if len(recommendations["recommendations"]) > 3:
-                st.info(f"💡 **{len(recommendations['recommendations']) - 3} more recommendations** available in the Learning Feed!")
+                st.info(
+                    f"💡 **{len(recommendations['recommendations']) - 3} more recommendations** available in the Learning Feed!"
+                )
         else:
             reason = recommendations.get("metadata", {}).get("reason", "unknown")
             if reason == "general_persona_no_recommendations":
-                st.info("🌱 **Getting to know you...** Keep using your accounts and we'll provide personalized recommendations soon!")
+                st.info(
+                    "🌱 **Getting to know you...** Keep using your accounts and we'll provide personalized recommendations soon!"
+                )
             else:
                 st.warning("No recommendations available at this time.")
 
@@ -453,17 +460,27 @@ def render_learning_feed(user_id: str, user_data: Dict[str, Any]):
         if not recommendations.get("recommendations"):
             reason = recommendations.get("metadata", {}).get("reason", "unknown")
             if reason == "general_persona_no_recommendations":
-                st.info("🌱 **Getting to know you...** We're still learning about your financial patterns. Keep using your accounts and personalized content will appear here soon!")
+                st.info(
+                    "🌱 **Getting to know you...** We're still learning about your financial patterns. Keep using your accounts and personalized content will appear here soon!"
+                )
             elif reason == "insufficient_data":
-                shortfall = recommendations.get("metadata", {}).get("education_eligibility_shortfall", 0)
-                st.warning(f"📊 **Limited data available.** We need more transaction history to provide {shortfall} additional personalized recommendations.")
+                shortfall = recommendations.get("metadata", {}).get(
+                    "education_eligibility_shortfall", 0
+                )
+                st.warning(
+                    f"📊 **Limited data available.** We need more transaction history to provide {shortfall} additional personalized recommendations."
+                )
             else:
                 st.warning("No recommendations available at this time.")
             return
 
         # Separate education and offers
-        education_items = [r for r in recommendations["recommendations"] if r["type"] == "education"]
-        partner_offers = [r for r in recommendations["recommendations"] if r["type"] == "partner_offer"]
+        education_items = [
+            r for r in recommendations["recommendations"] if r["type"] == "education"
+        ]
+        partner_offers = [
+            r for r in recommendations["recommendations"] if r["type"] == "partner_offer"
+        ]
 
         # Education section
         if education_items:
@@ -519,7 +536,9 @@ def render_learning_feed(user_id: str, user_data: Dict[str, Any]):
             st.markdown(f"**Generated:** {metadata.get('timestamp', 'Unknown')}")
             st.markdown(f"**Education items:** {metadata.get('education_count', 0)}")
             st.markdown(f"**Partner offers:** {metadata.get('offer_count', 0)}")
-            st.markdown(f"**Tone check:** {'✅ Passed' if metadata.get('tone_check_passed', True) else '⚠️ Flagged for review'}")
+            st.markdown(
+                f"**Tone check:** {'✅ Passed' if metadata.get('tone_check_passed', True) else '⚠️ Flagged for review'}"
+            )
 
     except Exception as e:
         st.error(f"Error loading learning feed: {e}")
@@ -530,11 +549,13 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
     """Render privacy and consent settings page."""
     st.title("🔒 Privacy & Consent Settings")
 
-    st.markdown("""
+    st.markdown(
+        """
     ### Your Data, Your Control
 
     SpendSense respects your privacy and puts you in control of your financial data.
-    """)
+    """
+    )
 
     st.divider()
 
@@ -546,10 +567,7 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
     col1, col2 = st.columns(2)
 
     with col1:
-        st.metric(
-            label="Consent Status",
-            value="✅ Active" if consent_granted else "⏸️ Not Granted"
-        )
+        st.metric(label="Consent Status", value="✅ Active" if consent_granted else "⏸️ Not Granted")
 
         if consent_granted and user_data.get("consent_timestamp"):
             st.caption(f"Granted: {user_data.get('consent_timestamp', 'Unknown')[:10]}")
@@ -558,10 +576,7 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
             st.caption(f"Revoked: {user_data.get('revoked_timestamp', 'Unknown')[:10]}")
 
     with col2:
-        st.metric(
-            label="Data Processing",
-            value="Enabled" if consent_granted else "Disabled"
-        )
+        st.metric(label="Data Processing", value="Enabled" if consent_granted else "Disabled")
 
     st.divider()
 
@@ -571,14 +586,16 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
     if consent_granted:
         st.success("✅ You've granted consent for data processing.")
 
-        st.markdown("""
+        st.markdown(
+            """
         **What this means:**
         - We analyze your transaction data to detect behavioral patterns
         - We generate personalized educational content based on your profile
         - We suggest partner offers that may be relevant to your situation
 
         **You can revoke consent at any time.** All data processing will stop immediately.
-        """)
+        """
+        )
 
         st.warning("⚠️ **Revoke Consent**")
         st.markdown("Revoking consent will:")
@@ -596,14 +613,16 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
     else:
         st.warning("⏸️ You have not granted consent for data processing.")
 
-        st.markdown("""
+        st.markdown(
+            """
         **To enable personalized insights:**
         - Grant consent below
         - We'll analyze your transaction patterns
         - You'll receive educational content tailored to your profile
 
         **You remain in control** and can revoke at any time.
-        """)
+        """
+        )
 
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
@@ -617,14 +636,16 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
     # Data export (coming soon)
     st.markdown("## 📥 Export Your Data")
 
-    st.info("""
+    st.info(
+        """
     **Coming Soon:** Download your complete data package including:
     - Transaction history
     - Detected behavioral patterns
     - Persona assignments
     - Recommendation history
     - Decision trace logs
-    """)
+    """
+    )
 
     st.button("📦 Export My Data", disabled=True, help="This feature is coming soon!")
 
@@ -632,7 +653,8 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
 
     # Privacy info
     with st.expander("ℹ️ How We Protect Your Privacy"):
-        st.markdown("""
+        st.markdown(
+            """
         ### Data Security
 
         - **Local Storage:** All data is stored locally in SQLite and Parquet files
@@ -659,7 +681,8 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
         - **Control:** Grant or revoke consent at any time
         - **Export:** Download your complete data package (coming soon)
         - **Transparency:** Access decision traces explaining all recommendations
-        """)
+        """
+        )
 
 
 # =============================================================================

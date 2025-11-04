@@ -13,10 +13,9 @@ overserved by the recommendation system.
 """
 
 import sqlite3
-from typing import Dict, Any, Tuple, List
+from typing import Dict, Any, Tuple
 
 import pandas as pd
-import numpy as np
 
 
 # ============================================
@@ -197,36 +196,28 @@ def calculate_persona_distribution(
     distribution["overall"] = merged["persona"].value_counts().to_dict()
 
     # Gender × Persona cross-tab
-    gender_persona = pd.crosstab(
-        merged["gender"], merged["persona"], normalize="index"
-    )
+    gender_persona = pd.crosstab(merged["gender"], merged["persona"], normalize="index")
     distribution["gender_by_persona"] = {
         str(gender): {str(persona): round(rate, 4) for persona, rate in row.items()}
         for gender, row in gender_persona.iterrows()
     }
 
     # Income Tier × Persona cross-tab
-    income_persona = pd.crosstab(
-        merged["income_tier"], merged["persona"], normalize="index"
-    )
+    income_persona = pd.crosstab(merged["income_tier"], merged["persona"], normalize="index")
     distribution["income_tier_by_persona"] = {
         str(tier): {str(persona): round(rate, 4) for persona, rate in row.items()}
         for tier, row in income_persona.iterrows()
     }
 
     # Region × Persona cross-tab
-    region_persona = pd.crosstab(
-        merged["region"], merged["persona"], normalize="index"
-    )
+    region_persona = pd.crosstab(merged["region"], merged["persona"], normalize="index")
     distribution["region_by_persona"] = {
         str(region): {str(persona): round(rate, 4) for persona, rate in row.items()}
         for region, row in region_persona.iterrows()
     }
 
     # Age Bucket × Persona cross-tab
-    age_persona = pd.crosstab(
-        merged["age_bucket"], merged["persona"], normalize="index"
-    )
+    age_persona = pd.crosstab(merged["age_bucket"], merged["persona"], normalize="index")
     distribution["age_by_persona"] = {
         str(bucket): {str(persona): round(rate, 4) for persona, rate in row.items()}
         for bucket, row in age_persona.iterrows()
@@ -389,7 +380,9 @@ This report analyzes demographic parity in persona assignment across four protec
     for gender, personas in distribution["gender_by_persona"].items():
         high_util = personas.get("high_utilization", 0.0) * 100
         general = personas.get("general", 0.0) * 100
-        other = sum(v for k, v in personas.items() if k not in ["high_utilization", "general"]) * 100
+        other = (
+            sum(v for k, v in personas.items() if k not in ["high_utilization", "general"]) * 100
+        )
         md += f"| {gender} | {high_util:.1f}% | {general:.1f}% | {other:.1f}% |\n"
 
     # ========================================
@@ -469,9 +462,7 @@ def calculate_fairness_metrics(
     print(f"Calculating fairness metrics for {len(users_df)} users...")
 
     # Calculate fairness parity
-    fairness_results, overall_rate = calculate_fairness_parity(
-        users_df, personas_df, tolerance
-    )
+    fairness_results, overall_rate = calculate_fairness_parity(users_df, personas_df, tolerance)
 
     # Calculate persona distribution
     distribution = calculate_persona_distribution(users_df, personas_df)

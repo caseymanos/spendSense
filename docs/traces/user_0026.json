@@ -1,6 +1,6 @@
 {
   "user_id": "user_0026",
-  "timestamp": "2025-11-04T00:26:46.683659",
+  "timestamp": "2025-11-04T00:34:43.542075",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -21,48 +21,56 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 6866.95
+        "emergency_fund_months": 5.17,
+        "savings_balance": 28096.66
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 6866.95
+        "emergency_fund_months": 5.05,
+        "savings_balance": 28096.66
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 0.0,
-        "avg_utilization_pct": 0.0,
+        "max_utilization_pct": 26.57,
+        "avg_utilization_pct": 26.57,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
-        "has_interest": false,
+        "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 0,
-        "utilization_by_card": [],
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000075",
+            "mask": "2259",
+            "balance": 6642.907596401079,
+            "limit": 25000.0,
+            "utilization_pct": 26.57
+          }
+        ],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 7,
+        "income_variability": 0.555,
+        "cash_buffer_months": 3.28,
+        "pay_frequency": "weekly",
+        "num_paychecks": 5,
+        "avg_paycheck": 4656.76
       },
       "180d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 4,
+        "income_variability": 0.8292,
+        "cash_buffer_months": 10.98,
+        "pay_frequency": "weekly",
+        "num_paychecks": 34,
+        "avg_paycheck": 2779.34
       }
     }
   },
@@ -71,14 +79,12 @@
     "criteria_met": {},
     "all_checks": {
       "high_utilization": {},
-      "variable_income": {
-        "cash_buffer_months": 0.0
-      },
+      "variable_income": {},
       "subscription_heavy": {},
       "savings_builder": {
-        "low_utilization": 0.0
+        "low_utilization": 26.57
       }
     },
-    "timestamp": "2025-11-04T00:26:52.185697"
+    "timestamp": "2025-11-04T10:18:44.369158"
   }
 }

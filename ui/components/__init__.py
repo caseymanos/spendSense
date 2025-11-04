@@ -11,15 +11,15 @@ from .charts import (
 from .operator_actions import create_operator_actions, create_override_dialog, create_flag_dialog
 
 __all__ = [
-    'create_metric_card',
-    'create_summary_metrics_row',
-    'create_data_table',
-    'create_filterable_table',
-    'create_persona_chart',
-    'create_distribution_chart',
-    'create_histogram',
-    'create_credit_utilization_histogram',
-    'create_operator_actions',
-    'create_override_dialog',
-    'create_flag_dialog',
+    "create_metric_card",
+    "create_summary_metrics_row",
+    "create_data_table",
+    "create_filterable_table",
+    "create_persona_chart",
+    "create_distribution_chart",
+    "create_histogram",
+    "create_credit_utilization_histogram",
+    "create_operator_actions",
+    "create_override_dialog",
+    "create_flag_dialog",
 ]

@@ -33,9 +33,7 @@ TRACE_DIR = Path("docs/traces")
 
 
 def run_all_guardrails(
-    user_id: str,
-    recommendations: List[Dict[str, Any]],
-    user_context: Dict[str, Any]
+    user_id: str, recommendations: List[Dict[str, Any]], user_context: Dict[str, Any]
 ) -> Dict[str, Any]:
     """
     Run all guardrail checks on recommendations for a user.
@@ -85,10 +83,14 @@ def run_all_guardrails(
         results["summary"] = "Consent not granted - processing blocked"
 
         # Log to trace file
-        log_guardrail_decision(user_id, "consent_blocked", {
-            "reason": "User has not granted consent",
-            "consent_status": consent_history["current_status"],
-        })
+        log_guardrail_decision(
+            user_id,
+            "consent_blocked",
+            {
+                "reason": "User has not granted consent",
+                "consent_status": consent_history["current_status"],
+            },
+        )
 
         return results
 
@@ -99,10 +101,14 @@ def run_all_guardrails(
     if not tone_scan["passed"]:
         results["passed"] = False
         # Log violations
-        log_guardrail_decision(user_id, "tone_violations", {
-            "violations_count": tone_scan["violations_found"],
-            "details": tone_scan["details"],
-        })
+        log_guardrail_decision(
+            user_id,
+            "tone_violations",
+            {
+                "violations_count": tone_scan["violations_found"],
+                "details": tone_scan["details"],
+            },
+        )
 
     # GUARDRAIL 3: Eligibility Filtering
     # Separate education items from offers
@@ -121,17 +127,21 @@ def run_all_guardrails(
 
     if eligibility_result["blocked_count"] > 0:
         # Log blocked offers
-        log_guardrail_decision(user_id, "offers_blocked", {
-            "blocked_count": eligibility_result["blocked_count"],
-            "blocked_offers": [
-                {
-                    "title": b["offer"].get("title"),
-                    "reason": b["reason"],
-                    "blocked_at": b["blocked_at"],
-                }
-                for b in eligibility_result["blocked_offers"]
-            ],
-        })
+        log_guardrail_decision(
+            user_id,
+            "offers_blocked",
+            {
+                "blocked_count": eligibility_result["blocked_count"],
+                "blocked_offers": [
+                    {
+                        "title": b["offer"].get("title"),
+                        "reason": b["reason"],
+                        "blocked_at": b["blocked_at"],
+                    }
+                    for b in eligibility_result["blocked_offers"]
+                ],
+            },
+        )
 
     # Combine education items (no filtering) with eligible offers
     filtered_recommendations = education_items + eligibility_result["eligible_offers"]
@@ -140,21 +150,21 @@ def run_all_guardrails(
     results["summary"] = _generate_summary(results)
 
     # Log final guardrail results to trace file
-    log_guardrail_decision(user_id, "guardrails_complete", {
-        "total_recommendations": len(recommendations),
-        "filtered_count": len(filtered_recommendations),
-        "tone_passed": tone_scan["passed"],
-        "eligibility_blocks": eligibility_result["blocked_count"],
-    })
+    log_guardrail_decision(
+        user_id,
+        "guardrails_complete",
+        {
+            "total_recommendations": len(recommendations),
+            "filtered_count": len(filtered_recommendations),
+            "tone_passed": tone_scan["passed"],
+            "eligibility_blocks": eligibility_result["blocked_count"],
+        },
+    )
 
     return results
 
 
-def log_guardrail_decision(
-    user_id: str,
-    decision_type: str,
-    details: Dict[str, Any]
-) -> None:
+def log_guardrail_decision(user_id: str, decision_type: str, details: Dict[str, Any]) -> None:
     """
     Log a guardrail decision to the user's trace file.
 

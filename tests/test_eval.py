@@ -10,20 +10,14 @@ This module contains 5 tests verifying the evaluation metrics:
 """
 
 import json
-import sqlite3
-import tempfile
 import time
 from pathlib import Path
 
 import pandas as pd
-import pytest
 
 from eval.metrics import (
     calculate_coverage,
     calculate_explainability,
-    calculate_relevance,
-    calculate_latency,
-    calculate_auditability,
     calculate_all_metrics,
 )
 from eval.fairness import calculate_fairness_parity, calculate_fairness_metrics
@@ -106,9 +100,7 @@ def test_coverage_metric_calculation():
     assert (
         metadata["users_with_meaningful_persona"] == 7
     ), "Should have 7 users with non-general persona"
-    assert (
-        metadata["users_with_3_behaviors"] == 7
-    ), "Should have 7 users with ≥3 behaviors"
+    assert metadata["users_with_3_behaviors"] == 7, "Should have 7 users with ≥3 behaviors"
     assert metadata["users_with_both"] == 7, "Should have 7 users with both criteria"
     assert coverage_pct == 70.0, "Coverage should be exactly 70%"
     assert metadata["passes"] == False, "Coverage should not pass (target is 100%)"
@@ -237,15 +229,11 @@ def test_latency_measurement_accuracy():
     assert mean_latency >= 0.001, "Mean latency should be at least 1ms"
     assert mean_latency < 0.1, "Mean latency should be under 100ms for mock data"
     assert max_latency >= min_latency, "Max should be >= min"
-    assert all(
-        isinstance(lat, float) for lat in latencies
-    ), "All latencies should be floats"
+    assert all(isinstance(lat, float) for lat in latencies), "All latencies should be floats"
 
     # Verify perf_counter has sufficient precision (microseconds)
     assert min_latency > 0, "Latency should be measurable (not zero)"
-    assert (
-        max_latency - min_latency >= 0
-    ), "Should detect timing variance between runs"
+    assert max_latency - min_latency >= 0, "Should detect timing variance between runs"
 
 
 # ============================================
@@ -312,12 +300,12 @@ def test_fairness_parity_calculation():
     # Check individual group rates
     assert abs(gender_results["group_rates"]["male"] - 0.5) < 0.01, "Male rate should be ~50%"
     assert abs(gender_results["group_rates"]["female"] - 0.333) < 0.01, "Female rate should be ~33%"
-    assert abs(gender_results["group_rates"]["non_binary"] - 0.667) < 0.01, "Non-binary rate should be ~67%"
+    assert (
+        abs(gender_results["group_rates"]["non_binary"] - 0.667) < 0.01
+    ), "Non-binary rate should be ~67%"
 
     # Verify deviations
-    assert (
-        gender_results["max_deviation"] > 0.10
-    ), "Max deviation should exceed 10% tolerance"
+    assert gender_results["max_deviation"] > 0.10, "Max deviation should exceed 10% tolerance"
 
     # Verify income_tier and region pass (all users have same values)
     assert fairness_results["demographics"]["income_tier"]["passes"] is True
@@ -421,9 +409,7 @@ def test_full_evaluation_run():
     latency = results["latency"]
     assert latency["value"] > 0, "Latency should be positive"
     assert latency["value"] < 5.0, "Mean latency should be under 5 seconds"
-    assert (
-        latency["metadata"]["users_tested"] == 10
-    ), "Should test 10 users (sample size)"
+    assert latency["metadata"]["users_tested"] == 10, "Should test 10 users (sample size)"
     print(f"✅ Latency: {latency['value']:.4f}s (mean)")
 
     # ========================================
@@ -449,28 +435,24 @@ def test_full_evaluation_run():
     assert "income_tier" in fairness["demographics"], "Should check income tier fairness"
     assert "region" in fairness["demographics"], "Should check region fairness"
     assert "age" in fairness["demographics"], "Should check age fairness"
-    print(
-        f"✅ Fairness: {'PASS' if fairness['all_demographics_pass'] else 'FAIL'}"
-    )
+    print(f"✅ Fairness: {'PASS' if fairness['all_demographics_pass'] else 'FAIL'}")
 
     # ========================================
     # Verify persona distribution
     # ========================================
     assert "overall" in distribution, "Should have overall persona distribution"
-    assert (
-        "high_utilization" in distribution["overall"]
-    ), "Should have high_utilization persona"
+    assert "high_utilization" in distribution["overall"], "Should have high_utilization persona"
     assert (
         sum(distribution["overall"].values()) == 100
     ), "Total persona assignments should equal 100"
-    print(f"✅ Persona distribution calculated")
+    print("✅ Persona distribution calculated")
 
     # ========================================
     # Verify summary
     # ========================================
     assert "summary" in results, "Results should include summary"
     assert results["summary"]["total_users"] == 100, "Summary should show 100 users"
-    print(f"\n✅ All 6 metrics calculated successfully on real synthetic data")
+    print("\n✅ All 6 metrics calculated successfully on real synthetic data")
 
     # ========================================
     # Test JSON serialization (ensure no errors)
@@ -482,4 +464,4 @@ def test_full_evaluation_run():
     # Verify JSON can be parsed back
     parsed = json.loads(json_str)
     assert parsed["coverage"]["value"] == results["coverage"]["value"]
-    print(f"✅ JSON round-trip successful")
+    print("✅ JSON round-trip successful")

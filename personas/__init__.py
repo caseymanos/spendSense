@@ -13,16 +13,17 @@ from personas.assignment import (
 )
 
 __all__ = [
-    'assign_persona',
-    'assign_all_personas',
-    'check_high_utilization',
-    'check_variable_income',
-    'check_subscription_heavy',
-    'check_savings_builder',
+    "assign_persona",
+    "assign_all_personas",
+    "check_high_utilization",
+    "check_variable_income",
+    "check_subscription_heavy",
+    "check_savings_builder",
 ]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # CLI entry point for running persona assignment
     from personas.assignment import assign_all_personas
+
     assign_all_personas()

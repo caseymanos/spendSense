@@ -16,7 +16,6 @@ Usage:
 
 import argparse
 import json
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -95,9 +94,7 @@ def generate_json_output(
                 "value": metrics["relevance"]["value"],
                 "target": metrics["relevance"]["metadata"]["target"],
                 "passes": metrics["relevance"]["metadata"]["passes"],
-                "total_recommendations": metrics["relevance"]["metadata"][
-                    "total_recommendations"
-                ],
+                "total_recommendations": metrics["relevance"]["metadata"]["total_recommendations"],
             },
             "latency": {
                 "value": metrics["latency"]["value"],
@@ -515,9 +512,7 @@ def print_console_summary(
     )
 
     print("-" * 60)
-    all_pass = (
-        metrics["summary"]["all_metrics_pass"] and fairness["all_demographics_pass"]
-    )
+    all_pass = metrics["summary"]["all_metrics_pass"] and fairness["all_demographics_pass"]
     print(f"\n{'OVERALL STATUS:':<20} {'✅ ALL PASS' if all_pass else '❌ SOME FAIL'}")
     print("=" * 60 + "\n")
 
@@ -531,9 +526,7 @@ def main():
     """
     Main entry point for evaluation harness.
     """
-    parser = argparse.ArgumentParser(
-        description="SpendSense Evaluation Harness - PR #8"
-    )
+    parser = argparse.ArgumentParser(description="SpendSense Evaluation Harness - PR #8")
     parser.add_argument(
         "--db",
         type=str,
@@ -657,16 +650,14 @@ def main():
         # ========================================
         print_console_summary(metrics, fairness)
 
-        print(f"✅ Evaluation complete! See docs/eval_summary.md for details.\n")
+        print("✅ Evaluation complete! See docs/eval_summary.md for details.\n")
 
         # Return 0 if all pass, 1 if any fail
-        all_pass = (
-            metrics["summary"]["all_metrics_pass"] and fairness["all_demographics_pass"]
-        )
+        all_pass = metrics["summary"]["all_metrics_pass"] and fairness["all_demographics_pass"]
         sys.exit(0 if all_pass else 1)
 
     except Exception as e:
-        print(f"\n❌ ERROR: Evaluation failed with exception:")
+        print("\n❌ ERROR: Evaluation failed with exception:")
         print(f"   {type(e).__name__}: {e}")
         import traceback
 

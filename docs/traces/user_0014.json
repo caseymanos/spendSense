@@ -1,6 +1,6 @@
 {
   "user_id": "user_0014",
-  "timestamp": "2025-11-04T00:26:46.550501",
+  "timestamp": "2025-11-04T00:34:43.370529",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -21,14 +21,14 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 3413.45
+        "emergency_fund_months": 0.88,
+        "savings_balance": 5856.54
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 3413.45
+        "emergency_fund_months": 0.92,
+        "savings_balance": 5856.54
       }
     },
     "credit": {
@@ -49,20 +49,20 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 4,
+        "income_variability": 0.8421,
+        "cash_buffer_months": 1.62,
+        "pay_frequency": "weekly",
+        "num_paychecks": 6,
+        "avg_paycheck": 2914.8
       },
       "180d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 5,
+        "income_variability": 0.6975,
+        "cash_buffer_months": 10.58,
+        "pay_frequency": "weekly",
+        "num_paychecks": 31,
+        "avg_paycheck": 3387.9
       }
     }
   },
@@ -71,14 +71,12 @@
     "criteria_met": {},
     "all_checks": {
       "high_utilization": {},
-      "variable_income": {
-        "cash_buffer_months": 0.0
-      },
+      "variable_income": {},
       "subscription_heavy": {},
       "savings_builder": {
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-04T00:26:52.182359"
+    "timestamp": "2025-11-04T10:18:44.367334"
   }
 }

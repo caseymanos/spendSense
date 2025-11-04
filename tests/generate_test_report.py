@@ -18,16 +18,24 @@ def run_pytest_with_coverage():
     # Run pytest with coverage
     result = subprocess.run(
         [
-            sys.executable, "-m", "pytest",
-            "--cov=ingest", "--cov=features", "--cov=personas",
-            "--cov=recommend", "--cov=guardrails", "--cov=eval", "--cov=ui",
+            sys.executable,
+            "-m",
+            "pytest",
+            "--cov=ingest",
+            "--cov=features",
+            "--cov=personas",
+            "--cov=recommend",
+            "--cov=guardrails",
+            "--cov=eval",
+            "--cov=ui",
             "--cov-report=json",
             "--cov-report=term",
-            "-v", "--tb=line",
-            "tests/"
+            "-v",
+            "--tb=line",
+            "tests/",
         ],
         capture_output=True,
-        text=True
+        text=True,
     )
 
     return result
@@ -35,7 +43,9 @@ def run_pytest_with_coverage():
 
 def parse_coverage_json():
     """Parse coverage.json file."""
-    coverage_path = Path(".coverage.json") if Path(".coverage.json").exists() else Path("coverage.json")
+    coverage_path = (
+        Path(".coverage.json") if Path(".coverage.json").exists() else Path("coverage.json")
+    )
 
     if not coverage_path.exists():
         print("Warning: coverage.json not found")
@@ -81,24 +91,28 @@ def generate_test_results_md(pytest_result, test_counts):
         "",
         f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
         f"**Python Version:** {sys.version.split()[0]}",
-        f"**Test Framework:** pytest",
+        "**Test Framework:** pytest",
         "",
         "## Summary",
-        ""
+        "",
     ]
 
     # Parse summary line
-    summary_line = [line for line in pytest_result.stdout.split("\n") if "passed" in line and "==" in line]
+    summary_line = [
+        line for line in pytest_result.stdout.split("\n") if "passed" in line and "==" in line
+    ]
     if summary_line:
         content.append(f"```\n{summary_line[-1].strip()}\n```\n")
 
     # Test breakdown by module
-    content.extend([
-        "## Test Breakdown by Module",
-        "",
-        "| Module | Tests | Passed | Failed | Pass Rate |",
-        "|--------|-------|--------|--------|-----------|"
-    ])
+    content.extend(
+        [
+            "## Test Breakdown by Module",
+            "",
+            "| Module | Tests | Passed | Failed | Pass Rate |",
+            "|--------|-------|--------|--------|-----------|",
+        ]
+    )
 
     total_passed = 0
     total_failed = 0
@@ -118,19 +132,23 @@ def generate_test_results_md(pytest_result, test_counts):
     total_tests = total_passed + total_failed
     overall_pass_rate = (total_passed / total_tests * 100) if total_tests > 0 else 0
 
-    content.extend([
-        f"| **TOTAL** | **{total_tests}** | **{total_passed}** | **{total_failed}** | **{overall_pass_rate:.1f}%** |",
-        ""
-    ])
+    content.extend(
+        [
+            f"| **TOTAL** | **{total_tests}** | **{total_passed}** | **{total_failed}** | **{overall_pass_rate:.1f}%** |",
+            "",
+        ]
+    )
 
     # Coverage summary
     if coverage_summary:
-        content.extend([
-            "## Code Coverage",
-            "",
-            "| Module | Statements | Missed | Coverage |",
-            "|--------|------------|--------|----------|"
-        ])
+        content.extend(
+            [
+                "## Code Coverage",
+                "",
+                "| Module | Statements | Missed | Coverage |",
+                "|--------|------------|--------|----------|",
+            ]
+        )
 
         for module, stats in sorted(coverage_summary.items()):
             content.append(
@@ -140,14 +158,16 @@ def generate_test_results_md(pytest_result, test_counts):
         content.append("")
 
     # Success criteria
-    content.extend([
-        "## Success Criteria Progress",
-        "",
-        "| Criterion | Target | Current | Status |",
-        "|-----------|--------|---------|--------|",
-        f"| Test Count | ≥10 | {total_tests} | {'✅' if total_tests >= 10 else '❌'} |",
-        f"| Pass Rate | 100% | {overall_pass_rate:.1f}% | {'✅' if overall_pass_rate == 100 else '⚠️'} |"
-    ])
+    content.extend(
+        [
+            "## Success Criteria Progress",
+            "",
+            "| Criterion | Target | Current | Status |",
+            "|-----------|--------|---------|--------|",
+            f"| Test Count | ≥10 | {total_tests} | {'✅' if total_tests >= 10 else '❌'} |",
+            f"| Pass Rate | 100% | {overall_pass_rate:.1f}% | {'✅' if overall_pass_rate == 100 else '⚠️'} |",
+        ]
+    )
 
     # Add coverage criterion if available
     if coverage_summary:
@@ -156,78 +176,80 @@ def generate_test_results_md(pytest_result, test_counts):
             f"| Code Coverage | ≥80% | {avg_coverage:.1f}% | {'✅' if avg_coverage >= 80 else '⚠️'} |"
         )
 
-    content.extend([
-        "",
-        "## Test Categories",
-        "",
-        "### PR #1: Data Foundation (15 tests)",
-        "- Schema validation",
-        "- Deterministic generation",
-        "- End-to-end data pipeline",
-        "",
-        "### PR #2: Behavioral Signals (6 tests)",
-        "- Subscription detection",
-        "- Credit utilization",
-        "- Savings patterns",
-        "- Income stability",
-        "",
-        "### PR #3: Persona Assignment (18 tests)",
-        "- High Utilization persona",
-        "- Variable Income persona",
-        "- Subscription Heavy persona",
-        "- Savings Builder persona",
-        "- Priority ordering",
-        "",
-        "### PR #4: Recommendations (14 tests)",
-        "- Rationale formatting",
-        "- Disclaimer presence",
-        "- Recommendation counts",
-        "- Eligibility filtering",
-        "",
-        "### PR #5: Guardrails (19 tests)",
-        "- Consent enforcement",
-        "- Tone validation",
-        "- Predatory product filtering",
-        "- Eligibility checks",
-        "",
-        "### PR #7: Operator UI (1 test)",
-        "- Operator attribution logging",
-        "",
-        "### PR #8: Evaluation (5 tests)",
-        "- Coverage metrics",
-        "- Explainability metrics",
-        "- Latency measurement",
-        "- Fairness calculation",
-        "",
-        "### PR #9: Integration (3 tests)",
-        "- End-to-end pipeline verification",
-        "- Component integration tests",
-        "",
-        "## Test Execution",
-        "",
-        "To run all tests:",
-        "```bash",
-        "uv run pytest tests/ -v",
-        "```",
-        "",
-        "To run with coverage:",
-        "```bash",
-        "uv run pytest --cov=ingest --cov=features --cov=personas --cov=recommend --cov=guardrails --cov=eval --cov=ui --cov-report=html tests/",
-        "```",
-        "",
-        "View HTML coverage report:",
-        "```bash",
-        "open htmlcov/index.html",
-        "```",
-        "",
-        "## Notes",
-        "",
-        "- All tests use deterministic seeding (`seed=42`) for reproducibility",
-        "- Integration tests verify the complete pipeline from data generation through evaluation",
-        "- UI tests (PR #6, PR #7) are primarily manual/visual for Streamlit apps",
-        f"- Total test count exceeds minimum requirement by {(total_tests / 10 - 1) * 100:.0f}%",
-        ""
-    ])
+    content.extend(
+        [
+            "",
+            "## Test Categories",
+            "",
+            "### PR #1: Data Foundation (15 tests)",
+            "- Schema validation",
+            "- Deterministic generation",
+            "- End-to-end data pipeline",
+            "",
+            "### PR #2: Behavioral Signals (6 tests)",
+            "- Subscription detection",
+            "- Credit utilization",
+            "- Savings patterns",
+            "- Income stability",
+            "",
+            "### PR #3: Persona Assignment (18 tests)",
+            "- High Utilization persona",
+            "- Variable Income persona",
+            "- Subscription Heavy persona",
+            "- Savings Builder persona",
+            "- Priority ordering",
+            "",
+            "### PR #4: Recommendations (14 tests)",
+            "- Rationale formatting",
+            "- Disclaimer presence",
+            "- Recommendation counts",
+            "- Eligibility filtering",
+            "",
+            "### PR #5: Guardrails (19 tests)",
+            "- Consent enforcement",
+            "- Tone validation",
+            "- Predatory product filtering",
+            "- Eligibility checks",
+            "",
+            "### PR #7: Operator UI (1 test)",
+            "- Operator attribution logging",
+            "",
+            "### PR #8: Evaluation (5 tests)",
+            "- Coverage metrics",
+            "- Explainability metrics",
+            "- Latency measurement",
+            "- Fairness calculation",
+            "",
+            "### PR #9: Integration (3 tests)",
+            "- End-to-end pipeline verification",
+            "- Component integration tests",
+            "",
+            "## Test Execution",
+            "",
+            "To run all tests:",
+            "```bash",
+            "uv run pytest tests/ -v",
+            "```",
+            "",
+            "To run with coverage:",
+            "```bash",
+            "uv run pytest --cov=ingest --cov=features --cov=personas --cov=recommend --cov=guardrails --cov=eval --cov=ui --cov-report=html tests/",
+            "```",
+            "",
+            "View HTML coverage report:",
+            "```bash",
+            "open htmlcov/index.html",
+            "```",
+            "",
+            "## Notes",
+            "",
+            "- All tests use deterministic seeding (`seed=42`) for reproducibility",
+            "- Integration tests verify the complete pipeline from data generation through evaluation",
+            "- UI tests (PR #6, PR #7) are primarily manual/visual for Streamlit apps",
+            f"- Total test count exceeds minimum requirement by {(total_tests / 10 - 1) * 100:.0f}%",
+            "",
+        ]
+    )
 
     # Write to file
     output_path.parent.mkdir(exist_ok=True)

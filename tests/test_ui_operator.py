@@ -9,7 +9,6 @@ operator name into the decision log and trace JSON.
 import sys
 import json
 import types
-from pathlib import Path
 
 
 def test_log_operator_override_writes_operator_name(tmp_path, monkeypatch):
@@ -71,4 +70,3 @@ def test_log_operator_override_writes_operator_name(tmp_path, monkeypatch):
     assert last["operator"] == operator
     assert last["action"] == action
     assert last.get("recommendation_title") == title
-

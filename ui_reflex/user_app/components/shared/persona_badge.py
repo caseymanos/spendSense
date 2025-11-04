@@ -6,7 +6,7 @@ Includes expandable section to show why the persona was assigned.
 """
 
 import reflex as rx
-from typing import Dict, Any, List
+from typing import Dict, List
 import sys
 from pathlib import Path
 
@@ -114,7 +114,6 @@ def persona_section_with_criteria(
     return rx.vstack(
         # Main persona badge
         persona_badge(persona_info, show_description=True, size="lg"),
-
         # Criteria section (if provided)
         rx.cond(
             criteria_met is not None and len(criteria_met) > 0,
@@ -143,7 +142,7 @@ def persona_section_with_criteria(
                         rx.foreach(
                             criteria_met,
                             lambda criterion: rx.hstack(
-                                rx.text("•", color=persona_info.get('color', theme.PRIMARY)),
+                                rx.text("•", color=persona_info.get("color", theme.PRIMARY)),
                                 rx.text(
                                     criterion,
                                     font_size=theme.FONT_SIZE_SM,
@@ -165,7 +164,6 @@ def persona_section_with_criteria(
             ),
             rx.box(),
         ),
-
         spacing="3",
         width="100%",
     )

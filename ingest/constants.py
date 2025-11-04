@@ -13,34 +13,34 @@ This is the single source of truth for tunable parameters.
 PERSONA_THRESHOLDS = {
     "high_utilization": {
         "utilization_threshold": 50.0,  # 50% or higher credit utilization
-        "interest_threshold": 0.01,     # Any interest charges (> $0)
-        "min_payment_only": True,       # Flag for minimum payment pattern
-        "overdue_flag": True,           # Flag for overdue status
+        "interest_threshold": 0.01,  # Any interest charges (> $0)
+        "min_payment_only": True,  # Flag for minimum payment pattern
+        "overdue_flag": True,  # Flag for overdue status
     },
     "variable_income": {
-        "median_pay_gap_days": 45,      # More than 45 days between paychecks
-        "cash_buffer_months": 1.0,      # Less than 1 month cash buffer
+        "median_pay_gap_days": 45,  # More than 45 days between paychecks
+        "cash_buffer_months": 1.0,  # Less than 1 month cash buffer
         "income_variability_threshold": 25.0,  # 25% std dev in income
     },
     "subscription_heavy": {
-        "min_recurring_count": 3,       # At least 3 recurring merchants
-        "recurring_spend_min": 50.0,    # At least $50/month OR
-        "recurring_spend_pct": 10.0,    # 10% of total spend (percentage form to match feature output)
+        "min_recurring_count": 3,  # At least 3 recurring merchants
+        "recurring_spend_min": 50.0,  # At least $50/month OR
+        "recurring_spend_pct": 10.0,  # 10% of total spend (percentage form to match feature output)
     },
     "savings_builder": {
-        "growth_rate_pct": 2.0,         # 2% or higher savings growth rate (percentage form to match feature output)
-        "net_inflow_min": 200.0,        # At least $200 net inflow OR
-        "max_utilization": 30.0,        # Credit utilization below 30% (percentage form: 30.0 = 30%)
+        "growth_rate_pct": 2.0,  # 2% or higher savings growth rate (percentage form to match feature output)
+        "net_inflow_min": 200.0,  # At least $200 net inflow OR
+        "max_utilization": 30.0,  # Credit utilization below 30% (percentage form: 30.0 = 30%)
     },
 }
 
 # Persona priority order for conflict resolution (PRD Part 2, Section 6.2)
 PERSONA_PRIORITY = [
-    "high_utilization",      # Priority 1: Immediate financial strain
-    "variable_income",       # Priority 2: Stability and planning gap
-    "subscription_heavy",    # Priority 3: Spending pattern optimization
-    "savings_builder",       # Priority 4: Positive reinforcement
-    "custom",               # Priority 5: Reserved for future
+    "high_utilization",  # Priority 1: Immediate financial strain
+    "variable_income",  # Priority 2: Stability and planning gap
+    "subscription_heavy",  # Priority 3: Spending pattern optimization
+    "savings_builder",  # Priority 4: Positive reinforcement
+    "custom",  # Priority 5: Reserved for future
 ]
 
 # =============================================================================
@@ -48,8 +48,8 @@ PERSONA_PRIORITY = [
 # =============================================================================
 
 TIME_WINDOWS = {
-    "short_term_days": 30,    # 30-day rolling window for recent behavior
-    "long_term_days": 180,    # 180-day (6 month) window for trends
+    "short_term_days": 30,  # 30-day rolling window for recent behavior
+    "long_term_days": 180,  # 180-day (6 month) window for trends
 }
 
 # =============================================================================
@@ -58,9 +58,9 @@ TIME_WINDOWS = {
 
 # Subscription Detection
 SUBSCRIPTION_DETECTION = {
-    "min_occurrences": 3,        # Need 3+ occurrences to be considered recurring
-    "lookback_days": 90,         # Look back 90 days for pattern detection
-    "amount_variance_pct": 0.10, # Allow 10% variance in amount for same merchant
+    "min_occurrences": 3,  # Need 3+ occurrences to be considered recurring
+    "lookback_days": 90,  # Look back 90 days for pattern detection
+    "amount_variance_pct": 0.10,  # Allow 10% variance in amount for same merchant
 }
 
 # Savings Analysis
@@ -71,8 +71,8 @@ SAVINGS_ANALYSIS = {
 
 # Credit Utilization Flags (PRD Part 2, Section 5.3)
 CREDIT_UTILIZATION_FLAGS = {
-    "warning_threshold": 30.0,   # 30% utilization - yellow flag
-    "high_threshold": 50.0,      # 50% utilization - orange flag
+    "warning_threshold": 30.0,  # 30% utilization - yellow flag
+    "high_threshold": 50.0,  # 50% utilization - orange flag
     "critical_threshold": 80.0,  # 80% utilization - red flag
 }
 
@@ -106,10 +106,10 @@ SUBSCRIPTION_PRICES = {
 # =============================================================================
 
 RECOMMENDATION_LIMITS = {
-    "education_items_min": 3,    # Minimum educational recommendations
-    "education_items_max": 5,    # Maximum educational recommendations
-    "partner_offers_min": 1,     # Minimum partner offers
-    "partner_offers_max": 3,     # Maximum partner offers
+    "education_items_min": 3,  # Minimum educational recommendations
+    "education_items_max": 5,  # Maximum educational recommendations
+    "partner_offers_min": 1,  # Minimum partner offers
+    "partner_offers_max": 3,  # Maximum partner offers
 }
 
 # Content Types
@@ -157,12 +157,12 @@ MANDATORY_DISCLAIMER = (
 # =============================================================================
 
 EVALUATION_TARGETS = {
-    "coverage_pct": 100,           # 100% of users with persona + ≥3 behaviors
-    "explainability_pct": 100,     # 100% of recommendations with rationale
-    "relevance_pct": 90,           # 90% persona-content match score
-    "latency_seconds": 5,          # < 5 seconds per user recommendation generation
-    "fairness_variance_pct": 10,   # ±10% demographic parity
-    "auditability_pct": 100,       # 100% of recommendations with trace JSON
+    "coverage_pct": 100,  # 100% of users with persona + ≥3 behaviors
+    "explainability_pct": 100,  # 100% of recommendations with rationale
+    "relevance_pct": 90,  # 90% persona-content match score
+    "latency_seconds": 5,  # < 5 seconds per user recommendation generation
+    "fairness_variance_pct": 10,  # ±10% demographic parity
+    "auditability_pct": 100,  # 100% of recommendations with trace JSON
 }
 
 # Fairness metrics demographic groups
@@ -208,9 +208,9 @@ PREDATORY_PRODUCTS = [
 # =============================================================================
 
 DEFAULT_GENERATION_CONFIG = {
-    "seed": 42,                      # Deterministic seed
-    "num_users": 100,                # Default user count
-    "months_history": 6,             # 6 months of transaction history
+    "seed": 42,  # Deterministic seed
+    "num_users": 100,  # Default user count
+    "months_history": 6,  # 6 months of transaction history
     "avg_transactions_per_month": 30,  # ~1 per day
 }
 

@@ -1,84 +1,106 @@
 {
   "user_id": "user_0037",
-  "timestamp": "2025-11-04T00:26:46.780025",
+  "timestamp": "2025-11-04T00:34:43.706365",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 116.91,
+        "subscription_share_pct": 1.86,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 4,
+        "monthly_recurring_spend": 117.26,
+        "subscription_share_pct": 1.91,
+        "recurring_merchants": [
+          "Adobe Creative Cloud",
+          "Hulu",
+          "LinkedIn Premium",
+          "Netflix"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 40272.61
+        "emergency_fund_months": 5.7,
+        "savings_balance": 35785.33
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 40272.61
+        "emergency_fund_months": 5.81,
+        "savings_balance": 35785.33
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 0.0,
-        "avg_utilization_pct": 0.0,
-        "flag_30": false,
+        "max_utilization_pct": 36.93,
+        "avg_utilization_pct": 22.19,
+        "flag_30": true,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
-        "has_interest": false,
+        "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 0,
-        "utilization_by_card": [],
+        "num_credit_cards": 2,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000103",
+            "mask": "1631",
+            "balance": 1863.1285436520755,
+            "limit": 25000.0,
+            "utilization_pct": 7.45
+          },
+          {
+            "account_id": "acc_000104",
+            "mask": "1381",
+            "balance": 738.6204565905587,
+            "limit": 2000.0,
+            "utilization_pct": 36.93
+          }
+        ],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 22,
+        "income_variability": 0.9439,
+        "cash_buffer_months": -0.19,
+        "pay_frequency": "variable",
+        "num_paychecks": 2,
+        "avg_paycheck": 2527.56
       },
       "180d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 3,
+        "income_variability": 0.7536,
+        "cash_buffer_months": 7.25,
+        "pay_frequency": "variable",
+        "num_paychecks": 28,
+        "avg_paycheck": 2911.3
       }
     }
   },
   "persona_assignment": {
-    "persona": "general",
-    "criteria_met": {},
+    "persona": "subscription_heavy",
+    "criteria_met": {
+      "recurring_count": 4,
+      "monthly_spend": 116.91
+    },
     "all_checks": {
       "high_utilization": {},
-      "variable_income": {
-        "cash_buffer_months": 0.0
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 4,
+        "monthly_spend": 116.91
       },
-      "subscription_heavy": {},
-      "savings_builder": {
-        "low_utilization": 0.0
-      }
+      "savings_builder": {}
     },
-    "timestamp": "2025-11-04T00:26:52.187335"
+    "timestamp": "2025-11-04T10:18:44.370993"
   }
 }

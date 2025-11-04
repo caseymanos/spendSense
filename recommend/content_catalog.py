@@ -319,6 +319,7 @@ PARTNER_OFFERS: Dict[str, List[Dict[str, Any]]] = {
 # HELPER FUNCTIONS
 # ============================================
 
+
 def get_education_items(persona: str) -> List[Dict[str, Any]]:
     """
     Get all educational content for a given persona.

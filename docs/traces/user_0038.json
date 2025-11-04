@@ -1,6 +1,6 @@
 {
   "user_id": "user_0038",
-  "timestamp": "2025-11-04T00:26:46.787963",
+  "timestamp": "2025-11-04T00:34:43.719323",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -19,16 +19,16 @@
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 40247.23
+        "net_inflow": 114.6,
+        "growth_rate_pct": 0.23,
+        "emergency_fund_months": 8.0,
+        "savings_balance": 49021.33
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 40247.23
+        "net_inflow": 687.58,
+        "growth_rate_pct": 1.42,
+        "emergency_fund_months": 8.05,
+        "savings_balance": 49021.33
       }
     },
     "credit": {
@@ -49,36 +49,38 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 1,
+        "income_variability": 0.8933,
+        "cash_buffer_months": 0.34,
+        "pay_frequency": "variable",
+        "num_paychecks": 5,
+        "avg_paycheck": 1637.87
       },
       "180d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 2,
+        "income_variability": 0.7972,
+        "cash_buffer_months": 9.44,
+        "pay_frequency": "variable",
+        "num_paychecks": 31,
+        "avg_paycheck": 3030.67
       }
     }
   },
   "persona_assignment": {
-    "persona": "general",
-    "criteria_met": {},
+    "persona": "savings_builder",
+    "criteria_met": {
+      "net_inflow": 687.58,
+      "low_utilization": 0.0
+    },
     "all_checks": {
       "high_utilization": {},
-      "variable_income": {
-        "cash_buffer_months": 0.0
-      },
+      "variable_income": {},
       "subscription_heavy": {},
       "savings_builder": {
+        "net_inflow": 687.58,
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-04T00:26:52.187481"
+    "timestamp": "2025-11-04T10:18:44.371166"
   }
 }

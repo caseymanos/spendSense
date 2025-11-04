@@ -1,41 +1,46 @@
 {
   "user_id": "user_0028",
-  "timestamp": "2025-11-04T00:26:46.704395",
+  "timestamp": "2025-11-04T00:34:43.574943",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 68.89,
+        "subscription_share_pct": 1.52,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 4,
+        "monthly_recurring_spend": 68.27,
+        "subscription_share_pct": 1.06,
+        "recurring_merchants": [
+          "Dropbox",
+          "Hulu",
+          "LinkedIn Premium",
+          "Planet Fitness"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 8722.97
+        "emergency_fund_months": 5.15,
+        "savings_balance": 23261.58
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 8722.97
+        "emergency_fund_months": 3.61,
+        "savings_balance": 23261.58
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 45.03,
-        "avg_utilization_pct": 45.03,
-        "flag_30": true,
+        "max_utilization_pct": 25.63,
+        "avg_utilization_pct": 25.63,
+        "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
@@ -44,11 +49,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000082",
-            "mask": "9424",
-            "balance": 900.6464595180053,
-            "limit": 2000.0,
-            "utilization_pct": 45.03
+            "account_id": "acc_000081",
+            "mask": "3838",
+            "balance": 6408.6659202337,
+            "limit": 25000.0,
+            "utilization_pct": 25.63
           }
         ],
         "interest_charges_present": false,
@@ -57,34 +62,40 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 6,
+        "income_variability": 0.5816,
+        "cash_buffer_months": 2.11,
+        "pay_frequency": "weekly",
+        "num_paychecks": 4,
+        "avg_paycheck": 3515.36
       },
       "180d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 3,
+        "income_variability": 0.5526,
+        "cash_buffer_months": 12.92,
+        "pay_frequency": "variable",
+        "num_paychecks": 32,
+        "avg_paycheck": 3804.85
       }
     }
   },
   "persona_assignment": {
-    "persona": "general",
-    "criteria_met": {},
+    "persona": "subscription_heavy",
+    "criteria_met": {
+      "recurring_count": 4,
+      "monthly_spend": 68.89
+    },
     "all_checks": {
       "high_utilization": {},
-      "variable_income": {
-        "cash_buffer_months": 0.0
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 4,
+        "monthly_spend": 68.89
       },
-      "subscription_heavy": {},
-      "savings_builder": {}
+      "savings_builder": {
+        "low_utilization": 25.63
+      }
     },
-    "timestamp": "2025-11-04T00:26:52.186008"
+    "timestamp": "2025-11-04T10:18:44.369617"
   }
 }

@@ -2,12 +2,13 @@
 
 from enum import Enum
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Dict
 from nicegui import ui, app
 
 
 class Theme(Enum):
     """Available visual themes."""
+
     CLEAN_MINIMAL = "clean_minimal"
     MODERN_COLORFUL = "modern_colorful"
     DASHBOARD_ANALYTICS = "dashboard_analytics"
@@ -16,6 +17,7 @@ class Theme(Enum):
 @dataclass
 class ThemeColors:
     """Color scheme for a theme."""
+
     primary: str
     secondary: str
     accent: str
@@ -35,6 +37,7 @@ class ThemeColors:
 @dataclass
 class ThemeConfig:
     """Complete theme configuration."""
+
     name: str
     colors: ThemeColors
     custom_css: str
@@ -63,14 +66,14 @@ class ThemeManager:
     @classmethod
     def get_current_theme(cls) -> Theme:
         """Get the current theme from user storage."""
-        if 'theme' not in app.storage.user:
-            app.storage.user['theme'] = Theme.CLEAN_MINIMAL.value
-        return Theme(app.storage.user['theme'])
+        if "theme" not in app.storage.user:
+            app.storage.user["theme"] = Theme.CLEAN_MINIMAL.value
+        return Theme(app.storage.user["theme"])
 
     @classmethod
     def set_theme(cls, theme: Theme):
         """Set the current theme."""
-        app.storage.user['theme'] = theme.value
+        app.storage.user["theme"] = theme.value
 
     @classmethod
     def get_theme_config(cls, theme: Theme = None) -> ThemeConfig:
@@ -108,7 +111,7 @@ class ThemeManager:
         return config.card_classes
 
     @classmethod
-    def get_button_classes(cls, variant: str = 'primary') -> str:
+    def get_button_classes(cls, variant: str = "primary") -> str:
         """Get button classes for current theme."""
         config = cls.get_theme_config()
         return config.button_classes

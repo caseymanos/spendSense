@@ -1,61 +1,59 @@
 {
   "user_id": "user_0066",
-  "timestamp": "2025-11-04T00:26:47.031902",
+  "timestamp": "2025-11-04T00:34:44.121177",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 45.36,
+        "subscription_share_pct": 0.68,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 4,
+        "monthly_recurring_spend": 44.91,
+        "subscription_share_pct": 0.8,
+        "recurring_merchants": [
+          "Apple Music",
+          "Dropbox",
+          "Microsoft 365",
+          "NYT Subscription"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 31397.53
+        "emergency_fund_months": 5.14,
+        "savings_balance": 34187.08
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 31397.53
+        "emergency_fund_months": 6.12,
+        "savings_balance": 34187.08
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 87.06,
-        "avg_utilization_pct": 78.99,
+        "max_utilization_pct": 35.22,
+        "avg_utilization_pct": 35.22,
         "flag_30": true,
-        "flag_50": true,
-        "flag_80": true,
+        "flag_50": false,
+        "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
-        "is_overdue": true,
-        "num_credit_cards": 2,
+        "is_overdue": false,
+        "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000187",
-            "mask": "6857",
-            "balance": 7091.460505472061,
-            "limit": 10000.0,
-            "utilization_pct": 70.91
-          },
-          {
-            "account_id": "acc_000188",
-            "mask": "7485",
-            "balance": 8705.689788395037,
-            "limit": 10000.0,
-            "utilization_pct": 87.06
+            "account_id": "acc_000186",
+            "mask": "4611",
+            "balance": 5283.386459777046,
+            "limit": 15000.0,
+            "utilization_pct": 35.22
           }
         ],
         "interest_charges_present": false,
@@ -64,40 +62,34 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 5,
+        "income_variability": 0.363,
+        "cash_buffer_months": 0.84,
+        "pay_frequency": "weekly",
+        "num_paychecks": 4,
+        "avg_paycheck": 3060.56
       },
       "180d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 3,
+        "income_variability": 0.7342,
+        "cash_buffer_months": 12.53,
+        "pay_frequency": "variable",
+        "num_paychecks": 35,
+        "avg_paycheck": 2956.63
       }
     }
   },
   "persona_assignment": {
-    "persona": "high_utilization",
-    "criteria_met": {
-      "high_utilization": 87.06,
-      "is_overdue": true
-    },
+    "persona": "general",
+    "criteria_met": {},
     "all_checks": {
-      "high_utilization": {
-        "high_utilization": 87.06,
-        "is_overdue": true
+      "high_utilization": {},
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 4
       },
-      "variable_income": {
-        "cash_buffer_months": 0.0
-      },
-      "subscription_heavy": {},
       "savings_builder": {}
     },
-    "timestamp": "2025-11-04T00:26:52.191392"
+    "timestamp": "2025-11-04T10:18:44.377207"
   }
 }

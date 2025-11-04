@@ -7,26 +7,25 @@ def get_clean_minimal_theme() -> ThemeConfig:
     """Get Clean & Minimal theme configuration."""
 
     colors = ThemeColors(
-        primary='#2C3E50',       # Dark slate blue
-        secondary='#7F8C8D',     # Gray
-        accent='#3498DB',        # Bright blue
-        background='#FFFFFF',    # White
-        surface='#F8F9FA',       # Light gray
-        text_primary='#2C3E50',  # Dark slate
-        text_secondary='#7F8C8D',# Gray
-        success='#27AE60',       # Green
-        warning='#F39C12',       # Orange
-        error='#E74C3C',         # Red
-        border='#E0E0E0',        # Light gray border
-
+        primary="#2C3E50",  # Dark slate blue
+        secondary="#7F8C8D",  # Gray
+        accent="#3498DB",  # Bright blue
+        background="#FFFFFF",  # White
+        surface="#F8F9FA",  # Light gray
+        text_primary="#2C3E50",  # Dark slate
+        text_secondary="#7F8C8D",  # Gray
+        success="#27AE60",  # Green
+        warning="#F39C12",  # Orange
+        error="#E74C3C",  # Red
+        border="#E0E0E0",  # Light gray border
         chart_colors=[
-            '#3498DB',  # Blue
-            '#2ECC71',  # Green
-            '#F39C12',  # Orange
-            '#9B59B6',  # Purple
-            '#1ABC9C',  # Teal
-            '#E74C3C',  # Red
-        ]
+            "#3498DB",  # Blue
+            "#2ECC71",  # Green
+            "#F39C12",  # Orange
+            "#9B59B6",  # Purple
+            "#1ABC9C",  # Teal
+            "#E74C3C",  # Red
+        ],
     )
 
     custom_css = """
@@ -88,5 +87,5 @@ def get_clean_minimal_theme() -> ThemeConfig:
         card_classes="clean-card p-4",
         button_classes="clean-button",
         table_classes="clean-table",
-        metric_card_classes="clean-metric-card"
+        metric_card_classes="clean-metric-card",
     )

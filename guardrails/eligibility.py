@@ -35,7 +35,9 @@ INCOME_TIER_ORDER = {
 }
 
 
-def check_product_eligibility(offer: Dict[str, Any], user_context: Dict[str, Any]) -> Tuple[bool, str]:
+def check_product_eligibility(
+    offer: Dict[str, Any], user_context: Dict[str, Any]
+) -> Tuple[bool, str]:
     """
     Check if a user is eligible for a specific partner offer.
 
@@ -111,7 +113,9 @@ def check_product_eligibility(offer: Dict[str, Any], user_context: Dict[str, Any
     return True, "Eligible"
 
 
-def filter_predatory_products(offers: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+def filter_predatory_products(
+    offers: List[Dict[str, Any]],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     """
     Remove predatory products from offer list.
 
@@ -141,18 +145,22 @@ def filter_predatory_products(offers: List[Dict[str, Any]]) -> Tuple[List[Dict[s
         product_type = offer.get("product_type", "unknown")
 
         if product_type in PREDATORY_PRODUCTS:
-            blocked_offers.append({
-                "offer": offer,
-                "reason": f"Predatory product type: {product_type}",
-                "blocked_at": "predatory_filter",
-            })
+            blocked_offers.append(
+                {
+                    "offer": offer,
+                    "reason": f"Predatory product type: {product_type}",
+                    "blocked_at": "predatory_filter",
+                }
+            )
         else:
             safe_offers.append(offer)
 
     return safe_offers, blocked_offers
 
 
-def check_existing_accounts(offer: Dict[str, Any], user_context: Dict[str, Any]) -> Tuple[bool, str]:
+def check_existing_accounts(
+    offer: Dict[str, Any], user_context: Dict[str, Any]
+) -> Tuple[bool, str]:
     """
     Check if user already owns this type of product.
 
@@ -239,22 +247,26 @@ def apply_all_filters(offers: List[Dict[str, Any]], user_context: Dict[str, Any]
         eligible, reason = check_product_eligibility(offer, user_context)
 
         if not eligible:
-            blocked_offers.append({
-                "offer": offer,
-                "reason": reason,
-                "blocked_at": "product_eligibility",
-            })
+            blocked_offers.append(
+                {
+                    "offer": offer,
+                    "reason": reason,
+                    "blocked_at": "product_eligibility",
+                }
+            )
             continue
 
         # Check existing accounts
         should_offer, account_reason = check_existing_accounts(offer, user_context)
 
         if not should_offer:
-            blocked_offers.append({
-                "offer": offer,
-                "reason": account_reason,
-                "blocked_at": "existing_accounts",
-            })
+            blocked_offers.append(
+                {
+                    "offer": offer,
+                    "reason": account_reason,
+                    "blocked_at": "existing_accounts",
+                }
+            )
             continue
 
         # Passed all filters

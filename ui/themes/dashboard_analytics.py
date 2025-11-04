@@ -7,26 +7,25 @@ def get_dashboard_analytics_theme() -> ThemeConfig:
     """Get Dashboard & Analytics theme configuration."""
 
     colors = ThemeColors(
-        primary='#00BCD4',       # Cyan
-        secondary='#FF9800',     # Orange
-        accent='#9C27B0',        # Purple
-        background='#1E1E1E',    # Dark gray (dark mode)
-        surface='#2D2D2D',       # Darker gray
-        text_primary='#E0E0E0',  # Light gray
-        text_secondary='#B0B0B0',# Medium gray
-        success='#4CAF50',       # Green
-        warning='#FFC107',       # Amber
-        error='#F44336',         # Red
-        border='#3E3E3E',        # Dark border
-
+        primary="#00BCD4",  # Cyan
+        secondary="#FF9800",  # Orange
+        accent="#9C27B0",  # Purple
+        background="#1E1E1E",  # Dark gray (dark mode)
+        surface="#2D2D2D",  # Darker gray
+        text_primary="#E0E0E0",  # Light gray
+        text_secondary="#B0B0B0",  # Medium gray
+        success="#4CAF50",  # Green
+        warning="#FFC107",  # Amber
+        error="#F44336",  # Red
+        border="#3E3E3E",  # Dark border
         chart_colors=[
-            '#00BCD4',  # Cyan
-            '#FF9800',  # Orange
-            '#9C27B0',  # Purple
-            '#4CAF50',  # Green
-            '#FFC107',  # Amber
-            '#E91E63',  # Pink
-        ]
+            "#00BCD4",  # Cyan
+            "#FF9800",  # Orange
+            "#9C27B0",  # Purple
+            "#4CAF50",  # Green
+            "#FFC107",  # Amber
+            "#E91E63",  # Pink
+        ],
     )
 
     custom_css = """
@@ -136,5 +135,5 @@ def get_dashboard_analytics_theme() -> ThemeConfig:
         card_classes="dashboard-card p-4",
         button_classes="dashboard-button",
         table_classes="dashboard-table",
-        metric_card_classes="dashboard-metric-card"
+        metric_card_classes="dashboard-metric-card",
     )

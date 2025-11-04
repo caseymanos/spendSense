@@ -2,4 +2,4 @@
 
 from .theme_manager import ThemeManager, Theme
 
-__all__ = ['ThemeManager', 'Theme']
+__all__ = ["ThemeManager", "Theme"]

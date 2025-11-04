@@ -4,7 +4,6 @@ REST endpoints for user and operator interfaces.
 """
 
 from datetime import datetime
-from typing import Optional
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,7 +14,7 @@ from api.models import (
     UserRecommendationsResponse,
     FeedbackRequest,
     OperatorReviewRequest,
-    EvaluationSummaryResponse
+    EvaluationSummaryResponse,
 )
 
 
@@ -25,7 +24,7 @@ app = FastAPI(
     description="Explainable, consent-aware financial behavior analysis platform",
     version="0.1.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # CORS middleware for local development
@@ -42,11 +41,7 @@ app.add_middleware(
 @app.get("/health", response_model=HealthResponse, tags=["System"])
 async def health_check():
     """Health check endpoint"""
-    return HealthResponse(
-        status="healthy",
-        timestamp=datetime.now(),
-        version="0.1.0"
-    )
+    return HealthResponse(status="healthy", timestamp=datetime.now(), version="0.1.0")
 
 
 # User endpoints
@@ -56,7 +51,7 @@ async def create_user(user_data: dict):
     # TODO: Implement in future PR when user creation is needed
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="User creation will be implemented in a future PR"
+        detail="User creation will be implemented in a future PR",
     )
 
 
@@ -66,7 +61,7 @@ async def update_consent(request: ConsentRequest):
     # TODO: Implement consent management in PR #5 (Guardrails)
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Consent management will be implemented in PR #5"
+        detail="Consent management will be implemented in PR #5",
     )
 
 
@@ -76,7 +71,7 @@ async def get_user_profile(user_id: str):
     # TODO: Implement in PR #3 (Personas)
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="User profile will be implemented in PR #3"
+        detail="User profile will be implemented in PR #3",
     )
 
 
@@ -86,7 +81,7 @@ async def get_recommendations(user_id: str):
     # TODO: Implement in PR #4 (Recommendations)
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Recommendations will be implemented in PR #4"
+        detail="Recommendations will be implemented in PR #4",
     )
 
 
@@ -96,7 +91,7 @@ async def submit_feedback(request: FeedbackRequest):
     # TODO: Implement feedback tracking in future PR
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Feedback will be implemented in a future PR"
+        detail="Feedback will be implemented in a future PR",
     )
 
 
@@ -107,7 +102,7 @@ async def get_pending_reviews():
     # TODO: Implement in PR #7 (Operator Dashboard)
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Operator review will be implemented in PR #7"
+        detail="Operator review will be implemented in PR #7",
     )
 
 
@@ -117,7 +112,7 @@ async def submit_review(request: OperatorReviewRequest):
     # TODO: Implement in PR #7 (Operator Dashboard)
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Operator review will be implemented in PR #7"
+        detail="Operator review will be implemented in PR #7",
     )
 
 
@@ -128,7 +123,7 @@ async def get_evaluation_summary():
     # TODO: Implement in PR #8 (Evaluation Harness)
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Evaluation will be implemented in PR #8"
+        detail="Evaluation will be implemented in PR #8",
     )
 
 
@@ -142,10 +137,11 @@ async def root():
         "status": "PR #1: Project Setup & Data Foundation",
         "docs": "/docs",
         "health": "/health",
-        "note": "Most endpoints will be implemented in subsequent PRs"
+        "note": "Most endpoints will be implemented in subsequent PRs",
     }
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

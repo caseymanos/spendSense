@@ -9,9 +9,17 @@ from pathlib import Path
 from datetime import datetime, timedelta
 
 from ingest.schemas import (
-    User, Account, Transaction, Liability,
-    AccountType, AccountSubtype, PaymentChannel,
-    Gender, IncomeTier, Region, DataGenerationConfig
+    User,
+    Account,
+    Transaction,
+    Liability,
+    AccountType,
+    AccountSubtype,
+    PaymentChannel,
+    Gender,
+    IncomeTier,
+    Region,
+    DataGenerationConfig,
 )
 
 
@@ -34,7 +42,7 @@ def sample_user():
         gender=Gender.MALE,
         income_tier=IncomeTier.MEDIUM,
         region=Region.WEST,
-        created_at=datetime.now()
+        created_at=datetime.now(),
     )
 
 
@@ -49,7 +57,7 @@ def sample_checking_account():
         balance_current=5000.0,
         mask="1234",
         name="Checking Account",
-        official_name="Test Bank Checking"
+        official_name="Test Bank Checking",
     )
 
 
@@ -66,7 +74,7 @@ def sample_credit_account():
         balance_limit=5000.0,
         mask="4523",
         name="Credit Card",
-        official_name="Visa Test Bank"
+        official_name="Visa Test Bank",
     )
 
 
@@ -82,7 +90,7 @@ def sample_transaction():
         payment_channel=PaymentChannel.ONLINE,
         personal_finance_category="GENERAL_SERVICES",
         personal_finance_subcategory="Subscription Services",
-        pending=False
+        pending=False,
     )
 
 
@@ -98,7 +106,7 @@ def sample_liability():
         last_payment_amount=100.0,
         last_payment_date=datetime.now() - timedelta(days=15),
         next_due_date=datetime.now() + timedelta(days=15),
-        is_overdue=False
+        is_overdue=False,
     )
 
 
@@ -109,5 +117,5 @@ def generation_config():
         seed=42,
         num_users=10,  # Small for fast tests
         months_history=6,
-        avg_transactions_per_month=30
+        avg_transactions_per_month=30,
     )

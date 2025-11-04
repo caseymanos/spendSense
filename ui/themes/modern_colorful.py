@@ -7,26 +7,25 @@ def get_modern_colorful_theme() -> ThemeConfig:
     """Get Modern & Colorful theme configuration."""
 
     colors = ThemeColors(
-        primary='#6366F1',       # Indigo
-        secondary='#EC4899',     # Pink
-        accent='#8B5CF6',        # Purple
-        background='#F9FAFB',    # Very light gray
-        surface='#FFFFFF',       # White
-        text_primary='#111827',  # Dark gray
-        text_secondary='#6B7280',# Medium gray
-        success='#10B981',       # Emerald
-        warning='#F59E0B',       # Amber
-        error='#EF4444',         # Red
-        border='#E5E7EB',        # Light gray border
-
+        primary="#6366F1",  # Indigo
+        secondary="#EC4899",  # Pink
+        accent="#8B5CF6",  # Purple
+        background="#F9FAFB",  # Very light gray
+        surface="#FFFFFF",  # White
+        text_primary="#111827",  # Dark gray
+        text_secondary="#6B7280",  # Medium gray
+        success="#10B981",  # Emerald
+        warning="#F59E0B",  # Amber
+        error="#EF4444",  # Red
+        border="#E5E7EB",  # Light gray border
         chart_colors=[
-            '#6366F1',  # Indigo
-            '#EC4899',  # Pink
-            '#8B5CF6',  # Purple
-            '#10B981',  # Emerald
-            '#F59E0B',  # Amber
-            '#06B6D4',  # Cyan
-        ]
+            "#6366F1",  # Indigo
+            "#EC4899",  # Pink
+            "#8B5CF6",  # Purple
+            "#10B981",  # Emerald
+            "#F59E0B",  # Amber
+            "#06B6D4",  # Cyan
+        ],
     )
 
     custom_css = """
@@ -117,5 +116,5 @@ def get_modern_colorful_theme() -> ThemeConfig:
         card_classes="modern-card p-4",
         button_classes="modern-button",
         table_classes="modern-table",
-        metric_card_classes="modern-metric-card"
+        metric_card_classes="modern-metric-card",
     )

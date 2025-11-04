@@ -67,7 +67,9 @@ class TestRationaleFormatting:
         }
 
         # Template from content catalog
-        template = "Your {card_description} is at {utilization_pct}% utilization ({balance} of {limit})."
+        template = (
+            "Your {card_description} is at {utilization_pct}% utilization ({balance} of {limit})."
+        )
 
         # Act: Format rationale
         rationale = _format_rationale(template, user_context)
@@ -77,7 +79,9 @@ class TestRationaleFormatting:
         assert "68%" in rationale, "Utilization percentage should be in rationale"
         assert "$3,400" in rationale, "Balance should be in rationale"
         assert "$5,000" in rationale, "Limit should be in rationale"
-        assert "credit card ending in 4523" in rationale, "Card description should be formatted correctly"
+        assert (
+            "credit card ending in 4523" in rationale
+        ), "Card description should be formatted correctly"
 
     def test_rationale_includes_subscription_data(self):
         """
@@ -128,7 +132,9 @@ class TestRationaleFormatting:
             "recent_transactions": [],
         }
 
-        template = "You've saved {net_inflow} in the last 6 months, showing {growth_rate_pct}% growth."
+        template = (
+            "You've saved {net_inflow} in the last 6 months, showing {growth_rate_pct}% growth."
+        )
 
         # Act
         rationale = _format_rationale(template, user_context)
@@ -169,7 +175,9 @@ class TestDisclaimerPresence:
         assert len(recommendations_with_disclaimer) == 2
         for rec in recommendations_with_disclaimer:
             assert "disclaimer" in rec, "Disclaimer field should be present"
-            assert rec["disclaimer"] == MANDATORY_DISCLAIMER, "Disclaimer text should match constant"
+            assert (
+                rec["disclaimer"] == MANDATORY_DISCLAIMER
+            ), "Disclaimer text should match constant"
 
     def test_disclaimer_exact_text(self):
         """
@@ -197,10 +205,12 @@ class TestRecommendationCounts:
         offers = get_partner_offers("high_utilization")
 
         # Assert catalog has enough content
-        assert len(education_items) >= RECOMMENDATION_LIMITS["education_items_min"], \
-            "Catalog should have at least minimum education items"
-        assert len(offers) >= RECOMMENDATION_LIMITS["partner_offers_min"], \
-            "Catalog should have at least minimum offers"
+        assert (
+            len(education_items) >= RECOMMENDATION_LIMITS["education_items_min"]
+        ), "Catalog should have at least minimum education items"
+        assert (
+            len(offers) >= RECOMMENDATION_LIMITS["partner_offers_min"]
+        ), "Catalog should have at least minimum offers"
 
     def test_variable_income_recommendation_count(self):
         """
@@ -263,7 +273,9 @@ class TestEligibilityFiltering:
         is_eligible = _check_offer_eligibility(offer, signals, user_context, "medium")
 
         # Assert
-        assert is_eligible is False, "Offer should be excluded for user with existing savings accounts"
+        assert (
+            is_eligible is False
+        ), "Offer should be excluded for user with existing savings accounts"
 
     def test_low_income_excludes_high_tier_offers(self):
         """
@@ -346,14 +358,17 @@ class TestGeneralPersonaHandling:
         # Assert
         assert response["persona"] == "general", "Persona should be general"
         assert len(response["recommendations"]) == 0, "Recommendations should be empty"
-        assert response["metadata"]["reason"] == "general_persona_no_recommendations", \
-            "Metadata should indicate why recommendations are empty"
+        assert (
+            response["metadata"]["reason"] == "general_persona_no_recommendations"
+        ), "Metadata should indicate why recommendations are empty"
 
 
 class TestFullRecommendationIntegration:
     """Integration test: Full recommendation generation for all users."""
 
-    @pytest.mark.skipif(not DB_PATH.exists() or not SIGNALS_PATH.exists(), reason="Data not available")
+    @pytest.mark.skipif(
+        not DB_PATH.exists() or not SIGNALS_PATH.exists(), reason="Data not available"
+    )
     def test_full_recommendation_generation_integration(self):
         """
         Test: Generate recommendations for all synthetic users.
@@ -391,23 +406,29 @@ class TestFullRecommendationIntegration:
 
             # Check education count (3-5)
             edu_count = metadata.get("education_count", 0)
-            assert edu_count >= RECOMMENDATION_LIMITS["education_items_min"], \
-                f"User {row['user_id']} should have at least {RECOMMENDATION_LIMITS['education_items_min']} education items, got {edu_count}"
-            assert edu_count <= RECOMMENDATION_LIMITS["education_items_max"], \
-                f"User {row['user_id']} should have at most {RECOMMENDATION_LIMITS['education_items_max']} education items, got {edu_count}"
+            assert (
+                edu_count >= RECOMMENDATION_LIMITS["education_items_min"]
+            ), f"User {row['user_id']} should have at least {RECOMMENDATION_LIMITS['education_items_min']} education items, got {edu_count}"
+            assert (
+                edu_count <= RECOMMENDATION_LIMITS["education_items_max"]
+            ), f"User {row['user_id']} should have at most {RECOMMENDATION_LIMITS['education_items_max']} education items, got {edu_count}"
 
             # Check offer count (may be 0 if eligibility filters exclude all)
             offer_count = metadata.get("offer_count", 0)
-            assert offer_count <= RECOMMENDATION_LIMITS["partner_offers_max"], \
-                f"User {row['user_id']} should have at most {RECOMMENDATION_LIMITS['partner_offers_max']} offers, got {offer_count}"
+            assert (
+                offer_count <= RECOMMENDATION_LIMITS["partner_offers_max"]
+            ), f"User {row['user_id']} should have at most {RECOMMENDATION_LIMITS['partner_offers_max']} offers, got {offer_count}"
 
             # Check all recommendations have rationales and disclaimers
             for rec in recs:
                 assert "rationale" in rec, f"Recommendation '{rec['title']}' missing rationale"
-                assert len(rec["rationale"]) > 0, f"Recommendation '{rec['title']}' has empty rationale"
+                assert (
+                    len(rec["rationale"]) > 0
+                ), f"Recommendation '{rec['title']}' has empty rationale"
                 assert "disclaimer" in rec, f"Recommendation '{rec['title']}' missing disclaimer"
-                assert rec["disclaimer"] == MANDATORY_DISCLAIMER, \
-                    f"Recommendation '{rec['title']}' has incorrect disclaimer"
+                assert (
+                    rec["disclaimer"] == MANDATORY_DISCLAIMER
+                ), f"Recommendation '{rec['title']}' has incorrect disclaimer"
 
         # Check trace files updated
         trace_dir = Path("docs/traces")
@@ -439,10 +460,11 @@ class TestFullRecommendationIntegration:
 
         if total_recs > 0:
             explainability_pct = (recs_with_rationale / total_recs) * 100
-            assert explainability_pct == 100.0, \
-                f"Explainability should be 100%, got {explainability_pct:.1f}%"
+            assert (
+                explainability_pct == 100.0
+            ), f"Explainability should be 100%, got {explainability_pct:.1f}%"
 
-        print(f"\n✅ Integration Test Summary:")
+        print("\n✅ Integration Test Summary:")
         print(f"   - Total users processed: {len(all_recs_df)}")
         print(f"   - Non-general personas: {len(non_general)}")
         print(f"   - Total recommendations: {total_recs}")
@@ -461,6 +483,7 @@ class TestStrictEligibilityNoPadding:
         """
         # Monkeypatch catalog to return items that require utilization >= 30%
         from recommend import engine as eng
+
         def fake_get_education_items(persona):
             return [
                 {
@@ -499,6 +522,10 @@ class TestStrictEligibilityNoPadding:
 
         # Assert: no padding beyond eligibility
         assert resp["metadata"]["education_count"] == 0, "Should not pad ineligible education items"
-        assert resp["metadata"].get("reason") == "insufficient_data", "Should mark insufficient data"
-        assert resp["metadata"].get("education_eligibility_shortfall") == RECOMMENDATION_LIMITS["education_items_min"], \
-            "Shortfall should equal min_items when none eligible"
+        assert (
+            resp["metadata"].get("reason") == "insufficient_data"
+        ), "Should mark insufficient data"
+        assert (
+            resp["metadata"].get("education_eligibility_shortfall")
+            == RECOMMENDATION_LIMITS["education_items_min"]
+        ), "Shortfall should equal min_items when none eligible"

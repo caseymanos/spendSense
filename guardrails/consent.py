@@ -24,7 +24,7 @@ Compliance:
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 
 # Database path - use absolute path to project root
@@ -72,7 +72,7 @@ def grant_consent(user_id: str) -> Dict[str, Any]:
                 revoked_timestamp = NULL
             WHERE user_id = ?
             """,
-            (timestamp, user_id)
+            (timestamp, user_id),
         )
         conn.commit()
 
@@ -130,7 +130,7 @@ def revoke_consent(user_id: str) -> Dict[str, Any]:
                 revoked_timestamp = ?
             WHERE user_id = ?
             """,
-            (timestamp, user_id)
+            (timestamp, user_id),
         )
         conn.commit()
 
@@ -163,10 +163,7 @@ def check_consent(user_id: str) -> bool:
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
 
-        cursor.execute(
-            "SELECT consent_granted FROM users WHERE user_id = ?",
-            (user_id,)
-        )
+        cursor.execute("SELECT consent_granted FROM users WHERE user_id = ?", (user_id,))
         row = cursor.fetchone()
 
         if row is None:
@@ -207,7 +204,7 @@ def get_consent_history(user_id: str) -> Dict[str, Any]:
             FROM users
             WHERE user_id = ?
             """,
-            (user_id,)
+            (user_id,),
         )
         row = cursor.fetchone()
 
@@ -275,7 +272,7 @@ def batch_grant_consent(user_ids: list) -> Dict[str, Any]:
                         revoked_timestamp = NULL
                     WHERE user_id = ?
                     """,
-                    (timestamp, user_id)
+                    (timestamp, user_id),
                 )
                 success_count += 1
 

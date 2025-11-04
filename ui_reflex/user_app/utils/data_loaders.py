@@ -38,6 +38,7 @@ TRACES_DIR = PROJECT_ROOT / "docs" / "traces"
 # USER DATA LOADING
 # =============================================================================
 
+
 def load_all_users() -> List[Dict[str, Any]]:
     """Load all users from database with consent status.
 
@@ -49,8 +50,7 @@ def load_all_users() -> List[Dict[str, Any]]:
 
     with sqlite3.connect(DB_PATH) as conn:
         users_df = pd.read_sql(
-            "SELECT user_id, name, consent_granted FROM users ORDER BY user_id",
-            conn
+            "SELECT user_id, name, consent_granted FROM users ORDER BY user_id", conn
         )
 
     # Convert to list of dicts for easy Reflex iteration
@@ -70,11 +70,7 @@ def load_user_data(user_id: str) -> Dict[str, Any]:
         return {}
 
     with sqlite3.connect(DB_PATH) as conn:
-        user_df = pd.read_sql(
-            "SELECT * FROM users WHERE user_id = ?",
-            conn,
-            params=(user_id,)
-        )
+        user_df = pd.read_sql("SELECT * FROM users WHERE user_id = ?", conn, params=(user_id,))
 
         if len(user_df) == 0:
             return {}
@@ -101,7 +97,7 @@ def load_persona_assignment(user_id: str) -> Optional[Dict[str, Any]]:
         persona_df = pd.read_sql(
             "SELECT * FROM persona_assignments WHERE user_id = ? ORDER BY assigned_at DESC LIMIT 1",
             conn,
-            params=(user_id,)
+            params=(user_id,),
         )
 
         if len(persona_df) == 0:
@@ -160,9 +156,7 @@ def load_user_accounts(user_id: str) -> List[Dict[str, Any]]:
 
     with sqlite3.connect(DB_PATH) as conn:
         accounts_df = pd.read_sql(
-            "SELECT * FROM accounts WHERE user_id = ?",
-            conn,
-            params=(user_id,)
+            "SELECT * FROM accounts WHERE user_id = ?", conn, params=(user_id,)
         )
 
     return accounts_df.to_dict("records")
@@ -195,6 +189,7 @@ def load_user_trace(user_id: str) -> Optional[Dict[str, Any]]:
 # RECOMMENDATIONS
 # =============================================================================
 
+
 def get_recommendations(user_id: str) -> Dict[str, Any]:
     """Generate recommendations for a user.
 
@@ -214,16 +209,14 @@ def get_recommendations(user_id: str) -> Dict[str, Any]:
         return {
             "user_id": user_id,
             "recommendations": [],
-            "metadata": {
-                "error": str(e),
-                "reason": "error_generating_recommendations"
-            }
+            "metadata": {"error": str(e), "reason": "error_generating_recommendations"},
         }
 
 
 # =============================================================================
 # CONSENT MANAGEMENT
 # =============================================================================
+
 
 def grant_user_consent(user_id: str) -> bool:
     """Grant consent for a user.
@@ -279,6 +272,7 @@ def check_user_consent(user_id: str) -> bool:
 # PERSONA DESCRIPTIONS
 # =============================================================================
 
+
 def get_persona_description(persona: str) -> Dict[str, str]:
     """Get user-friendly description for each persona.
 
@@ -328,6 +322,7 @@ def get_persona_description(persona: str) -> Dict[str, str]:
 # UTILITY FUNCTIONS
 # =============================================================================
 
+
 def get_database_stats() -> Dict[str, int]:
     """Get basic statistics about the database.
 
@@ -343,7 +338,9 @@ def get_database_stats() -> Dict[str, int]:
 
     if DB_PATH.exists():
         with sqlite3.connect(DB_PATH) as conn:
-            stats["user_count"] = pd.read_sql("SELECT COUNT(*) as cnt FROM users", conn)["cnt"].iloc[0]
+            stats["user_count"] = pd.read_sql("SELECT COUNT(*) as cnt FROM users", conn)[
+                "cnt"
+            ].iloc[0]
             stats["consented_count"] = pd.read_sql(
                 "SELECT COUNT(*) as cnt FROM users WHERE consent_granted = 1", conn
             )["cnt"].iloc[0]

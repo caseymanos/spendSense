@@ -4,6 +4,7 @@ Formatting utilities for displaying financial data.
 Provides consistent formatting for currency, percentages, and other data types.
 """
 
+
 def format_currency(amount: float) -> str:
     """Format a number as US currency.
 
@@ -116,7 +117,7 @@ def truncate_text(text: str, max_length: int = 100, suffix: str = "...") -> str:
     if len(text) <= max_length:
         return text
 
-    return text[:max_length - len(suffix)] + suffix
+    return text[: max_length - len(suffix)] + suffix
 
 
 def pluralize(count: int, singular: str, plural: str = None) -> str:

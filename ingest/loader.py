@@ -10,15 +10,17 @@ from typing import List, Dict, Any
 from datetime import datetime
 import pandas as pd
 
-from ingest.schemas import User, Account, Transaction, Liability
 from ingest.validators import DataValidator
 
 
 class DataLoader:
     """Loads synthetic data into storage"""
 
-    def __init__(self, sqlite_path: str = "data/users.sqlite",
-                 parquet_path: str = "data/transactions.parquet"):
+    def __init__(
+        self,
+        sqlite_path: str = "data/users.sqlite",
+        parquet_path: str = "data/transactions.parquet",
+    ):
         self.sqlite_path = Path(sqlite_path)
         self.parquet_path = Path(parquet_path)
 
@@ -31,7 +33,8 @@ class DataLoader:
         cursor = conn.cursor()
 
         # Users table with consent tracking
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS users (
                 user_id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
@@ -44,10 +47,12 @@ class DataLoader:
                 region TEXT NOT NULL,
                 created_at TEXT NOT NULL
             )
-        """)
+        """
+        )
 
         # Accounts table
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS accounts (
                 account_id TEXT PRIMARY KEY,
                 user_id TEXT NOT NULL,
@@ -63,10 +68,12 @@ class DataLoader:
                 official_name TEXT,
                 FOREIGN KEY (user_id) REFERENCES users (user_id)
             )
-        """)
+        """
+        )
 
         # Transactions table (minimal - full data in Parquet)
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS transactions (
                 transaction_id TEXT PRIMARY KEY,
                 account_id TEXT NOT NULL,
@@ -78,10 +85,12 @@ class DataLoader:
                 pending INTEGER DEFAULT 0,
                 FOREIGN KEY (account_id) REFERENCES accounts (account_id)
             )
-        """)
+        """
+        )
 
         # Liabilities table
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS liabilities (
                 liability_id TEXT PRIMARY KEY,
                 account_id TEXT NOT NULL,
@@ -96,10 +105,12 @@ class DataLoader:
                 FOREIGN KEY (account_id) REFERENCES accounts (account_id),
                 FOREIGN KEY (user_id) REFERENCES users (user_id)
             )
-        """)
+        """
+        )
 
         # Persona assignments table (populated by PR #3)
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS persona_assignments (
                 assignment_id TEXT PRIMARY KEY,
                 user_id TEXT NOT NULL,
@@ -108,14 +119,19 @@ class DataLoader:
                 assigned_at TEXT NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users (user_id)
             )
-        """)
+        """
+        )
 
         # Create indexes for common queries
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_accounts_user ON accounts(user_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_transactions_account ON transactions(account_id)")
+        cursor.execute(
+            "CREATE INDEX IF NOT EXISTS idx_transactions_account ON transactions(account_id)"
+        )
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_transactions_date ON transactions(date)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_liabilities_user ON liabilities(user_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_persona_user ON persona_assignments(user_id)")
+        cursor.execute(
+            "CREATE INDEX IF NOT EXISTS idx_persona_user ON persona_assignments(user_id)"
+        )
 
         conn.commit()
 
@@ -124,23 +140,26 @@ class DataLoader:
         cursor = conn.cursor()
 
         for user_data in users:
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT OR REPLACE INTO users (
                     user_id, name, consent_granted, consent_timestamp, revoked_timestamp,
                     age, gender, income_tier, region, created_at
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                user_data["user_id"],
-                user_data["name"],
-                1 if user_data["consent_granted"] else 0,
-                user_data.get("consent_timestamp"),
-                user_data.get("revoked_timestamp"),
-                user_data["age"],
-                user_data["gender"],
-                user_data["income_tier"],
-                user_data["region"],
-                user_data["created_at"]
-            ))
+            """,
+                (
+                    user_data["user_id"],
+                    user_data["name"],
+                    1 if user_data["consent_granted"] else 0,
+                    user_data.get("consent_timestamp"),
+                    user_data.get("revoked_timestamp"),
+                    user_data["age"],
+                    user_data["gender"],
+                    user_data["income_tier"],
+                    user_data["region"],
+                    user_data["created_at"],
+                ),
+            )
 
         conn.commit()
 
@@ -149,26 +168,29 @@ class DataLoader:
         cursor = conn.cursor()
 
         for acc_data in accounts:
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT OR REPLACE INTO accounts (
                     account_id, user_id, account_type, account_subtype,
                     balance_current, balance_available, balance_limit,
                     iso_currency_code, holder_category, mask, name, official_name
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                acc_data["account_id"],
-                acc_data["user_id"],
-                acc_data["account_type"],
-                acc_data["account_subtype"],
-                acc_data["balance_current"],
-                acc_data.get("balance_available"),
-                acc_data.get("balance_limit"),
-                acc_data.get("iso_currency_code", "USD"),
-                acc_data.get("holder_category", "consumer"),
-                acc_data["mask"],
-                acc_data["name"],
-                acc_data.get("official_name")
-            ))
+            """,
+                (
+                    acc_data["account_id"],
+                    acc_data["user_id"],
+                    acc_data["account_type"],
+                    acc_data["account_subtype"],
+                    acc_data["balance_current"],
+                    acc_data.get("balance_available"),
+                    acc_data.get("balance_limit"),
+                    acc_data.get("iso_currency_code", "USD"),
+                    acc_data.get("holder_category", "consumer"),
+                    acc_data["mask"],
+                    acc_data["name"],
+                    acc_data.get("official_name"),
+                ),
+            )
 
         conn.commit()
 
@@ -182,21 +204,24 @@ class DataLoader:
             if isinstance(date_str, datetime):
                 date_str = date_str.isoformat()
 
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT OR REPLACE INTO transactions (
                     transaction_id, account_id, date, amount,
                     merchant_name, payment_channel, personal_finance_category, pending
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                txn_data["transaction_id"],
-                txn_data["account_id"],
-                date_str,
-                txn_data["amount"],
-                txn_data["merchant_name"],
-                txn_data["payment_channel"],
-                txn_data["personal_finance_category"],
-                1 if txn_data.get("pending", False) else 0
-            ))
+            """,
+                (
+                    txn_data["transaction_id"],
+                    txn_data["account_id"],
+                    date_str,
+                    txn_data["amount"],
+                    txn_data["merchant_name"],
+                    txn_data["payment_channel"],
+                    txn_data["personal_finance_category"],
+                    1 if txn_data.get("pending", False) else 0,
+                ),
+            )
 
         conn.commit()
 
@@ -214,24 +239,27 @@ class DataLoader:
             if isinstance(next_due_date, datetime):
                 next_due_date = next_due_date.isoformat()
 
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT OR REPLACE INTO liabilities (
                     liability_id, account_id, user_id, apr, minimum_payment,
                     last_payment_amount, last_payment_date, next_due_date,
                     is_overdue, overdue_amount
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                liab_data["liability_id"],
-                liab_data["account_id"],
-                liab_data["user_id"],
-                liab_data["apr"],
-                liab_data["minimum_payment"],
-                liab_data.get("last_payment_amount"),
-                last_payment_date,
-                next_due_date,
-                1 if liab_data.get("is_overdue", False) else 0,
-                liab_data.get("overdue_amount")
-            ))
+            """,
+                (
+                    liab_data["liability_id"],
+                    liab_data["account_id"],
+                    liab_data["user_id"],
+                    liab_data["apr"],
+                    liab_data["minimum_payment"],
+                    liab_data.get("last_payment_amount"),
+                    last_payment_date,
+                    next_due_date,
+                    1 if liab_data.get("is_overdue", False) else 0,
+                    liab_data.get("overdue_amount"),
+                ),
+            )
 
         conn.commit()
 
@@ -241,11 +269,11 @@ class DataLoader:
         df = pd.DataFrame(transactions)
 
         # Convert datetime columns
-        if 'date' in df.columns:
-            df['date'] = pd.to_datetime(df['date'])
+        if "date" in df.columns:
+            df["date"] = pd.to_datetime(df["date"])
 
         # Write to Parquet with compression
-        df.to_parquet(self.parquet_path, engine='pyarrow', compression='snappy', index=False)
+        df.to_parquet(self.parquet_path, engine="pyarrow", compression="snappy", index=False)
 
     def load_all(self, data: Dict[str, List[Dict[str, Any]]]):
         """Load all data into storage"""
@@ -294,7 +322,7 @@ def main():
         print("Run 'uv run python -m ingest.data_generator' first")
         sys.exit(1)
 
-    with open(json_path, 'r') as f:
+    with open(json_path, "r") as f:
         data = json.load(f)
 
     # Validate data
@@ -317,14 +345,20 @@ def main():
     # Verify files exist
     print("\nStep 3: Verifying output files...")
     if loader.sqlite_path.exists():
-        print(f"✓ SQLite database: {loader.sqlite_path} ({loader.sqlite_path.stat().st_size / 1024:.1f} KB)")
+        print(
+            f"✓ SQLite database: {loader.sqlite_path} ({loader.sqlite_path.stat().st_size / 1024:.1f} KB)"
+        )
     if loader.parquet_path.exists():
-        print(f"✓ Parquet file: {loader.parquet_path} ({loader.parquet_path.stat().st_size / 1024:.1f} KB)")
+        print(
+            f"✓ Parquet file: {loader.parquet_path} ({loader.parquet_path.stat().st_size / 1024:.1f} KB)"
+        )
 
     print("\n✅ All data loaded successfully!")
     print("\nYou can now:")
     print("  - Query SQLite: sqlite3 data/users.sqlite")
-    print("  - Analyze Parquet: python -c 'import pandas as pd; df = pd.read_parquet(\"data/transactions.parquet\"); print(df.head())'")
+    print(
+        "  - Analyze Parquet: python -c 'import pandas as pd; df = pd.read_parquet(\"data/transactions.parquet\"); print(df.head())'"
+    )
 
 
 if __name__ == "__main__":

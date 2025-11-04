@@ -28,10 +28,9 @@ import plotly.express as px
 import sqlite3
 import json
 import pandas as pd
-import numpy as np
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional
 
 # Configure Streamlit page
 st.set_page_config(
@@ -57,6 +56,7 @@ try:
     from guardrails.tone import scan_recommendations, validate_tone
     from guardrails.eligibility import get_eligibility_summary
     from recommend.engine import generate_recommendations
+
     MODULES_AVAILABLE = True
 except ImportError as e:
     MODULES_AVAILABLE = False
@@ -205,7 +205,7 @@ def log_operator_override(
     operator_name: str,
     action: str,  # "approve", "override", "flag"
     reason: str,
-    recommendation_title: str = None
+    recommendation_title: str = None,
 ) -> bool:
     """
     Log operator override to decision_log.md and update trace JSON.
@@ -325,7 +325,7 @@ def render_sidebar() -> str:
                 "🔍 Decision Trace Viewer",
                 "🛡️ Guardrails Monitor",
             ],
-            key="navigation"
+            key="navigation",
         )
 
         st.divider()
@@ -380,11 +380,7 @@ def render_overview_tab():
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric(
-            "Total Users",
-            len(users_df),
-            help="Total number of users in the system"
-        )
+        st.metric("Total Users", len(users_df), help="Total number of users in the system")
 
     with col2:
         consent_count = users_df["consent_granted"].sum()
@@ -392,21 +388,17 @@ def render_overview_tab():
         st.metric(
             "Consent Granted",
             f"{consent_count} ({consent_pct:.1f}%)",
-            help="Users who have opted in to data processing"
+            help="Users who have opted in to data processing",
         )
 
     with col3:
-        st.metric(
-            "Personas Assigned",
-            len(persona_dist),
-            help="Distinct personas in use"
-        )
+        st.metric("Personas Assigned", len(persona_dist), help="Distinct personas in use")
 
     with col4:
         st.metric(
             "Total Recommendations",
             guardrail_summary.get("total_recommendations", 0),
-            help="Total recommendations generated across all users"
+            help="Total recommendations generated across all users",
         )
 
     st.divider()
@@ -416,10 +408,9 @@ def render_overview_tab():
 
     if persona_dist:
         # Create dataframe for chart
-        persona_df = pd.DataFrame([
-            {"Persona": k.replace("_", " ").title(), "Count": v}
-            for k, v in persona_dist.items()
-        ])
+        persona_df = pd.DataFrame(
+            [{"Persona": k.replace("_", " ").title(), "Count": v} for k, v in persona_dist.items()]
+        )
 
         # Plotly Express bar chart (Python 3.14 compatible)
         fig = px.bar(
@@ -455,7 +446,7 @@ def render_overview_tab():
             st.dataframe(
                 persona_df.style.format({"Count": "{:,.0f}"}),
                 hide_index=True,
-                use_container_width=True
+                use_container_width=True,
             )
     else:
         st.info("No persona assignments found. Run feature pipeline and persona assignment.")
@@ -474,7 +465,7 @@ def render_overview_tab():
             tone_violation_count,
             delta=f"-{tone_violation_count}" if tone_violation_count > 0 else None,
             delta_color="inverse",
-            help="Recommendations flagged for inappropriate tone"
+            help="Recommendations flagged for inappropriate tone",
         )
 
     with col2:
@@ -484,7 +475,7 @@ def render_overview_tab():
             blocked_offer_count,
             delta=f"-{blocked_offer_count}" if blocked_offer_count > 0 else None,
             delta_color="inverse",
-            help="Offers filtered due to eligibility or predatory product rules"
+            help="Offers filtered due to eligibility or predatory product rules",
         )
 
     with col3:
@@ -494,7 +485,7 @@ def render_overview_tab():
             no_consent_count,
             delta=f"-{no_consent_count}" if no_consent_count > 0 else None,
             delta_color="inverse",
-            help="Users who have not opted in to data processing"
+            help="Users who have not opted in to data processing",
         )
 
     # Recent activity (placeholder for future enhancement)
@@ -526,34 +517,20 @@ def render_user_management_tab():
 
     with col1:
         consent_filter = st.selectbox(
-            "Consent Status",
-            ["All", "Granted", "Not Granted"],
-            key="consent_filter"
+            "Consent Status", ["All", "Granted", "Not Granted"], key="consent_filter"
         )
 
     with col2:
         personas = ["All"] + sorted(users_df["persona"].dropna().unique().tolist())
-        persona_filter = st.selectbox(
-            "Persona",
-            personas,
-            key="persona_filter"
-        )
+        persona_filter = st.selectbox("Persona", personas, key="persona_filter")
 
     with col3:
         genders = ["All"] + sorted(users_df["gender"].dropna().unique().tolist())
-        gender_filter = st.selectbox(
-            "Gender",
-            genders,
-            key="gender_filter"
-        )
+        gender_filter = st.selectbox("Gender", genders, key="gender_filter")
 
     with col4:
         income_tiers = ["All"] + sorted(users_df["income_tier"].dropna().unique().tolist())
-        income_filter = st.selectbox(
-            "Income Tier",
-            income_tiers,
-            key="income_filter"
-        )
+        income_filter = st.selectbox("Income Tier", income_tiers, key="income_filter")
 
     # Apply filters
     filtered_df = users_df.copy()
@@ -578,16 +555,17 @@ def render_user_management_tab():
     st.subheader(f"Users ({len(filtered_df)} of {len(users_df)})")
 
     # Format display
-    display_df = filtered_df[[
-        "user_id", "name", "consent_granted", "persona",
-        "age", "gender", "income_tier", "region"
-    ]].copy()
+    display_df = filtered_df[
+        ["user_id", "name", "consent_granted", "persona", "age", "gender", "income_tier", "region"]
+    ].copy()
 
     display_df["consent_granted"] = display_df["consent_granted"].apply(
         lambda x: "✅ Yes" if x else "⏸️ No"
     )
-    display_df["persona"] = display_df["persona"].fillna("(None)").apply(
-        lambda x: x.replace("_", " ").title() if x != "(None)" else x
+    display_df["persona"] = (
+        display_df["persona"]
+        .fillna("(None)")
+        .apply(lambda x: x.replace("_", " ").title() if x != "(None)" else x)
     )
 
     # Display table
@@ -604,7 +582,7 @@ def render_user_management_tab():
             "gender": "Gender",
             "income_tier": "Income Tier",
             "region": "Region",
-        }
+        },
     )
 
     st.divider()
@@ -639,7 +617,7 @@ def render_user_management_tab():
             "Select user to view details:",
             filtered_df["user_id"].tolist(),
             format_func=lambda uid: f"{uid} - {filtered_df[filtered_df['user_id']==uid].iloc[0]['name']}",
-            key="detail_user_selector"
+            key="detail_user_selector",
         )
 
         if st.button("View User Details", type="primary"):
@@ -676,7 +654,7 @@ def render_signals_tab():
             st.metric(
                 "Avg Credit Utilization",
                 f"{avg_util:.1f}%",
-                help="Average maximum credit utilization across all users"
+                help="Average maximum credit utilization across all users",
             )
         else:
             st.metric("Avg Credit Utilization", "N/A")
@@ -687,7 +665,7 @@ def render_signals_tab():
             st.metric(
                 "Avg Subscriptions",
                 f"{avg_subs:.1f}",
-                help="Average number of recurring subscriptions per user"
+                help="Average number of recurring subscriptions per user",
             )
         else:
             st.metric("Avg Subscriptions", "N/A")
@@ -698,7 +676,7 @@ def render_signals_tab():
             st.metric(
                 "Median Savings Inflow (180d)",
                 f"${median_savings:,.0f}",
-                help="Median net savings inflow over 180 days"
+                help="Median net savings inflow over 180 days",
             )
         else:
             st.metric("Median Savings Inflow", "N/A")
@@ -709,7 +687,7 @@ def render_signals_tab():
             st.metric(
                 "Median Pay Gap",
                 f"{median_pay_gap:.0f} days",
-                help="Median days between income deposits"
+                help="Median days between income deposits",
             )
         else:
             st.metric("Median Pay Gap", "N/A")
@@ -729,12 +707,11 @@ def render_signals_tab():
             # Create histogram bins
             bins = [0, 30, 50, 80, 100]
             labels = ["0-30% (Good)", "30-50% (Fair)", "50-80% (High)", "80-100% (Very High)"]
-            util_counts = pd.cut(util_data, bins=bins, labels=labels, include_lowest=True).value_counts()
+            util_counts = pd.cut(
+                util_data, bins=bins, labels=labels, include_lowest=True
+            ).value_counts()
 
-            util_df = pd.DataFrame({
-                "Range": util_counts.index,
-                "Count": util_counts.values
-            })
+            util_df = pd.DataFrame({"Range": util_counts.index, "Count": util_counts.values})
 
             # Show chart only; remove duplicate table
             col1, _ = st.columns([2, 1])
@@ -758,15 +735,14 @@ def render_signals_tab():
     if "sub_30d_recurring_count" in signals_df.columns:
         st.markdown("**Subscription Count Distribution**")
 
-        sub_data = signals_df[signals_df["sub_30d_recurring_count"].notna()]["sub_30d_recurring_count"]
+        sub_data = signals_df[signals_df["sub_30d_recurring_count"].notna()][
+            "sub_30d_recurring_count"
+        ]
 
         if len(sub_data) > 0:
             sub_counts = sub_data.value_counts().sort_index()
 
-            sub_df = pd.DataFrame({
-                "Subscriptions": sub_counts.index,
-                "Count": sub_counts.values
-            })
+            sub_df = pd.DataFrame({"Subscriptions": sub_counts.index, "Count": sub_counts.values})
 
             # Show chart only; remove duplicate table
             col1, _ = st.columns([2, 1])
@@ -791,19 +767,29 @@ def render_signals_tab():
 
     comparison_metrics = []
 
-    if "sub_30d_recurring_count" in signals_df.columns and "sub_180d_recurring_count" in signals_df.columns:
-        comparison_metrics.append({
-            "Metric": "Recurring Subscriptions",
-            "30-Day Avg": f"{signals_df['sub_30d_recurring_count'].mean():.2f}",
-            "180-Day Avg": f"{signals_df['sub_180d_recurring_count'].mean():.2f}",
-        })
+    if (
+        "sub_30d_recurring_count" in signals_df.columns
+        and "sub_180d_recurring_count" in signals_df.columns
+    ):
+        comparison_metrics.append(
+            {
+                "Metric": "Recurring Subscriptions",
+                "30-Day Avg": f"{signals_df['sub_30d_recurring_count'].mean():.2f}",
+                "180-Day Avg": f"{signals_df['sub_180d_recurring_count'].mean():.2f}",
+            }
+        )
 
-    if "inc_30d_median_pay_gap_days" in signals_df.columns and "inc_180d_median_pay_gap_days" in signals_df.columns:
-        comparison_metrics.append({
-            "Metric": "Median Pay Gap (days)",
-            "30-Day Avg": f"{signals_df['inc_30d_median_pay_gap_days'].mean():.1f}",
-            "180-Day Avg": f"{signals_df['inc_180d_median_pay_gap_days'].mean():.1f}",
-        })
+    if (
+        "inc_30d_median_pay_gap_days" in signals_df.columns
+        and "inc_180d_median_pay_gap_days" in signals_df.columns
+    ):
+        comparison_metrics.append(
+            {
+                "Metric": "Median Pay Gap (days)",
+                "30-Day Avg": f"{signals_df['inc_30d_median_pay_gap_days'].mean():.1f}",
+                "180-Day Avg": f"{signals_df['inc_180d_median_pay_gap_days'].mean():.1f}",
+            }
+        )
 
     if comparison_metrics:
         comp_df = pd.DataFrame(comparison_metrics)
@@ -819,7 +805,7 @@ def render_signals_tab():
         selected_user = st.selectbox(
             "Select user to view detailed signals:",
             signals_df["user_id"].tolist(),
-            key="signals_user_selector"
+            key="signals_user_selector",
         )
 
         if selected_user:
@@ -889,7 +875,7 @@ def render_recommendations_tab():
             "Choose user to review recommendations:",
             users_df["user_id"].tolist(),
             format_func=lambda uid: f"{uid} - {users_df[users_df['user_id']==uid].iloc[0]['name']} ({users_df[users_df['user_id']==uid].iloc[0]['persona'] or 'No Persona'})",
-            key="review_user_selector"
+            key="review_user_selector",
         )
 
     with col2:
@@ -907,7 +893,9 @@ def render_recommendations_tab():
     user_data = users_df[users_df["user_id"] == selected_user].iloc[0]
 
     st.subheader(f"Recommendations for {user_data['name']} ({selected_user})")
-    st.caption(f"**Persona:** {user_data['persona'] or 'None'} | **Consent:** {'✅ Granted' if user_data['consent_granted'] else '⏸️ Not Granted'}")
+    st.caption(
+        f"**Persona:** {user_data['persona'] or 'None'} | **Consent:** {'✅ Granted' if user_data['consent_granted'] else '⏸️ Not Granted'}"
+    )
 
     try:
         recs = generate_recommendations(selected_user)
@@ -933,7 +921,7 @@ def render_recommendations_tab():
             "Tone Check",
             "✅ Passed" if tone_passed else "⚠️ Issues",
             delta=None if tone_passed else metadata.get("tone_violations_count", 0),
-            delta_color="off" if tone_passed else "inverse"
+            delta_color="off" if tone_passed else "inverse",
         )
 
     with col4:
@@ -980,7 +968,9 @@ def render_recommendations_tab():
 
             with col1:
                 # Tone validation
-                tone_result = validate_tone(rec.get("rationale", "") + " " + rec.get("description", ""))
+                tone_result = validate_tone(
+                    rec.get("rationale", "") + " " + rec.get("description", "")
+                )
                 if len(tone_result) == 0:
                     st.success("✅ Tone: Passed")
                 else:
@@ -1006,14 +996,16 @@ def render_recommendations_tab():
                 if st.button(f"✅ Approve #{idx}", key=f"approve_{idx}", use_container_width=True):
                     operator = (st.session_state.get("operator_name", "") or "").strip()
                     if not operator:
-                        st.warning("Please enter your name in the sidebar under 'Operator Identity' before approving.")
+                        st.warning(
+                            "Please enter your name in the sidebar under 'Operator Identity' before approving."
+                        )
                     else:
                         success = log_operator_override(
                             user_id=selected_user,
                             operator_name=operator,
                             action="approve",
                             reason="Recommendation approved after review",
-                            recommendation_title=rec.get("title")
+                            recommendation_title=rec.get("title"),
                         )
                         if success:
                             st.success(f"✅ Approved recommendation #{idx}")
@@ -1048,7 +1040,7 @@ def render_recommendations_tab():
                                 operator_name=operator,
                                 action="override",
                                 reason=reason,
-                                recommendation_title=rec.get("title")
+                                recommendation_title=rec.get("title"),
                             )
                             if success:
                                 st.success(f"✅ Override logged for recommendation #{idx}")
@@ -1083,7 +1075,7 @@ def render_recommendations_tab():
                                 operator_name=operator,
                                 action="flag",
                                 reason=reason,
-                                recommendation_title=rec.get("title")
+                                recommendation_title=rec.get("title"),
                             )
                             if success:
                                 st.success(f"🚩 Flagged recommendation #{idx} for review")
@@ -1124,9 +1116,13 @@ def render_trace_viewer_tab():
     selected_user = st.selectbox(
         "Select user to view trace:",
         users_df["user_id"].tolist(),
-        index=users_df["user_id"].tolist().index(default_user) if default_user in users_df["user_id"].tolist() else 0,
+        index=(
+            users_df["user_id"].tolist().index(default_user)
+            if default_user in users_df["user_id"].tolist()
+            else 0
+        ),
         format_func=lambda uid: f"{uid} - {users_df[users_df['user_id']==uid].iloc[0]['name']}",
-        key="trace_user_selector"
+        key="trace_user_selector",
     )
 
     # Load trace
@@ -1134,7 +1130,9 @@ def render_trace_viewer_tab():
 
     if not trace:
         st.error(f"No trace file found for {selected_user}")
-        st.caption("Trace files are generated during the feature pipeline and recommendation generation.")
+        st.caption(
+            "Trace files are generated during the feature pipeline and recommendation generation."
+        )
         return
 
     st.divider()
@@ -1213,7 +1211,9 @@ def render_trace_viewer_tab():
         persona_data = trace.get("persona_assignment", {})
 
         if persona_data:
-            st.markdown(f"**Assigned Persona:** {persona_data.get('persona', 'N/A').replace('_', ' ').title()}")
+            st.markdown(
+                f"**Assigned Persona:** {persona_data.get('persona', 'N/A').replace('_', ' ').title()}"
+            )
             st.markdown(f"**Timestamp:** {persona_data.get('timestamp', 'N/A')}")
 
             st.markdown("**Criteria Met:**")
@@ -1238,7 +1238,9 @@ def render_trace_viewer_tab():
         if recs_data:
             st.markdown(f"**Timestamp:** {recs_data.get('timestamp', 'N/A')}")
             st.markdown(f"**Persona:** {recs_data.get('persona', 'N/A').replace('_', ' ').title()}")
-            st.markdown(f"**Consent Granted:** {'✅ Yes' if recs_data.get('consent_granted') else '⏸️ No'}")
+            st.markdown(
+                f"**Consent Granted:** {'✅ Yes' if recs_data.get('consent_granted') else '⏸️ No'}"
+            )
 
             col1, col2, col3 = st.columns(3)
 
@@ -1257,7 +1259,9 @@ def render_trace_viewer_tab():
             if recommendations:
                 for idx, rec in enumerate(recommendations, 1):
                     st.markdown(f"**#{idx} - {rec.get('title', 'Untitled')}**")
-                    st.caption(f"Type: {rec.get('type', 'N/A')} | Category: {rec.get('category', 'N/A')}")
+                    st.caption(
+                        f"Type: {rec.get('type', 'N/A')} | Category: {rec.get('category', 'N/A')}"
+                    )
                     st.caption(f"Rationale: {rec.get('rationale', 'N/A')}")
                     st.divider()
             else:
@@ -1317,17 +1321,13 @@ def render_guardrails_tab():
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric(
-            "Total Users",
-            summary.get("total_users", 0),
-            help="Total users with trace files"
-        )
+        st.metric("Total Users", summary.get("total_users", 0), help="Total users with trace files")
 
     with col2:
         st.metric(
             "With Consent",
             summary.get("users_with_consent", 0),
-            help="Users who have granted consent"
+            help="Users who have granted consent",
         )
 
     with col3:
@@ -1337,7 +1337,7 @@ def render_guardrails_tab():
             tone_violations,
             delta=f"-{tone_violations}" if tone_violations > 0 else None,
             delta_color="inverse",
-            help="Total tone violations detected across all recommendations"
+            help="Total tone violations detected across all recommendations",
         )
 
     with col4:
@@ -1347,7 +1347,7 @@ def render_guardrails_tab():
             blocked_offers,
             delta=f"-{blocked_offers}" if blocked_offers > 0 else None,
             delta_color="inverse",
-            help="Total offers blocked due to eligibility or predatory filtering"
+            help="Total offers blocked due to eligibility or predatory filtering",
         )
 
     st.divider()
@@ -1366,10 +1366,14 @@ def render_guardrails_tab():
             phrase = violation.get("phrase", "unknown")
             violation_counts[phrase] = violation_counts.get(phrase, 0) + 1
 
-        violation_df = pd.DataFrame([
-            {"Prohibited Phrase": phrase, "Occurrences": count}
-            for phrase, count in sorted(violation_counts.items(), key=lambda x: x[1], reverse=True)
-        ])
+        violation_df = pd.DataFrame(
+            [
+                {"Prohibited Phrase": phrase, "Occurrences": count}
+                for phrase, count in sorted(
+                    violation_counts.items(), key=lambda x: x[1], reverse=True
+                )
+            ]
+        )
 
         st.dataframe(violation_df, hide_index=True, use_container_width=True)
     else:
@@ -1387,7 +1391,9 @@ def render_guardrails_tab():
 
         # Display sample
         for idx, offer in enumerate(blocked_offers[:10], 1):
-            st.caption(f"{idx}. {offer.get('title', 'Unknown')} - Reason: {offer.get('reason', 'N/A')}")
+            st.caption(
+                f"{idx}. {offer.get('title', 'Unknown')} - Reason: {offer.get('reason', 'N/A')}"
+            )
 
         if len(blocked_offers) > 10:
             st.caption(f"... and {len(blocked_offers) - 10} more")
@@ -1408,9 +1414,9 @@ def render_guardrails_tab():
         if len(consent_df) > 0:
             consent_df = consent_df.sort_values("consent_timestamp", ascending=False).head(10)
 
-            display_df = consent_df[[
-                "user_id", "name", "consent_granted", "consent_timestamp"
-            ]].copy()
+            display_df = consent_df[
+                ["user_id", "name", "consent_granted", "consent_timestamp"]
+            ].copy()
 
             display_df["consent_granted"] = display_df["consent_granted"].apply(
                 lambda x: "✅ Granted" if x else "⏸️ Not Granted"
@@ -1425,7 +1431,7 @@ def render_guardrails_tab():
                     "name": "Name",
                     "consent_granted": "Status",
                     "consent_timestamp": "Timestamp",
-                }
+                },
             )
         else:
             st.info("No consent activity recorded yet")

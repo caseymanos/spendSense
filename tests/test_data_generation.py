@@ -10,13 +10,19 @@ Tests:
 import pytest
 import json
 import hashlib
-from pathlib import Path
 from datetime import datetime
 from pydantic import ValidationError
 
 from ingest.schemas import (
-    User, Account, Transaction, Liability, DataGenerationConfig,
-    AccountType, Gender, IncomeTier, Region
+    User,
+    Account,
+    Transaction,
+    Liability,
+    DataGenerationConfig,
+    AccountType,
+    Gender,
+    IncomeTier,
+    Region,
 )
 from ingest.data_generator import SyntheticDataGenerator
 from ingest.validators import DataValidator
@@ -41,7 +47,7 @@ class TestSchemaValidation:
                 age=35,
                 gender=Gender.MALE,
                 income_tier=IncomeTier.MEDIUM,
-                region=Region.WEST
+                region=Region.WEST,
             )
         assert "name" in str(exc_info.value).lower()
 
@@ -54,7 +60,7 @@ class TestSchemaValidation:
                 age=15,  # Below minimum 18
                 gender=Gender.MALE,
                 income_tier=IncomeTier.MEDIUM,
-                region=Region.WEST
+                region=Region.WEST,
             )
 
     def test_account_schema_valid(self, sample_checking_account):
@@ -72,7 +78,7 @@ class TestSchemaValidation:
                 account_subtype="checking",
                 balance_current=2000000.0,  # Over $1M limit
                 mask="1234",
-                name="Test Account"
+                name="Test Account",
             )
 
     def test_transaction_schema_valid(self, sample_transaction):
@@ -90,7 +96,7 @@ class TestSchemaValidation:
                 amount=100000.0,  # Over $50k limit
                 merchant_name="Test Merchant",
                 payment_channel="online",
-                personal_finance_category="TEST"
+                personal_finance_category="TEST",
             )
 
     def test_liability_schema_valid(self, sample_liability):
@@ -106,7 +112,7 @@ class TestSchemaValidation:
                 account_id="test_acc",
                 user_id="test_user",
                 apr=150.0,  # Over 100% limit
-                minimum_payment=50.0
+                minimum_payment=50.0,
             )
 
 
@@ -125,12 +131,12 @@ class TestDeterministicGeneration:
         users2 = gen2.generate_users()
 
         # Compare serialized data
-        users1_json = [u.model_dump(mode='json') for u in users1]
-        users2_json = [u.model_dump(mode='json') for u in users2]
+        users1_json = [u.model_dump(mode="json") for u in users1]
+        users2_json = [u.model_dump(mode="json") for u in users2]
 
         # Exclude timestamps which may vary slightly
         for u in users1_json + users2_json:
-            u.pop('created_at', None)
+            u.pop("created_at", None)
 
         assert users1_json == users2_json, "Users differ between identical seeds"
 
@@ -164,27 +170,27 @@ class TestDeterministicGeneration:
 
         # Create deterministic JSON representations
         data1 = {
-            "users": [u.model_dump(mode='json') for u in users1],
-            "accounts": [a.model_dump(mode='json') for a in accounts1],
-            "transactions": [t.model_dump(mode='json') for t in transactions1],
-            "liabilities": [l.model_dump(mode='json') for l in liabilities1]
+            "users": [u.model_dump(mode="json") for u in users1],
+            "accounts": [a.model_dump(mode="json") for a in accounts1],
+            "transactions": [t.model_dump(mode="json") for t in transactions1],
+            "liabilities": [l.model_dump(mode="json") for l in liabilities1],
         }
 
         data2 = {
-            "users": [u.model_dump(mode='json') for u in users2],
-            "accounts": [a.model_dump(mode='json') for a in accounts2],
-            "transactions": [t.model_dump(mode='json') for t in transactions2],
-            "liabilities": [l.model_dump(mode='json') for l in liabilities2]
+            "users": [u.model_dump(mode="json") for u in users2],
+            "accounts": [a.model_dump(mode="json") for a in accounts2],
+            "transactions": [t.model_dump(mode="json") for t in transactions2],
+            "liabilities": [l.model_dump(mode="json") for l in liabilities2],
         }
 
         # Remove timestamp fields for comparison
         for u in data1["users"] + data2["users"]:
-            u.pop('created_at', None)
-            u.pop('consent_timestamp', None)
+            u.pop("created_at", None)
+            u.pop("consent_timestamp", None)
         for t in data1["transactions"] + data2["transactions"]:
-            t['date'] = str(t['date'])  # Normalize datetime
+            t["date"] = str(t["date"])  # Normalize datetime
         for l in data1["liabilities"] + data2["liabilities"]:
-            for field in ['last_payment_date', 'next_due_date']:
+            for field in ["last_payment_date", "next_due_date"]:
                 if l.get(field):
                     l[field] = str(l[field])
 
@@ -216,10 +222,10 @@ class TestEndToEndPipeline:
 
         # Step 2: Validate data
         data = {
-            "users": [u.model_dump(mode='json') for u in users],
-            "accounts": [a.model_dump(mode='json') for a in accounts],
-            "transactions": [t.model_dump(mode='json') for t in transactions],
-            "liabilities": [l.model_dump(mode='json') for l in liabilities]
+            "users": [u.model_dump(mode="json") for u in users],
+            "accounts": [a.model_dump(mode="json") for a in accounts],
+            "transactions": [t.model_dump(mode="json") for t in transactions],
+            "liabilities": [l.model_dump(mode="json") for l in liabilities],
         }
 
         validator = DataValidator()
@@ -244,6 +250,7 @@ class TestEndToEndPipeline:
 
         # Step 5: Verify consent table initialized
         import sqlite3
+
         conn = sqlite3.connect(sqlite_path)
         cursor = conn.cursor()
 
@@ -279,7 +286,9 @@ class TestEndToEndPipeline:
             dates = sorted([t.date for t in txns])
             date_range = (dates[-1] - dates[0]).days
 
-            assert date_range >= 150, f"User {user_id} has insufficient date range: {date_range} days"
+            assert (
+                date_range >= 150
+            ), f"User {user_id} has insufficient date range: {date_range} days"
 
     def test_sqlite_and_parquet_readable(self, temp_data_dir):
         """SQLite and Parquet files are readable after loading"""
@@ -289,10 +298,10 @@ class TestEndToEndPipeline:
         users, accounts, transactions, liabilities = generator.generate_all()
 
         data = {
-            "users": [u.model_dump(mode='json') for u in users],
-            "accounts": [a.model_dump(mode='json') for a in accounts],
-            "transactions": [t.model_dump(mode='json') for t in transactions],
-            "liabilities": [l.model_dump(mode='json') for l in liabilities]
+            "users": [u.model_dump(mode="json") for u in users],
+            "accounts": [a.model_dump(mode="json") for a in accounts],
+            "transactions": [t.model_dump(mode="json") for t in transactions],
+            "liabilities": [l.model_dump(mode="json") for l in liabilities],
         }
 
         sqlite_path = temp_data_dir / "test.sqlite"
@@ -303,6 +312,7 @@ class TestEndToEndPipeline:
 
         # Test SQLite queries
         import sqlite3
+
         conn = sqlite3.connect(sqlite_path)
         cursor = conn.cursor()
 
@@ -318,6 +328,7 @@ class TestEndToEndPipeline:
 
         # Test Parquet reading
         import pandas as pd
+
         df = pd.read_parquet(parquet_path)
 
         assert len(df) > 0, "Parquet should have transactions"

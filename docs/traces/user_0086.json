@@ -1,84 +1,106 @@
 {
   "user_id": "user_0086",
-  "timestamp": "2025-11-04T00:26:47.206493",
+  "timestamp": "2025-11-04T00:34:44.398751",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 50.49,
+        "subscription_share_pct": 0.52,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 4,
+        "monthly_recurring_spend": 50.99,
+        "subscription_share_pct": 0.54,
+        "recurring_merchants": [
+          "Disney+",
+          "Dropbox",
+          "NYT Subscription",
+          "Netflix"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 3497.06
+        "emergency_fund_months": 4.78,
+        "savings_balance": 46020.89
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 3497.06
+        "emergency_fund_months": 4.89,
+        "savings_balance": 46020.89
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 0.0,
-        "avg_utilization_pct": 0.0,
-        "flag_30": false,
+        "max_utilization_pct": 49.31,
+        "avg_utilization_pct": 45.14,
+        "flag_30": true,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
-        "has_interest": false,
+        "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 0,
-        "utilization_by_card": [],
+        "num_credit_cards": 2,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000241",
+            "mask": "1714",
+            "balance": 4930.922901279397,
+            "limit": 10000.0,
+            "utilization_pct": 49.31
+          },
+          {
+            "account_id": "acc_000242",
+            "mask": "8317",
+            "balance": 6144.691275130064,
+            "limit": 15000.0,
+            "utilization_pct": 40.96
+          }
+        ],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 2,
+        "income_variability": 0.4839,
+        "cash_buffer_months": 1.22,
+        "pay_frequency": "variable",
+        "num_paychecks": 7,
+        "avg_paycheck": 3059.86
       },
       "180d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 3,
+        "income_variability": 0.5715,
+        "cash_buffer_months": 11.57,
+        "pay_frequency": "variable",
+        "num_paychecks": 47,
+        "avg_paycheck": 3521.29
       }
     }
   },
   "persona_assignment": {
-    "persona": "general",
-    "criteria_met": {},
+    "persona": "subscription_heavy",
+    "criteria_met": {
+      "recurring_count": 4,
+      "monthly_spend": 50.49
+    },
     "all_checks": {
       "high_utilization": {},
-      "variable_income": {
-        "cash_buffer_months": 0.0
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 4,
+        "monthly_spend": 50.49
       },
-      "subscription_heavy": {},
-      "savings_builder": {
-        "low_utilization": 0.0
-      }
+      "savings_builder": {}
     },
-    "timestamp": "2025-11-04T00:26:52.194480"
+    "timestamp": "2025-11-04T10:18:44.380411"
   }
 }

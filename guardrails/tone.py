@@ -58,7 +58,7 @@ def validate_tone(text: str) -> List[Dict[str, Any]]:
     for phrase in PROHIBITED_PHRASES:
         # Use word boundaries to avoid partial matches
         # e.g., "discipline" shouldn't match "lack discipline"
-        pattern = r'\b' + re.escape(phrase.lower()) + r'\b'
+        pattern = r"\b" + re.escape(phrase.lower()) + r"\b"
 
         for match in re.finditer(pattern, text_lower):
             start_pos = match.start()
@@ -73,9 +73,7 @@ def validate_tone(text: str) -> List[Dict[str, Any]]:
                 "phrase": phrase,
                 "position": start_pos,
                 "context": context.strip(),
-                "suggestion": PREFERRED_ALTERNATIVES.get(
-                    phrase, "consider rephrasing"
-                ),
+                "suggestion": PREFERRED_ALTERNATIVES.get(phrase, "consider rephrasing"),
             }
             violations.append(violation)
 
@@ -154,10 +152,12 @@ def scan_recommendations(recommendations: List[Dict[str, Any]]) -> Dict[str, Any
 
         if violations:
             violations_count += 1
-            details.append({
-                "recommendation_title": title,
-                "violations": violations,
-            })
+            details.append(
+                {
+                    "recommendation_title": title,
+                    "violations": violations,
+                }
+            )
 
     clean_count = total - violations_count
 
@@ -170,8 +170,9 @@ def scan_recommendations(recommendations: List[Dict[str, Any]]) -> Dict[str, Any
     }
 
 
-def apply_tone_filter(recommendations: List[Dict[str, Any]],
-                      strict_mode: bool = True) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+def apply_tone_filter(
+    recommendations: List[Dict[str, Any]], strict_mode: bool = True
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """
     Filter recommendations that fail tone validation.
 
@@ -210,10 +211,7 @@ def apply_tone_filter(recommendations: List[Dict[str, Any]],
     else:
         # Keep all but add warning flags
         filtered = []
-        violation_map = {
-            d["recommendation_title"]: d["violations"]
-            for d in scan_result["details"]
-        }
+        violation_map = {d["recommendation_title"]: d["violations"] for d in scan_result["details"]}
 
         for rec in recommendations:
             rec_copy = rec.copy()

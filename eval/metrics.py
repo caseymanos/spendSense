@@ -179,10 +179,8 @@ def calculate_coverage(
         lambda row: sum(
             [
                 row["sub_180d_recurring_count"] > 0,  # Subscriptions
-                row["sav_180d_net_inflow"] > 0
-                or row["sav_180d_growth_rate_pct"] > 0,  # Savings
-                row["credit_max_util_pct"] > 0
-                or row["credit_has_interest"],  # Credit
+                row["sav_180d_net_inflow"] > 0 or row["sav_180d_growth_rate_pct"] > 0,  # Savings
+                row["credit_max_util_pct"] > 0 or row["credit_has_interest"],  # Credit
                 row["inc_180d_num_paychecks"] > 0,  # Income
             ]
         ),
@@ -199,8 +197,7 @@ def calculate_coverage(
         lambda row: sum(
             [
                 row["sub_180d_recurring_count"] > 0,
-                row["sav_180d_net_inflow"] > 0
-                or row["sav_180d_growth_rate_pct"] > 0,
+                row["sav_180d_net_inflow"] > 0 or row["sav_180d_growth_rate_pct"] > 0,
                 row["credit_max_util_pct"] > 0 or row["credit_has_interest"],
                 row["inc_180d_num_paychecks"] > 0,
             ]
@@ -268,9 +265,7 @@ def calculate_explainability(traces: List[Dict[str, Any]]) -> Tuple[float, Dict[
                     }
                 )
 
-    explainability_pct = (
-        (recs_with_rationale / total_recs) * 100 if total_recs > 0 else 0.0
-    )
+    explainability_pct = (recs_with_rationale / total_recs) * 100 if total_recs > 0 else 0.0
 
     metadata = {
         "total_recommendations": int(total_recs),
@@ -279,9 +274,7 @@ def calculate_explainability(traces: List[Dict[str, Any]]) -> Tuple[float, Dict[
         "explainability_percentage": round(float(explainability_pct), 2),
         "target": 100.0,
         "passes": bool(explainability_pct >= 100.0),
-        "missing_rationales_sample": recs_without_rationale[
-            :5
-        ],  # First 5 examples
+        "missing_rationales_sample": recs_without_rationale[:5],  # First 5 examples
     }
 
     return explainability_pct, metadata
@@ -463,9 +456,7 @@ def calculate_auditability(
         trace_file = traces_path / f"{user_id}.json"
 
         if not trace_file.exists():
-            incomplete_details.append(
-                {"user_id": user_id, "reason": "trace_file_missing"}
-            )
+            incomplete_details.append({"user_id": user_id, "reason": "trace_file_missing"})
             continue
 
         users_with_trace += 1

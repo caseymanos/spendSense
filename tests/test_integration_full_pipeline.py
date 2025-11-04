@@ -5,22 +5,15 @@ Tests the complete end-to-end flow from synthetic data generation
 through evaluation, verifying all success criteria.
 """
 
-import json
-import os
 import sqlite3
-import tempfile
 import time
 from pathlib import Path
 
 import pandas as pd
 import pytest
 
-from ingest import data_generator, loader
-from features import subscriptions, savings, credit, income
-from personas import assignment
 from recommend import engine as recommend_engine
-from guardrails import consent, eligibility, tone
-from eval import metrics, fairness, run as eval_run
+from guardrails import tone
 
 
 class TestFullPipelineIntegration:
@@ -74,7 +67,7 @@ class TestFullPipelineIntegration:
         # Verify files exist
         assert db_path.exists(), "SQLite database not found (run data generator first)"
         assert parquet_path.exists(), "Parquet file not found (run data generator first)"
-        print(f"  ✓ Found existing data files")
+        print("  ✓ Found existing data files")
 
         # Get list of users with consent
         conn = sqlite3.connect(str(db_path))
@@ -95,14 +88,16 @@ class TestFullPipelineIntegration:
 
         signals_df = pd.read_parquet(signals_path)
         features_time = time.perf_counter() - start_features
-        print(f"  ✓ Loaded signals for {signals_df['user_id'].nunique()} users in {features_time:.2f}s")
+        print(
+            f"  ✓ Loaded signals for {signals_df['user_id'].nunique()} users in {features_time:.2f}s"
+        )
 
         # Verify all 4 signal categories present (with prefixes)
         assert "sub_30d_recurring_count" in signals_df.columns, "Subscription signals missing"
         assert "sav_30d_growth_rate_pct" in signals_df.columns, "Savings signals missing"
         assert "credit_avg_util_pct" in signals_df.columns, "Credit signals missing"
         assert "inc_30d_median_pay_gap_days" in signals_df.columns, "Income signals missing"
-        print(f"  ✓ All 4 signal categories present")
+        print("  ✓ All 4 signal categories present")
 
         # Step 3: Verify persona assignments exist
         print("\n[STEP 3] Verifying persona assignments...")
@@ -111,9 +106,12 @@ class TestFullPipelineIntegration:
         # Verify persona assignments stored
         conn = sqlite3.connect(str(db_path))
         cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM persona_assignments WHERE user_id IN ({})".format(
-            ','.join('?' * len(user_ids))
-        ), user_ids)
+        cursor.execute(
+            "SELECT COUNT(*) FROM persona_assignments WHERE user_id IN ({})".format(
+                ",".join("?" * len(user_ids))
+            ),
+            user_ids,
+        )
         stored_count = cursor.fetchone()[0]
         conn.close()
 
@@ -139,7 +137,7 @@ class TestFullPipelineIntegration:
 
         # Verify latency meets success criteria
         assert avg_latency < 5.0, f"Latency {avg_latency:.2f}s exceeds 5s target"
-        print(f"  ✓ Latency meets <5s target")
+        print("  ✓ Latency meets <5s target")
 
         # Step 5: Verify guardrails applied
         print("\n[STEP 5] Verifying guardrails...")
@@ -162,9 +160,13 @@ class TestFullPipelineIntegration:
             if passed:
                 guardrail_pass_count += 1
 
-        print(f"  ✓ {guardrail_pass_count}/{len(all_recommendations)} recommendation sets passed tone checks")
+        print(
+            f"  ✓ {guardrail_pass_count}/{len(all_recommendations)} recommendation sets passed tone checks"
+        )
         if tone_violations:
-            print(f"  ! Found {len(tone_violations)} tone violations (guardrails working correctly)")
+            print(
+                f"  ! Found {len(tone_violations)} tone violations (guardrails working correctly)"
+            )
 
         # Step 6: Calculate evaluation metrics
         print("\n[STEP 6] Calculating evaluation metrics...")
@@ -172,11 +174,16 @@ class TestFullPipelineIntegration:
         # Calculate coverage metric
         conn = sqlite3.connect(str(db_path))
         cursor = conn.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT COUNT(DISTINCT user_id)
             FROM persona_assignments
             WHERE persona != 'general' AND user_id IN ({})
-        """.format(','.join('?' * len(user_ids))), user_ids)
+        """.format(
+                ",".join("?" * len(user_ids))
+            ),
+            user_ids,
+        )
         users_with_persona = cursor.fetchone()[0]
         conn.close()
 
@@ -186,7 +193,8 @@ class TestFullPipelineIntegration:
         # Calculate explainability metric
         total_recs = sum(len(r.get("recommendations", [])) for r in all_recommendations)
         recs_with_rationale = sum(
-            1 for r_set in all_recommendations
+            1
+            for r_set in all_recommendations
             for rec in r_set.get("recommendations", [])
             if rec.get("rationale")
         )
@@ -235,7 +243,7 @@ class TestFullPipelineIntegration:
         assert signals_path.exists(), "Signals parquet missing"
         assert trace_count > 0, "No trace JSONs generated"
 
-        print(f"\n✅ Full pipeline integration test PASSED")
+        print("\n✅ Full pipeline integration test PASSED")
         print(f"   Total time: {time.perf_counter() - start_gen:.2f}s")
         print(f"   Users processed: {len(user_ids)}")
         print(f"   Recommendations generated: {total_recs}")
@@ -258,8 +266,8 @@ class TestPipelineComponentIntegration:
         required_columns = [
             "sub_30d_recurring_count",  # Subscriptions
             "sav_30d_growth_rate_pct",  # Savings
-            "credit_avg_util_pct",      # Credit
-            "inc_30d_median_pay_gap_days"  # Income
+            "credit_avg_util_pct",  # Credit
+            "inc_30d_median_pay_gap_days",  # Income
         ]
 
         for col in required_columns:

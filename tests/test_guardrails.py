@@ -12,11 +12,9 @@ Test Coverage:
 6. INTEGRATION - Full guardrail pipeline
 """
 
-import pytest
 import sqlite3
 import json
 from pathlib import Path
-from datetime import datetime
 
 from guardrails.consent import (
     grant_consent,
@@ -27,7 +25,6 @@ from guardrails.consent import (
 )
 from guardrails.tone import (
     validate_tone,
-    suggest_alternatives,
     scan_recommendations,
     check_text_safe,
 )
@@ -35,7 +32,6 @@ from guardrails.eligibility import (
     check_product_eligibility,
     filter_predatory_products,
     check_existing_accounts,
-    apply_all_filters,
 )
 from guardrails import run_all_guardrails
 from recommend.engine import generate_recommendations
@@ -67,10 +63,7 @@ def test_consent_blocking():
         user_id = cursor.fetchone()[0]
 
         # Ensure consent is NOT granted
-        cursor.execute(
-            "UPDATE users SET consent_granted = 0 WHERE user_id = ?",
-            (user_id,)
-        )
+        cursor.execute("UPDATE users SET consent_granted = 0 WHERE user_id = ?", (user_id,))
         conn.commit()
 
     # Check consent status
@@ -95,10 +88,7 @@ def test_consent_status_check():
         user_id = cursor.fetchone()[0]
 
         # Test consent granted
-        cursor.execute(
-            "UPDATE users SET consent_granted = 1 WHERE user_id = ?",
-            (user_id,)
-        )
+        cursor.execute("UPDATE users SET consent_granted = 1 WHERE user_id = ?", (user_id,))
         conn.commit()
 
     assert check_consent(user_id) is True
@@ -106,10 +96,7 @@ def test_consent_status_check():
     # Test consent revoked
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
-        cursor.execute(
-            "UPDATE users SET consent_granted = 0 WHERE user_id = ?",
-            (user_id,)
-        )
+        cursor.execute("UPDATE users SET consent_granted = 0 WHERE user_id = ?", (user_id,))
         conn.commit()
 
     assert check_consent(user_id) is False

@@ -1,61 +1,58 @@
 {
   "user_id": "user_0027",
-  "timestamp": "2025-11-04T00:26:46.694789",
+  "timestamp": "2025-11-04T00:34:43.558723",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 75.23,
+        "subscription_share_pct": 1.45,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 3,
+        "monthly_recurring_spend": 75.78,
+        "subscription_share_pct": 1.22,
+        "recurring_merchants": [
+          "Adobe Creative Cloud",
+          "Amazon Prime",
+          "Hulu"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 21511.81
+        "emergency_fund_months": 9.18,
+        "savings_balance": 47608.54
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.0,
-        "savings_balance": 21511.81
+        "emergency_fund_months": 7.65,
+        "savings_balance": 47608.54
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 71.0,
-        "avg_utilization_pct": 53.85,
-        "flag_30": true,
-        "flag_50": true,
+        "max_utilization_pct": 10.49,
+        "avg_utilization_pct": 10.49,
+        "flag_30": false,
+        "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 2,
+        "num_credit_cards": 1,
         "utilization_by_card": [
           {
             "account_id": "acc_000078",
-            "mask": "7040",
-            "balance": 1834.5510333129528,
+            "mask": "8653",
+            "balance": 524.3237762540033,
             "limit": 5000.0,
-            "utilization_pct": 36.69
-          },
-          {
-            "account_id": "acc_000079",
-            "mask": "6709",
-            "balance": 17750.642941413047,
-            "limit": 25000.0,
-            "utilization_pct": 71.0
+            "utilization_pct": 10.49
           }
         ],
         "interest_charges_present": false,
@@ -64,38 +61,40 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 5,
+        "income_variability": 0.3816,
+        "cash_buffer_months": 2.41,
+        "pay_frequency": "weekly",
+        "num_paychecks": 6,
+        "avg_paycheck": 2946.21
       },
       "180d": {
-        "median_pay_gap_days": 0,
-        "income_variability": 0.0,
-        "cash_buffer_months": 0.0,
-        "pay_frequency": "unknown",
-        "num_paychecks": 0,
-        "avg_paycheck": 0.0
+        "median_pay_gap_days": 5,
+        "income_variability": 0.5045,
+        "cash_buffer_months": 18.29,
+        "pay_frequency": "weekly",
+        "num_paychecks": 41,
+        "avg_paycheck": 3685.81
       }
     }
   },
   "persona_assignment": {
-    "persona": "high_utilization",
+    "persona": "subscription_heavy",
     "criteria_met": {
-      "high_utilization": 71.0
+      "recurring_count": 3,
+      "monthly_spend": 75.23
     },
     "all_checks": {
-      "high_utilization": {
-        "high_utilization": 71.0
+      "high_utilization": {},
+      "variable_income": {},
+      "subscription_heavy": {
+        "recurring_count": 3,
+        "monthly_spend": 75.23
       },
-      "variable_income": {
-        "cash_buffer_months": 0.0
-      },
-      "subscription_heavy": {},
-      "savings_builder": {}
+      "savings_builder": {
+        "low_utilization": 10.49
+      }
     },
-    "timestamp": "2025-11-04T00:26:52.185840"
+    "timestamp": "2025-11-04T10:18:44.369296"
   }
 }

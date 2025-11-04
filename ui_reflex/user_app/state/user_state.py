@@ -25,7 +25,6 @@ from utils.data_loaders import (
     grant_user_consent,
     revoke_user_consent,
     get_persona_description,
-    get_database_stats,
 )
 
 
@@ -97,13 +96,16 @@ class UserAppState(rx.State):
             return "Never granted"
 
         # Prefer DB column name; fall back to any legacy key if present
-        consent_at = self.user_data.get("consent_timestamp") or self.user_data.get("consent_granted_at")
+        consent_at = self.user_data.get("consent_timestamp") or self.user_data.get(
+            "consent_granted_at"
+        )
         if not consent_at:
             return "Unknown date"
 
         try:
             from datetime import datetime
-            dt = datetime.fromisoformat(consent_at.replace('Z', '+00:00'))
+
+            dt = datetime.fromisoformat(consent_at.replace("Z", "+00:00"))
             return dt.strftime("%b %d, %Y at %I:%M %p")
         except:
             return str(consent_at)
@@ -115,13 +117,16 @@ class UserAppState(rx.State):
             return "Consent has never been granted for this user"
 
         # Prefer DB column name; fall back to any legacy key if present
-        consent_at = self.user_data.get("consent_timestamp") or self.user_data.get("consent_granted_at")
+        consent_at = self.user_data.get("consent_timestamp") or self.user_data.get(
+            "consent_granted_at"
+        )
         if not consent_at:
             return "Consent granted (date unknown)"
 
         try:
             from datetime import datetime, timezone
-            dt = datetime.fromisoformat(consent_at.replace('Z', '+00:00'))
+
+            dt = datetime.fromisoformat(consent_at.replace("Z", "+00:00"))
             now = datetime.now(timezone.utc)
             delta = now - dt
 
@@ -143,7 +148,7 @@ class UserAppState(rx.State):
             {
                 "user_id": user["user_id"],
                 "display": f"{'✓' if user.get('consent_granted') else '✗'} {user['user_id']}",
-                "has_consent": bool(user.get("consent_granted"))
+                "has_consent": bool(user.get("consent_granted")),
             }
             for user in self.all_users
         ]
@@ -202,7 +207,7 @@ class UserAppState(rx.State):
             else:
                 self.recommendations_data = {
                     "recommendations": [],
-                    "metadata": {"reason": "consent_not_granted"}
+                    "metadata": {"reason": "consent_not_granted"},
                 }
 
         except Exception as e:
@@ -346,7 +351,8 @@ class UserAppState(rx.State):
         if not self.recommendations_data:
             return []
         return [
-            rec for rec in self.recommendations_data.get("recommendations", [])
+            rec
+            for rec in self.recommendations_data.get("recommendations", [])
             if rec.get("type") == "education"
         ]
 
@@ -356,7 +362,8 @@ class UserAppState(rx.State):
         if not self.recommendations_data:
             return []
         return [
-            rec for rec in self.recommendations_data.get("recommendations", [])
+            rec
+            for rec in self.recommendations_data.get("recommendations", [])
             if rec.get("type") == "partner_offer"
         ]
 
