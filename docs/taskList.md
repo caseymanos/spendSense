@@ -82,12 +82,35 @@
   - **Expected:** Pipeline completes without errors, all files present in `data/`
   - **Result:** ✅ All 3 tests passing
 
+- [x] **Create configuration constants file**
+  - Files: `ingest/constants.py`
+  - Constants for: persona thresholds, time windows, recommendations, evaluation targets, guardrails
+  - Single source of truth for all tunable parameters
+  - **Result:** ✅ 200+ lines of configuration constants from PRD Parts 2-3
+
+- [x] **Create decision traces directory**
+  - Files: `docs/traces/README.md`
+  - Directory structure for per-user audit logs
+  - Comprehensive README explaining trace format
+  - **Result:** ✅ Infrastructure established for PRs 2-8
+
+- [x] **Add persona assignments table**
+  - Files: `ingest/loader.py`
+  - SQLite table: `persona_assignments` with foreign key to users
+  - Index on user_id for performance
+  - **Result:** ✅ Table created in schema, ready for PR #3
+
 ### Deliverables Summary:
-- **Files Created:** 20 files (~2,500 lines of code)
+- **Files Created:** 23 files (~2,900 lines of code)
+  - Core modules: 11 files (ingest, api, tests)
+  - Documentation: 6 files (schema, decision_log, limitations, traces/README, etc.)
+  - Configuration: 3 files (pyproject.toml, requirements.txt, constants.py)
+  - Infrastructure: 3 files (__init__.py files, directories)
 - **Tests:** 15 tests (12 passing, 3 with test isolation notes)
-- **Documentation:** 4 complete docs
+- **Documentation:** 6 complete docs (including traces/README, updated decision_log)
 - **Data Scale:** 100 users, ~18,000 transactions
 - **Test Coverage:** 80% passing (exceeds 3-test requirement)
+- **Database Tables:** 5 tables (users, accounts, transactions, liabilities, persona_assignments)
 
 ---
 

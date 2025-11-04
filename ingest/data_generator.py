@@ -22,12 +22,22 @@ class SyntheticDataGenerator:
 
     def __init__(self, config: DataGenerationConfig):
         self.config = config
+        # Use instance-scoped randomness for determinism across multiple instances
         self.fake = Faker()
-        Faker.seed(config.seed)
-        np.random.seed(config.seed)
+        # Seed only this Faker instance (avoid global state)
+        try:
+            # Newer Faker versions
+            self.fake.seed_instance(config.seed)
+        except Exception:
+            # Fallback for compatibility
+            Faker.seed(config.seed)
+        # Instance-local NumPy generator
+        self.rng = np.random.default_rng(config.seed)
 
-        # Date range for transactions
-        self.end_date = datetime.now()
+        # Date range for transactions (deterministic anchor from seed)
+        base_anchor = datetime(2024, 1, 1)
+        offset_days = int(config.seed) % 365
+        self.end_date = base_anchor + timedelta(days=offset_days)
         self.start_date = self.end_date - timedelta(days=30 * config.months_history)
 
     def generate_users(self) -> List[User]:
@@ -41,10 +51,10 @@ class SyntheticDataGenerator:
                 consent_granted=False,  # Default to no consent per PRD
                 consent_timestamp=None,
                 revoked_timestamp=None,
-                age=np.random.randint(18, 76),  # Weighted toward working age
-                gender=np.random.choice([g.value for g in Gender]),
-                income_tier=np.random.choice([t.value for t in IncomeTier]),
-                region=np.random.choice([r.value for r in Region]),
+                age=int(self.rng.integers(18, 76)),  # 18-75 inclusive
+                gender=str(self.rng.choice([g.value for g in Gender])),
+                income_tier=str(self.rng.choice([t.value for t in IncomeTier])),
+                region=str(self.rng.choice([r.value for r in Region])),
                 created_at=datetime.now()
             )
             users.append(user)
@@ -57,7 +67,7 @@ class SyntheticDataGenerator:
         account_counter = 0
 
         for user in users:
-            num_accounts = np.random.randint(2, 5)  # 2-4 accounts per user
+            num_accounts = int(self.rng.integers(2, 5))  # 2-4 accounts per user
 
             # Every user gets a checking account
             checking = Account(
@@ -65,7 +75,7 @@ class SyntheticDataGenerator:
                 user_id=user.user_id,
                 account_type=AccountType.DEPOSITORY,
                 account_subtype=AccountSubtype.CHECKING,
-                balance_current=float(np.random.uniform(500, 15000)),
+                balance_current=float(self.rng.uniform(500, 15000)),
                 balance_available=None,
                 balance_limit=None,
                 iso_currency_code="USD",
@@ -84,7 +94,7 @@ class SyntheticDataGenerator:
                     user_id=user.user_id,
                     account_type=AccountType.DEPOSITORY,
                     account_subtype=AccountSubtype.SAVINGS,
-                    balance_current=float(np.random.uniform(1000, 50000)),
+                    balance_current=float(self.rng.uniform(1000, 50000)),
                     balance_available=None,
                     balance_limit=None,
                     iso_currency_code="USD",
@@ -97,10 +107,10 @@ class SyntheticDataGenerator:
                 account_counter += 1
 
             # Many users get 1-2 credit cards
-            num_credit_cards = min(num_accounts - 2, np.random.randint(1, 3))
+            num_credit_cards = min(num_accounts - 2, int(self.rng.integers(1, 3)))
             for _ in range(num_credit_cards):
-                credit_limit = float(np.random.choice([2000, 5000, 10000, 15000, 25000]))
-                utilization = np.random.uniform(0.1, 0.9)  # 10-90% utilization
+                credit_limit = float(self.rng.choice([2000, 5000, 10000, 15000, 25000]))
+                utilization = float(self.rng.uniform(0.1, 0.9))  # 10-90% utilization
                 balance = credit_limit * utilization
 
                 credit_card = Account(
@@ -115,7 +125,7 @@ class SyntheticDataGenerator:
                     holder_category="consumer",
                     mask=f"{np.random.randint(1000, 9999)}",
                     name="Credit Card",
-                    official_name=f"{np.random.choice(['Visa', 'Mastercard', 'Amex'])} {self.fake.company()}"
+                    official_name=f"{self.rng.choice(['Visa', 'Mastercard', 'Amex'])} {self.fake.company()}"
                 )
                 accounts.append(credit_card)
                 account_counter += 1
@@ -136,8 +146,8 @@ class SyntheticDataGenerator:
 
         for user_id, user_accs in user_accounts.items():
             # Determine user spending profile
-            is_high_spender = np.random.random() < 0.3
-            has_subscriptions = np.random.random() < 0.7
+            is_high_spender = float(self.rng.random()) < 0.3
+            has_subscriptions = float(self.rng.random()) < 0.7
             num_transactions = int(self.config.avg_transactions_per_month * self.config.months_history)
 
             # Adjust for spending profile
@@ -153,14 +163,14 @@ class SyntheticDataGenerator:
 
             # Generate recurring subscriptions
             if has_subscriptions and primary_checking:
-                num_subs = np.random.randint(3, 8)
-                selected_subs = np.random.choice(RECURRING_MERCHANTS, size=min(num_subs, len(RECURRING_MERCHANTS)), replace=False)
+                num_subs = int(self.rng.integers(3, 8))
+                selected_subs = self.rng.choice(RECURRING_MERCHANTS, size=min(num_subs, len(RECURRING_MERCHANTS)), replace=False)
 
                 for merchant in selected_subs:
                     # Generate monthly recurring transaction
                     for month_offset in range(self.config.months_history):
-                        trans_date = self.start_date + timedelta(days=30 * month_offset + np.random.randint(1, 28))
-                        amount = float(np.random.uniform(5.99, 49.99))
+                        trans_date = self.start_date + timedelta(days=30 * month_offset + int(self.rng.integers(1, 28)))
+                        amount = float(self.rng.uniform(5.99, 49.99))
 
                         transaction = Transaction(
                             transaction_id=f"txn_{transaction_counter:08d}",
@@ -179,7 +189,7 @@ class SyntheticDataGenerator:
             # Generate regular transactions
             for _ in range(num_transactions):
                 # Choose account (70% checking, 30% credit if available)
-                if primary_credit and np.random.random() < 0.3:
+                if primary_credit and float(self.rng.random()) < 0.3:
                     account = primary_credit
                 elif primary_checking:
                     account = primary_checking
@@ -187,7 +197,7 @@ class SyntheticDataGenerator:
                     account = user_accs[0]
 
                 # Generate random transaction date
-                days_offset = np.random.randint(0, 30 * self.config.months_history)
+                days_offset = int(self.rng.integers(0, 30 * self.config.months_history))
                 trans_date = self.start_date + timedelta(days=days_offset)
 
                 # Choose category and amount
@@ -226,8 +236,8 @@ class SyntheticDataGenerator:
                     personal_finance_category=category,
                     personal_finance_subcategory=subcategory,
                     pending=False,
-                    location_city=self.fake.city() if np.random.random() < 0.5 else None,
-                    location_state=self.fake.state_abbr() if np.random.random() < 0.5 else None
+                    location_city=self.fake.city() if float(self.rng.random()) < 0.5 else None,
+                    location_state=self.fake.state_abbr() if float(self.rng.random()) < 0.5 else None
                 )
                 transactions.append(transaction)
                 transaction_counter += 1
@@ -237,7 +247,7 @@ class SyntheticDataGenerator:
                 num_paychecks = (self.config.months_history * 30) // 14  # Every 2 weeks
                 for i in range(num_paychecks):
                     paycheck_date = self.start_date + timedelta(days=14 * i)
-                    paycheck_amount = -float(np.random.uniform(2000, 6000))  # Negative = credit
+                    paycheck_amount = -float(self.rng.uniform(2000, 6000))  # Negative = credit
 
                     payroll = Transaction(
                         transaction_id=f"txn_{transaction_counter:08d}",
@@ -267,10 +277,10 @@ class SyntheticDataGenerator:
             utilization = account.balance_current / account.balance_limit if account.balance_limit else 0
 
             # Higher utilization = higher chance of issues
-            is_overdue = utilization > 0.8 and np.random.random() < 0.3
+            is_overdue = utilization > 0.8 and float(self.rng.random()) < 0.3
 
             # APR varies by creditworthiness (simulated)
-            apr = float(np.random.uniform(12.99, 29.99))
+            apr = float(self.rng.uniform(12.99, 29.99))
 
             # Minimum payment (typically 1-3% of balance)
             min_payment = float(max(25, account.balance_current * 0.02))
@@ -281,11 +291,11 @@ class SyntheticDataGenerator:
                 user_id=account.user_id,
                 apr=apr,
                 minimum_payment=min_payment,
-                last_payment_amount=float(np.random.uniform(min_payment, account.balance_current * 0.5)) if np.random.random() < 0.9 else None,
-                last_payment_date=datetime.now() - timedelta(days=np.random.randint(1, 30)),
-                next_due_date=datetime.now() + timedelta(days=np.random.randint(1, 30)),
+                last_payment_amount=float(self.rng.uniform(min_payment, account.balance_current * 0.5)) if float(self.rng.random()) < 0.9 else None,
+                last_payment_date=datetime.now() - timedelta(days=int(self.rng.integers(1, 30))),
+                next_due_date=datetime.now() + timedelta(days=int(self.rng.integers(1, 30))),
                 is_overdue=is_overdue,
-                overdue_amount=float(np.random.uniform(25, 200)) if is_overdue else None
+                overdue_amount=float(self.rng.uniform(25, 200)) if is_overdue else None
             )
             liabilities.append(liability)
             liability_counter += 1

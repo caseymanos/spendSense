@@ -98,11 +98,24 @@ class DataLoader:
             )
         """)
 
+        # Persona assignments table (populated by PR #3)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS persona_assignments (
+                assignment_id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                persona TEXT NOT NULL,
+                criteria_met TEXT,
+                assigned_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users (user_id)
+            )
+        """)
+
         # Create indexes for common queries
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_accounts_user ON accounts(user_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_transactions_account ON transactions(account_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_transactions_date ON transactions(date)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_liabilities_user ON liabilities(user_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_persona_user ON persona_assignments(user_id)")
 
         conn.commit()
 

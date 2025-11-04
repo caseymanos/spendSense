@@ -97,9 +97,21 @@ class DataValidator:
                     self.report.add_warning("User", user.user_id,
                                           "Consent granted but no timestamp")
 
-                if user.revoked_timestamp and user.revoked_timestamp < user.consent_timestamp:
-                    self.report.add_error("User", user.user_id,
-                                        "Revoked timestamp before consent timestamp")
+                if user.revoked_timestamp:
+                    # If revoke exists without consent timestamp, flag as error
+                    if user.consent_timestamp is None:
+                        self.report.add_error(
+                            "User",
+                            user.user_id,
+                            "Revoked timestamp present but consent timestamp is missing",
+                        )
+                    # If both exist, ensure revoke is not before consent
+                    elif user.revoked_timestamp < user.consent_timestamp:
+                        self.report.add_error(
+                            "User",
+                            user.user_id,
+                            "Revoked timestamp before consent timestamp",
+                        )
 
             except ValidationError as e:
                 self.report.add_error("User", user_data.get("user_id", "unknown"),

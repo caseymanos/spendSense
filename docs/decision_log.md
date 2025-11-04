@@ -216,6 +216,97 @@ This document tracks key design decisions, their rationale, and alternatives con
 
 ---
 
+### Decision 11: Centralized Configuration Constants
+
+**Context:** PRD Parts 2-3 define numerous threshold values for persona detection, recommendations, and evaluation. These need to be accessible across all future PRs.
+
+**Decision:** Create `ingest/constants.py` as single source of truth for all tunable parameters in PR #1.
+
+**Rationale:**
+- Avoid hardcoded values scattered across modules
+- Single file to adjust thresholds without code changes
+- Clear documentation of all system parameters
+- Easier to tune and optimize post-deployment
+- Natural home for PRD-specified values
+
+**Alternatives Considered:**
+- Add constants in each PR when needed: Leads to duplication and inconsistency
+- Use config JSON file: Less discoverable, no type hints
+- Environment variables: Overkill for MVP, harder to version control
+
+**Constants Included:**
+- `PERSONA_THRESHOLDS` - Detection rules for all 4 personas
+- `TIME_WINDOWS` - 30-day and 180-day analysis periods
+- `SUBSCRIPTION_DETECTION` - Recurring merchant detection rules
+- `RECOMMENDATION_LIMITS` - Min/max items per user
+- `EVALUATION_TARGETS` - Success criteria metrics
+- `PROHIBITED_PHRASES` - Tone validation blacklist
+- `MANDATORY_DISCLAIMER` - Standard disclaimer text
+
+**Impact:** PRs 2-10 import from constants file. Future tuning requires single file change.
+
+---
+
+### Decision 12: Persona Assignments Table in Data Foundation
+
+**Context:** PR #3 will assign personas to users based on PR #2 signals. Need database table to store assignments.
+
+**Decision:** Create `persona_assignments` table in PR #1 SQLite schema (ingest/loader.py).
+
+**Rationale:**
+- Database schema is data foundation concern, not business logic
+- PR #3 should focus on assignment algorithm, not infrastructure
+- Allows PR #2 to optionally write preliminary assignments
+- Clear separation: PR #1 = structure, PR #3 = population
+
+**Alternatives Considered:**
+- Create table in PR #3: Mixes infrastructure with logic
+- Use JSON files: Poor query performance, no relational integrity
+
+**Schema:**
+```sql
+CREATE TABLE persona_assignments (
+    assignment_id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    persona TEXT NOT NULL,
+    criteria_met TEXT,  -- JSON string
+    assigned_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
+)
+```
+
+**Impact:** PR #3 writes directly to table. Operator dashboard can query assignments.
+
+---
+
+### Decision 13: Decision Traces Directory Structure
+
+**Context:** PRD Part 3 specifies per-user trace JSONs in `docs/traces/{user_id}.json` for auditability.
+
+**Decision:** Create `docs/traces/` directory with README in PR #1.
+
+**Rationale:**
+- Infrastructure should exist from project start
+- Empty directory documents intent and structure
+- README explains trace format before traces exist
+- Prevents PR #4 from creating undocumented directory
+
+**Alternatives Considered:**
+- Create in PR #4 when traces generated: Directory purpose unclear until then
+- Use different location (data/ or logs/): docs/ aligns with decision_log.md
+
+**Trace Contents (defined in README):**
+- User profile + consent status
+- Behavioral signals (PR #2)
+- Persona assignment (PR #3)
+- Recommendations + rationales (PR #4)
+- Guardrail checks (PR #5)
+- Evaluation metadata (PR #8)
+
+**Impact:** PRs 2-8 incrementally populate trace structure. Operator dashboard displays traces.
+
+---
+
 ## Future PRs
 
 Design decisions for subsequent PRs will be logged here as they are made.
@@ -253,4 +344,5 @@ Reason: Description
 
 | Date | PR | Changes |
 |------|-------|---------|
-| 2025-11-03 | #1 | Initial decision log created |
+| 2025-11-03 | #1 | Initial decision log created (Decisions 1-10) |
+| 2025-11-03 | #1 | Added infrastructure decisions (11-13): constants, persona table, traces dir |
