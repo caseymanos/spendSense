@@ -110,17 +110,16 @@ SUBSCRIPTION_PRICES = {
 ---
 
 ### Issue #4: Uniform Income Patterns
-**Status:** OPEN
+**Status:** FIXED in commit cf295b6
 **Severity:** P1 - High
 **Impact:** Zero users assigned to variable_income persona
 
 **Problem:**
 All users have bi-weekly payroll deposits (14-day intervals).
 
-**Current State:**
-- 100% of users: 14-day pay gap
-- Threshold: >45 days required
-- Result: 0% match variable_income criteria
+**Previous State:**
+- 100% of users had a 14-day pay gap (biweekly only)
+- Threshold requires >45 days for variable_income; resulted in near-zero matches
 
 **Files Affected:**
 - `ingest/data_generator.py` - Payroll generation logic
@@ -132,8 +131,8 @@ All users have bi-weekly payroll deposits (14-day intervals).
 **Files:**
 - `ingest/data_generator.py`
 
-**Expected Outcome After Fix (target):**
-- A reasonable share of users assigned to variable_income based on diversified patterns
+**Observed Outcome (target):**
+- Diversified patterns (weekly/biweekly/monthly/irregular) appear; enables variable_income where warranted
 
 ---
 
@@ -209,13 +208,9 @@ Criteria: `(growth ≥2% OR inflow ≥$200) AND utilization <30%`
 - Overly broad high_utilization criteria (optional refinement)
 - Savings builder blocked by combined requirements
 
-### Open (P2 - Design):
-- ⏳ Savings builder blocked by combined requirements
-
 ### Current Persona Distribution:
 - Note: Distribution varies with data generation. Prior runs showed high share for high_utilization and low/zero for others due to generator constraints noted above.
 
 ### Test Status:
 - 39/39 tests passing ✅
 - All P0 fixes validated
-- Ready for P1 data generation improvements (optional for MVP)
