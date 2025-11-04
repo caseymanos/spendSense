@@ -28,7 +28,7 @@ from typing import Dict, Any, Optional
 # Configure Streamlit page
 st.set_page_config(
     page_title="SpendSense - Your Financial Learning Dashboard",
-    page_icon="💰",
+    page_icon=str(Path(__file__).resolve().parent.parent / "ui_reflex" / "assets" / "favicon.ico"),
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -238,9 +238,9 @@ def render_consent_banner(user_id: str):
 
 
 def render_sidebar():
-    """Render sidebar with user selection and navigation."""
+    """Render sidebar with user selection only (nav moved to top bar)."""
     with st.sidebar:
-        st.title("💰 SpendSense")
+        st.title("SpendSense")
         st.markdown("### Your Financial Learning Dashboard")
 
         st.divider()
@@ -270,20 +270,79 @@ def render_sidebar():
 
         st.divider()
 
-        # Navigation
-        st.subheader("Navigation")
-        page = st.radio(
-            "Go to:", ["🏠 Dashboard", "📚 Learning Feed", "🔒 Privacy Settings"], key="navigation"
-        )
-
-        st.divider()
-
         # Disclaimer
         st.caption(
-            "**Disclaimer:** This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+            "**Disclaimer:** Educational content only, not financial advice."
         )
 
-        return selected_user_id, page
+        return selected_user_id
+
+
+def _get_active_page() -> str:
+    """Derive active page from URL query params; default to 'dashboard'."""
+    params = st.experimental_get_query_params()
+    page = (params.get("page", ["dashboard"]) or ["dashboard"])[0]
+    if page not in {"dashboard", "learning", "privacy"}:
+        page = "dashboard"
+    return page
+
+
+def _set_active_page(page: str) -> None:
+    """Set active page via query params to enable link-based nav."""
+    st.experimental_set_query_params(page=page)
+
+
+def render_top_navbar(user_name: str, consent_granted: bool, active_page: str) -> None:
+    """Render a modern top navbar with brand mark and segmented nav."""
+    # Compute badge colors based on consent flag
+    badge_border = "#34c759" if consent_granted else "#9ca3af"
+    badge_fg = "#0f5132" if consent_granted else "#374151"
+    badge_bg = "#d1fae5" if consent_granted else "#f3f4f6"
+
+    # CSS styles (scoped)
+    st.markdown(
+        f"""
+        <style>
+        .ss-nav {{
+            position: sticky; top: 0; z-index: 100;
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 16px; backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }}
+        .ss-brand {{ display:flex; align-items:center; gap:8px; font-weight:700; }}
+        .ss-mark {{ width:22px; height:22px; border-radius:6px;
+            background: linear-gradient(135deg, #5b8def, #85a8f5);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }}
+        .ss-group {{ display:flex; gap:6px; padding:4px; border:1px solid rgba(0,0,0,0.08);
+            border-radius:10px; background: rgba(255,255,255,0.6);
+        }}
+        .ss-link {{ text-decoration:none; font-weight:600; font-size:0.9rem;
+            color:#222; padding:6px 10px; border-radius:8px; display:inline-block;
+        }}
+        .ss-link:hover {{ background: rgba(0,0,0,0.05); }}
+        .ss-active {{ background: rgba(0,0,0,0.08); }}
+        .ss-user {{ margin-left:auto; display:flex; align-items:center; gap:10px; font-weight:500; }}
+        .ss-badge {{ font-size:0.75rem; padding:2px 8px; border-radius:999px; border:1px solid;
+            border-color: {badge_border};
+            color: {badge_fg}; background: {badge_bg};
+        }}
+        </style>
+        <div class="ss-nav">
+          <div class="ss-brand"><div class="ss-mark"></div><div>SpendSense</div></div>
+          <div class="ss-group">
+            <a class="ss-link {'ss-active' if active_page=='dashboard' else ''}" href="?page=dashboard">Dashboard</a>
+            <a class="ss-link {'ss-active' if active_page=='learning' else ''}" href="?page=learning">Learning</a>
+            <a class="ss-link {'ss-active' if active_page=='privacy' else ''}" href="?page=privacy">Privacy</a>
+          </div>
+          <div class="ss-user">
+            <div>{user_name}</div>
+            <div class="ss-badge">{'Active' if consent_granted else 'Inactive'}</div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_dashboard(
@@ -692,9 +751,8 @@ def render_privacy_settings(user_id: str, user_data: Dict[str, Any]):
 
 def main():
     """Main application entry point."""
-
     # Render sidebar and get user selection
-    selected_user_id, page = render_sidebar()
+    selected_user_id = render_sidebar()
 
     # Load user data
     user_data = load_user_data(selected_user_id)
@@ -703,16 +761,20 @@ def main():
         st.error(f"User {selected_user_id} not found in database.")
         st.stop()
 
+    # Render top navbar (after loading user for name/consent)
+    active_page = _get_active_page()
+    render_top_navbar(user_name=user_data.get("name", selected_user_id), consent_granted=bool(user_data.get("consent_granted", False)), active_page=active_page)
+
     # Load persona and signals
     persona_data = load_persona_assignment(selected_user_id)
     signals = load_behavioral_signals(selected_user_id)
 
     # Route to appropriate page
-    if page == "🏠 Dashboard":
+    if active_page == "dashboard":
         render_dashboard(selected_user_id, user_data, persona_data, signals)
-    elif page == "📚 Learning Feed":
+    elif active_page == "learning":
         render_learning_feed(selected_user_id, user_data)
-    elif page == "🔒 Privacy Settings":
+    elif active_page == "privacy":
         render_privacy_settings(selected_user_id, user_data)
 
 

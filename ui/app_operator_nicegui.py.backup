@@ -1141,6 +1141,197 @@ def render_data_generation_tab():
     data_gen_ui = DataGeneratorUI()
     data_gen_ui.render()
 
+        # Load current config
+        current_config = load_config()
+
+        # Parameter controls
+        with ui.column().classes("gap-6 w-full"):
+            # Seed
+            with ui.row().classes("items-center gap-4 w-full"):
+                ui.label("Random Seed:").classes("w-48 font-semibold")
+                seed_slider = (
+                    ui.slider(min=0, max=9999, value=current_config.get("seed", 42), step=1)
+                    .classes("flex-grow")
+                    .props("label-always")
+                )
+                seed_input = (
+                    ui.number(value=current_config.get("seed", 42), min=0, max=9999)
+                    .classes("w-32")
+                    .bind_value(seed_slider, "value")
+                )
+
+            # Num users
+            with ui.row().classes("items-center gap-4 w-full"):
+                ui.label("Number of Users:").classes("w-48 font-semibold")
+                users_slider = (
+                    ui.slider(min=10, max=1000, value=current_config.get("num_users", 100), step=10)
+                    .classes("flex-grow")
+                    .props("label-always")
+                )
+                users_input = (
+                    ui.number(value=current_config.get("num_users", 100), min=10, max=1000)
+                    .classes("w-32")
+                    .bind_value(users_slider, "value")
+                )
+
+            # Months history
+            with ui.row().classes("items-center gap-4 w-full"):
+                ui.label("Months of History:").classes("w-48 font-semibold")
+                months_slider = (
+                    ui.slider(min=1, max=24, value=current_config.get("months_history", 6), step=1)
+                    .classes("flex-grow")
+                    .props("label-always")
+                )
+                months_input = (
+                    ui.number(value=current_config.get("months_history", 6), min=1, max=24)
+                    .classes("w-32")
+                    .bind_value(months_slider, "value")
+                )
+
+            # Avg transactions
+            with ui.row().classes("items-center gap-4 w-full"):
+                ui.label("Avg Transactions/Month:").classes("w-48 font-semibold")
+                trans_slider = (
+                    ui.slider(
+                        min=10,
+                        max=100,
+                        value=current_config.get("avg_transactions_per_month", 30),
+                        step=5,
+                    )
+                    .classes("flex-grow")
+                    .props("label-always")
+                )
+                trans_input = (
+                    ui.number(
+                        value=current_config.get("avg_transactions_per_month", 30), min=10, max=100
+                    )
+                    .classes("w-32")
+                    .bind_value(trans_slider, "value")
+                )
+
+        ui.separator().classes("my-6")
+
+        # Preview section
+        with ui.card().classes("bg-gray-50 p-4"):
+            ui.label("Configuration Preview").classes("font-semibold mb-2")
+
+            preview_config = {
+                "seed": current_config.get("seed", 42),
+                "num_users": current_config.get("num_users", 100),
+                "months_history": current_config.get("months_history", 6),
+                "avg_transactions_per_month": current_config.get("avg_transactions_per_month", 30),
+            }
+
+            config_preview = (
+                ui.json_editor(preview_config).props("mode=view readonly").classes("w-full h-48")
+            )
+
+            def update_preview():
+                """Update preview when sliders change."""
+                new_config = {
+                    "seed": int(seed_slider.value),
+                    "num_users": int(users_slider.value),
+                    "months_history": int(months_slider.value),
+                    "avg_transactions_per_month": int(trans_slider.value),
+                }
+                config_preview.update(new_config)
+
+            seed_slider.on_value_change(lambda: update_preview())
+            users_slider.on_value_change(lambda: update_preview())
+            months_slider.on_value_change(lambda: update_preview())
+            trans_slider.on_value_change(lambda: update_preview())
+
+            # Estimated data volume
+            est_transactions = (
+                int(users_slider.value) * int(months_slider.value) * int(trans_slider.value)
+            )
+            est_label = ui.label(f"Estimated transactions: {est_transactions:,}").classes(
+                "text-sm text-gray-600 mt-2"
+            )
+
+            def update_estimate():
+                est_count = (
+                    int(users_slider.value) * int(months_slider.value) * int(trans_slider.value)
+                )
+                est_label.set_text(f"Estimated transactions: {est_count:,}")
+
+            users_slider.on_value_change(lambda: update_estimate())
+            months_slider.on_value_change(lambda: update_estimate())
+            trans_slider.on_value_change(lambda: update_estimate())
+
+        ui.separator().classes("my-6")
+
+        # Action buttons
+        with ui.row().classes("gap-4"):
+
+            async def generate_data():
+                """Generate data with current parameters."""
+                # Save config
+                new_config = {
+                    "seed": int(seed_slider.value),
+                    "num_users": int(users_slider.value),
+                    "months_history": int(months_slider.value),
+                    "avg_transactions_per_month": int(trans_slider.value),
+                    "generation_timestamp": datetime.now().isoformat(),
+                }
+
+                save_config(new_config)
+
+                ui.notify("Starting data generation...", type="info")
+
+                # Run data generator
+                try:
+                    process = await asyncio.create_subprocess_exec(
+                        "uv",
+                        "run",
+                        "python",
+                        "-m",
+                        "ingest.data_generator",
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE,
+                    )
+
+                    stdout, stderr = await process.communicate()
+
+                    if process.returncode == 0:
+                        ui.notify("Data generation complete!", type="positive")
+                        refresh_data()
+                        render_overview_tab.refresh()
+                    else:
+                        ui.notify(f"Generation failed: {stderr.decode()}", type="negative")
+
+                except Exception as e:
+                    ui.notify(f"Error: {str(e)}", type="negative")
+
+            ui.button("Generate Data", icon="play_arrow", on_click=generate_data).props(
+                "color=primary size=lg"
+            ).classes(ThemeManager.get_button_classes())
+
+            def reset_defaults():
+                """Reset to default values."""
+                seed_slider.value = 42
+                users_slider.value = 100
+                months_slider.value = 6
+                trans_slider.value = 30
+
+            ui.button("Reset to Defaults", icon="refresh", on_click=reset_defaults).props(
+                "flat"
+            ).classes(ThemeManager.get_button_classes())
+
+            def load_from_config():
+                """Load from saved config."""
+                config = load_config()
+                seed_slider.value = config.get("seed", 42)
+                users_slider.value = config.get("num_users", 100)
+                months_slider.value = config.get("months_history", 6)
+                trans_slider.value = config.get("avg_transactions_per_month", 30)
+                ui.notify("Config loaded", type="positive")
+
+            ui.button("Load from Config", icon="upload", on_click=load_from_config).props(
+                "flat"
+            ).classes(ThemeManager.get_button_classes())
+
+
 # =============================================================================
 # MAIN PAGE
 # =============================================================================

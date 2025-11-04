@@ -1,0 +1,12 @@
+{
+  "user_id": "user_0024",
+  "recommendations": {
+    "timestamp": "2025-11-04T16:19:46.010175",
+    "persona": "subscription_heavy",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": true
+  }
+}
