@@ -89,14 +89,14 @@
         "low_utilization": 28.37
       }
     },
-    "timestamp": "2025-11-03T21:49:12.845629"
+    "timestamp": "2025-11-03T22:13:00.515818"
   },
   "recommendations": {
-    "timestamp": "2025-11-03T21:49:12.895978",
+    "timestamp": "2025-11-03T22:13:00.566619",
     "persona": "high_utilization",
-    "education_count": 3,
+    "education_count": 1,
     "offer_count": 0,
-    "total_recommendations": 3,
+    "total_recommendations": 1,
     "recommendations": [
       {
         "type": "education",
@@ -104,22 +104,6 @@
         "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
         "category": "payment_automation",
         "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Understanding Credit Utilization and Your Score",
-        "description": "Learn how credit utilization affects your credit score and why keeping it below 30% is important. Includes strategies for paying down balances strategically.",
-        "category": "credit_basics",
-        "rationale": "Your credit card ending in 1125 is at 28% utilization ($7,093 of $25,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $106/month.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Debt Avalanche vs. Debt Snowball: Which Strategy is Right for You?",
-        "description": "Compare two proven debt paydown methods. Avalanche prioritizes highest interest rates, while Snowball focuses on smallest balances first for psychological wins.",
-        "category": "debt_paydown",
-        "rationale": "With 1 credit cards and total utilization of 28%, a structured paydown plan could save you hundreds in interest. This guide helps you choose the right approach.",
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       }
     ],

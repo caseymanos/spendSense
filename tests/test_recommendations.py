@@ -447,3 +447,58 @@ class TestFullRecommendationIntegration:
         print(f"   - Non-general personas: {len(non_general)}")
         print(f"   - Total recommendations: {total_recs}")
         print(f"   - Explainability: {explainability_pct:.1f}%")
+
+
+class TestStrictEligibilityNoPadding:
+    """Ensure we don't pad education with ineligible items when signals are missing."""
+
+    def test_no_padding_when_signals_missing(self, monkeypatch, tmp_path):
+        """
+        When signals are missing/empty, education items should not be padded.
+
+        Verify: generate_recommendations returns fewer (possibly zero) education items
+        and includes metadata reason 'insufficient_data' with shortfall count.
+        """
+        # Monkeypatch catalog to return items that require utilization >= 30%
+        from recommend import engine as eng
+        def fake_get_education_items(persona):
+            return [
+                {
+                    "title": "Lower credit utilization",
+                    "description": "Tips to reduce utilization",
+                    "category": "credit",
+                    "rationale_template": "Your utilization is {utilization_pct}%",
+                    "eligibility": {"min_utilization": 0.30},
+                },
+                {
+                    "title": "Automate payments",
+                    "description": "Reduce late fees",
+                    "category": "credit",
+                    "rationale_template": "Set up autopay",
+                    "eligibility": {"min_utilization": 0.30},
+                },
+            ]
+
+        monkeypatch.setattr("recommend.engine.get_education_items", fake_get_education_items)
+
+        # Monkeypatch context loader: consent granted, persona set, but no signals present
+        def fake_load_user_context(user_id: str):
+            return {
+                "user_id": user_id,
+                "consent_granted": True,
+                "persona": "high_utilization",
+                "signals": {},  # Missing/empty signals
+                "accounts": [],
+                "recent_transactions": [],
+            }
+
+        monkeypatch.setattr(eng, "_load_user_context", fake_load_user_context)
+
+        # Act
+        resp = generate_recommendations("user_missing_signals")
+
+        # Assert: no padding beyond eligibility
+        assert resp["metadata"]["education_count"] == 0, "Should not pad ineligible education items"
+        assert resp["metadata"].get("reason") == "insufficient_data", "Should mark insufficient data"
+        assert resp["metadata"].get("education_eligibility_shortfall") == RECOMMENDATION_LIMITS["education_items_min"], \
+            "Shortfall should equal min_items when none eligible"

@@ -114,6 +114,15 @@ def generate_recommendations(user_id: str) -> Dict[str, Any]:
         },
     }
 
+    # If we couldn't meet minimum education items due to insufficient data/signals,
+    # add explicit metadata reason rather than padding with ineligible items.
+    min_items = RECOMMENDATION_LIMITS["education_items_min"]
+    if len(education_recs) < min_items:
+        shortfall = max(0, min_items - len(education_recs))
+        response["metadata"]["reason"] = "insufficient_data"
+        response["metadata"]["education_eligibility_shortfall"] = shortfall
+        response["metadata"]["signals_present"] = SIGNALS_PATH.exists()
+
     # Save trace
     _save_trace(user_id, response, user_context)
 
@@ -243,15 +252,6 @@ def _select_education_items(
 
     # Take top items (already prioritized in catalog order)
     selected_items = eligible_items[:max_items]
-
-    # Ensure we have at least min_items (pad with lower priority if needed)
-    if len(selected_items) < min_items and len(all_items) >= min_items:
-        # Add more items even if eligibility is partial
-        for item in all_items:
-            if item not in selected_items:
-                selected_items.append(item)
-            if len(selected_items) >= min_items:
-                break
 
     # Format recommendations with rationales
     recommendations = []
