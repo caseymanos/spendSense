@@ -151,31 +151,31 @@ def revoke_consent(user_id: str) -> bool:
 def get_persona_description(persona: str) -> Dict[str, str]:
     """Get user-friendly description for each persona."""
     descriptions = {
-        "high_utilization": {
+        "High Utilization": {
             "title": "Credit Optimizer",
             "description": "You're focused on optimizing credit utilization and managing card balances effectively.",
             "icon": "💳",
             "color": "#FF6B6B",
         },
-        "variable_income": {
+        "Variable Income Budgeter": {
             "title": "Flexible Budgeter",
             "description": "You're managing variable income with smart budgeting strategies.",
             "icon": "📊",
             "color": "#4ECDC4",
         },
-        "subscription_heavy": {
+        "Subscription-Heavy": {
             "title": "Subscription Manager",
             "description": "You're optimizing recurring expenses and subscription spending.",
             "icon": "🔄",
             "color": "#95E1D3",
         },
-        "savings_builder": {
+        "Savings Builder": {
             "title": "Savings Champion",
             "description": "You're actively building savings and growing your financial cushion.",
             "icon": "🎯",
             "color": "#38B6FF",
         },
-        "general": {
+        "General": {
             "title": "Getting Started",
             "description": "We're learning about your financial patterns. Keep using your accounts to unlock personalized insights!",
             "icon": "🌱",
@@ -183,7 +183,7 @@ def get_persona_description(persona: str) -> Dict[str, str]:
         },
     }
 
-    return descriptions.get(persona, descriptions["general"])
+    return descriptions.get(persona, descriptions["General"])
 
 
 def format_currency(amount: float) -> str:
