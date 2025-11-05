@@ -77,10 +77,8 @@ class DataGeneratorUI:
 
     def render(self):
         """Render the complete data generator UI"""
-        ui.query("body").style("background-color: #f8fafc")
-
-        with ui.column().classes("w-full max-w-[1600px] mx-auto gap-6 p-6").style("min-height: 100vh"):
-            self._render_header()
+        with ui.column().classes("w-full max-w-[1600px] mx-auto gap-6").style("min-height: 100vh"):
+            # Header is rendered by main dashboard, not here
             self._render_preset_selector()
 
             with ui.row().classes("w-full gap-6 flex-wrap xl:flex-nowrap items-start"):
