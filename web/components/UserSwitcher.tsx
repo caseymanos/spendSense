@@ -1,12 +1,16 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { useUsers } from '../lib/hooks';
+import React from 'react'
+import { useUsers } from '../lib/hooks'
 
 export function UserSwitcher({ value, onChange }: { value?: string; onChange: (id: string) => void }) {
-  const { data: users } = useUsers();
+  const { data: users } = useUsers()
   return (
-    <select value={value} onChange={(e) => onChange(e.target.value)} style={{ padding: 6, borderRadius: 6, border: '1px solid var(--border)' }}>
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="h-9 rounded-md border bg-background px-3 text-sm"
+    >
       <option value="">Select user…</option>
       {(users || []).map((u) => (
         <option key={u.user_id} value={u.user_id}>
@@ -14,6 +18,5 @@ export function UserSwitcher({ value, onChange }: { value?: string; onChange: (i
         </option>
       ))}
     </select>
-  );
+  )
 }
-

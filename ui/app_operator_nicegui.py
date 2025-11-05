@@ -37,6 +37,9 @@ from ui.utils.data_loaders import DB_PATH as _DB_PATH
 from ui.utils.data_loaders import SIGNALS_PATH as _SIGNALS_PATH
 from ui.utils.data_loaders import TRACES_DIR as _TRACES_DIR
 
+# Import recommendation engine for live generation
+from recommend.engine import generate_recommendations
+
 # Import components
 from ui.components import (
     create_summary_metrics_row,
@@ -135,8 +138,9 @@ def get_persona_description(persona: str) -> str:
     descriptions = {
         "High Utilization": "Credit card utilization > 50% (prioritized for debt reduction advice)",
         "Variable Income Budgeter": "Income deposits with >20 day gap variance (irregular income patterns)",
-        "Subscription Heavy": "5+ recurring subscriptions (focus on spending optimization)",
+        "Subscription-Heavy": "5+ recurring subscriptions (focus on spending optimization)",
         "Savings Builder": "Consistent savings deposits (positive reinforcement for good habits)",
+        "General": "Default persona for users not matching specific behavioral criteria",
         "Custom Persona": "Reserved for future expansion or special cases",
     }
     return descriptions.get(persona, "No description available")
@@ -655,6 +659,7 @@ def render_recommendation_review_tab():
         }
 
         recommendation_container = ui.column().classes("w-full")
+        button_container = ui.row().classes("gap-2")
 
         with ui.row().classes("w-full items-center gap-4 mb-4"):
             user_select = ui.select(
@@ -663,14 +668,10 @@ def render_recommendation_review_tab():
                 value=list(user_options.keys())[0] if user_options else None,
             ).classes("flex-grow")
 
-            load_button = (
-                ui.button("Load Recommendations", icon="download")
-                .props("color=primary")
-                .classes(ThemeManager.get_button_classes())
-            )
+            button_container
 
-        def load_recommendations():
-            """Load and display recommendations for selected user."""
+        def load_existing_recommendations():
+            """Load existing recommendations from trace file."""
             recommendation_container.clear()
 
             if not user_select.value:
@@ -679,19 +680,29 @@ def render_recommendation_review_tab():
                 return
 
             selected_user_id = user_options[user_select.value]
+
+            # Try to load from trace file first
             trace = load_user_trace(selected_user_id)
 
-            if not trace:
+            if not trace or "recommendations" not in trace:
+                # No existing recommendations - show option to generate
                 with recommendation_container:
-                    ui.label(f"No trace found for user {selected_user_id}").classes(
-                        "text-orange-600"
-                    )
+                    with ui.card().classes("w-full bg-gray-50 p-8 text-center"):
+                        ui.icon("inbox", size="xl").classes("text-gray-400 mb-4")
+                        ui.label("No recommendations found for this user").classes(
+                            "text-lg text-gray-600 mb-2"
+                        )
+                        ui.label("Click 'Generate Recommendations' to create new recommendations").classes(
+                            "text-sm text-gray-500"
+                        )
                 return
 
-            recommendations_data = trace.get("recommendations", {})
-            trace_consent = recommendations_data.get("consent_granted", False)
-            persona = recommendations_data.get("persona", "Unknown")
-            recommendations_list = recommendations_data.get("recommendations", [])
+            # Extract recommendations from trace
+            rec_data = trace["recommendations"]
+            recommendations_list = rec_data.get("recommendations", [])
+            trace_consent = rec_data.get("consent_granted", False)
+            persona = rec_data.get("persona", "Unknown")
+            timestamp = rec_data.get("timestamp", "Unknown")
 
             # Get current consent from database
             current_user = users_df[users_df["user_id"] == selected_user_id]
@@ -699,16 +710,24 @@ def render_recommendation_review_tab():
             consent_mismatch = current_consent != trace_consent
 
             with recommendation_container:
+                # Timestamp banner
+                with ui.card().classes("w-full bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-4"):
+                    with ui.row().classes("items-center gap-3"):
+                        ui.icon("history", size="md").classes("text-indigo-600")
+                        with ui.column().classes("gap-1 flex-1"):
+                            ui.label("Viewing Existing Recommendations").classes("font-semibold text-indigo-900")
+                            ui.label(f"Generated: {timestamp}").classes("text-sm text-indigo-800")
+
                 # Consent mismatch warning
                 if consent_mismatch:
                     with ui.card().classes("w-full bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4"):
                         with ui.row().classes("items-start gap-3"):
-                            ui.icon("info", size="md").classes("text-yellow-600")
+                            ui.icon("warning", size="md").classes("text-yellow-600")
                             with ui.column().classes("gap-1 flex-1"):
                                 ui.label("Consent Status Changed").classes("font-semibold text-yellow-900")
                                 ui.label(f"Current (database): {'✓ Granted' if current_consent else '✗ Not Granted'} | "
-                                        f"At recommendation time: {'✓ Granted' if trace_consent else '✗ Not Granted'}").classes("text-sm text-yellow-800")
-                                ui.label("Recommendations below were generated with the historical consent status.").classes("text-xs text-yellow-700 mt-1")
+                                        f"At generation time: {'✓ Granted' if trace_consent else '✗ Not Granted'}").classes("text-sm text-yellow-800")
+                                ui.label("These recommendations were generated with the historical consent status.").classes("text-xs text-yellow-700 mt-1")
 
                 # Metadata
                 with ui.card().classes("bg-blue-50 p-4 mb-4"):
@@ -736,7 +755,7 @@ def render_recommendation_review_tab():
 
                 # Recommendations
                 if not recommendations_list:
-                    ui.label("No recommendations generated for this user").classes(
+                    ui.label("No recommendations in trace file").classes(
                         "text-gray-500 p-4"
                     )
                     return
@@ -833,7 +852,7 @@ def render_recommendation_review_tab():
 
                             def refresh_after_action():
                                 """Refresh view after operator action."""
-                                load_recommendations()
+                                load_existing_recommendations()
 
                             create_operator_actions(
                                 user_id=selected_user_id,
@@ -842,11 +861,67 @@ def render_recommendation_review_tab():
                                 theme_classes=ThemeManager.get_button_classes(),
                             )
 
-        load_button.on_click(load_recommendations)
+        def generate_new_recommendations():
+            """Generate fresh recommendations for selected user."""
+            recommendation_container.clear()
 
-        # Auto-load first user
+            if not user_select.value:
+                with recommendation_container:
+                    ui.label("Please select a user").classes("text-gray-500")
+                return
+
+            selected_user_id = user_options[user_select.value]
+
+            # Show loading indicator
+            with recommendation_container:
+                ui.spinner(size="lg")
+                ui.label("Generating recommendations...").classes("text-gray-600 mt-2")
+
+            # Generate fresh recommendations (writes to trace automatically)
+            try:
+                rec_response = generate_recommendations(selected_user_id)
+                # Reload the existing recommendations view to show the new ones
+                load_existing_recommendations()
+            except Exception as e:
+                recommendation_container.clear()
+                with recommendation_container:
+                    ui.label(f"Error generating recommendations: {str(e)}").classes(
+                        "text-red-600"
+                    )
+                return
+
+        def update_buttons():
+            """Update button visibility based on whether recommendations exist."""
+            button_container.clear()
+
+            if not user_select.value:
+                return
+
+            selected_user_id = user_options[user_select.value]
+            trace = load_user_trace(selected_user_id)
+            has_recommendations = trace and "recommendations" in trace
+
+            with button_container:
+                if has_recommendations:
+                    ui.button("Regenerate Recommendations", icon="refresh", on_click=generate_new_recommendations).props(
+                        "color=primary"
+                    ).classes(ThemeManager.get_button_classes())
+                else:
+                    ui.button("Generate Recommendations", icon="add", on_click=generate_new_recommendations).props(
+                        "color=primary"
+                    ).classes(ThemeManager.get_button_classes())
+
+        def on_user_change():
+            """Handle user selection change."""
+            update_buttons()
+            load_existing_recommendations()
+
+        user_select.on_value_change(lambda: on_user_change())
+
+        # Initial load
         if user_options:
-            load_recommendations()
+            update_buttons()
+            load_existing_recommendations()
 
 
 # =============================================================================

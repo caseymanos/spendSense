@@ -1,14 +1,16 @@
-'use client';
+'use client'
 
-import React from 'react';
-import type { Recommendation } from '../lib/types';
+import React from 'react'
+import type { Recommendation } from '../lib/types'
+import { Card, CardContent } from './ui/card'
 
 export function RecommendationCard({ rec }: { rec: Recommendation }) {
   return (
-    <div className="card" style={{ marginTop: 12 }}>
-      <div style={{ fontWeight: 600 }}>{rec.title}</div>
-      <div style={{ marginTop: 4, color: 'var(--muted)' }}>{rec.rationale}</div>
-    </div>
-  );
+    <Card className="mt-3">
+      <CardContent className="py-4">
+        <div className="font-semibold">{rec.title}</div>
+        <div className="mt-1 text-sm text-muted-foreground">{rec.rationale}</div>
+      </CardContent>
+    </Card>
+  )
 }
-
