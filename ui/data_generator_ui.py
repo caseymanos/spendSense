@@ -216,11 +216,11 @@ class DataGeneratorUI:
 
                 # Persona checkboxes with descriptions
                 persona_descriptions = {
-                    "high_utilization": "Credit utilization ≥50%, interest charges, overdue payments",
-                    "variable_income": "Irregular income patterns, unstable cash flow",
-                    "subscription_heavy": "3+ recurring subscriptions, significant monthly spend",
-                    "savings_builder": "Regular savings transfers, low credit utilization",
-                    "general": "No specific behavioral patterns (baseline)",
+                    "High Utilization": "Credit utilization ≥50%, interest charges, overdue payments",
+                    "Variable Income Budgeter": "Irregular income patterns, unstable cash flow",
+                    "Subscription-Heavy": "3+ recurring subscriptions, significant monthly spend",
+                    "Savings Builder": "Regular savings transfers, low credit utilization",
+                    "General": "No specific behavioral patterns (baseline)",
                 }
 
                 with ui.column().classes("w-full gap-3"):
@@ -800,8 +800,8 @@ class DataGeneratorUI:
             with open(config_path, "w") as f:
                 json.dump(config_data, f, indent=2, default=str)
 
-            self.status_label.set_text("Running generator...")
-            self.status_progress.set_value(0.3)
+            self.status_label.set_text("Step 1/4: Generating synthetic data...")
+            self.status_progress.set_value(0.1)
 
             # Run generator using the actual data_generator module
             process = await asyncio.create_subprocess_exec(
@@ -811,14 +811,14 @@ class DataGeneratorUI:
             )
 
             stdout, stderr = await process.communicate()
-            self.status_progress.set_value(0.6)
+            self.status_progress.set_value(0.4)
 
             if process.returncode == 0:
-                self.status_label.set_text(f"✓ Generation complete! Loading into database...")
+                self.status_label.set_text(f"Step 2/4: Loading data into database...")
                 ui.notify("Data generation successful! Loading data...", type="positive")
 
-                # Automatically run the loader
-                self.status_progress.set_value(0.7)
+                # Step 2: Run the loader
+                self.status_progress.set_value(0.4)
                 loader_process = await asyncio.create_subprocess_exec(
                     "uv", "run", "python", "-m", "ingest.loader",
                     stdout=asyncio.subprocess.PIPE,
@@ -826,11 +826,45 @@ class DataGeneratorUI:
                 )
 
                 loader_stdout, loader_stderr = await loader_process.communicate()
-                self.status_progress.set_value(1.0)
 
                 if loader_process.returncode == 0:
-                    self.status_label.set_text(f"✓ Complete! Data generated and loaded successfully.")
-                    ui.notify("Data generated and loaded successfully! Dashboard will auto-refresh.", type="positive", timeout=5000)
+                    self.status_label.set_text(f"Step 3/4: Detecting behavioral signals...")
+                    self.status_progress.set_value(0.6)
+
+                    # Step 3: Generate behavioral signals
+                    features_process = await asyncio.create_subprocess_exec(
+                        "uv", "run", "python", "-m", "features",
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE
+                    )
+
+                    features_stdout, features_stderr = await features_process.communicate()
+
+                    if features_process.returncode == 0:
+                        self.status_label.set_text(f"Step 4/4: Assigning behavioral personas...")
+                        self.status_progress.set_value(0.8)
+
+                        # Step 4: Assign personas
+                        personas_process = await asyncio.create_subprocess_exec(
+                            "uv", "run", "python", "-m", "personas.assignment",
+                            stdout=asyncio.subprocess.PIPE,
+                            stderr=asyncio.subprocess.PIPE
+                        )
+
+                        personas_stdout, personas_stderr = await personas_process.communicate()
+                        self.status_progress.set_value(1.0)
+
+                        if personas_process.returncode == 0:
+                            self.status_label.set_text(f"✓ Complete! Data generated, loaded, and personas assigned.")
+                            ui.notify("Full pipeline complete! Dashboard will auto-refresh.", type="positive", timeout=5000)
+                        else:
+                            error_msg = personas_stderr.decode() if personas_stderr else "Unknown error"
+                            self.status_label.set_text(f"⚠ Persona assignment failed: {error_msg[:100]}")
+                            ui.notify(f"Persona assignment failed: {error_msg[:100]}", type="warning")
+                    else:
+                        error_msg = features_stderr.decode() if features_stderr else "Unknown error"
+                        self.status_label.set_text(f"⚠ Signal generation failed: {error_msg[:100]}")
+                        ui.notify(f"Signal generation failed: {error_msg[:100]}", type="warning")
                 else:
                     loader_error = loader_stderr.decode() or "Unknown loader error"
                     self.status_label.set_text(f"⚠ Generated but loader failed: {loader_error}")

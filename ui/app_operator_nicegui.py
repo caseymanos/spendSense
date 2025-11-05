@@ -107,6 +107,29 @@ def _get_data_mtime() -> float:
     return max(mtimes) if mtimes else 0.0
 
 
+def _is_data_stale() -> bool:
+    """Check if data has changed since last refresh."""
+    try:
+        last_seen = app.storage.user.get('last_data_mtime', 0)
+        return _get_data_mtime() > last_seen
+    except Exception:
+        return False
+
+
+def _render_stale_data_banner():
+    """Render warning banner when data is stale with refresh button."""
+    if _is_data_stale():
+        with ui.card().classes("w-full bg-orange-50 border-l-4 border-orange-500 mb-4"):
+            with ui.row().classes("w-full items-center justify-between p-4"):
+                with ui.row().classes("items-center gap-3"):
+                    ui.icon("warning", size="lg").classes("text-orange-600")
+                    with ui.column().classes("gap-1"):
+                        ui.label("Data Updated Since Last Refresh").classes("font-semibold text-orange-900")
+                        ui.label("Click 'Refresh Data' to see the latest information").classes("text-sm text-orange-700")
+
+                ui.button("Refresh Data", icon="refresh", on_click=lambda: handle_refresh()).props("color=orange").classes("text-white")
+
+
 def get_persona_description(persona: str) -> str:
     """Get description for a persona."""
     descriptions = {
@@ -343,25 +366,25 @@ def render_behavioral_signals_tab():
         ui.label("No signals data available").classes("text-center p-8 text-gray-500")
         return
 
-    # Aggregate metrics
+    # Aggregate metrics (using actual parquet column names)
     avg_credit_util = (
-        signals_df["credit_utilization_30d"].mean()
-        if "credit_utilization_30d" in signals_df.columns
+        signals_df["credit_avg_util_pct"].mean()
+        if "credit_avg_util_pct" in signals_df.columns
         else 0
     )
     avg_subscriptions = (
-        signals_df["recurring_subscriptions_30d"].mean()
-        if "recurring_subscriptions_30d" in signals_df.columns
+        signals_df["sub_30d_recurring_count"].mean()
+        if "sub_30d_recurring_count" in signals_df.columns
         else 0
     )
     median_savings = (
-        signals_df["savings_inflow_180d"].median()
-        if "savings_inflow_180d" in signals_df.columns
+        signals_df["sav_180d_net_inflow"].median()
+        if "sav_180d_net_inflow" in signals_df.columns
         else 0
     )
     median_pay_gap = (
-        signals_df["pay_gap_variance_30d"].median()
-        if "pay_gap_variance_30d" in signals_df.columns
+        signals_df["inc_30d_median_pay_gap_days"].median()
+        if "inc_30d_median_pay_gap_days" in signals_df.columns
         else 0
     )
 
@@ -609,6 +632,9 @@ def render_behavioral_signals_tab():
 @ui.refreshable
 def render_recommendation_review_tab():
     """Render Recommendation Review tab with operator actions."""
+    # Show stale data warning if data has been updated
+    _render_stale_data_banner()
+
     users_df = data_cache["users"]
 
     if users_df is None or users_df.empty:
@@ -663,11 +689,27 @@ def render_recommendation_review_tab():
                 return
 
             recommendations_data = trace.get("recommendations", {})
-            consent_granted = recommendations_data.get("consent_granted", False)
+            trace_consent = recommendations_data.get("consent_granted", False)
             persona = recommendations_data.get("persona", "Unknown")
             recommendations_list = recommendations_data.get("recommendations", [])
 
+            # Get current consent from database
+            current_user = users_df[users_df["user_id"] == selected_user_id]
+            current_consent = bool(current_user.iloc[0]["consent_granted"]) if not current_user.empty else trace_consent
+            consent_mismatch = current_consent != trace_consent
+
             with recommendation_container:
+                # Consent mismatch warning
+                if consent_mismatch:
+                    with ui.card().classes("w-full bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4"):
+                        with ui.row().classes("items-start gap-3"):
+                            ui.icon("info", size="md").classes("text-yellow-600")
+                            with ui.column().classes("gap-1 flex-1"):
+                                ui.label("Consent Status Changed").classes("font-semibold text-yellow-900")
+                                ui.label(f"Current (database): {'✓ Granted' if current_consent else '✗ Not Granted'} | "
+                                        f"At recommendation time: {'✓ Granted' if trace_consent else '✗ Not Granted'}").classes("text-sm text-yellow-800")
+                                ui.label("Recommendations below were generated with the historical consent status.").classes("text-xs text-yellow-700 mt-1")
+
                 # Metadata
                 with ui.card().classes("bg-blue-50 p-4 mb-4"):
                     with ui.row().classes("w-full items-center gap-8"):
@@ -680,12 +722,12 @@ def render_recommendation_review_tab():
                             ui.label(persona).classes("font-semibold")
 
                         with ui.column().classes("gap-1"):
-                            ui.label("Consent:").classes("text-xs text-gray-600")
+                            ui.label("Current Consent:").classes("text-xs text-gray-600")
                             consent_badge = ui.badge(
-                                "Granted" if consent_granted else "Not Granted"
+                                "✓ Granted" if current_consent else "✗ Not Granted"
                             )
                             consent_badge.props(
-                                f'color={"positive" if consent_granted else "negative"}'
+                                f'color={"positive" if current_consent else "negative"}'
                             )
 
                         with ui.column().classes("gap-1"):
@@ -986,6 +1028,9 @@ def render_decision_trace_viewer_tab():
 @ui.refreshable
 def render_guardrails_monitor_tab():
     """Render Guardrails Monitor tab with compliance metrics."""
+    # Show stale data warning if data has been updated
+    _render_stale_data_banner()
+
     guardrail_summary = data_cache["guardrail_summary"]
     users_df = data_cache["users"]
 

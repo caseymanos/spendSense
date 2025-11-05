@@ -10,7 +10,7 @@ Complete guide to setting up and running all SpendSense frontend and backend com
 2. [Prerequisites](#prerequisites)
 3. [Initial Setup](#initial-setup)
 4. [Frontend Options](#frontend-options)
-   - [Reflex UI (Recommended)](#1-reflex-ui-modern-web-app)
+   - [Next.js Web (Recommended)](#1-nextjs-web-modern-web-app)
    - [NiceGUI Operator Dashboard](#2-nicegui-operator-dashboard)
    - [Streamlit User Dashboard (Legacy)](#3-streamlit-user-dashboard-legacy)
 5. [Backend API](#backend-fastapi-rest-api)
@@ -26,12 +26,15 @@ SpendSense provides **multiple UI options** for different use cases:
 
 | Interface | Technology | Port | Purpose | Status |
 |-----------|-----------|------|---------|--------|
-| **Reflex UI** | Reflex (Python-React) | 3000 | Modern themed user dashboard | ✅ **Recommended** |
+| **Next.js Web** | Next.js (React) | 3000 | Modern themed user dashboard | ✅ **Recommended** |
 | **NiceGUI Operator** | NiceGUI | 8081 | Compliance & data generation | ✅ Active |
 | **Streamlit User** | Streamlit | 8501 | Legacy user dashboard | ⚠️ Legacy |
 | **FastAPI** | FastAPI | 8000 | REST API backend | ✅ Active |
 
 ---
+
+Note: The previous Reflex UI has been deprecated in favor of a Next.js web app. The `ui_reflex/` folder remains for reference but is not required to run the web frontend.
+
 
 ## Prerequisites
 
@@ -100,64 +103,36 @@ ls -lh data/
 
 ## Frontend Options
 
-### 1. Reflex UI (Modern Web App)
+### 1. Next.js Web (Modern Web App)
 
-**✅ RECOMMENDED** - Modern themed dashboard with full interactivity.
-
-#### Features
-- 🎨 **5 Stunning Themes**: Default Light, Dark Mode, Glassmorphism, Minimal, Vibrant
-- 🧭 **Full Navigation**: Dashboard, Learning Feed, Privacy pages
-- ✅ **Consent Management**: Grant/revoke consent with UI updates
-- 🎯 **Interactive**: Theme switcher, live data loading, responsive design
-- 🐛 **Fixed**: React hydration errors resolved, all buttons functional
+**✅ RECOMMENDED** - React web app with dashboard, learning feed, and privacy.
 
 #### Setup
 
 ```bash
-# Navigate to Reflex directory
-cd ui_reflex
+# From project root, ensure API is running
+uv run uvicorn api.main:app --reload
 
-# Install Reflex dependencies
-uv sync
-
-# Or manually install
-uv pip install reflex==0.8.18
+# In a second terminal, install and run Next.js web
+cd web
+npm install
+NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
+# Access http://localhost:3000
 ```
 
-#### Run
-
-```bash
-# Start Reflex development server
-uv run reflex run
-
-# Alternative: use full path to uv
-~/.local/bin/uv run reflex run
-```
-
-#### Access
-
-**URL:** http://localhost:3000
+#### Features
+- 🧭 Pages: Dashboard, Learning Feed, Privacy
+- 👤 User switcher with consent indicator
+- ✅ Consent grant/revoke (optimistic updates)
+- 📈 Summary metrics and recommendations
 
 **Default Users:**
 - `user_0001` through `user_0010` - Consent granted
 - `user_0011+` - Test consent flow
 
-#### Features in Action
-
-1. **Theme Switcher**: Click floating theme button (bottom-right)
-2. **Navigation**: Use top navbar to switch between Dashboard/Learning Feed/Privacy
-3. **User Selection**: Dropdown to switch between users
-4. **Consent Flow**:
-   - Select user with no consent → See consent request banner
-   - Click "Grant Consent" → Dashboard unlocks
-   - Click "Revoke Consent" → Dashboard locks
-
-#### Stop Server
-
-```bash
-# Ctrl+C in terminal, or:
-lsof -ti:3000 | xargs kill
-```
+#### Default Users
+- `user_0001` through `user_0010` - Consent granted
+- `user_0011+` - Test consent flow
 
 ---
 
@@ -225,7 +200,7 @@ lsof -ti:8081 | xargs kill
 
 ### 3. Streamlit User Dashboard (Legacy)
 
-**⚠️ Legacy Interface** - Use Reflex UI for modern experience.
+**⚠️ Legacy Interface** - Prefer Next.js web for modern experience.
 
 #### Run
 
@@ -267,21 +242,14 @@ uv run uvicorn api.main:app --reload
 
 ### Available Endpoints
 
-Check `api/main.py` for complete API specification. Common endpoints:
+Backed by implemented routes in `api/main.py`:
 
 ```bash
-# Health check
-GET /
-
-# User endpoints
-GET /users/{user_id}
-GET /users/{user_id}/signals
-GET /users/{user_id}/persona
-GET /users/{user_id}/recommendations
-
-# Consent management
-POST /users/{user_id}/consent
-DELETE /users/{user_id}/consent
+GET /health
+GET /users
+GET /profile/{user_id}
+GET /recommendations/{user_id}
+POST /consent  # { user_id, consent_granted }
 ```
 
 ### Example API Call
@@ -309,10 +277,11 @@ lsof -ti:8000 | xargs kill
 
 Run frontend and backend simultaneously for full-stack development:
 
-#### Terminal 1: Reflex Frontend
+#### Terminal 1: Next.js Web Frontend
 ```bash
-cd /Users/caseymanos/GauntletAI/SpendSense/ui_reflex
-uv run reflex run
+cd /Users/caseymanos/GauntletAI/SpendSense/web
+npm install
+NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
 # Access: http://localhost:3000
 ```
 
