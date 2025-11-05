@@ -216,11 +216,11 @@ class DataGeneratorUI:
 
                 # Persona checkboxes with descriptions
                 persona_descriptions = {
-                    "high_utilization": "Credit utilization ≥50%, interest charges, overdue payments",
-                    "variable_income": "Irregular income patterns, unstable cash flow",
-                    "subscription_heavy": "3+ recurring subscriptions, significant monthly spend",
-                    "savings_builder": "Regular savings transfers, low credit utilization",
-                    "general": "No specific behavioral patterns (baseline)",
+                    "High Utilization": "Credit utilization ≥50%, interest charges, overdue payments",
+                    "Variable Income Budgeter": "Irregular income patterns, unstable cash flow",
+                    "Subscription-Heavy": "3+ recurring subscriptions, significant monthly spend",
+                    "Savings Builder": "Regular savings transfers, low credit utilization",
+                    "General": "No specific behavioral patterns (baseline)",
                 }
 
                 with ui.column().classes("w-full gap-3"):
