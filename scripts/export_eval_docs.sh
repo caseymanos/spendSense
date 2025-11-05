@@ -37,7 +37,7 @@ done
 
 # Create README for the export
 echo -e "${GREEN}Creating README...${NC}"
-cat > "$EXPORT_DIR/README.md" << 'EOF'
+cat > "$EXPORT_DIR/README.md" << EOF
 # SpendSense Evaluation Documentation
 
 This folder contains evaluation metrics and documentation for the SpendSense MVP V2 system.
@@ -53,7 +53,7 @@ This folder contains evaluation metrics and documentation for the SpendSense MVP
 
 ### Trace Files
 
-The `traces/` directory contains sample decision trace JSONs showing:
+The \`traces/\` directory contains sample decision trace JSONs showing:
 - How personas are assigned to users
 - Which behavioral signals triggered each persona
 - Recommendations generated and their rationales
