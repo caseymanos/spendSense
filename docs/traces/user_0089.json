@@ -96,5 +96,47 @@
       }
     },
     "timestamp": "2025-11-04T10:18:44.380867"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-04T21:52:50.936992",
+    "persona": "subscription_heavy",
+    "education_count": 3,
+    "offer_count": 1,
+    "total_recommendations": 4,
+    "recommendations": [
+      {
+        "type": "education",
+        "title": "The Complete Subscription Audit Checklist",
+        "description": "Step-by-step process to identify all recurring charges, evaluate if you're still using them, and cancel unused subscriptions. Includes email templates for cancellation requests.",
+        "category": "subscription_management",
+        "rationale": "You have 3 recurring subscriptions totaling approximately $51 per month. A quarterly audit can identify unused services.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Subscription Sharing: Ethical Ways to Split Costs",
+        "description": "How to legally share family plans for streaming, music, and software. Covers terms of service, payment splitting apps, and what to watch out for.",
+        "category": "subscription_management",
+        "rationale": "Your $51/month in subscriptions could be reduced 30-50% through family plan sharing where allowed.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Setting Up Bill Alerts to Catch Price Increases",
+        "description": "How to monitor recurring charges for sneaky price increases. Covers bank alerts, calendar reminders, and subscription tracking apps.",
+        "category": "subscription_management",
+        "rationale": "Subscriptions often increase prices after promotional periods. With 3 active subscriptions, alerts help you catch changes quickly.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "partner_offer",
+        "title": "Mint Mobile Family Plan",
+        "description": "Ultra-low-cost cell phone service ($15-30/month). Share a family plan to reduce costs even further.",
+        "category": "phone_service",
+        "rationale": "Phone service is often one of the biggest recurring bills. Mint Mobile could cut your phone costs by 50-70% without sacrificing coverage.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      }
+    ],
+    "consent_granted": true
   }
 }

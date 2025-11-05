@@ -94,5 +94,25 @@
       "savings_builder": {}
     },
     "timestamp": "2025-11-04T10:18:44.379214"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-04T21:52:50.836578",
+    "persona": "subscription_heavy",
+    "education_count": 1,
+    "offer_count": 0,
+    "total_recommendations": 1,
+    "recommendations": [
+      {
+        "type": "education",
+        "title": "Subscription Sharing: Ethical Ways to Split Costs",
+        "description": "How to legally share family plans for streaming, music, and software. Covers terms of service, payment splitting apps, and what to watch out for.",
+        "category": "subscription_management",
+        "rationale": "Your $91/month in subscriptions could be reduced 30-50% through family plan sharing where allowed.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      }
+    ],
+    "consent_granted": true,
+    "reason": "insufficient_data",
+    "education_shortfall": 2
   }
 }

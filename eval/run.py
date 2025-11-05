@@ -80,6 +80,7 @@ def generate_json_output(
                 "value": metrics["coverage"]["value"],
                 "target": metrics["coverage"]["metadata"]["target"],
                 "passes": metrics["coverage"]["metadata"]["passes"],
+                "tracking_only": metrics["coverage"]["metadata"].get("tracking_only", False),
                 "users_with_both": metrics["coverage"]["metadata"]["users_with_both"],
             },
             "explainability": {
@@ -131,16 +132,14 @@ def generate_json_output(
             "all_metrics_pass": metrics["summary"]["all_metrics_pass"]
             and fairness["all_demographics_pass"],
             "metrics_passing": sum(
-                [
-                    metrics["coverage"]["metadata"]["passes"],
-                    metrics["explainability"]["metadata"]["passes"],
-                    metrics["relevance"]["metadata"]["passes"],
-                    metrics["latency"]["metadata"]["passes"],
-                    metrics["auditability"]["metadata"]["passes"],
-                    fairness["all_demographics_pass"],
-                ]
+                1 for flag in (metrics["summary"]["metric_pass_flags"] + [fairness["all_demographics_pass"]]) if flag
             ),
-            "metrics_total": 6,
+            "metrics_total": len(metrics["summary"]["metric_pass_flags"]) + 1,
+            "tracking_metrics": [
+                metric_name
+                for metric_name in ["coverage", "explainability", "relevance", "latency", "auditability"]
+                if metrics[metric_name]["metadata"].get("tracking_only", False)
+            ],
         },
     }
 
@@ -261,6 +260,29 @@ def generate_summary_markdown(
     """
     total_users = metrics["summary"]["total_users"]
     all_pass = metrics["summary"]["all_metrics_pass"] and fairness["all_demographics_pass"]
+    metric_pass_flags = metrics["summary"]["metric_pass_flags"]
+    fairness_pass = fairness["all_demographics_pass"]
+    metrics_passing = sum(1 for flag in metric_pass_flags if flag) + (1 if fairness_pass else 0)
+    metrics_total = len(metric_pass_flags) + 1
+    tracking_metrics = [
+        metric_name
+        for metric_name in ["coverage", "explainability", "relevance", "latency", "auditability"]
+        if metrics[metric_name]["metadata"].get("tracking_only", False)
+    ]
+    tracking_line = (
+        f"\n**Tracking Only**: {', '.join(tracking_metrics)}" if tracking_metrics else ""
+    )
+
+    coverage_meta = metrics["coverage"]["metadata"]
+    coverage_value = metrics["coverage"]["value"]
+    coverage_target_display = (
+        "—" if coverage_meta["target"] is None else f"{coverage_meta['target']:.2f}%"
+    )
+    coverage_status_display = (
+        "TRACKING (no pass/fail threshold set)"
+        if coverage_meta.get("tracking_only", False)
+        else ("✅ PASS" if coverage_meta.get("passes") else "❌ FAIL")
+    )
 
     md = f"""# Evaluation Summary - SpendSense
 
@@ -271,7 +293,7 @@ def generate_summary_markdown(
 {"✅ **ALL METRICS PASS**" if all_pass else "❌ **SOME METRICS FAIL**"}
 
 **Total Users**: {total_users}
-**Metrics Passing**: {sum([metrics["coverage"]["metadata"]["passes"], metrics["explainability"]["metadata"]["passes"], metrics["relevance"]["metadata"]["passes"], metrics["latency"]["metadata"]["passes"], metrics["auditability"]["metadata"]["passes"], fairness["all_demographics_pass"]])}/6
+**Metrics Passing**: {metrics_passing}/{metrics_total}{tracking_line}
 
 ---
 
@@ -280,14 +302,14 @@ def generate_summary_markdown(
 ### 1. Coverage
 **Definition**: % of users with meaningful persona + ≥3 detected behaviors
 
-- **Value**: {metrics["coverage"]["value"]:.2f}%
-- **Target**: {metrics["coverage"]["metadata"]["target"]:.2f}%
-- **Status**: {"✅ PASS" if metrics["coverage"]["metadata"]["passes"] else "❌ FAIL"}
+- **Value**: {coverage_value:.2f}%
+- **Target**: {coverage_target_display}
+- **Status**: {coverage_status_display}
 - **Details**:
-  - Total users: {metrics["coverage"]["metadata"]["total_users"]}
-  - Users with meaningful persona: {metrics["coverage"]["metadata"]["users_with_meaningful_persona"]}
-  - Users with ≥3 behaviors: {metrics["coverage"]["metadata"]["users_with_3_behaviors"]}
-  - Users with both: {metrics["coverage"]["metadata"]["users_with_both"]}
+  - Total users: {coverage_meta["total_users"]}
+  - Users with meaningful persona: {coverage_meta["users_with_meaningful_persona"]}
+  - Users with ≥3 behaviors: {coverage_meta["users_with_3_behaviors"]}
+  - Users with both: {coverage_meta["users_with_both"]}
 
 ### 2. Explainability
 **Definition**: % of recommendations with non-empty rationale text
@@ -356,17 +378,15 @@ def generate_summary_markdown(
 
 """
 
-    if not metrics["coverage"]["metadata"]["passes"]:
-        md += """
+    if coverage_value < 100:
+        md += f"""
 ### Coverage Improvement
-- **Issue**: Only {:.2f}% of users have meaningful persona + ≥3 behaviors
+- **Issue**: Only {coverage_value:.2f}% of users have meaningful persona + ≥3 behaviors
 - **Actions**:
   1. Review data generation to ensure diverse financial behaviors
   2. Consider lowering behavior detection thresholds
   3. Investigate users with 'general' persona for potential reclassification
-""".format(
-            metrics["coverage"]["value"]
-        )
+"""
 
     if not metrics["explainability"]["metadata"]["passes"]:
         md += """
@@ -469,10 +489,19 @@ def print_console_summary(
     print("-" * 60)
 
     # Coverage
+    coverage_meta = metrics["coverage"]["metadata"]
+    coverage_target_display = (
+        "--" if coverage_meta["target"] is None else f"{coverage_meta['target']:.2f}%"
+    )
+    coverage_status_display = (
+        "TRACK"
+        if coverage_meta.get("tracking_only", False)
+        else ("✅ PASS" if coverage_meta.get("passes") else "❌ FAIL")
+    )
     print(
         f"{'Coverage':<20} {metrics['coverage']['value']:>6.2f}% "
-        f"{metrics['coverage']['metadata']['target']:>12.2f}% "
-        f"{'✅ PASS' if metrics['coverage']['metadata']['passes'] else '❌ FAIL':<10}"
+        f"{coverage_target_display:>15} "
+        f"{coverage_status_display:<10}"
     )
 
     # Explainability

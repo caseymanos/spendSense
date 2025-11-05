@@ -84,5 +84,39 @@
       "savings_builder": {}
     },
     "timestamp": "2025-11-04T10:18:44.369934"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-04T21:52:50.339630",
+    "persona": "high_utilization",
+    "education_count": 3,
+    "offer_count": 0,
+    "total_recommendations": 3,
+    "recommendations": [
+      {
+        "type": "education",
+        "title": "Understanding Credit Utilization and Your Score",
+        "description": "Learn how credit utilization affects your credit score and why keeping it below 30% is important. Includes strategies for paying down balances strategically.",
+        "category": "credit_basics",
+        "rationale": "Your credit card ending in 1944 is at 46% utilization ($4,628 of $10,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $69/month.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
+        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
+        "category": "payment_automation",
+        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "How Interest Charges Work: APR, Compounding, and Grace Periods",
+        "description": "Demystify credit card interest calculations. Learn about daily periodic rates, grace periods, and how carrying a balance costs more than you think.",
+        "category": "credit_basics",
+        "rationale": "You're currently paying approximately $69/month per month in interest charges. Understanding how interest compounds can motivate faster paydown strategies.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      }
+    ],
+    "consent_granted": true
   }
 }

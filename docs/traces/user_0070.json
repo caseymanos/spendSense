@@ -93,5 +93,17 @@
       }
     },
     "timestamp": "2025-11-04T10:18:44.377830"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-04T21:52:50.751701",
+    "persona": "savings_builder",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": true,
+    "reason": "insufficient_data",
+    "message": "You're doing great - no recommendations at this time.",
+    "education_shortfall": 3
   }
 }

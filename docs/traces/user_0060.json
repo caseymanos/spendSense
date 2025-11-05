@@ -93,5 +93,16 @@
       }
     },
     "timestamp": "2025-11-04T10:18:44.376222"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-04T21:52:50.655210",
+    "persona": "general",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": true,
+    "reason": "general_persona_no_recommendations",
+    "message": "You're doing great - no recommendations at this time."
   }
 }

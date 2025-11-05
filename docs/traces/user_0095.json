@@ -101,5 +101,25 @@
       "savings_builder": {}
     },
     "timestamp": "2025-11-04T10:18:44.381816"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-04T21:52:50.996755",
+    "persona": "savings_builder",
+    "education_count": 1,
+    "offer_count": 0,
+    "total_recommendations": 1,
+    "recommendations": [
+      {
+        "type": "education",
+        "title": "Certificates of Deposit (CDs): Locking In Higher Rates",
+        "description": "When CDs make sense for part of your savings. Covers laddering strategies, penalty-free CDs, and how to balance liquidity with returns.",
+        "category": "savings_optimization",
+        "rationale": "With 4.9 months of emergency savings, you may have excess funds that could earn higher rates in CDs.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      }
+    ],
+    "consent_granted": true,
+    "reason": "insufficient_data",
+    "education_shortfall": 2
   }
 }
