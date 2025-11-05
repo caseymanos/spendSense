@@ -421,6 +421,13 @@ class UserAppState(rx.State):
         ]
 
     @rx.var
+    def recommendations(self) -> List[Dict[str, Any]]:
+        """Get all recommendations."""
+        if not self.recommendations_data:
+            return []
+        return self.recommendations_data.get("recommendations", [])
+
+    @rx.var
     def top_recommendations(self) -> List[Dict[str, Any]]:
         """Get top 3 recommendations for dashboard preview."""
         if not self.recommendations_data:
