@@ -1,0 +1,18 @@
+[
+  {
+    "timestamp": "2025-11-05T03:52:25.316858",
+    "total_users": 100,
+    "multi_trigger_count": 4,
+    "multi_trigger_percentage": 4.0,
+    "current_educational_revenue": 1294.9200000000003,
+    "revenue_optimal_revenue": 1399.1800000000003,
+    "opportunity_cost": 104.26,
+    "affected_users": 1,
+    "revenue_lift_percentage": 8.051462638618599,
+    "persona_trigger_counts": {
+      "high_utilization": 19,
+      "savings_builder": 10,
+      "subscription_heavy": 36
+    }
+  }
+]
