@@ -1,8 +1,10 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { useProfile, useSetConsent } from '../../lib/hooks';
-import { UserSwitcher } from '../../components/UserSwitcher';
+import React from 'react'
+import { useProfile, useSetConsent } from '../../lib/hooks'
+import { UserSwitcher } from '../../components/UserSwitcher'
+import { Button } from '../../components/ui/button'
+import { Card } from '../../components/ui/card'
 
 export default function PrivacyPage() {
   const [userId, setUserId] = React.useState<string | undefined>();
@@ -20,22 +22,21 @@ export default function PrivacyPage() {
   };
 
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
-      <div className="card" style={{ display: 'flex', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
+    <div className="grid gap-4">
+      <Card className="flex items-center justify-between gap-3 p-3">
         <div>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>🔒 Privacy & Consent</div>
-          <div style={{ color: 'var(--muted)' }}>Manage your consent settings</div>
+          <div className="text-lg font-bold">🔒 Privacy & Consent</div>
+          <div className="text-muted-foreground">Manage your consent settings</div>
         </div>
-        <UserSwitcher value={userId} onChange={(id) => { setUserId(id); window.localStorage.setItem('userId', id); }} />
-      </div>
+        <UserSwitcher value={userId} onChange={(id) => { setUserId(id); window.localStorage.setItem('userId', id) }} />
+      </Card>
 
-      <div className="card">
-        <div style={{ fontWeight: 700, marginBottom: 8 }}>{profile?.consent_granted ? '✓ Consent Active' : '✗ Consent Not Granted'}</div>
-        <button className={profile?.consent_granted ? 'btn-outline' : 'btn'} onClick={toggleConsent}>
+      <Card className="p-3">
+        <div className="mb-2 font-bold">{profile?.consent_granted ? '✓ Consent Active' : '✗ Consent Not Granted'}</div>
+        <Button variant={profile?.consent_granted ? 'outline' : 'default'} onClick={toggleConsent}>
           {profile?.consent_granted ? 'Revoke Consent' : 'Grant Consent'}
-        </button>
-      </div>
+        </Button>
+      </Card>
     </div>
-  );
+  )
 }
-

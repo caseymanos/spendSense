@@ -1,10 +1,11 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { useProfile, useRecs } from '../../lib/hooks';
-import { UserSwitcher } from '../../components/UserSwitcher';
-import { MetricCard } from '../../components/MetricCard';
-import { PersonaBadge } from '../../components/PersonaBadge';
+import React from 'react'
+import { useProfile, useRecs } from '../../lib/hooks'
+import { UserSwitcher } from '../../components/UserSwitcher'
+import { MetricCard } from '../../components/MetricCard'
+import { PersonaBadge } from '../../components/PersonaBadge'
+import { Card } from '../../components/ui/card'
 
 export default function DashboardPage() {
   const [userId, setUserId] = React.useState<string | undefined>();
@@ -25,40 +26,39 @@ export default function DashboardPage() {
   const personaTitle = (profile?.persona || 'general').replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
-      <div className="card" style={{ display: 'flex', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
+    <div className="grid gap-4">
+      <Card className="flex items-center justify-between gap-3 p-3">
         <div>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>🏠 Your Financial Dashboard</div>
-          <div style={{ color: 'var(--muted)' }}>{profile ? `Welcome back, ${profile.name}` : 'Select a user to begin'}</div>
+          <div className="text-lg font-bold">🏠 Your Financial Dashboard</div>
+          <div className="text-muted-foreground">{profile ? `Welcome back, ${profile.name}` : 'Select a user to begin'}</div>
         </div>
         <UserSwitcher value={userId} onChange={onChangeUser} />
-      </div>
+      </Card>
 
       {profile?.consent_granted ? (
         <>
           <PersonaBadge title={personaTitle} description="Your current persona" />
-          <div className="grid-3">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             <MetricCard label="Credit Cards" value={String(profile?.signals?.credit_num_cards ?? '0')} help="Active accounts" />
             <MetricCard label="Subscriptions" value={String(profile?.signals?.sub_180d_recurring_count ?? '0')} help="Recurring services" />
             <MetricCard label="Savings (6mo)" value={`$${Number(profile?.signals?.sav_180d_net_inflow ?? 0).toLocaleString()}`} help="Net inflow" />
           </div>
-          <div className="card">
-            <div style={{ fontWeight: 700, marginBottom: 8 }}>Your Recommendations</div>
+          <Card className="p-3">
+            <div className="font-bold">Your Recommendations</div>
             {(recs?.recommendations || []).slice(0, 3).map((r) => (
-              <div key={r.recommendation_id} className="card" style={{ marginTop: 8 }}>
-                <div style={{ fontWeight: 600 }}>{r.title}</div>
-                <div style={{ marginTop: 4, color: 'var(--muted)' }}>{r.rationale}</div>
-              </div>
+              <Card key={r.recommendation_id} className="mt-2 p-3">
+                <div className="font-semibold">{r.title}</div>
+                <div className="mt-1 text-muted-foreground">{r.rationale}</div>
+              </Card>
             ))}
-          </div>
+          </Card>
         </>
       ) : (
-        <div className="card" style={{ borderColor: 'var(--warning)', background: '#FEF3C7' }}>
-          <div style={{ fontWeight: 700 }}>Consent Not Yet Granted</div>
+        <Card className="border-yellow-300 bg-yellow-50 p-3">
+          <div className="font-bold">Consent Not Yet Granted</div>
           <div>To provide personalized insights, please grant consent on the Privacy page.</div>
-        </div>
+        </Card>
       )}
     </div>
   );
 }
-

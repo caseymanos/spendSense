@@ -1,9 +1,10 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { useRecs } from '../../lib/hooks';
-import { UserSwitcher } from '../../components/UserSwitcher';
-import { RecommendationCard } from '../../components/RecommendationCard';
+import React from 'react'
+import { useRecs } from '../../lib/hooks'
+import { UserSwitcher } from '../../components/UserSwitcher'
+import { RecommendationCard } from '../../components/RecommendationCard'
+import { Card } from '../../components/ui/card'
 
 export default function LearnPage() {
   const [userId, setUserId] = React.useState<string | undefined>();
@@ -15,14 +16,14 @@ export default function LearnPage() {
   const { data } = useRecs(userId);
 
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
-      <div className="card" style={{ display: 'flex', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
+    <div className="grid gap-4">
+      <Card className="flex items-center justify-between gap-3 p-3">
         <div>
-          <div style={{ fontWeight: 700, fontSize: 18 }}>📚 Learning Feed</div>
-          <div style={{ color: 'var(--muted)' }}>Educational content and personalized insights</div>
+          <div className="text-lg font-bold">📚 Learning Feed</div>
+          <div className="text-muted-foreground">Educational content and personalized insights</div>
         </div>
-        <UserSwitcher value={userId} onChange={(id) => { setUserId(id); window.localStorage.setItem('userId', id); }} />
-      </div>
+        <UserSwitcher value={userId} onChange={(id) => { setUserId(id); window.localStorage.setItem('userId', id) }} />
+      </Card>
 
       <div>
         {(data?.recommendations || []).map((rec) => (
@@ -32,4 +33,3 @@ export default function LearnPage() {
     </div>
   );
 }
-
