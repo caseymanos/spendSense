@@ -11,23 +11,23 @@ This is the single source of truth for tunable parameters.
 # =============================================================================
 
 PERSONA_THRESHOLDS = {
-    "high_utilization": {
+    "High Utilization": {
         "utilization_threshold": 50.0,  # 50% or higher credit utilization
         "interest_threshold": 0.01,  # Any interest charges (> $0)
         "min_payment_only": True,  # Flag for minimum payment pattern
         "overdue_flag": True,  # Flag for overdue status
     },
-    "variable_income": {
+    "Variable Income Budgeter": {
         "median_pay_gap_days": 45,  # More than 45 days between paychecks
         "cash_buffer_months": 1.0,  # Less than 1 month cash buffer
         "income_variability_threshold": 25.0,  # 25% std dev in income
     },
-    "subscription_heavy": {
+    "Subscription-Heavy": {
         "min_recurring_count": 3,  # At least 3 recurring merchants
         "recurring_spend_min": 50.0,  # At least $50/month OR
         "recurring_spend_pct": 10.0,  # 10% of total spend (percentage form to match feature output)
     },
-    "savings_builder": {
+    "Savings Builder": {
         "growth_rate_pct": 2.0,  # 2% or higher savings growth rate (percentage form to match feature output)
         "net_inflow_min": 200.0,  # At least $200 net inflow OR
         "max_utilization": 30.0,  # Credit utilization below 30% (percentage form: 30.0 = 30%)
@@ -36,11 +36,11 @@ PERSONA_THRESHOLDS = {
 
 # Persona priority order for conflict resolution (PRD Part 2, Section 6.2)
 PERSONA_PRIORITY = [
-    "high_utilization",  # Priority 1: Immediate financial strain
-    "variable_income",  # Priority 2: Stability and planning gap
-    "subscription_heavy",  # Priority 3: Spending pattern optimization
-    "savings_builder",  # Priority 4: Positive reinforcement
-    "custom",  # Priority 5: Reserved for future
+    "High Utilization",  # Priority 1: Immediate financial strain
+    "Variable Income Budgeter",  # Priority 2: Stability and planning gap
+    "Subscription-Heavy",  # Priority 3: Spending pattern optimization
+    "Savings Builder",  # Priority 4: Positive reinforcement
+    "General",  # Priority 5: Default for users with minimal signals
 ]
 
 # =============================================================================

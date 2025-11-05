@@ -32,7 +32,7 @@ def check_high_utilization(signals: pd.Series) -> Tuple[bool, Dict]:
 
     # Check utilization ≥ 50%
     utilization = signals.get("credit_max_util_pct", 0)
-    if utilization >= PERSONA_THRESHOLDS["high_utilization"]["utilization_threshold"]:
+    if utilization >= PERSONA_THRESHOLDS["High Utilization"]["utilization_threshold"]:
         criteria_met["high_utilization"] = float(utilization)
 
     # Interest charges posted > 0 (spec-accurate)
@@ -72,14 +72,14 @@ def check_variable_income(signals: pd.Series) -> Tuple[bool, Dict]:
 
     # Check median pay gap > 45 days (using 180-day window for long-term trend)
     median_pay_gap = signals.get("inc_180d_median_pay_gap_days", 0)
-    if median_pay_gap > PERSONA_THRESHOLDS["variable_income"]["median_pay_gap_days"]:
+    if median_pay_gap > PERSONA_THRESHOLDS["Variable Income Budgeter"]["median_pay_gap_days"]:
         criteria_met["median_pay_gap_days"] = int(median_pay_gap)
 
     # Check cash buffer < 1 month (using 180-day window)
     cash_buffer = signals.get(
         "inc_180d_cash_buffer_months", 999
     )  # Default high to avoid false positives
-    if cash_buffer < PERSONA_THRESHOLDS["variable_income"]["cash_buffer_months"]:
+    if cash_buffer < PERSONA_THRESHOLDS["Variable Income Budgeter"]["cash_buffer_months"]:
         criteria_met["cash_buffer_months"] = float(cash_buffer)
 
     # Matches if BOTH conditions are true (AND logic)
@@ -90,7 +90,7 @@ def check_variable_income(signals: pd.Series) -> Tuple[bool, Dict]:
 
 def check_subscription_heavy(signals: pd.Series) -> Tuple[bool, Dict]:
     """
-    Check if user meets Subscription Heavy persona criteria.
+    Check if user meets Subscription-Heavy persona criteria.
 
     Criteria: Recurring merchants ≥ 3 AND (recurring spend ≥ $50 OR ≥ 10% of total spend)
 
@@ -104,24 +104,24 @@ def check_subscription_heavy(signals: pd.Series) -> Tuple[bool, Dict]:
 
     # Check recurring count ≥ 3 (detector enforces 90d cadence)
     recurring_count = signals.get("sub_180d_recurring_count", 0)
-    if recurring_count >= PERSONA_THRESHOLDS["subscription_heavy"]["min_recurring_count"]:
+    if recurring_count >= PERSONA_THRESHOLDS["Subscription-Heavy"]["min_recurring_count"]:
         criteria_met["recurring_count"] = int(recurring_count)
 
     # Check 30d window for monthly spend/share per spec
     monthly_spend = signals.get("sub_30d_monthly_spend", signals.get("sub_180d_monthly_spend", 0))
     share_pct = signals.get("sub_30d_share_pct", signals.get("sub_180d_share_pct", 0))
 
-    if monthly_spend >= PERSONA_THRESHOLDS["subscription_heavy"]["recurring_spend_min"]:
+    if monthly_spend >= PERSONA_THRESHOLDS["Subscription-Heavy"]["recurring_spend_min"]:
         criteria_met["monthly_spend"] = float(monthly_spend)
 
-    if share_pct >= PERSONA_THRESHOLDS["subscription_heavy"]["recurring_spend_pct"]:
+    if share_pct >= PERSONA_THRESHOLDS["Subscription-Heavy"]["recurring_spend_pct"]:
         criteria_met["share_pct"] = float(share_pct)
 
     # Matches if recurring_count ≥ 3 AND (spend ≥ $50 OR share ≥ 10%)
-    has_count = recurring_count >= PERSONA_THRESHOLDS["subscription_heavy"]["min_recurring_count"]
+    has_count = recurring_count >= PERSONA_THRESHOLDS["Subscription-Heavy"]["min_recurring_count"]
     has_spend_or_share = (
-        monthly_spend >= PERSONA_THRESHOLDS["subscription_heavy"]["recurring_spend_min"]
-        or share_pct >= PERSONA_THRESHOLDS["subscription_heavy"]["recurring_spend_pct"]
+        monthly_spend >= PERSONA_THRESHOLDS["Subscription-Heavy"]["recurring_spend_min"]
+        or share_pct >= PERSONA_THRESHOLDS["Subscription-Heavy"]["recurring_spend_pct"]
     )
 
     matches = has_count and has_spend_or_share
@@ -145,25 +145,25 @@ def check_savings_builder(signals: pd.Series) -> Tuple[bool, Dict]:
 
     # Check savings growth ≥ 2% (using 180-day window)
     growth_rate = signals.get("sav_180d_growth_rate_pct", 0)
-    if growth_rate >= PERSONA_THRESHOLDS["savings_builder"]["growth_rate_pct"]:
+    if growth_rate >= PERSONA_THRESHOLDS["Savings Builder"]["growth_rate_pct"]:
         criteria_met["growth_rate_pct"] = float(growth_rate)
 
     # Check net inflow ≥ $200
     net_inflow = signals.get("sav_180d_net_inflow", 0)
-    if net_inflow >= PERSONA_THRESHOLDS["savings_builder"]["net_inflow_min"]:
+    if net_inflow >= PERSONA_THRESHOLDS["Savings Builder"]["net_inflow_min"]:
         criteria_met["net_inflow"] = float(net_inflow)
 
     # Check utilization < 30% (required for both OR branches)
     utilization = signals.get("credit_max_util_pct", 100)  # Default high to avoid false positives
-    utilization_ok = utilization < PERSONA_THRESHOLDS["savings_builder"]["max_utilization"]
+    utilization_ok = utilization < PERSONA_THRESHOLDS["Savings Builder"]["max_utilization"]
 
     if utilization_ok:
         criteria_met["low_utilization"] = float(utilization)
 
     # Matches if (growth ≥ 2% OR inflow ≥ $200) AND utilization < 30%
     has_savings_metric = (
-        growth_rate >= PERSONA_THRESHOLDS["savings_builder"]["growth_rate_pct"]
-        or net_inflow >= PERSONA_THRESHOLDS["savings_builder"]["net_inflow_min"]
+        growth_rate >= PERSONA_THRESHOLDS["Savings Builder"]["growth_rate_pct"]
+        or net_inflow >= PERSONA_THRESHOLDS["Savings Builder"]["net_inflow_min"]
     )
 
     matches = has_savings_metric and utilization_ok
@@ -178,7 +178,7 @@ def assign_persona(signals: pd.Series) -> Tuple[str, Dict]:
     Priority order:
     1. High Utilization (immediate credit strain)
     2. Variable Income Budgeter (income stability)
-    3. Subscription Heavy (spending optimization)
+    3. Subscription-Heavy (spending optimization)
     4. Savings Builder (positive reinforcement)
     5. General (default for users with minimal signals)
 
@@ -190,16 +190,16 @@ def assign_persona(signals: pd.Series) -> Tuple[str, Dict]:
     """
     # Run all persona checks
     checks = {
-        "high_utilization": check_high_utilization(signals),
-        "variable_income": check_variable_income(signals),
-        "subscription_heavy": check_subscription_heavy(signals),
-        "savings_builder": check_savings_builder(signals),
+        "High Utilization": check_high_utilization(signals),
+        "Variable Income Budgeter": check_variable_income(signals),
+        "Subscription-Heavy": check_subscription_heavy(signals),
+        "Savings Builder": check_savings_builder(signals),
     }
 
     # Apply priority-based assignment
     for persona_name in PERSONA_PRIORITY:
-        if persona_name == "custom":
-            # Skip 'custom' - we use 'general' instead
+        if persona_name == "General":
+            # Skip 'General' - it's the default fallback
             continue
 
         if persona_name in checks:
@@ -213,9 +213,9 @@ def assign_persona(signals: pd.Series) -> Tuple[str, Dict]:
                     "all_checks": all_checks,
                 }
 
-    # Default to 'general' if no persona matches
+    # Default to 'General' if no persona matches
     all_checks = {p: c for p, (m, c) in checks.items()}
-    return "general", {"assigned_persona": "general", "criteria_met": {}, "all_checks": all_checks}
+    return "General", {"assigned_persona": "General", "criteria_met": {}, "all_checks": all_checks}
 
 
 def assign_all_personas(

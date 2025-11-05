@@ -10,11 +10,11 @@ from enum import Enum
 
 class PersonaTarget(str, Enum):
     """Personas available for targeted generation"""
-    HIGH_UTILIZATION = "high_utilization"
-    VARIABLE_INCOME = "variable_income"
-    SUBSCRIPTION_HEAVY = "subscription_heavy"
-    SAVINGS_BUILDER = "savings_builder"
-    GENERAL = "general"
+    HIGH_UTILIZATION = "High Utilization"
+    VARIABLE_INCOME = "Variable Income Budgeter"
+    SUBSCRIPTION_HEAVY = "Subscription-Heavy"
+    SAVINGS_BUILDER = "Savings Builder"
+    GENERAL = "General"
 
 
 class PayrollPattern(str, Enum):
@@ -371,9 +371,9 @@ PRESET_CONFIGS = {
             PersonaTarget.VARIABLE_INCOME,
         ],
         persona_weights={
-            "high_utilization": 0.40,
-            "subscription_heavy": 0.35,
-            "variable_income": 0.25,
+            "High Utilization": 0.40,
+            "Subscription-Heavy": 0.35,
+            "Variable Income Budgeter": 0.25,
         },
         # Mix of behaviors to create overlaps
         subscription_adoption_rate=0.85,
