@@ -1,0 +1,7 @@
+metric,value,target,passes,unit
+coverage,28.999999999999996,,,percentage
+explainability,100.0,100.0,True,percentage
+relevance,84.13793103448276,90.0,False,percentage
+latency,0.010782377910212321,5.0,True,seconds
+auditability,100.0,100.0,True,percentage
+fairness,100.0,100.0,True,boolean

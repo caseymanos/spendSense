@@ -1,0 +1,266 @@
+{
+  "metadata": {
+    "timestamp": "2025-11-04T21-52-49",
+    "version": "PR #8 Evaluation Harness",
+    "total_users": 100,
+    "total_personas": 100,
+    "total_traces": 101
+  },
+  "metrics": {
+    "coverage": {
+      "value": 28.999999999999996,
+      "target": null,
+      "passes": null,
+      "tracking_only": true,
+      "users_with_both": 29
+    },
+    "explainability": {
+      "value": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "total_recommendations": 204
+    },
+    "relevance": {
+      "value": 84.13793103448276,
+      "target": 90.0,
+      "passes": false,
+      "total_recommendations": 145
+    },
+    "latency": {
+      "value": 0.010782377910212321,
+      "target": 5.0,
+      "passes": true,
+      "mean_seconds": 0.0108,
+      "p95_seconds": 0.0138
+    },
+    "auditability": {
+      "value": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "completeness_percentage": 100.0
+    },
+    "fairness": {
+      "value": true,
+      "target": true,
+      "passes": true,
+      "overall_persona_rate": 0.82,
+      "failing_demographics": []
+    }
+  },
+  "detailed_results": {
+    "coverage": {
+      "total_users": 100,
+      "users_with_meaningful_persona": 82,
+      "users_with_3_behaviors": 38,
+      "users_with_both": 29,
+      "coverage_percentage": 29.0,
+      "target": null,
+      "passes": null,
+      "tracking_only": true
+    },
+    "explainability": {
+      "total_recommendations": 204,
+      "recommendations_with_rationale": 204,
+      "recommendations_without_rationale": 0,
+      "explainability_percentage": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "missing_rationales_sample": []
+    },
+    "relevance": {
+      "total_recommendations": 145,
+      "relevant_recommendations": 122,
+      "irrelevant_recommendations": 23,
+      "relevance_percentage": 84.14,
+      "target": 90.0,
+      "passes": false,
+      "irrelevant_sample": [
+        {
+          "user_id": "user_0007",
+          "persona": "high_utilization",
+          "title": "Certificates of Deposit (CDs): Locking In Higher Rates",
+          "category": "savings_optimization",
+          "expected_categories": [
+            "credit_basics",
+            "debt_paydown",
+            "payment_automation",
+            "counseling",
+            "credit_card",
+            "budgeting_app"
+          ]
+        },
+        {
+          "user_id": "user_0023",
+          "persona": "subscription_heavy",
+          "title": "Certificates of Deposit (CDs): Locking In Higher Rates",
+          "category": "savings_optimization",
+          "expected_categories": [
+            "subscription_management",
+            "subscription_app",
+            "phone_service"
+          ]
+        },
+        {
+          "user_id": "user_0027",
+          "persona": "subscription_heavy",
+          "title": "Setting Up Autopay to Avoid Late Fees and Interest",
+          "category": "payment_automation",
+          "expected_categories": [
+            "subscription_management",
+            "subscription_app",
+            "phone_service"
+          ]
+        },
+        {
+          "user_id": "user_0028",
+          "persona": "subscription_heavy",
+          "title": "Setting Up Autopay to Avoid Late Fees and Interest",
+          "category": "payment_automation",
+          "expected_categories": [
+            "subscription_management",
+            "subscription_app",
+            "phone_service"
+          ]
+        },
+        {
+          "user_id": "user_0031",
+          "persona": "high_utilization",
+          "title": "Subscription Sharing: Ethical Ways to Split Costs",
+          "category": "subscription_management",
+          "expected_categories": [
+            "credit_basics",
+            "debt_paydown",
+            "payment_automation",
+            "counseling",
+            "credit_card",
+            "budgeting_app"
+          ]
+        }
+      ]
+    },
+    "latency": {
+      "users_tested": 99,
+      "mean_seconds": 0.0108,
+      "median_seconds": 0.0102,
+      "p95_seconds": 0.0138,
+      "p99_seconds": 0.0203,
+      "min_seconds": 0.009,
+      "max_seconds": 0.021,
+      "target": 5.0,
+      "passes": true
+    },
+    "auditability": {
+      "total_users": 100,
+      "users_with_trace_file": 100,
+      "users_with_complete_trace": 100,
+      "auditability_percentage": 100.0,
+      "completeness_percentage": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "incomplete_traces_sample": []
+    },
+    "fairness": {
+      "overall_persona_rate": 0.82,
+      "tolerance": 0.1,
+      "demographics": {
+        "gender": {
+          "passes": true,
+          "max_deviation": 0.1,
+          "group_rates": {
+            "female": 0.72,
+            "male": 0.88,
+            "non_binary": 0.76,
+            "prefer_not_to_say": 0.92
+          },
+          "group_counts": {
+            "prefer_not_to_say": 25,
+            "female": 25,
+            "male": 25,
+            "non_binary": 25
+          },
+          "deviations": {
+            "female": 0.1,
+            "male": 0.06,
+            "non_binary": 0.06,
+            "prefer_not_to_say": 0.1
+          }
+        },
+        "income_tier": {
+          "passes": true,
+          "max_deviation": 0.0285,
+          "group_rates": {
+            "high": 0.8485,
+            "low": 0.7941,
+            "medium": 0.8182
+          },
+          "group_counts": {
+            "low": 34,
+            "high": 33,
+            "medium": 33
+          },
+          "deviations": {
+            "high": 0.0285,
+            "low": 0.0259,
+            "medium": 0.0018
+          }
+        },
+        "region": {
+          "passes": true,
+          "max_deviation": 0.1,
+          "group_rates": {
+            "midwest": 0.72,
+            "northeast": 0.84,
+            "south": 0.84,
+            "west": 0.88
+          },
+          "group_counts": {
+            "midwest": 25,
+            "west": 25,
+            "south": 25,
+            "northeast": 25
+          },
+          "deviations": {
+            "midwest": 0.1,
+            "northeast": 0.02,
+            "south": 0.02,
+            "west": 0.06
+          }
+        },
+        "age": {
+          "passes": true,
+          "max_deviation": 0.0624,
+          "group_rates": {
+            "18-30": 0.8529,
+            "31-50": 0.8485,
+            "51+": 0.7576
+          },
+          "group_counts": {
+            "18-30": 34,
+            "51+": 33,
+            "31-50": 33
+          },
+          "deviations": {
+            "18-30": 0.0329,
+            "31-50": 0.0285,
+            "51+": 0.0624
+          },
+          "buckets": [
+            "18-30",
+            "31-50",
+            "51-100"
+          ]
+        }
+      },
+      "all_demographics_pass": true,
+      "failing_demographics": []
+    }
+  },
+  "summary": {
+    "all_metrics_pass": false,
+    "metrics_passing": 4,
+    "metrics_total": 5,
+    "tracking_metrics": [
+      "coverage"
+    ]
+  }
+}

@@ -77,6 +77,10 @@ def test_consent_blocking():
     assert response["recommendations"] == [], "Should have no recommendations"
     assert response["metadata"]["reason"] == "consent_not_granted"
     assert "consent" in response["metadata"]["reason"].lower()
+    assert "message" in response["metadata"]
+    assert "consent" in response["metadata"]["message"].lower()
+    assert response["metadata"]["total_count"] == 0
+    assert response["metadata"]["education_count"] == 0
 
 
 def test_consent_status_check():
@@ -149,6 +153,7 @@ def test_consent_revocation():
     response = generate_recommendations(user_id)
     assert response["recommendations"] == []
     assert response["metadata"]["reason"] == "consent_not_granted"
+    assert "message" in response["metadata"]
 
     # Step 4: Check consent history
     history = get_consent_history(user_id)
@@ -483,6 +488,7 @@ def test_full_guardrail_pipeline():
     response = generate_recommendations(user_without_consent)
     assert response["recommendations"] == []
     assert response["metadata"]["reason"] == "consent_not_granted"
+    assert "message" in response["metadata"]
 
     # Step 6: Verify trace files include guardrail decisions
     trace_files = list(TRACE_DIR.glob("*.json"))

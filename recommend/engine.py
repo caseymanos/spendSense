@@ -45,6 +45,41 @@ SIGNALS_PATH = _PROJECT_ROOT / "features" / "signals.parquet"
 TRANSACTIONS_PATH = _PROJECT_ROOT / "data" / "transactions.parquet"
 
 
+NO_CONSENT_MESSAGE = (
+    "Consent not granted. Opt in from your profile to unlock personalized guidance."
+)
+NO_RECOMMENDATIONS_MESSAGE = "You're doing great - no recommendations at this time."
+
+
+def _build_empty_response(
+    user_id: str,
+    persona: Optional[str],
+    reason: str,
+    message: str,
+    consent_granted: bool,
+) -> Dict[str, Any]:
+    """
+    Construct a standardized empty recommendation payload so traces remain complete.
+    """
+    timestamp = datetime.now().isoformat()
+    return {
+        "user_id": user_id,
+        "persona": persona or "unknown",
+        "recommendations": [],
+        "metadata": {
+            "timestamp": timestamp,
+            "reason": reason,
+            "message": message,
+            "education_count": 0,
+            "offer_count": 0,
+            "total_count": 0,
+            "tone_check_passed": None,
+            "tone_violations_count": 0,
+            "consent_granted": consent_granted,
+        },
+    }
+
+
 def generate_recommendations(user_id: str) -> Dict[str, Any]:
     """
     Generate personalized recommendations for a user.
@@ -66,30 +101,30 @@ def generate_recommendations(user_id: str) -> Dict[str, Any]:
     # Load user context
     user_context = _load_user_context(user_id)
 
-    # Check consent
-    if not user_context.get("consent_granted", False):
-        return {
-            "user_id": user_id,
-            "persona": user_context.get("persona", "unknown"),
-            "recommendations": [],
-            "metadata": {
-                "timestamp": datetime.now().isoformat(),
-                "reason": "consent_not_granted",
-            },
-        }
+    consent_granted = bool(user_context.get("consent_granted", False))
+    persona = user_context.get("persona")
+    if not consent_granted:
+        response = _build_empty_response(
+            user_id,
+            persona,
+            reason="consent_not_granted",
+            message=NO_CONSENT_MESSAGE,
+            consent_granted=False,
+        )
+        _save_trace(user_id, response, user_context)
+        return response
 
     # Check persona
-    persona = user_context.get("persona")
     if persona == "general" or persona is None:
-        return {
-            "user_id": user_id,
-            "persona": persona or "unknown",
-            "recommendations": [],
-            "metadata": {
-                "timestamp": datetime.now().isoformat(),
-                "reason": "general_persona_no_recommendations",
-            },
-        }
+        response = _build_empty_response(
+            user_id,
+            persona,
+            reason="general_persona_no_recommendations",
+            message=NO_RECOMMENDATIONS_MESSAGE,
+            consent_granted=True,
+        )
+        _save_trace(user_id, response, user_context)
+        return response
 
     # Select education items (3-5)
     education_recs = _select_education_items(persona, user_context)
@@ -121,6 +156,7 @@ def generate_recommendations(user_id: str) -> Dict[str, Any]:
             "total_count": len(all_recommendations),
             "tone_check_passed": tone_scan["passed"],
             "tone_violations_count": tone_scan.get("violations_found", 0),
+            "consent_granted": consent_granted,
         },
     }
 
@@ -132,6 +168,10 @@ def generate_recommendations(user_id: str) -> Dict[str, Any]:
         response["metadata"]["reason"] = "insufficient_data"
         response["metadata"]["education_eligibility_shortfall"] = shortfall
         response["metadata"]["signals_present"] = SIGNALS_PATH.exists()
+
+    if response["metadata"]["total_count"] == 0:
+        response["metadata"].setdefault("reason", "no_recommendations_available")
+        response["metadata"].setdefault("message", NO_RECOMMENDATIONS_MESSAGE)
 
     # Save trace
     _save_trace(user_id, response, user_context)
@@ -634,7 +674,7 @@ def _save_trace(user_id: str, response: Dict[str, Any], user_context: Dict[str, 
 
     # Add recommendation section (matching PR #2 and PR #3 pattern)
     trace_data["recommendations"] = {
-        "timestamp": datetime.now().isoformat(),
+        "timestamp": response["metadata"].get("timestamp", datetime.now().isoformat()),
         "persona": response.get("persona"),
         "education_count": response["metadata"]["education_count"],
         "offer_count": response["metadata"]["offer_count"],
@@ -642,6 +682,14 @@ def _save_trace(user_id: str, response: Dict[str, Any], user_context: Dict[str, 
         "recommendations": response["recommendations"],
         "consent_granted": user_context.get("consent_granted", False),
     }
+    if "reason" in response["metadata"]:
+        trace_data["recommendations"]["reason"] = response["metadata"]["reason"]
+    if "message" in response["metadata"]:
+        trace_data["recommendations"]["message"] = response["metadata"]["message"]
+    if "education_eligibility_shortfall" in response["metadata"]:
+        trace_data["recommendations"]["education_shortfall"] = response["metadata"][
+            "education_eligibility_shortfall"
+        ]
 
     # Save trace
     with open(trace_file, "w") as f:

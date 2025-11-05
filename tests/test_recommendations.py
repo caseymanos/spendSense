@@ -351,6 +351,11 @@ class TestGeneralPersonaHandling:
             pytest.skip("No 'general' persona users in database")
 
         user_id = general_users.iloc[0]["user_id"]
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.execute(
+                "UPDATE users SET consent_granted = 1 WHERE user_id = ?", (user_id,)
+            )
+            conn.commit()
 
         # Act
         response = generate_recommendations(user_id)
@@ -361,6 +366,9 @@ class TestGeneralPersonaHandling:
         assert (
             response["metadata"]["reason"] == "general_persona_no_recommendations"
         ), "Metadata should indicate why recommendations are empty"
+        assert "message" in response["metadata"]
+        assert "no recommendations" in response["metadata"]["message"].lower()
+        assert response["metadata"]["total_count"] == 0
 
 
 class TestFullRecommendationIntegration:

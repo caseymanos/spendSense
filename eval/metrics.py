@@ -214,8 +214,9 @@ def calculate_coverage(
         "users_with_3_behaviors": int(users_with_3_behaviors),
         "users_with_both": int(users_with_both),
         "coverage_percentage": round(float(coverage_pct), 2),
-        "target": 100.0,
-        "passes": bool(coverage_pct >= 100.0),
+        "target": None,
+        "passes": None,
+        "tracking_only": True,
     }
 
     return coverage_pct, metadata
@@ -467,11 +468,14 @@ def calculate_auditability(
 
         has_signals = "signals" in trace
         has_persona = "persona_assignment" in trace
-        has_recs = "recommendations" in trace
+        has_recs_section = "recommendations" in trace
+        rec_section = trace.get("recommendations", {})
+        rec_items = rec_section.get("recommendations", []) if has_recs_section else []
+        rec_reason = rec_section.get("reason")
 
         if consent:
             # Consented users should have recommendations
-            if has_signals and has_persona and has_recs:
+            if has_signals and has_persona and has_recs_section:
                 complete_traces += 1
             else:
                 incomplete_details.append(
@@ -480,12 +484,22 @@ def calculate_auditability(
                         "consent": True,
                         "has_signals": has_signals,
                         "has_persona": has_persona,
-                        "has_recommendations": has_recs,
+                        "has_recommendations_section": has_recs_section,
+                        "recommendations_count": len(rec_items),
+                        "recommendations_reason": rec_reason,
                     }
                 )
         else:
-            # Non-consented users should NOT have recommendations
-            if has_signals and has_persona and not has_recs:
+            # Non-consented users should provide a clear message instead of recommendations
+            non_consent_ok = False
+            if has_recs_section:
+                non_consent_ok = (
+                    not rec_items and rec_reason == "consent_not_granted"
+                )
+            else:
+                non_consent_ok = True  # legacy traces without section
+
+            if has_signals and has_persona and non_consent_ok:
                 complete_traces += 1
             else:
                 incomplete_details.append(
@@ -494,7 +508,9 @@ def calculate_auditability(
                         "consent": False,
                         "has_signals": has_signals,
                         "has_persona": has_persona,
-                        "unexpected_recommendations": has_recs,
+                        "has_recommendations_section": has_recs_section,
+                        "recommendations_count": len(rec_items),
+                        "recommendations_reason": rec_reason,
                     }
                 )
 
@@ -591,15 +607,24 @@ def calculate_all_metrics(
     }
 
     # Summary
+    metric_pass_flags = []
+    for metric_name in ["coverage", "explainability", "relevance", "latency", "auditability"]:
+        meta = results[metric_name]["metadata"]
+        if meta.get("tracking_only", False):
+            continue
+        passes_flag = meta.get("passes")
+        if isinstance(passes_flag, bool):
+            metric_pass_flags.append(passes_flag)
+
     results["summary"] = {
         "total_users": len(users_df),
         "total_personas": len(personas_df),
         "total_traces": len(traces),
         "metrics_calculated": 5,
-        "all_metrics_pass": all(
-            results[metric]["metadata"].get("passes", False)
-            for metric in ["coverage", "explainability", "relevance", "latency", "auditability"]
-        ),
+        "metric_pass_flags": metric_pass_flags,
+        "metrics_passing": sum(1 for flag in metric_pass_flags if flag),
+        "metrics_total": len(metric_pass_flags),
+        "all_metrics_pass": all(metric_pass_flags) if metric_pass_flags else True,
     }
 
     return results

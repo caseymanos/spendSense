@@ -28,6 +28,15 @@ AGE_BUCKETS = [
     (51, 100, "51+"),
 ]
 
+EPSILON = 1e-9
+
+
+def within_tolerance(deviation: float, tolerance: float) -> bool:
+    """
+    Determine if a deviation is within tolerance, accounting for floating point noise.
+    """
+    return deviation <= tolerance + EPSILON
+
 
 def bucket_age(age: int) -> str:
     """
@@ -88,7 +97,7 @@ def calculate_fairness_parity(
     gender_rates = (merged["persona"] != "general").groupby(merged["gender"]).mean()
     gender_deviations = (gender_rates - overall_persona_rate).abs()
     gender_max_deviation = gender_deviations.max()
-    gender_passes = gender_max_deviation <= tolerance
+    gender_passes = within_tolerance(gender_max_deviation, tolerance)
 
     fairness_results["demographics"]["gender"] = {
         "passes": bool(gender_passes),
@@ -104,7 +113,7 @@ def calculate_fairness_parity(
     income_rates = (merged["persona"] != "general").groupby(merged["income_tier"]).mean()
     income_deviations = (income_rates - overall_persona_rate).abs()
     income_max_deviation = income_deviations.max()
-    income_passes = income_max_deviation <= tolerance
+    income_passes = within_tolerance(income_max_deviation, tolerance)
 
     fairness_results["demographics"]["income_tier"] = {
         "passes": bool(income_passes),
@@ -120,7 +129,7 @@ def calculate_fairness_parity(
     region_rates = (merged["persona"] != "general").groupby(merged["region"]).mean()
     region_deviations = (region_rates - overall_persona_rate).abs()
     region_max_deviation = region_deviations.max()
-    region_passes = region_max_deviation <= tolerance
+    region_passes = within_tolerance(region_max_deviation, tolerance)
 
     fairness_results["demographics"]["region"] = {
         "passes": bool(region_passes),
@@ -137,7 +146,7 @@ def calculate_fairness_parity(
     age_rates = (merged["persona"] != "general").groupby(merged["age_bucket"]).mean()
     age_deviations = (age_rates - overall_persona_rate).abs()
     age_max_deviation = age_deviations.max()
-    age_passes = age_max_deviation <= tolerance
+    age_passes = within_tolerance(age_max_deviation, tolerance)
 
     fairness_results["demographics"]["age"] = {
         "passes": bool(age_passes),
@@ -288,7 +297,7 @@ This report analyzes demographic parity in persona assignment across four protec
     for group, rate in gender["group_rates"].items():
         deviation = gender["deviations"][group]
         count = gender["group_counts"].get(group, 0)
-        status = "✅" if abs(deviation) <= tolerance else "❌"
+        status = "✅" if within_tolerance(abs(deviation), tolerance) else "❌"
         md += f"| {group} | {rate*100:.2f}% | {deviation*100:+.2f}% | {count} | {status} |\n"
 
     # ========================================
@@ -309,7 +318,7 @@ This report analyzes demographic parity in persona assignment across four protec
     for group, rate in income["group_rates"].items():
         deviation = income["deviations"][group]
         count = income["group_counts"].get(group, 0)
-        status = "✅" if abs(deviation) <= tolerance else "❌"
+        status = "✅" if within_tolerance(abs(deviation), tolerance) else "❌"
         md += f"| {group} | {rate*100:.2f}% | {deviation*100:+.2f}% | {count} | {status} |\n"
 
     # ========================================
@@ -330,7 +339,7 @@ This report analyzes demographic parity in persona assignment across four protec
     for group, rate in region["group_rates"].items():
         deviation = region["deviations"][group]
         count = region["group_counts"].get(group, 0)
-        status = "✅" if abs(deviation) <= tolerance else "❌"
+        status = "✅" if within_tolerance(abs(deviation), tolerance) else "❌"
         md += f"| {group} | {rate*100:.2f}% | {deviation*100:+.2f}% | {count} | {status} |\n"
 
     # ========================================
@@ -352,7 +361,7 @@ This report analyzes demographic parity in persona assignment across four protec
     for group, rate in age["group_rates"].items():
         deviation = age["deviations"][group]
         count = age["group_counts"].get(group, 0)
-        status = "✅" if abs(deviation) <= tolerance else "❌"
+        status = "✅" if within_tolerance(abs(deviation), tolerance) else "❌"
         md += f"| {group} | {rate*100:.2f}% | {deviation*100:+.2f}% | {count} | {status} |\n"
 
     # ========================================

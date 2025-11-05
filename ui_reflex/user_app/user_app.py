@@ -128,15 +128,15 @@ def metric_card_themed(label: str, value: str, help_text: str, color: str, theme
     )
 
 
-def persona_badge_themed(persona_info: dict, theme_config) -> rx.Component:
+def persona_badge_themed(persona_info: dict, persona_id: str, theme_config) -> rx.Component:
     """Themed persona badge."""
     theme = theme_config.colors
-    persona_color = persona_info.get("color", theme.primary)
+    persona_color = get_persona_color(theme_config, persona_id)
 
     return rx.box(
         rx.vstack(
             rx.heading(
-                f"🎯 Your Persona: {persona_info.get('title', 'Unknown')}",
+                f"{persona_info.get('icon', '🎯')} Your Persona: {persona_info.get('title', 'Unknown')}",
                 size="6",
                 color=theme.text_primary,
                 margin_bottom="3",
@@ -245,7 +245,7 @@ def dashboard_view(theme_config) -> rx.Component:
                 margin_bottom="6",
             ),
             # Persona section
-            persona_badge_themed(UserAppState.persona_info, theme_config),
+            persona_badge_themed(UserAppState.persona_info, UserAppState.persona, theme_config),
             # Metrics grid
             rx.heading(
                 "Your Financial Snapshot",
@@ -359,7 +359,7 @@ def learning_feed_view(theme_config) -> rx.Component:
             UserAppState.consent_granted,
             rx.vstack(
                 rx.foreach(
-                    UserAppState.education_recommendations,
+                    UserAppState.recommendations,
                     lambda rec: recommendation_card_themed(rec, theme_config),
                 ),
                 spacing="4",
@@ -524,18 +524,137 @@ def themed_dashboard(theme_config) -> rx.Component:
             rx.cond(
                 UserAppState.is_loading,
                 rx.spinner(size="3"),
-                # Content (when not loading) - conditional based on current_page
+                # Content (when not loading)
                 rx.cond(
-                    UserAppState.current_page == "dashboard",
-                    dashboard_view(theme_config),
-                    rx.cond(
-                        UserAppState.current_page == "learning_feed",
-                        learning_feed_view(theme_config),
-                        rx.cond(
-                            UserAppState.current_page == "privacy",
-                            privacy_view(theme_config),
-                            dashboard_view(theme_config),  # Default fallback
+                    UserAppState.consent_granted,
+                    # Dashboard content (consent granted)
+                    rx.vstack(
+                        # Consent info banner
+                        rx.box(
+                            rx.hstack(
+                                rx.vstack(
+                                    rx.heading(
+                                        "✓ Data Analysis Active",
+                                        size="4",
+                                        color=theme.success,
+                                        margin_bottom="1",
+                                    ),
+                                    rx.text(
+                                        UserAppState.consent_status_text,
+                                        as_="div",
+                                        font_size="0.875rem",
+                                        color=theme.text_secondary,
+                                    ),
+                                    spacing="0",
+                                    align_items="flex_start",
+                                ),
+                                rx.spacer(),
+                                rx.button(
+                                    "Revoke Consent",
+                                    on_click=UserAppState.revoke_consent_confirmed(),
+                                    variant="outline",
+                                    color_scheme="red",
+                                    size="2",
+                                ),
+                                spacing="4",
+                                width="100%",
+                                align_items="center",
+                            ),
+                            padding="4",
+                            background=theme.success_light,
+                            border=f"1px solid {theme.success}",
+                            border_radius=theme_config.border_radius,
+                            margin_bottom="6",
                         ),
+                        # Persona section
+                        persona_badge_themed(UserAppState.persona_info, UserAppState.persona, theme_config),
+                        # Metrics grid
+                        rx.heading(
+                            "Your Financial Snapshot",
+                            size="7",
+                            margin_bottom="4",
+                            color=theme.text_primary,
+                        ),
+                        rx.grid(
+                            metric_card_themed(
+                                label="Credit Cards",
+                                value=UserAppState.safe_credit_num_cards,
+                                help_text="Active accounts",
+                                color=theme.persona_high_util,
+                                theme_config=theme_config,
+                            ),
+                            metric_card_themed(
+                                label="Subscriptions",
+                                value=UserAppState.safe_sub_count,
+                                help_text="Recurring services",
+                                color=theme.persona_subscription,
+                                theme_config=theme_config,
+                            ),
+                            metric_card_themed(
+                                label="Savings (6mo)",
+                                value=UserAppState.safe_sav_net_inflow,
+                                help_text="Net inflow",
+                                color=theme.persona_savings,
+                                theme_config=theme_config,
+                            ),
+                            columns="3",
+                            spacing="4",
+                        ),
+                        # Recommendations preview
+                        rx.heading(
+                            "Your Recommendations",
+                            size="7",
+                            margin_top="8",
+                            margin_bottom="4",
+                            color=theme.text_primary,
+                        ),
+                        rx.cond(
+                            UserAppState.has_recommendations,
+                            rx.vstack(
+                                rx.foreach(
+                                    UserAppState.top_recommendations,
+                                    lambda rec: recommendation_card_themed(rec, theme_config),
+                                ),
+                                spacing="3",
+                            ),
+                            rx.text("No recommendations available", as_="div", color=theme.text_muted),
+                        ),
+                        spacing="4",
+                        width="100%",
+                    ),
+                    # Consent banner (no consent)
+                    rx.box(
+                        rx.heading(
+                            "Consent Not Yet Granted",
+                            size="7",
+                            margin_bottom="3",
+                            color=theme.text_primary,
+                        ),
+                        rx.text(
+                            UserAppState.consent_status_text,
+                            as_="div",
+                            margin_bottom="4",
+                            color=theme.text_secondary,
+                            font_style="italic",
+                        ),
+                        rx.text(
+                            "To provide personalized financial insights and recommendations, we need your consent to analyze your transaction data.",
+                            as_="div",
+                            margin_bottom="4",
+                            color=theme.text_secondary,
+                        ),
+                        rx.button(
+                            "Grant Consent",
+                            on_click=UserAppState.grant_consent_confirmed(),
+                            background=theme.primary,
+                            color="#FFFFFF",
+                            size="3",
+                            _hover={"background": theme.primary_hover},
+                        ),
+                        padding="8",
+                        background=theme.warning_light,
+                        border=f"2px solid {theme.warning}",
+                        border_radius=theme_config.border_radius,
                     ),
                 ),
             ),
