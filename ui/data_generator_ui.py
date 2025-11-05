@@ -805,9 +805,9 @@ class DataGeneratorUI:
             self.status_label.set_text("Running generator...")
             self.status_progress.set_value(0.3)
 
-            # Run generator (will be implemented next)
+            # Run generator using the actual data_generator module
             process = await asyncio.create_subprocess_exec(
-                "uv", "run", "python", "-m", "ingest.persona_skewed_generator",
+                "uv", "run", "python", "-m", "ingest.data_generator",
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE
             )
