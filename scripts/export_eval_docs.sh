@@ -90,16 +90,36 @@ Generated: $(date)
 SpendSense MVP V2 - Explainable, Consent-Aware Financial Behavior Analysis
 EOF
 
+# Convert markdown files to HTML (printable to PDF from browser)
+echo -e "${GREEN}Converting markdown files to HTML...${NC}"
+MD_TO_PDF="$PROJECT_ROOT/scripts/md_to_pdf.py"
+if [ -f "$MD_TO_PDF" ]; then
+    for md_file in "$EXPORT_DIR"/*.md; do
+        if [ -f "$md_file" ]; then
+            html_file="${md_file%.md}.html"
+            python3 "$MD_TO_PDF" "$md_file" "$html_file" 2>/dev/null
+        fi
+    done
+else
+    echo "  ⚠️  md_to_pdf.py not found, skipping HTML conversion"
+fi
+
+# Remove empty PDF files if any exist
+rm -f "$EXPORT_DIR"/*.pdf 2>/dev/null
+
 # Count exported files
 echo ""
 echo -e "${BLUE}📊 Export Summary:${NC}"
 echo "  Results files: $(ls "$EXPORT_DIR"/*.{csv,json} 2>/dev/null | wc -l | xargs)"
-echo "  Report files: $(ls "$EXPORT_DIR"/*.md 2>/dev/null | wc -l | xargs)"
+echo "  Markdown files: $(ls "$EXPORT_DIR"/*.md 2>/dev/null | wc -l | xargs)"
+echo "  HTML files: $(ls "$EXPORT_DIR"/*.html 2>/dev/null | wc -l | xargs)"
 echo "  Trace files: $(ls "$EXPORT_DIR/traces"/*.json 2>/dev/null | wc -l | xargs)"
 
 echo ""
 echo -e "${GREEN}✅ Export complete!${NC}"
 echo "📁 Location: $EXPORT_DIR"
+echo ""
+echo "📄 HTML files can be opened in any browser and printed to PDF if needed"
 echo ""
 echo "To view:"
 echo "  open $EXPORT_DIR"
