@@ -605,3 +605,14 @@ class UserAppState(rx.State):
             except (ValueError, TypeError):
                 return "0.00"
         return "0.00"
+
+    @rx.var
+    def safe_sav_net_inflow(self) -> str:
+        """Safely get savings net inflow as formatted currency string."""
+        value = self.signals.get("sav_180d_net_inflow")
+        if value is not None:
+            try:
+                return f"${float(value):,.2f}"
+            except (ValueError, TypeError):
+                return "$0.00"
+        return "$0.00"
