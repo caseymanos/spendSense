@@ -1,0 +1,3182 @@
+{
+  "metadata": {
+    "analysis_date": "2025-11-05T01:58:15.638628",
+    "total_users_analyzed": 100,
+    "signals_file": "/home/user/spendSense/features/signals.parquet"
+  },
+  "revenue_model_assumptions": {
+    "high_utilization": {
+      "primary_offer": "0% Balance Transfer Credit Card",
+      "revenue_per_conversion": 150,
+      "conversion_rate": 0.07,
+      "secondary_revenue": 0,
+      "ltv_multiplier": 1.0,
+      "user_quality": "medium",
+      "notes": "High per-transaction value but lower conversion and approval rates"
+    },
+    "variable_income": {
+      "primary_offer": "Marcus High-Yield Savings + YNAB",
+      "revenue_per_conversion": 100,
+      "conversion_rate": 0.12,
+      "secondary_revenue": 15,
+      "ltv_multiplier": 1.2,
+      "user_quality": "medium",
+      "notes": "Moderate revenue from deposit accounts and app subscriptions"
+    },
+    "subscription_heavy": {
+      "primary_offer": "Rocket Money Subscription Manager",
+      "revenue_per_conversion": 20,
+      "conversion_rate": 0.17,
+      "secondary_revenue": 0,
+      "ltv_multiplier": 1.1,
+      "user_quality": "medium",
+      "notes": "Lowest revenue potential - consumer app referrals only"
+    },
+    "savings_builder": {
+      "primary_offer": "Fidelity Go Robo-Advisor + Ally Savings",
+      "revenue_per_conversion": 200,
+      "conversion_rate": 0.12,
+      "secondary_revenue": 100,
+      "ltv_multiplier": 3.0,
+      "user_quality": "high",
+      "notes": "Highest LTV - investment accounts generate ongoing AUM fees + deposits grow"
+    },
+    "general": {
+      "primary_offer": "None",
+      "revenue_per_conversion": 0,
+      "conversion_rate": 0,
+      "secondary_revenue": 0,
+      "ltv_multiplier": 1.0,
+      "user_quality": "low",
+      "notes": "No recommendations, no revenue"
+    }
+  },
+  "expected_revenue_per_user_by_persona": {
+    "high_utilization": 10.500000000000002,
+    "variable_income": 16.56,
+    "subscription_heavy": 3.7400000000000007,
+    "savings_builder": 108.0,
+    "general": 0.0
+  },
+  "co_occurrence_analysis": {
+    "total_users": 100,
+    "multi_trigger_count": 4,
+    "multi_trigger_percentage": 4.0,
+    "persona_trigger_counts": {
+      "high_utilization": 19,
+      "savings_builder": 10,
+      "subscription_heavy": 36
+    },
+    "co_occurrence_pairs": {
+      "('savings_builder', 'subscription_heavy')": 1,
+      "('high_utilization', 'subscription_heavy')": 3
+    },
+    "multi_trigger_users": [
+      {
+        "user_id": "user_0033",
+        "triggered_personas": [
+          "subscription_heavy",
+          "savings_builder"
+        ],
+        "count": 2
+      },
+      {
+        "user_id": "user_0065",
+        "triggered_personas": [
+          "high_utilization",
+          "subscription_heavy"
+        ],
+        "count": 2
+      },
+      {
+        "user_id": "user_0072",
+        "triggered_personas": [
+          "high_utilization",
+          "subscription_heavy"
+        ],
+        "count": 2
+      },
+      {
+        "user_id": "user_0087",
+        "triggered_personas": [
+          "high_utilization",
+          "subscription_heavy"
+        ],
+        "count": 2
+      }
+    ]
+  },
+  "priority_order_comparison": {
+    "priority_order_results": {
+      "current_educational": {
+        "priority_order_name": "current_educational",
+        "priority_order": [
+          "high_utilization",
+          "variable_income",
+          "subscription_heavy",
+          "savings_builder",
+          "general"
+        ],
+        "total_users": 100,
+        "total_expected_revenue": 1294.9200000000003,
+        "avg_revenue_per_user": 12.949200000000003,
+        "persona_assignments": {
+          "high_utilization": 19,
+          "general": 39,
+          "savings_builder": 9,
+          "subscription_heavy": 33
+        },
+        "persona_revenue_totals": {
+          "high_utilization": 199.50000000000003,
+          "general": 0.0,
+          "savings_builder": 972.0,
+          "subscription_heavy": 123.41999999999994
+        },
+        "persona_revenue_per_user": {
+          "high_utilization": 10.500000000000002,
+          "general": 0.0,
+          "savings_builder": 108.0,
+          "subscription_heavy": 3.7399999999999984
+        },
+        "detailed_assignments": [
+          {
+            "user_id": "user_0000",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0001",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0002",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0003",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0004",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0005",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0006",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0007",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0008",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0009",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0010",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0011",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0012",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0013",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0014",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0015",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0016",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0017",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0018",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0019",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0020",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0021",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0022",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0023",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0024",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0025",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0026",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0027",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0028",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0029",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0030",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0031",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0032",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0033",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy",
+              "savings_builder"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0034",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0035",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0036",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0037",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0038",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0039",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0040",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0041",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0042",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0043",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0044",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0045",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0046",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0047",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0048",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0049",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0050",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0051",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0052",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0053",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0054",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0055",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0056",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0057",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0058",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0059",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0060",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0061",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0062",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0063",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0064",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0065",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0066",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0067",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0068",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0069",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0070",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0071",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0072",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0073",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0074",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0075",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0076",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0077",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0078",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0079",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0080",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0081",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0082",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0083",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0084",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0085",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0086",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0087",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0088",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0089",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0090",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0091",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0092",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0093",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0094",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0095",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0096",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0097",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0098",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0099",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          }
+        ]
+      },
+      "revenue_optimal": {
+        "priority_order_name": "revenue_optimal",
+        "priority_order": [
+          "savings_builder",
+          "high_utilization",
+          "variable_income",
+          "subscription_heavy",
+          "general"
+        ],
+        "total_users": 100,
+        "total_expected_revenue": 1399.1800000000003,
+        "avg_revenue_per_user": 13.991800000000003,
+        "persona_assignments": {
+          "high_utilization": 19,
+          "general": 39,
+          "savings_builder": 10,
+          "subscription_heavy": 32
+        },
+        "persona_revenue_totals": {
+          "high_utilization": 199.50000000000003,
+          "general": 0.0,
+          "savings_builder": 1080.0,
+          "subscription_heavy": 119.67999999999995
+        },
+        "persona_revenue_per_user": {
+          "high_utilization": 10.500000000000002,
+          "general": 0.0,
+          "savings_builder": 108.0,
+          "subscription_heavy": 3.7399999999999984
+        },
+        "detailed_assignments": [
+          {
+            "user_id": "user_0000",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0001",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0002",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0003",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0004",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0005",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0006",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0007",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0008",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0009",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0010",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0011",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0012",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0013",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0014",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0015",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0016",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0017",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0018",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0019",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0020",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0021",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0022",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0023",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0024",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0025",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0026",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0027",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0028",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0029",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0030",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0031",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0032",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0033",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "subscription_heavy",
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0034",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0035",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0036",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0037",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0038",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0039",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0040",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0041",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0042",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0043",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0044",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0045",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0046",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0047",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0048",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0049",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0050",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0051",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0052",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0053",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0054",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0055",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0056",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0057",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0058",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0059",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0060",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0061",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0062",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0063",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0064",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0065",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0066",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0067",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0068",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0069",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0070",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0071",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0072",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0073",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0074",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0075",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0076",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0077",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0078",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0079",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0080",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0081",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0082",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0083",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0084",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0085",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0086",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0087",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0088",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0089",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0090",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0091",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0092",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0093",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0094",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0095",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0096",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0097",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0098",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0099",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          }
+        ]
+      },
+      "hybrid_balanced": {
+        "priority_order_name": "hybrid_balanced",
+        "priority_order": [
+          "high_utilization",
+          "savings_builder",
+          "variable_income",
+          "subscription_heavy",
+          "general"
+        ],
+        "total_users": 100,
+        "total_expected_revenue": 1399.1800000000003,
+        "avg_revenue_per_user": 13.991800000000003,
+        "persona_assignments": {
+          "high_utilization": 19,
+          "general": 39,
+          "savings_builder": 10,
+          "subscription_heavy": 32
+        },
+        "persona_revenue_totals": {
+          "high_utilization": 199.50000000000003,
+          "general": 0.0,
+          "savings_builder": 1080.0,
+          "subscription_heavy": 119.67999999999995
+        },
+        "persona_revenue_per_user": {
+          "high_utilization": 10.500000000000002,
+          "general": 0.0,
+          "savings_builder": 108.0,
+          "subscription_heavy": 3.7399999999999984
+        },
+        "detailed_assignments": [
+          {
+            "user_id": "user_0000",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0001",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0002",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0003",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0004",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0005",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0006",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0007",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0008",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0009",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0010",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0011",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0012",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0013",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0014",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0015",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0016",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0017",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0018",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0019",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0020",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0021",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0022",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0023",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0024",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0025",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0026",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0027",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0028",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0029",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0030",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0031",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0032",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0033",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "subscription_heavy",
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0034",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0035",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0036",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0037",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0038",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0039",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0040",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0041",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0042",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0043",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0044",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0045",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0046",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0047",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0048",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0049",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0050",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0051",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0052",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0053",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0054",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0055",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0056",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0057",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0058",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0059",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0060",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0061",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0062",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0063",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0064",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0065",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0066",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0067",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0068",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0069",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0070",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0071",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0072",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0073",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0074",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0075",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0076",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0077",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0078",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0079",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0080",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0081",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0082",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0083",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0084",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0085",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0086",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0087",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0088",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0089",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0090",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0091",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0092",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0093",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0094",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0095",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0096",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0097",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0098",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0099",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          }
+        ]
+      },
+      "ltv_optimal": {
+        "priority_order_name": "ltv_optimal",
+        "priority_order": [
+          "savings_builder",
+          "variable_income",
+          "high_utilization",
+          "subscription_heavy",
+          "general"
+        ],
+        "total_users": 100,
+        "total_expected_revenue": 1399.1800000000003,
+        "avg_revenue_per_user": 13.991800000000003,
+        "persona_assignments": {
+          "high_utilization": 19,
+          "general": 39,
+          "savings_builder": 10,
+          "subscription_heavy": 32
+        },
+        "persona_revenue_totals": {
+          "high_utilization": 199.50000000000003,
+          "general": 0.0,
+          "savings_builder": 1080.0,
+          "subscription_heavy": 119.67999999999995
+        },
+        "persona_revenue_per_user": {
+          "high_utilization": 10.500000000000002,
+          "general": 0.0,
+          "savings_builder": 108.0,
+          "subscription_heavy": 3.7399999999999984
+        },
+        "detailed_assignments": [
+          {
+            "user_id": "user_0000",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0001",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0002",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0003",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0004",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0005",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0006",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0007",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0008",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0009",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0010",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0011",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0012",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0013",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0014",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0015",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0016",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0017",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0018",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0019",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0020",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0021",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0022",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0023",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0024",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0025",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0026",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0027",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0028",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0029",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0030",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0031",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0032",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0033",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "subscription_heavy",
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0034",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0035",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0036",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0037",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0038",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0039",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0040",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0041",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0042",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0043",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0044",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0045",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0046",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0047",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0048",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0049",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0050",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0051",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0052",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0053",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0054",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0055",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0056",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0057",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0058",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0059",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0060",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0061",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0062",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0063",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0064",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0065",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0066",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0067",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0068",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0069",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0070",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0071",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0072",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0073",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0074",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0075",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0076",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0077",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0078",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0079",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0080",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0081",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0082",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0083",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0084",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0085",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0086",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0087",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization",
+              "subscription_heavy"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0088",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0089",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0090",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0091",
+            "assigned_persona": "savings_builder",
+            "triggered_personas": [
+              "savings_builder"
+            ],
+            "expected_revenue": 108.0
+          },
+          {
+            "user_id": "user_0092",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0093",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0094",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          },
+          {
+            "user_id": "user_0095",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0096",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0097",
+            "assigned_persona": "general",
+            "triggered_personas": [],
+            "expected_revenue": 0.0
+          },
+          {
+            "user_id": "user_0098",
+            "assigned_persona": "high_utilization",
+            "triggered_personas": [
+              "high_utilization"
+            ],
+            "expected_revenue": 10.500000000000002
+          },
+          {
+            "user_id": "user_0099",
+            "assigned_persona": "subscription_heavy",
+            "triggered_personas": [
+              "subscription_heavy"
+            ],
+            "expected_revenue": 3.7400000000000007
+          }
+        ]
+      }
+    },
+    "revenue_lift": {
+      "revenue_optimal": {
+        "lift_dollars": 104.25999999999999,
+        "lift_percentage": 8.051462638618599
+      },
+      "hybrid_balanced": {
+        "lift_dollars": 104.25999999999999,
+        "lift_percentage": 8.051462638618599
+      },
+      "ltv_optimal": {
+        "lift_dollars": 104.25999999999999,
+        "lift_percentage": 8.051462638618599
+      }
+    }
+  },
+  "opportunity_cost_analysis": {
+    "total_opportunity_cost": 104.26,
+    "affected_user_count": 1,
+    "avg_opportunity_cost_per_user": 104.26,
+    "opportunity_losses": [
+      {
+        "user_id": "user_0033",
+        "triggered_personas": [
+          "subscription_heavy",
+          "savings_builder"
+        ],
+        "assigned_persona": "subscription_heavy",
+        "assigned_revenue": 3.7400000000000007,
+        "optimal_persona": "savings_builder",
+        "optimal_revenue": 108.0,
+        "opportunity_cost": 104.26
+      }
+    ]
+  }
+}
