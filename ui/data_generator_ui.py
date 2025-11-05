@@ -811,11 +811,30 @@ class DataGeneratorUI:
             )
 
             stdout, stderr = await process.communicate()
-            self.status_progress.set_value(1.0)
+            self.status_progress.set_value(0.6)
 
             if process.returncode == 0:
-                self.status_label.set_text(f"✓ Generation complete! {stdout.decode()}")
-                ui.notify("Data generation successful!", type="positive")
+                self.status_label.set_text(f"✓ Generation complete! Loading into database...")
+                ui.notify("Data generation successful! Loading data...", type="positive")
+
+                # Automatically run the loader
+                self.status_progress.set_value(0.7)
+                loader_process = await asyncio.create_subprocess_exec(
+                    "uv", "run", "python", "-m", "ingest.loader",
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE
+                )
+
+                loader_stdout, loader_stderr = await loader_process.communicate()
+                self.status_progress.set_value(1.0)
+
+                if loader_process.returncode == 0:
+                    self.status_label.set_text(f"✓ Complete! Data generated and loaded successfully.")
+                    ui.notify("Data generated and loaded successfully! Dashboard will auto-refresh.", type="positive", timeout=5000)
+                else:
+                    loader_error = loader_stderr.decode() or "Unknown loader error"
+                    self.status_label.set_text(f"⚠ Generated but loader failed: {loader_error}")
+                    ui.notify(f"Data generated but loading failed: {loader_error}", type="warning")
             else:
                 error_msg = stderr.decode() or "Unknown error"
                 self.status_label.set_text(f"✗ Generation failed: {error_msg}")
