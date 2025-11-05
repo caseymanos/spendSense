@@ -15,6 +15,15 @@ from api.models import (
     FeedbackRequest,
     OperatorReviewRequest,
     EvaluationSummaryResponse,
+    UserSummary,
+    ConsentUpdateResponse,
+)
+
+from api.services.data import (
+    list_users,
+    get_profile as svc_get_profile,
+    get_recommendations as svc_get_recommendations,
+    set_consent as svc_set_consent,
 )
 
 
@@ -45,44 +54,34 @@ async def health_check():
 
 
 # User endpoints
-@app.post("/users", tags=["Users"], status_code=status.HTTP_201_CREATED)
-async def create_user(user_data: dict):
-    """Create a new user (placeholder for PR #1)"""
-    # TODO: Implement in future PR when user creation is needed
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="User creation will be implemented in a future PR",
-    )
+@app.get("/users", response_model=list[UserSummary], tags=["Users"])
+async def get_users():
+    """List users for selection with consent flags."""
+    return list_users()
 
 
-@app.post("/consent", tags=["Users"])
+@app.post("/consent", response_model=ConsentUpdateResponse, tags=["Users"])
 async def update_consent(request: ConsentRequest):
-    """Grant or revoke user consent"""
-    # TODO: Implement consent management in PR #5 (Guardrails)
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Consent management will be implemented in PR #5",
-    )
+    """Grant or revoke user consent."""
+    updated = svc_set_consent(request.user_id, request.consent_granted)
+    if not updated:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Consent update failed")
+    return {"success": True, "user": updated}
 
 
 @app.get("/profile/{user_id}", response_model=UserProfileResponse, tags=["Users"])
 async def get_user_profile(user_id: str):
-    """Get user profile with persona and behavioral signals"""
-    # TODO: Implement in PR #3 (Personas)
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="User profile will be implemented in PR #3",
-    )
+    """Get user profile with persona and behavioral signals."""
+    profile = svc_get_profile(user_id)
+    if not profile:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return profile
 
 
 @app.get("/recommendations/{user_id}", response_model=UserRecommendationsResponse, tags=["Users"])
 async def get_recommendations(user_id: str):
-    """Get personalized recommendations for a user"""
-    # TODO: Implement in PR #4 (Recommendations)
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Recommendations will be implemented in PR #4",
-    )
+    """Get personalized recommendations for a user."""
+    return svc_get_recommendations(user_id)
 
 
 @app.post("/feedback", tags=["Users"])

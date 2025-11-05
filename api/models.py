@@ -56,7 +56,7 @@ class RecommendationResponse(BaseModel):
     """Recommendation item"""
 
     recommendation_id: str
-    type: str  # education or offer
+    type: str  # education or partner_offer
     title: str
     rationale: str
     disclaimer: str
@@ -70,6 +70,21 @@ class UserRecommendationsResponse(BaseModel):
     persona: Optional[str] = None
     recommendations: List[RecommendationResponse]
     generated_at: datetime
+
+
+class UserSummary(BaseModel):
+    """Lightweight user object for listings and consent updates"""
+
+    user_id: str
+    name: str
+    consent_granted: bool
+
+
+class ConsentUpdateResponse(BaseModel):
+    """Response for consent grant/revoke"""
+
+    success: bool
+    user: UserSummary
 
 
 class EvaluationSummaryResponse(BaseModel):
