@@ -438,9 +438,9 @@ def render_dashboard(
             )
         if signals.get("sav_180d_emergency_fund_months"):
             st.metric(
-                label="Emergency Fund",
+                label="Emergency Fund (6-month avg)",
                 value=f"{signals.get('sav_180d_emergency_fund_months', 0):.1f} mo",
-                help="Months of expenses covered by savings",
+                help="Months of expenses covered by savings (based on 6-month average spending)",
             )
 
     # Income metrics

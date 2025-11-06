@@ -30,7 +30,7 @@ from ingest.constants import (
     PREDATORY_PRODUCTS,
     TRACE_CONFIG,
 )
-from recommend.content_catalog import (
+from recommend.content_loader import (
     get_education_items,
     get_partner_offers,
 )
@@ -131,6 +131,9 @@ def generate_recommendations(user_id: str) -> Dict[str, Any]:
 
     # Select partner offers (1-3) with eligibility filtering
     offer_recs = _select_partner_offers(persona, user_context)
+
+    # Deduplicate and enforce diversity
+    education_recs, offer_recs = _deduplicate_and_enforce_diversity(education_recs, offer_recs)
 
     # Combine recommendations
     all_recommendations = education_recs + offer_recs
@@ -290,12 +293,21 @@ def _select_education_items(persona: str, user_context: Dict[str, Any]) -> List[
         if _check_content_eligibility(item, signals, user_context):
             eligible_items.append(item)
 
+    # Score each eligible item for relevance
+    scored_items = []
+    for item in eligible_items:
+        score = _score_recommendation(item, signals, user_context, "education")
+        scored_items.append((item, score))
+
+    # Sort by score descending (highest relevance first)
+    scored_items.sort(key=lambda x: x[1], reverse=True)
+
     # Limit to 3-5 items
     min_items = RECOMMENDATION_LIMITS["education_items_min"]
     max_items = RECOMMENDATION_LIMITS["education_items_max"]
 
-    # Take top items (already prioritized in catalog order)
-    selected_items = eligible_items[:max_items]
+    # Take top items by score
+    selected_items = [item for item, score in scored_items[:max_items]]
 
     # Format recommendations with rationales
     recommendations = []
@@ -309,6 +321,8 @@ def _select_education_items(persona: str, user_context: Dict[str, Any]) -> List[
                 "title": item["title"],
                 "description": item["description"],
                 "category": item.get("category", "general"),
+                "topic": item.get("topic", "general"),
+                "partner_equivalent": item.get("partner_equivalent", False),
                 "rationale": rationale,
             }
         )
@@ -345,11 +359,21 @@ def _select_partner_offers(persona: str, user_context: Dict[str, Any]) -> List[D
         if _check_offer_eligibility(offer, signals, user_context, income_tier):
             eligible_offers.append(offer)
 
+    # Score each eligible offer for relevance
+    scored_offers = []
+    for offer in eligible_offers:
+        score = _score_recommendation(offer, signals, user_context, "partner_offer")
+        scored_offers.append((offer, score))
+
+    # Sort by score descending (highest relevance first)
+    scored_offers.sort(key=lambda x: x[1], reverse=True)
+
     # Limit to 1-3 offers
     min_offers = RECOMMENDATION_LIMITS["partner_offers_min"]
     max_offers = RECOMMENDATION_LIMITS["partner_offers_max"]
 
-    selected_offers = eligible_offers[:max_offers]
+    # Take top offers by score
+    selected_offers = [offer for offer, score in scored_offers[:max_offers]]
 
     # Format recommendations with rationales
     recommendations = []
@@ -363,11 +387,192 @@ def _select_partner_offers(persona: str, user_context: Dict[str, Any]) -> List[D
                 "title": offer["title"],
                 "description": offer["description"],
                 "category": offer.get("category", "general"),
+                "topic": offer.get("topic", "general"),
                 "rationale": rationale,
             }
         )
 
     return recommendations
+
+
+def _score_recommendation(
+    item: Dict[str, Any],
+    signals: Dict[str, Any],
+    user_context: Dict[str, Any],
+    rec_type: str,
+) -> float:
+    """
+    Calculate relevance score for a recommendation based on user signals.
+
+    Higher scores indicate more relevant/urgent recommendations.
+
+    Args:
+        item: Recommendation item (education or partner offer)
+        signals: User behavioral signals
+        user_context: Full user context
+        rec_type: "education" or "partner_offer"
+
+    Returns:
+        Relevance score (0-100, higher is more relevant)
+    """
+    score = 50.0  # Base score
+    category = item.get("category", "general")
+    topic = item.get("topic", "general")
+
+    # CREDIT-RELATED SCORING
+    if category in ["credit_basics", "debt_paydown", "credit_card"]:
+        util_pct = signals.get("credit_avg_util_pct", 0)
+        # High utilization = higher urgency
+        if util_pct > 70:
+            score += 30  # Critical urgency
+        elif util_pct > 50:
+            score += 20  # High urgency
+        elif util_pct > 30:
+            score += 10  # Moderate urgency
+
+        # Estimate potential monthly interest savings
+        num_cards = signals.get("credit_num_cards", 0)
+        if num_cards > 0:
+            accounts = user_context.get("accounts", [])
+            credit_cards = [a for a in accounts if a.get("account_type") == "credit"]
+            if credit_cards:
+                total_balance = sum(c.get("balance_current", 0) for c in credit_cards)
+                monthly_interest = total_balance * (0.18 / 12)
+                # Add up to 15 points based on potential savings
+                score += min(15, monthly_interest / 20)
+
+    # SUBSCRIPTION-RELATED SCORING
+    elif category in ["subscription_management", "subscription_app"]:
+        recurring_count = signals.get("sub_180d_recurring_count", 0)
+        monthly_spend = signals.get("sub_180d_monthly_spend", 0)
+        share_pct = signals.get("sub_180d_share_pct", 0)
+
+        # More subscriptions = higher relevance
+        if recurring_count >= 6:
+            score += 20
+        elif recurring_count >= 4:
+            score += 10
+
+        # Higher spend = more potential savings
+        if monthly_spend > 200:
+            score += 15
+        elif monthly_spend > 100:
+            score += 10
+
+        # High subscription share indicates opportunity
+        if share_pct > 15:
+            score += 10
+
+    # SAVINGS-RELATED SCORING
+    elif category in ["savings_optimization", "savings_account", "cd_account", "investment_account"]:
+        net_inflow = signals.get("sav_180d_net_inflow", 0)
+        growth_rate = signals.get("sav_180d_growth_rate_pct", 0)
+        emergency_fund = signals.get("sav_180d_emergency_fund_months", 0)
+
+        # Positive savings behavior = higher relevance
+        if net_inflow > 2000:
+            score += 20  # Significant savings
+        elif net_inflow > 1000:
+            score += 15
+        elif net_inflow > 500:
+            score += 10
+
+        # Growth rate indicates engagement
+        if growth_rate > 5:
+            score += 10
+        elif growth_rate > 3:
+            score += 5
+
+        # Strong emergency fund = ready for optimization
+        if emergency_fund >= 6 and topic == "cd_accounts":
+            score += 15  # Ready to lock in some funds
+        elif emergency_fund >= 5 and topic == "investment_account":
+            score += 10  # Ready to invest beyond emergency fund
+
+    # INCOME-RELATED SCORING
+    elif category in ["budgeting", "tax_planning", "tax_app", "emergency_fund"]:
+        pay_gap = signals.get("inc_180d_median_pay_gap_days", 0)
+        cash_buffer = signals.get("inc_180d_cash_buffer_months", 0)
+
+        # Longer pay gaps = higher urgency
+        if pay_gap > 45:
+            score += 25
+        elif pay_gap > 35:
+            score += 15
+        elif pay_gap > 30:
+            score += 10
+
+        # Low cash buffer = higher urgency for emergency fund content
+        if topic in ["emergency_fund_variable_income", "emergency_fund_calculator"]:
+            if cash_buffer < 2:
+                score += 20
+            elif cash_buffer < 4:
+                score += 10
+
+    # PARTNER OFFER PREMIUM
+    # Partner offers get slight boost if they solve an immediate need
+    if rec_type == "partner_offer":
+        score += 5
+
+    return score
+
+
+def _deduplicate_and_enforce_diversity(
+    education_recs: List[Dict[str, Any]],
+    offer_recs: List[Dict[str, Any]],
+) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """
+    Remove duplicate topics and enforce diversity across recommendations.
+
+    Rules:
+    1. If an education item has partner_equivalent=True AND a partner offer exists
+       with the same topic, remove the education item (keep the actionable offer)
+    2. Max 2 items per category across education + offers combined
+
+    Args:
+        education_recs: List of education recommendations
+        offer_recs: List of partner offer recommendations
+
+    Returns:
+        Tuple of (deduplicated_education, deduplicated_offers)
+    """
+    # Build topic sets
+    offer_topics = {rec.get("topic") for rec in offer_recs if rec.get("topic")}
+
+    # Remove education items that have partner equivalents
+    filtered_education = []
+    for rec in education_recs:
+        topic = rec.get("topic")
+        has_partner = rec.get("partner_equivalent", False)
+
+        # If this education item has a partner offer with same topic, skip it
+        if has_partner and topic in offer_topics:
+            continue  # Skip - offer is more actionable
+        else:
+            filtered_education.append(rec)
+
+    # Enforce category diversity (max 2 per category)
+    category_counts = {}
+    final_education = []
+    final_offers = []
+
+    # Process offers first (higher priority)
+    for rec in offer_recs:
+        category = rec.get("category", "general")
+        count = category_counts.get(category, 0)
+        if count < 2:
+            final_offers.append(rec)
+            category_counts[category] = count + 1
+
+    # Process education items
+    for rec in filtered_education:
+        category = rec.get("category", "general")
+        count = category_counts.get(category, 0)
+        if count < 2:
+            final_education.append(rec)
+            category_counts[category] = count + 1
+
+    return final_education, final_offers
 
 
 def _check_content_eligibility(

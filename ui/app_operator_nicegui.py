@@ -40,6 +40,16 @@ from ui.utils.data_loaders import TRACES_DIR as _TRACES_DIR
 # Import recommendation engine for live generation
 from recommend.engine import generate_recommendations
 
+# Import content management
+from recommend.content_loader import (
+    load_content_catalog,
+    save_override,
+    delete_override,
+    reset_to_defaults,
+    export_catalog,
+    get_all_personas,
+)
+
 # Import components
 from ui.components import (
     create_summary_metrics_row,
@@ -1261,6 +1271,315 @@ def render_data_generation_tab():
     data_gen_ui = DataGeneratorUI()
     data_gen_ui.render()
 
+
+# =============================================================================
+# TAB 8: CONTENT MANAGEMENT (NEW)
+# =============================================================================
+
+
+@ui.refreshable
+def render_content_management_tab():
+    """Render Content Management tab for editing recommendations."""
+    import json
+
+    # Load current catalog
+    catalog = load_content_catalog()
+
+    # State for selected item
+    selected_item = {"persona": None, "type": None, "index": None, "data": {}}
+    filter_state = {"persona": "all", "type": "all", "search": ""}
+
+    ui.label("📚 Content Management").classes("text-2xl font-bold mb-4")
+    ui.label("Edit educational content and partner offers").classes("text-gray-500 mb-6")
+
+    # Top controls row
+    with ui.row().classes("w-full gap-4 mb-6"):
+        persona_filter = ui.select(
+            label="Filter by Persona",
+            options=["all"] + get_all_personas(),
+            value="all",
+            on_change=lambda: render_content_list.refresh()
+        ).classes("w-64")
+        persona_filter.bind_value(filter_state, "persona")
+
+        type_filter = ui.select(
+            label="Content Type",
+            options=["all", "educational", "offers"],
+            value="all",
+            on_change=lambda: render_content_list.refresh()
+        ).classes("w-48")
+        type_filter.bind_value(filter_state, "type")
+
+        search_input = ui.input(
+            label="Search",
+            placeholder="Search by title or topic...",
+            on_change=lambda: render_content_list.refresh()
+        ).classes("flex-grow")
+        search_input.bind_value(filter_state, "search")
+
+        def reset_filters():
+            filter_state["persona"] = "all"
+            filter_state["type"] = "all"
+            filter_state["search"] = ""
+            persona_filter.update()
+            type_filter.update()
+            search_input.update()
+            render_content_list.refresh()
+
+        ui.button("Reset Filters", on_click=reset_filters).props("flat color=grey")
+
+    # Main content area with two panels
+    with ui.row().classes("w-full gap-4"):
+        # LEFT PANEL: Content List (60%)
+        with ui.card().classes("w-3/5 p-4"):
+            ui.label("Content Items").classes("text-lg font-bold mb-4")
+
+            @ui.refreshable
+            def render_content_list():
+                """Render filtered list of content items."""
+                items_found = 0
+
+                for content_type in ["educational", "offers"]:
+                    if filter_state["type"] != "all" and filter_state["type"] != content_type:
+                        continue
+
+                    for persona in get_all_personas():
+                        if filter_state["persona"] != "all" and filter_state["persona"] != persona:
+                            continue
+
+                        items = catalog.get(content_type, {}).get(persona, [])
+
+                        for idx, item in enumerate(items):
+                            # Apply search filter
+                            if filter_state["search"]:
+                                search_term = filter_state["search"].lower()
+                                if (search_term not in item.get("title", "").lower() and
+                                    search_term not in item.get("topic", "").lower()):
+                                    continue
+
+                            items_found += 1
+
+                            # Render item card
+                            with ui.expansion(item.get("title", "Untitled"), icon="article" if content_type == "educational" else "sell").classes("w-full mb-2"):
+                                with ui.row().classes("w-full gap-2 items-start"):
+                                    ui.badge(persona.replace("_", " ").title()).props(f"color={'blue' if content_type == 'educational' else 'green'}")
+                                    ui.badge(item.get("category", "general")).props("color=grey")
+                                    if item.get("topic"):
+                                        ui.badge(f"#{item.get('topic')}").props("color=orange outline")
+
+                                ui.label(item.get("description", "")[:150] + "...").classes("text-sm text-gray-600 my-2")
+
+                                with ui.row().classes("gap-2"):
+                                    ui.button(
+                                        "Edit",
+                                        icon="edit",
+                                        on_click=lambda p=persona, t=content_type, i=idx: load_item_for_editing(p, t, i)
+                                    ).props("size=sm color=primary")
+
+                                    ui.button(
+                                        "Delete",
+                                        icon="delete",
+                                        on_click=lambda p=persona, t=content_type, i=idx, title=item.get("title"): confirm_delete_item(p, t, i, title)
+                                    ).props("size=sm color=red flat")
+
+                if items_found == 0:
+                    ui.label("No items match your filters").classes("text-gray-500 italic")
+
+            render_content_list()
+
+            # Add New Item button
+            ui.separator().classes("my-4")
+            ui.button(
+                "+ Add New Item",
+                icon="add_circle",
+                on_click=lambda: load_blank_form()
+            ).props("color=green outline")
+
+        # RIGHT PANEL: Edit Form (40%)
+        with ui.card().classes("w-2/5 p-4"):
+            ui.label("Edit Form").classes("text-lg font-bold mb-4")
+
+            @ui.refreshable
+            def render_edit_form():
+                """Render the edit form for selected item."""
+                if not selected_item["data"]:
+                    ui.label("← Select an item to edit or click '+ Add New Item'").classes("text-gray-500 italic")
+                    return
+
+                # Form fields
+                title_input = ui.input(
+                    label="Title",
+                    value=selected_item["data"].get("title", "")
+                ).classes("w-full mb-2")
+
+                description_input = ui.textarea(
+                    label="Description",
+                    value=selected_item["data"].get("description", "")
+                ).classes("w-full mb-2").props("rows=3")
+
+                with ui.row().classes("w-full gap-2 mb-2"):
+                    category_input = ui.input(
+                        label="Category",
+                        value=selected_item["data"].get("category", "")
+                    ).classes("flex-grow")
+
+                    topic_input = ui.input(
+                        label="Topic",
+                        value=selected_item["data"].get("topic", "")
+                    ).classes("flex-grow")
+
+                rationale_input = ui.textarea(
+                    label="Rationale Template",
+                    value=selected_item["data"].get("rationale_template", ""),
+                    placeholder="Use {placeholders} for user data"
+                ).classes("w-full mb-2").props("rows=4")
+
+                partner_equiv_checkbox = ui.checkbox(
+                    "Has Partner Equivalent",
+                    value=selected_item["data"].get("partner_equivalent", False)
+                ).classes("mb-2")
+
+                ui.label("Eligibility Rules (JSON)").classes("font-bold mb-1")
+                eligibility_input = ui.textarea(
+                    value=json.dumps(selected_item["data"].get("eligibility", {}), indent=2),
+                    placeholder='{"min_utilization": 0.30}'
+                ).classes("w-full mb-4").props("rows=6")
+
+                # Action buttons
+                with ui.row().classes("gap-2"):
+                    def save_item():
+                        """Save the edited item."""
+                        nonlocal catalog  # Declare nonlocal at the top of the function
+                        try:
+                            # Parse eligibility JSON
+                            eligibility = json.loads(eligibility_input.value or "{}")
+
+                            # Build updated item
+                            updated_item = {
+                                "title": title_input.value,
+                                "description": description_input.value,
+                                "category": category_input.value,
+                                "topic": topic_input.value,
+                                "rationale_template": rationale_input.value,
+                                "partner_equivalent": partner_equiv_checkbox.value,
+                                "eligibility": eligibility,
+                            }
+
+                            # Save override
+                            save_override(
+                                selected_item["type"],
+                                selected_item["persona"],
+                                updated_item
+                            )
+
+                            ui.notify("✓ Item saved successfully!", type="positive")
+
+                            # Refresh catalog and list
+                            catalog = load_content_catalog()
+                            render_content_list.refresh()
+
+                        except json.JSONDecodeError as e:
+                            ui.notify(f"Invalid JSON in eligibility: {e}", type="negative")
+                        except Exception as e:
+                            ui.notify(f"Error saving item: {e}", type="negative")
+
+                    ui.button("Save", icon="save", on_click=save_item).props("color=primary")
+                    ui.button("Cancel", icon="cancel", on_click=lambda: (
+                        selected_item.update({"persona": None, "type": None, "index": None, "data": {}}),
+                        render_edit_form.refresh()
+                    )).props("flat")
+
+            render_edit_form()
+
+    # Helper functions
+    def load_item_for_editing(persona, content_type, index):
+        """Load an item into the edit form."""
+        items = catalog.get(content_type, {}).get(persona, [])
+        if index < len(items):
+            selected_item["persona"] = persona
+            selected_item["type"] = content_type
+            selected_item["index"] = index
+            selected_item["data"] = items[index].copy()
+            render_edit_form.refresh()
+
+    def load_blank_form():
+        """Load a blank form for creating new item."""
+        selected_item["persona"] = get_all_personas()[0]  # Default to first persona
+        selected_item["type"] = "educational"
+        selected_item["index"] = -1  # -1 indicates new item
+        selected_item["data"] = {
+            "title": "",
+            "description": "",
+            "category": "",
+            "topic": "",
+            "rationale_template": "",
+            "partner_equivalent": False,
+            "eligibility": {}
+        }
+        render_edit_form.refresh()
+
+    def confirm_delete_item(persona, content_type, index, title):
+        """Confirm and delete an item."""
+        async def delete():
+            nonlocal catalog  # Declare nonlocal at the top
+            try:
+                items = catalog.get(content_type, {}).get(persona, [])
+                if index < len(items):
+                    item = items[index]
+                    item_id = item.get("id") or f"{item.get('title', '').lower().replace(' ', '_')}_{item.get('topic', '')}"
+                    delete_override(content_type, persona, item_id)
+
+                    ui.notify(f"✓ Deleted: {title}", type="positive")
+
+                    # Refresh
+                    catalog = load_content_catalog()
+                    render_content_list.refresh()
+
+                    # Clear edit form if this item was selected
+                    if selected_item["index"] == index:
+                        selected_item.update({"persona": None, "type": None, "index": None, "data": {}})
+                        render_edit_form.refresh()
+            except Exception as e:
+                ui.notify(f"Error deleting item: {e}", type="negative")
+
+        with ui.dialog() as dialog, ui.card():
+            ui.label(f"Delete '{title}'?").classes("text-lg font-bold")
+            ui.label("This will mark the item as deleted in overrides.").classes("text-sm text-gray-500 mb-4")
+            with ui.row():
+                ui.button("Cancel", on_click=dialog.close).props("flat")
+                ui.button("Delete", on_click=lambda: (delete(), dialog.close())).props("color=red")
+        dialog.open()
+
+    # Bottom action buttons
+    ui.separator().classes("my-6")
+    with ui.row().classes("gap-4"):
+        def handle_reset():
+            """Reset to defaults."""
+            with ui.dialog() as dialog, ui.card():
+                ui.label("Reset to Defaults?").classes("text-lg font-bold")
+                ui.label("This will delete all operator overrides and revert to default catalog.").classes("text-sm mb-4")
+                with ui.row():
+                    ui.button("Cancel", on_click=dialog.close).props("flat")
+                    ui.button("Reset", on_click=lambda: (
+                        reset_to_defaults(),
+                        ui.notify("✓ Reset to defaults", type="positive"),
+                        dialog.close(),
+                        render_content_management_tab.refresh()
+                    )).props("color=red")
+            dialog.open()
+
+        def handle_export():
+            """Export catalog."""
+            try:
+                export_path = export_catalog()
+                ui.notify(f"✓ Exported to {export_path}", type="positive")
+            except Exception as e:
+                ui.notify(f"Error exporting: {e}", type="negative")
+
+        ui.button("Reset to Defaults", icon="refresh", on_click=handle_reset).props("color=red outline")
+        ui.button("Export Catalog", icon="download", on_click=handle_export).props("color=blue outline")
+
+
 # =============================================================================
 # MAIN PAGE
 # =============================================================================
@@ -1313,6 +1632,7 @@ async def main_page():
                 render_decision_trace_viewer_tab.refresh()
                 render_guardrails_monitor_tab.refresh()
                 render_data_generation_tab.refresh()
+                render_content_management_tab.refresh()
                 app.storage.user["last_data_mtime"] = _get_data_mtime()
 
             ui.button(icon="refresh", on_click=handle_refresh).props("flat round")
@@ -1337,6 +1657,7 @@ async def main_page():
         tab_traces = ui.tab("Traces", icon="timeline")
         tab_guardrails = ui.tab("Guardrails", icon="shield")
         tab_datagen = ui.tab("Data Generation", icon="build")
+        tab_content = ui.tab("Content Management", icon="edit_note")
 
     with ui.tab_panels(tabs, value=tab_overview).classes("w-full p-6"):
         with ui.tab_panel(tab_overview):
@@ -1359,6 +1680,9 @@ async def main_page():
 
         with ui.tab_panel(tab_datagen):
             render_data_generation_tab()
+
+        with ui.tab_panel(tab_content):
+            render_content_management_tab()
 
 
 # =============================================================================

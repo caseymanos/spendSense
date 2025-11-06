@@ -1200,3 +1200,129 @@
 **Note:** Presets now work end-to-end. Changing preset in UI produces expected persona distribution changes throughout the application.
 
 ---
+
+## Recommendation System Improvements ✅ COMPLETED
+
+**Goal:** Enhance recommendation system with deduplication, smart scoring, and operator content management
+
+**Date:** 2025-11-05
+
+### Tasks Completed:
+
+- [x] **Add topic-based deduplication**
+  - Added `topic` and `partner_equivalent` fields to all 32 content items in `recommend/content_catalog.py`
+  - Implemented `_deduplicate_and_enforce_diversity()` in `recommend/engine.py`
+  - Removes educational items when partner offers with same topic exist
+  - Enforces max 2 items per category for diversity
+  - **Result:** ✅ User_0004 now gets 5 recommendations (down from 6), no duplicate HYSA content
+
+- [x] **Implement context-aware scoring**
+  - Created `_score_recommendation()` function with 0-100 relevance scoring
+  - Scoring based on signal strength, urgency, and potential impact
+  - Credit-related content prioritized for high utilization users
+  - Savings content boosted for users with positive inflow
+  - **Result:** ✅ Recommendations now ranked by relevance to user's financial situation
+
+- [x] **Standardize emergency fund calculations**
+  - Changed from 30d to 180d window for consistency
+  - Updated UI labels to show "Emergency Fund (6-month avg)"
+  - Added help text explaining calculation method
+  - **Result:** ✅ No more confusion between 4.3mo and "6mo of savings"
+
+- [x] **Create hybrid content management system**
+  - Created `recommend/content_loader.py` with JSON override system
+  - Default content from Python code (`content_catalog.py`)
+  - Operator overrides stored in `data/content_overrides.json`
+  - Non-destructive: never modifies Python source
+  - Functions: `load_content_catalog()`, `save_override()`, `delete_override()`, `reset_to_defaults()`
+  - **Result:** ✅ Operators can edit content without touching code
+
+- [x] **Add Content Management tab to operator dashboard**
+  - 8th tab in NiceGUI operator interface at http://localhost:8081
+  - Filter by persona, content type, search by title/topic
+  - Two-panel layout: content list + edit form
+  - Full CRUD operations: view, add, edit, delete content
+  - Export catalog and reset to defaults buttons
+  - **Result:** ✅ Complete operator content management UI
+
+- [x] **Fix filter interactivity**
+  - Added `on_change` callbacks to all filter controls
+  - Fixed "Reset Filters" button to use dict assignment
+  - Content list now refreshes automatically when filters change
+  - **Result:** ✅ Filters work immediately when changed
+
+- [x] **Update recommendation engine integration**
+  - Modified `recommend/engine.py` to use `content_loader` instead of direct imports
+  - Recommendations now include operator overrides automatically
+  - Maintained all scoring, deduplication, and eligibility logic
+  - **Result:** ✅ Operator edits appear in recommendations immediately
+
+### Testing Results:
+
+**Deduplication:**
+- User_0004 previously had 2 HYSA recommendations (education + partner offer)
+- After deduplication: 1 HYSA recommendation (partner offer only)
+- Total recommendations: 6 → 5 (more focused)
+
+**Content Management:**
+- Created test override item
+- Verified it appeared in recommendations at position #2
+- Deleted test override
+- Confirmed catalog returned to original state
+- All operations persisted in `data/content_overrides.json`
+
+**Scoring:**
+- CD recommendation scored 70 for user_0004 (good emergency fund)
+- HYSA offer scored 75 (highest priority due to savings growth)
+- Test item scored between 50-60 (base score)
+
+### Files Created:
+- `recommend/content_loader.py` (~325 lines)
+  - `load_content_catalog()` - Loads defaults + applies overrides
+  - `save_override()` - Saves operator modifications
+  - `delete_override()` - Marks items as deleted
+  - `reset_to_defaults()` - Clears all overrides
+  - `export_catalog()` - Export merged catalog to JSON
+  - Helper functions for education/offers by persona
+
+### Files Modified:
+- `recommend/content_catalog.py` (~100 lines changed)
+  - Added `topic` field to all 32 content items
+  - Added `partner_equivalent` boolean flags
+  - Removed overly restrictive eligibility filters
+
+- `recommend/engine.py` (~170 lines added)
+  - Added `_score_recommendation()` function (120 lines)
+  - Added `_deduplicate_and_enforce_diversity()` function (55 lines)
+  - Changed imports to use `content_loader`
+  - Integrated scoring and deduplication into recommendation flow
+
+- `ui/app_operator_nicegui.py` (~320 lines added)
+  - Added 8th tab "Content Management"
+  - Added `render_content_management_tab()` function
+  - Two-panel layout with filters, search, edit form
+  - Full CRUD operations with refresh on change
+
+- `ui/app_user.py` (~5 lines changed)
+  - Updated emergency fund label to "Emergency Fund (6-month avg)"
+  - Added help text explaining calculation
+
+### Integration Points:
+- Content loader merges defaults from Python with JSON overrides
+- Recommendation engine uses merged catalog for all operations
+- Operator dashboard provides UI for editing content
+- Changes persist in `data/content_overrides.json` (gitignored)
+- All existing scoring, deduplication, and eligibility logic maintained
+
+### Key Features:
+- **Topic-based deduplication:** Removes duplicate content across education and offers
+- **Category diversity:** Max 2 items per category
+- **Context-aware scoring:** 0-100 relevance scores based on user signals
+- **Hybrid content system:** Python defaults + JSON overrides
+- **Operator content management:** Full CRUD UI in operator dashboard
+- **Non-destructive editing:** Never modifies Python source files
+- **Immediate updates:** Changes appear in recommendations without restart
+
+**Note:** Content management system tested end-to-end with create, read, update, delete operations. All tests passed.
+
+---
