@@ -27,6 +27,12 @@ PERSONA_THRESHOLDS = {
         "recurring_spend_min": 50.0,  # At least $50/month OR
         "recurring_spend_pct": 10.0,  # 10% of total spend (percentage form to match feature output)
     },
+    "Cash Flow Optimizer": {
+        "max_cash_buffer_months": 2.0,  # Less than 2 months cash buffer
+        "max_growth_rate_pct": 1.0,  # Less than 1% savings growth rate
+        "max_net_inflow": 100.0,  # Less than $100 net savings inflow
+        "max_pay_gap_days": 45,  # 45 days or less (stable income, differentiates from Variable Income)
+    },
     "Savings Builder": {
         "growth_rate_pct": 2.0,  # 2% or higher savings growth rate (percentage form to match feature output)
         "net_inflow_min": 200.0,  # At least $200 net inflow OR
@@ -39,8 +45,9 @@ PERSONA_PRIORITY = [
     "High Utilization",  # Priority 1: Immediate financial strain
     "Variable Income Budgeter",  # Priority 2: Stability and planning gap
     "Subscription-Heavy",  # Priority 3: Spending pattern optimization
-    "Savings Builder",  # Priority 4: Positive reinforcement
-    "General",  # Priority 5: Default for users with minimal signals
+    "Cash Flow Optimizer",  # Priority 4: Cash flow and spending management
+    "Savings Builder",  # Priority 5: Positive reinforcement
+    "General",  # Priority 6: Default for users with minimal signals
 ]
 
 # =============================================================================

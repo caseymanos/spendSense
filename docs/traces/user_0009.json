@@ -67,23 +67,26 @@
     }
   },
   "persona_assignment": {
-    "persona": "savings_builder",
+    "persona": "Savings Builder",
     "criteria_met": {
       "growth_rate_pct": 101.4,
       "net_inflow": 1870.08,
       "low_utilization": 0.0
     },
     "all_checks": {
-      "high_utilization": {},
-      "variable_income": {},
-      "subscription_heavy": {},
-      "savings_builder": {
+      "High Utilization": {},
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {},
+      "Cash Flow Optimizer": {
+        "stable_income_pay_gap_days": 2
+      },
+      "Savings Builder": {
         "growth_rate_pct": 101.4,
         "net_inflow": 1870.08,
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-04T10:18:44.366550"
+    "timestamp": "2025-11-06T07:57:48.651685"
   },
   "recommendations": {
     "timestamp": "2025-11-04T21:52:50.080517",

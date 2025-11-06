@@ -72,23 +72,28 @@
     }
   },
   "persona_assignment": {
-    "persona": "subscription_heavy",
+    "persona": "Subscription-Heavy",
     "criteria_met": {
       "recurring_count": 4,
       "monthly_spend": 113.7
     },
     "all_checks": {
-      "high_utilization": {},
-      "variable_income": {},
-      "subscription_heavy": {
+      "High Utilization": {},
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {
         "recurring_count": 4,
         "monthly_spend": 113.7
       },
-      "savings_builder": {
+      "Cash Flow Optimizer": {
+        "low_growth_rate_pct": 0.0,
+        "low_net_inflow": 0.0,
+        "stable_income_pay_gap_days": 3
+      },
+      "Savings Builder": {
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-04T10:18:44.373151"
+    "timestamp": "2025-11-06T07:57:48.689507"
   },
   "recommendations": {
     "timestamp": "2025-11-04T21:52:50.512142",

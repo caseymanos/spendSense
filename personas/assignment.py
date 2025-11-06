@@ -171,6 +171,62 @@ def check_savings_builder(signals: pd.Series) -> Tuple[bool, Dict]:
     return matches, criteria_met
 
 
+def check_cash_flow_optimizer(signals: pd.Series) -> Tuple[bool, Dict]:
+    """
+    Check if user meets Cash Flow Optimizer persona criteria.
+
+    Criteria: Cash buffer < 2 months AND (growth rate < 1% OR net inflow < $100)
+              AND pay gap ≤ 45 days (stable income)
+
+    This persona captures users with spending > income patterns who have:
+    - Stable income (not variable income issues)
+    - Low savings accumulation despite stable income
+    - Cash flow management challenges
+
+    Args:
+        signals: Row from signals DataFrame for a single user
+
+    Returns:
+        (matches, criteria_met_dict)
+    """
+    criteria_met = {}
+
+    # Check cash buffer < 2 months (using 180-day window)
+    cash_buffer = signals.get("inc_180d_cash_buffer_months", 999)  # Default high to avoid false positives
+    if cash_buffer < PERSONA_THRESHOLDS["Cash Flow Optimizer"]["max_cash_buffer_months"]:
+        criteria_met["cash_buffer_months"] = float(cash_buffer)
+
+    # Check savings growth < 1% (using 180-day window)
+    growth_rate = signals.get("sav_180d_growth_rate_pct", 0)
+    if growth_rate < PERSONA_THRESHOLDS["Cash Flow Optimizer"]["max_growth_rate_pct"]:
+        criteria_met["low_growth_rate_pct"] = float(growth_rate)
+
+    # Check net inflow < $100 (using 180-day window)
+    net_inflow = signals.get("sav_180d_net_inflow", 0)
+    if net_inflow < PERSONA_THRESHOLDS["Cash Flow Optimizer"]["max_net_inflow"]:
+        criteria_met["low_net_inflow"] = float(net_inflow)
+
+    # Check pay gap ≤ 45 days (stable income - differentiates from Variable Income)
+    median_pay_gap = signals.get("inc_180d_median_pay_gap_days", 0)
+    if median_pay_gap > 0 and median_pay_gap <= PERSONA_THRESHOLDS["Cash Flow Optimizer"]["max_pay_gap_days"]:
+        criteria_met["stable_income_pay_gap_days"] = int(median_pay_gap)
+
+    # Matches if cash_buffer < 2 AND (growth < 1% OR inflow < $100) AND pay_gap ≤ 45
+    has_low_cash_buffer = cash_buffer < PERSONA_THRESHOLDS["Cash Flow Optimizer"]["max_cash_buffer_months"]
+    has_poor_savings = (
+        growth_rate < PERSONA_THRESHOLDS["Cash Flow Optimizer"]["max_growth_rate_pct"]
+        or net_inflow < PERSONA_THRESHOLDS["Cash Flow Optimizer"]["max_net_inflow"]
+    )
+    has_stable_income = (
+        median_pay_gap > 0 and
+        median_pay_gap <= PERSONA_THRESHOLDS["Cash Flow Optimizer"]["max_pay_gap_days"]
+    )
+
+    matches = has_low_cash_buffer and has_poor_savings and has_stable_income
+
+    return matches, criteria_met
+
+
 def assign_persona(signals: pd.Series) -> Tuple[str, Dict]:
     """
     Assign a persona to a user based on priority-ordered criteria.
@@ -179,8 +235,9 @@ def assign_persona(signals: pd.Series) -> Tuple[str, Dict]:
     1. High Utilization (immediate credit strain)
     2. Variable Income Budgeter (income stability)
     3. Subscription-Heavy (spending optimization)
-    4. Savings Builder (positive reinforcement)
-    5. General (default for users with minimal signals)
+    4. Cash Flow Optimizer (cash flow management)
+    5. Savings Builder (positive reinforcement)
+    6. General (default for users with minimal signals)
 
     Args:
         signals: Row from signals DataFrame for a single user
@@ -193,6 +250,7 @@ def assign_persona(signals: pd.Series) -> Tuple[str, Dict]:
         "High Utilization": check_high_utilization(signals),
         "Variable Income Budgeter": check_variable_income(signals),
         "Subscription-Heavy": check_subscription_heavy(signals),
+        "Cash Flow Optimizer": check_cash_flow_optimizer(signals),
         "Savings Builder": check_savings_builder(signals),
     }
 

@@ -169,6 +169,12 @@ def get_persona_description(persona: str) -> Dict[str, str]:
             "icon": "🔄",
             "color": "#95E1D3",
         },
+        "Cash Flow Optimizer": {
+            "title": "Cash Flow Manager",
+            "description": "You're focused on balancing spending with income and building financial reserves.",
+            "icon": "💰",
+            "color": "#FFA07A",
+        },
         "Savings Builder": {
             "title": "Savings Champion",
             "description": "You're actively building savings and growing your financial cushion.",

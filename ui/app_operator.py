@@ -431,8 +431,9 @@ def render_overview_tab():
             # Persona descriptions
             persona_descriptions = {
                 "High Utilization": "Credit utilization ≥50% or carrying interest",
-                "Variable Income": "Irregular income with low cash buffer",
-                "Subscription Heavy": "Multiple recurring subscriptions",
+                "Variable Income Budgeter": "Irregular income with low cash buffer",
+                "Subscription-Heavy": "Multiple recurring subscriptions",
+                "Cash Flow Optimizer": "Low cash buffer with stable income, poor savings accumulation",
                 "Savings Builder": "Positive savings growth and low utilization",
                 "General": "Default persona with minimal signals",
             }

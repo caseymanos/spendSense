@@ -161,6 +161,53 @@ EDUCATIONAL_CONTENT: Dict[str, List[Dict[str, Any]]] = {
             "eligibility": {"min_recurring_count": 3},
         },
     ],
+    "cash_flow_optimizer": [
+        {
+            "title": "The Zero-Based Budget: Giving Every Dollar a Job",
+            "description": "Learn how zero-based budgeting ensures every dollar has a purpose before the month begins. Helps prevent overspending and builds intentional spending habits.",
+            "category": "budgeting",
+            "topic": "zero_based_budget",
+            "partner_equivalent": True,  # Has budgeting app offers
+            "rationale_template": "With {cash_buffer_months} months of cash buffer, zero-based budgeting can help you allocate income more intentionally and build reserves.",
+            "eligibility": {},
+        },
+        {
+            "title": "Tracking Discretionary Spending: Where Does the Money Go?",
+            "description": "Step-by-step guide to categorizing expenses and identifying discretionary spending leaks. Includes spending diary templates and analysis techniques.",
+            "category": "spending_analysis",
+            "topic": "discretionary_tracking",
+            "partner_equivalent": True,  # Has Mint/YNAB offers
+            "rationale_template": "Understanding where your money goes is the first step to improving cash flow. This guide helps identify opportunities to redirect spending to savings.",
+            "eligibility": {},
+        },
+        {
+            "title": "The 24-Hour Rule: Curbing Impulse Purchases",
+            "description": "Simple technique to reduce impulse spending: wait 24 hours before non-essential purchases. Includes strategies for online shopping and in-store temptations.",
+            "category": "spending_habits",
+            "topic": "impulse_control",
+            "partner_equivalent": False,
+            "rationale_template": "Small behavioral changes can significantly improve your cash buffer over time. The 24-hour rule reduces regrettable purchases.",
+            "eligibility": {},
+        },
+        {
+            "title": "Building a Cash Buffer: The First $1000",
+            "description": "Practical strategies for building your first $1000 emergency buffer. Covers small wins, expense cuts, and income boosts to accelerate savings.",
+            "category": "emergency_fund",
+            "topic": "starter_emergency_fund",
+            "partner_equivalent": True,  # Has HYSA offers
+            "rationale_template": "Your current buffer of {cash_buffer_months} months can be strengthened with focused savings. This guide provides actionable steps to reach 1-2 months of expenses.",
+            "eligibility": {},
+        },
+        {
+            "title": "Pay Yourself First: Automating Savings Before Spending",
+            "description": "Learn how to set up automatic transfers to savings on payday, before discretionary spending occurs. Makes saving effortless and consistent.",
+            "category": "savings_automation",
+            "topic": "pay_yourself_first",
+            "partner_equivalent": False,
+            "rationale_template": "Automation removes willpower from the equation. Setting up automatic transfers can help grow your {cash_buffer_months}-month buffer consistently.",
+            "eligibility": {},
+        },
+    ],
     "savings_builder": [
         {
             "title": "SMART Goal Setting for Financial Milestones",
@@ -323,6 +370,41 @@ PARTNER_OFFERS: Dict[str, List[Dict[str, Any]]] = {
             "eligibility": {
                 "min_income_tier": "low",
                 "min_recurring_count": 3,
+            },
+        },
+    ],
+    "cash_flow_optimizer": [
+        {
+            "title": "Mint Budget Tracker & Spending Analyzer",
+            "description": "Free app that automatically categorizes spending, tracks budgets, and identifies spending patterns. Helps visualize where money goes.",
+            "category": "budgeting_app",
+            "topic": "discretionary_tracking",
+            "rationale_template": "Understanding your spending patterns is the first step to improving cash flow. Mint provides automatic tracking and alerts when you exceed budget categories.",
+            "eligibility": {
+                "min_income_tier": "low",
+                "exclude_existing": ["budgeting_app"],
+            },
+        },
+        {
+            "title": "Chime Automatic Savings Account",
+            "description": "No-fee banking with automatic round-up savings. Every purchase rounds up to the nearest dollar and transfers the difference to savings.",
+            "category": "savings_account",
+            "topic": "pay_yourself_first",
+            "rationale_template": "With {cash_buffer_months} months of buffer, automatic savings through round-ups can help you build reserves effortlessly without impacting your budget.",
+            "eligibility": {
+                "min_income_tier": "low",
+                "max_existing_savings_accounts": 1,
+            },
+        },
+        {
+            "title": "EveryDollar Zero-Based Budget App",
+            "description": "Simple budgeting app based on zero-based budgeting principles. Free version available, premium adds automatic transaction sync.",
+            "category": "budgeting_app",
+            "topic": "zero_based_budget",
+            "rationale_template": "Zero-based budgeting gives every dollar a job before the month begins. With your current cash buffer, this approach can help build consistent savings habits.",
+            "eligibility": {
+                "min_income_tier": "low",
+                "exclude_existing": ["budgeting_app"],
             },
         },
     ],

@@ -18,6 +18,7 @@ from personas.assignment import (
     check_high_utilization,
     check_variable_income,
     check_subscription_heavy,
+    check_cash_flow_optimizer,
     check_savings_builder,
     assign_persona,
     assign_all_personas,
@@ -279,8 +280,8 @@ class TestPersonaPriorityOrdering:
         persona, persona_data = assign_persona(signals)
 
         # Verify: Only high_utilization assigned (priority wins)
-        assert persona == "high_utilization", "High utilization should have priority"
-        assert persona_data["assigned_persona"] == "high_utilization"
+        assert persona == "High Utilization", "High utilization should have priority"
+        assert persona_data["assigned_persona"] == "High Utilization"
         assert len(persona_data["criteria_met"]) > 0
 
     def test_variable_income_wins_over_subscription_heavy(self):
@@ -305,7 +306,152 @@ class TestPersonaPriorityOrdering:
         persona, persona_data = assign_persona(signals)
 
         # Verify: variable_income wins
-        assert persona == "variable_income"
+        assert persona == "Variable Income Budgeter"
+
+    def test_subscription_heavy_wins_over_cash_flow_optimizer(self):
+        """Test: Subscription Heavy has higher priority than Cash Flow Optimizer."""
+        signals = pd.Series(
+            {
+                # Matches Subscription Heavy (Priority 3)
+                "sub_180d_recurring_count": 5,
+                "sub_30d_monthly_spend": 100.0,
+                "sub_30d_share_pct": 12.0,
+                # Also matches Cash Flow Optimizer (Priority 4)
+                "inc_180d_cash_buffer_months": 1.5,
+                "sav_180d_growth_rate_pct": 0.5,
+                "sav_180d_net_inflow": 50.0,
+                "inc_180d_median_pay_gap_days": 30,
+                # Not other personas
+                "credit_max_util_pct": 20.0,
+                "credit_interest_charges": False,
+                "credit_min_payment_only": False,
+                "credit_is_overdue": False,
+            }
+        )
+
+        persona, persona_data = assign_persona(signals)
+
+        # Verify: subscription_heavy wins
+        assert persona == "Subscription-Heavy"
+
+    def test_cash_flow_optimizer_wins_over_savings_builder(self):
+        """Test: Cash Flow Optimizer has higher priority than Savings Builder."""
+        signals = pd.Series(
+            {
+                # Matches Cash Flow Optimizer (Priority 4)
+                "inc_180d_cash_buffer_months": 1.2,
+                "sav_180d_growth_rate_pct": 0.3,
+                "sav_180d_net_inflow": 60.0,
+                "inc_180d_median_pay_gap_days": 28,
+                # Also would match Savings Builder, but utilization requirement conflicts
+                # (Cash flow optimizer doesn't require low utilization, Savings Builder does)
+                "credit_max_util_pct": 40.0,  # Too high for Savings Builder
+                "credit_interest_charges": False,
+                "credit_min_payment_only": False,
+                "credit_is_overdue": False,
+                "sub_180d_recurring_count": 2,
+            }
+        )
+
+        persona, persona_data = assign_persona(signals)
+
+        # Verify: cash_flow_optimizer wins
+        assert persona == "Cash Flow Optimizer"
+
+
+class TestCashFlowOptimizerPersona:
+    """Test Cash Flow Optimizer persona criteria (Priority 4)."""
+
+    def test_cash_flow_optimizer_all_criteria_met(self):
+        """Test: User with low cash buffer, poor savings, and stable income."""
+        signals = pd.Series(
+            {
+                "inc_180d_cash_buffer_months": 1.5,  # < 2 months ✓
+                "sav_180d_growth_rate_pct": 0.5,  # < 1% ✓
+                "sav_180d_net_inflow": 50.0,  # < $100 ✓
+                "inc_180d_median_pay_gap_days": 30,  # ≤ 45 days (stable income) ✓
+                "credit_max_util_pct": 25.0,  # Not high utilization
+                "credit_interest_charges": False,
+                "credit_min_payment_only": False,
+                "credit_is_overdue": False,
+                "sub_180d_recurring_count": 2,  # Not subscription heavy
+            }
+        )
+
+        matches, criteria_met = check_cash_flow_optimizer(signals)
+
+        # Verify: Matches all criteria
+        assert matches is True
+        assert "cash_buffer_months" in criteria_met
+        assert criteria_met["cash_buffer_months"] == 1.5
+        assert "low_growth_rate_pct" in criteria_met
+        assert "low_net_inflow" in criteria_met
+        assert "stable_income_pay_gap_days" in criteria_met
+
+    def test_cash_flow_optimizer_high_cash_buffer_blocks(self):
+        """Test: User with high cash buffer should not match."""
+        signals = pd.Series(
+            {
+                "inc_180d_cash_buffer_months": 3.0,  # >= 2 months ✗
+                "sav_180d_growth_rate_pct": 0.3,  # < 1% ✓
+                "sav_180d_net_inflow": 30.0,  # < $100 ✓
+                "inc_180d_median_pay_gap_days": 30,  # ≤ 45 days ✓
+            }
+        )
+
+        matches, criteria_met = check_cash_flow_optimizer(signals)
+
+        # Should NOT match because cash buffer is too high
+        assert matches == False
+
+    def test_cash_flow_optimizer_good_savings_blocks(self):
+        """Test: User with good savings growth should not match."""
+        signals = pd.Series(
+            {
+                "inc_180d_cash_buffer_months": 1.2,  # < 2 months ✓
+                "sav_180d_growth_rate_pct": 5.0,  # >= 1% ✗
+                "sav_180d_net_inflow": 500.0,  # >= $100 ✗
+                "inc_180d_median_pay_gap_days": 30,  # ≤ 45 days ✓
+            }
+        )
+
+        matches, criteria_met = check_cash_flow_optimizer(signals)
+
+        # Should NOT match because savings metrics are good
+        assert matches == False
+
+    def test_cash_flow_optimizer_variable_income_blocks(self):
+        """Test: User with variable income (high pay gap) should not match."""
+        signals = pd.Series(
+            {
+                "inc_180d_cash_buffer_months": 0.8,  # < 2 months ✓
+                "sav_180d_growth_rate_pct": 0.2,  # < 1% ✓
+                "sav_180d_net_inflow": 20.0,  # < $100 ✓
+                "inc_180d_median_pay_gap_days": 60,  # > 45 days ✗ (variable income)
+            }
+        )
+
+        matches, criteria_met = check_cash_flow_optimizer(signals)
+
+        # Should NOT match because this is a variable income case
+        assert matches == False
+
+    def test_cash_flow_optimizer_by_low_growth_only(self):
+        """Test: User meeting criteria through low growth rate alone."""
+        signals = pd.Series(
+            {
+                "inc_180d_cash_buffer_months": 1.8,  # < 2 months ✓
+                "sav_180d_growth_rate_pct": 0.1,  # < 1% ✓ (triggers OR)
+                "sav_180d_net_inflow": 150.0,  # >= $100 (but OR allows match)
+                "inc_180d_median_pay_gap_days": 28,  # ≤ 45 days ✓
+            }
+        )
+
+        matches, criteria_met = check_cash_flow_optimizer(signals)
+
+        # Matches because growth < 1% (even though inflow >= $100)
+        assert matches == True
+        assert "low_growth_rate_pct" in criteria_met
 
 
 class TestEdgeCaseNoPersona:
@@ -324,20 +470,20 @@ class TestEdgeCaseNoPersona:
                 "credit_min_payment_only": False,
                 "credit_is_overdue": False,
                 "inc_180d_median_pay_gap_days": 14,  # < 45 days
-                "inc_180d_cash_buffer_months": 3.0,  # >= 1 month
+                "inc_180d_cash_buffer_months": 3.0,  # >= 2 months
                 "sub_180d_recurring_count": 1,  # < 3
                 "sub_30d_monthly_spend": 15.0,  # < $50
                 "sub_30d_share_pct": 3.0,  # < 10% (percentage format: 3.0 = 3%)
-                "sav_180d_growth_rate_pct": 0.5,  # < 2% (percentage format: 0.5 = 0.5%)
-                "sav_180d_net_inflow": 50.0,  # < $200
+                "sav_180d_growth_rate_pct": 0.5,  # < 1% (but cash buffer is high)
+                "sav_180d_net_inflow": 50.0,  # < $100
             }
         )
 
         persona, persona_data = assign_persona(signals)
 
-        # Verify: Assigned to 'general' persona
-        assert persona == "general", "Should assign to general persona when no criteria met"
-        assert persona_data["assigned_persona"] == "general"
+        # Verify: Assigned to 'General' persona
+        assert persona == "General", "Should assign to General persona when no criteria met"
+        assert persona_data["assigned_persona"] == "General"
         assert len(persona_data["criteria_met"]) == 0, "No criteria should be met"
 
     def test_zero_signals_assigns_general(self):
@@ -360,7 +506,7 @@ class TestEdgeCaseNoPersona:
 
         persona, persona_data = assign_persona(signals)
 
-        assert persona == "general"
+        assert persona == "General"
 
 
 class TestFullPersonaAssignment:
