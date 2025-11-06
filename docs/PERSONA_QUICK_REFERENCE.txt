@@ -1,0 +1,218 @@
+===============================================================================
+SPENDSENSE PERSONA SYSTEM - QUICK REFERENCE GUIDE
+===============================================================================
+
+BEHAVIORAL SIGNAL DETECTION (4 Categories)
+===============================================================================
+
+1. CREDIT SIGNALS (Credit Cards)
+   Metrics: max_util_pct, avg_util_pct, interest_charges, min_payment_only, is_overdue
+   Example: 68% utilization, $87/month interest, 3 cards
+
+2. INCOME SIGNALS (Payroll Patterns)
+   Metrics: median_pay_gap_days, cash_buffer_months, pay_frequency, avg_paycheck
+   Example: Biweekly paychecks (14-day gap), 2.4 months buffer, $2,450/paycheck
+
+3. SUBSCRIPTION SIGNALS (Recurring Merchants)
+   Metrics: recurring_count, monthly_spend, share_pct
+   Example: 5 subscriptions, $145/month spend, 9.7% of total spend
+
+4. SAVINGS SIGNALS (Savings Account Activity)
+   Metrics: net_inflow, growth_rate_pct, emergency_fund_months
+   Example: $3,200 net inflow, 3.2% growth, 4.5 months emergency fund
+
+
+PERSONA PRIORITY ORDER (Conflict Resolution)
+===============================================================================
+
+PRIORITY 1: HIGH UTILIZATION (Immediate Credit Strain)
+  Triggers: utilization ≥50% OR interest > 0 OR min_payment_only OR overdue
+  Content: Debt paydown, balance transfers, credit management
+  Example: 68% util + $87/month interest → High Utilization
+
+PRIORITY 2: VARIABLE INCOME BUDGETER (Income Instability)
+  Triggers: pay_gap > 45d AND cash_buffer < 1mo
+  Content: Percentage budgeting, emergency funds, income smoothing
+  Example: 50-day gaps + $700 buffer → Variable Income
+
+PRIORITY 3: SUBSCRIPTION-HEAVY (Spending Optimization)
+  Triggers: recurring_count ≥ 3 AND (spend ≥ $50 OR share ≥ 10%)
+  Content: Subscription audits, cost negotiation, alternatives
+  Example: 6 subscriptions + $145/month → Subscription-Heavy
+
+PRIORITY 4: CASH FLOW OPTIMIZER (Cash Management) [NEW]
+  Triggers: buffer < 2mo AND (growth < 1% OR inflow < $100) AND gap ≤ 45d
+  Content: Zero-based budgeting, spending tracking, impulse control
+  Example: Biweekly + $1.2k buffer + 0.5% growth → Cash Flow Optimizer
+
+PRIORITY 5: SAVINGS BUILDER (Positive Reinforcement)
+  Triggers: (growth ≥ 2% OR inflow ≥ $200) AND util < 30%
+  Content: Advanced savings, CDs, investments
+  Example: 3.2% growth + 18% util → Savings Builder
+
+PRIORITY 6: GENERAL (No Strong Signals)
+  No recommendations, message: "You're doing great!"
+
+
+PERSONA-SPECIFIC RECOMMENDATIONS
+===============================================================================
+
+HIGH UTILIZATION (5 education + 1-3 offers)
+  Topics: Credit basics, debt paydown, autopay, interest, balance transfers
+  Sample: "Your Visa ending in 4523 is at 68% utilization ($3,400/$5,000). 
+           Reducing below 30% could save $87/month in interest."
+
+VARIABLE INCOME BUDGETER (5 education + 1-3 offers)
+  Topics: % budgeting, emergency funds, income smoothing, tax planning
+  Sample: "Your income varies with 50-day gaps. Percentage budgeting adapts
+           to fluctuations automatically."
+
+SUBSCRIPTION-HEAVY (5 education + 1-3 offers)
+  Topics: Audit, negotiation, sharing, free alternatives, bill alerts
+  Sample: "You have 5 recurring subscriptions costing ~$145/month. A quarterly
+           audit can identify unused services."
+
+CASH FLOW OPTIMIZER (4 education + 1-3 offers)
+  Topics: Zero-based budgeting, spending tracking, impulse control, cash building
+  Sample: "With $1.2k buffer (1.7 months), zero-based budgeting can help
+           allocate income more intentionally."
+
+SAVINGS BUILDER (3 education + 1-3 offers)
+  Topics: Advanced savings, CD laddering, investments
+  Sample: "Your savings are growing at 3.2% with $3,200 net inflow.
+           Build on this momentum with CDs or investments."
+
+
+RECOMMENDATION GENERATION FLOW
+===============================================================================
+
+1. LOAD CONTEXT: user_id → persona + signals + accounts + transactions
+2. CHECK CONSENT: consent_granted? NO → "Opt in to unlock guidance"
+3. CHECK PERSONA: persona = "general"? YES → "You're doing great!"
+4. SELECT EDUCATION: Load persona items → Filter eligibility → Score → Top 3-5
+5. SELECT OFFERS: Load persona offers → Filter eligibility → Score → Top 1-3
+6. DEDUPLICATION: Remove dups, max 2 per category
+7. INJECT RATIONALES: Template {placeholders} → Actual user data
+8. TONE CHECK: Scan for prohibited phrases
+9. APPEND DISCLAIMER: "Educational content, not financial advice"
+10. SAVE TRACE: docs/traces/{user_id}.json
+
+
+SCORING LOGIC (0-100 scale, base=50)
+===============================================================================
+
+CREDIT-RELATED:
+  + Max util >70% → +30 (critical)
+  + Max util >50% → +20 (high)
+  + Max util >30% → +10 (moderate)
+  + Monthly interest →  +up to 15
+
+SUBSCRIPTION-RELATED:
+  + Recurring count ≥6 → +20
+  + Recurring count ≥4 → +10
+  + Monthly spend >$200 → +15
+  + Monthly spend >$100 → +10
+  + Share >15% → +10
+
+SAVINGS-RELATED:
+  + Net inflow >$2k → +20
+  + Net inflow >$1k → +15
+  + Net inflow >$500 → +10
+  + Growth >5% → +10
+  + Growth >3% → +5
+  + EF ≥6mo (CDs) → +15
+  + EF ≥5mo (invest) → +10
+
+INCOME/BUDGETING:
+  + Pay gap >45d → +25
+  + Pay gap >35d → +15
+  + Pay gap >30d → +10
+  + Buffer <2mo (EF) → +20
+  + Buffer <4mo → +10
+
+
+ELIGIBILITY FILTERS
+===============================================================================
+
+Applied BEFORE recommendation selection:
+
+Consent: Must be consent_granted = TRUE
+Credit Products: Max util < 80%, income tier ≥ medium
+Savings Products: Max 2-3 existing accounts, all income tiers
+Blocking Rules: NO payday loans, title loans, rent-to-own, high-fee checking
+
+
+RATIONALE PLACEHOLDERS
+===============================================================================
+
+Credit: {card_description}, {utilization_pct}, {balance}, {limit}, 
+        {avg_utilization_pct}, {num_cards}, {monthly_interest}, {estimated_savings}
+
+Income: {pay_gap_days}, {cash_buffer_months}, {avg_paycheck}
+
+Subscription: {recurring_count}, {monthly_recurring_spend}, {subscription_share_pct}
+
+Savings: {net_inflow}, {growth_rate_pct}, {emergency_fund_months}
+
+
+TONE VALIDATION (Prohibited → Preferred)
+===============================================================================
+
+"overspending" → "consider reducing spending"
+"bad habits" → "habits to optimize"
+"lack discipline" → "explore automation tools"
+"irresponsible" → "opportunities to improve"
+"wasteful" → "areas to optimize"
+"poor choices" → "decisions to revisit"
+"financial mistakes" → "learning opportunities"
+"careless" → "attention to detail"
+
+
+TRACE FILES STRUCTURE
+===============================================================================
+
+docs/traces/{user_id}.json:
+
+{
+  "user_id": "user_0042",
+  "persona_assignment": {
+    "persona": "High Utilization",
+    "criteria_met": { "high_utilization": 68.0, "interest_charges": true },
+    "all_checks": { "High Utilization": {...}, "Variable Income": {...}, ... }
+  },
+  "recommendations": {
+    "persona": "High Utilization",
+    "education_count": 4,
+    "offer_count": 1,
+    "total_recommendations": 5,
+    "recommendations": [...]
+  }
+}
+
+
+KEY FILES
+===============================================================================
+
+personas/assignment.py ...................... Persona logic + priority order
+features/credit.py .......................... Credit signal detection
+features/income.py .......................... Income signal detection
+features/subscriptions.py ................... Subscription detection
+features/savings.py ......................... Savings signal detection
+recommend/engine.py ......................... Recommendation generation
+recommend/content_catalog.py ................ Content seed data
+ingest/constants.py ......................... All thresholds (source of truth)
+guardrails/tone.py .......................... Tone validation
+guardrails/eligibility.py ................... Eligibility filters
+
+
+MVP SUCCESS TARGETS
+===============================================================================
+
+Coverage: 100% (all users get persona + ≥3 behaviors)
+Explainability: 100% (all recommendations have rationale)
+Latency: <5 seconds per user
+Auditability: 100% (trace JSONs for all recs)
+Fairness: ±10% demographic parity
+Tests: ≥10 passing
+
+===============================================================================

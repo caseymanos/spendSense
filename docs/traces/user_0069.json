@@ -1,6 +1,6 @@
 {
   "user_id": "user_0069",
-  "timestamp": "2025-11-04T00:34:44.162800",
+  "timestamp": "2025-11-06T14:24:05.550862",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -21,21 +21,21 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.31,
-        "savings_balance": 17754.42
+        "emergency_fund_months": 12.31,
+        "savings_balance": 34543.54
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.05,
-        "savings_balance": 17754.42
+        "emergency_fund_months": 5.54,
+        "savings_balance": 34543.54
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 49.94,
-        "avg_utilization_pct": 49.94,
-        "flag_30": true,
+        "max_utilization_pct": 7.47,
+        "avg_utilization_pct": 7.47,
+        "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
@@ -44,11 +44,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000193",
-            "mask": "6743",
-            "balance": 7491.517747950663,
-            "limit": 15000.0,
-            "utilization_pct": 49.94
+            "account_id": "acc_000203",
+            "mask": "9593",
+            "balance": 149.46225255241117,
+            "limit": 2000.0,
+            "utilization_pct": 7.47
           }
         ],
         "interest_charges_present": false,
@@ -57,87 +57,47 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 2,
-        "income_variability": 0.7327,
-        "cash_buffer_months": 1.01,
-        "pay_frequency": "variable",
-        "num_paychecks": 7,
-        "avg_paycheck": 2205.73
+        "median_pay_gap_days": 7,
+        "income_variability": 0.1289,
+        "cash_buffer_months": 1.02,
+        "pay_frequency": "weekly",
+        "num_paychecks": 3,
+        "avg_paycheck": 4476.82
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.748,
-        "cash_buffer_months": 11.54,
-        "pay_frequency": "variable",
-        "num_paychecks": 51,
-        "avg_paycheck": 2977.3
+        "median_pay_gap_days": 4,
+        "income_variability": 0.6182,
+        "cash_buffer_months": 0.46,
+        "pay_frequency": "weekly",
+        "num_paychecks": 36,
+        "avg_paycheck": 3771.12
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "Cash Flow Optimizer",
+    "criteria_met": {
+      "cash_buffer_months": 0.46,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 4
+    },
     "all_checks": {
       "High Utilization": {},
-      "Variable Income Budgeter": {},
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.46
+      },
       "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 0.46,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "stable_income_pay_gap_days": 4
       },
-      "Savings Builder": {}
-    },
-    "timestamp": "2025-11-06T07:57:48.713045"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.741715",
-    "persona": "high_utilization",
-    "education_count": 4,
-    "offer_count": 1,
-    "total_recommendations": 5,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Understanding Credit Utilization and Your Score",
-        "description": "Learn how credit utilization affects your credit score and why keeping it below 30% is important. Includes strategies for paying down balances strategically.",
-        "category": "credit_basics",
-        "rationale": "Your credit card ending in 9593 is at 54% utilization ($1,089 of $2,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $16/month.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "How Interest Charges Work: APR, Compounding, and Grace Periods",
-        "description": "Demystify credit card interest calculations. Learn about daily periodic rates, grace periods, and how carrying a balance costs more than you think.",
-        "category": "credit_basics",
-        "rationale": "You're currently paying approximately $16/month per month in interest charges. Understanding how interest compounds can motivate faster paydown strategies.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Balance Transfer Cards: When They Help and When They Hurt",
-        "description": "Evaluate if a balance transfer makes sense for your situation. Covers transfer fees, promotional periods, and the math behind potential savings.",
-        "category": "debt_paydown",
-        "rationale": "With your current utilization of 50%, a 0% balance transfer could save you $196 over 12-18 months. This article helps you evaluate if it's the right move.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "0% Balance Transfer Credit Card",
-        "description": "Move high-interest balances to a card with 0% APR for 12-18 months. Typical transfer fee: 3-5%.",
-        "category": "credit_card",
-        "rationale": "With your current utilization of 50% and interest charges of approximately $16/month/month, a balance transfer could save you $196 over 12-18 months.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      "Savings Builder": {
+        "low_utilization": 7.47
       }
-    ],
-    "consent_granted": true
+    },
+    "timestamp": "2025-11-06T14:24:06.986552"
   }
 }

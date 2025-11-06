@@ -42,10 +42,10 @@ PERSONA_THRESHOLDS = {
 
 # Persona priority order for conflict resolution (PRD Part 2, Section 6.2)
 PERSONA_PRIORITY = [
-    "High Utilization",  # Priority 1: Immediate financial strain
-    "Variable Income Budgeter",  # Priority 2: Stability and planning gap
-    "Subscription-Heavy",  # Priority 3: Spending pattern optimization
-    "Cash Flow Optimizer",  # Priority 4: Cash flow and spending management
+    "High Utilization",  # Priority 1: Immediate financial strain (credit)
+    "Cash Flow Optimizer",  # Priority 2: Cash flow emergency (< 2 months runway)
+    "Variable Income Budgeter",  # Priority 3: Stability and planning gap
+    "Subscription-Heavy",  # Priority 4: Spending pattern optimization
     "Savings Builder",  # Priority 5: Positive reinforcement
     "General",  # Priority 6: Default for users with minimal signals
 ]

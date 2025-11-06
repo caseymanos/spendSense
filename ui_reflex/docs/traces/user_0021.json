@@ -1,0 +1,122 @@
+{
+  "user_id": "user_0021",
+  "timestamp": "2025-11-04T23:54:37.431979",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 230.12,
+        "subscription_share_pct": 5.3,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 6,
+        "monthly_recurring_spend": 236.67,
+        "subscription_share_pct": 3.68,
+        "recurring_merchants": [
+          "Adobe Creative Cloud",
+          "Credit Card Interest",
+          "Dropbox",
+          "NYT Subscription",
+          "Spotify",
+          "WSJ"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 103.28,
+        "growth_rate_pct": 0.23,
+        "emergency_fund_months": 11.15,
+        "savings_balance": 44433.74
+      },
+      "180d": {
+        "net_inflow": 619.7,
+        "growth_rate_pct": 1.41,
+        "emergency_fund_months": 6.93,
+        "savings_balance": 44433.74
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 40.99,
+        "avg_utilization_pct": 34.12,
+        "flag_30": true,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 2,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000063",
+            "mask": "5532",
+            "balance": 10248.542121093162,
+            "limit": 25000.0,
+            "utilization_pct": 40.99
+          },
+          {
+            "account_id": "acc_000064",
+            "mask": "1374",
+            "balance": 1361.8187046642026,
+            "limit": 5000.0,
+            "utilization_pct": 27.24
+          }
+        ],
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 229.64
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 1,
+        "income_variability": 0.6966,
+        "cash_buffer_months": 4.62,
+        "pay_frequency": "variable",
+        "num_paychecks": 7,
+        "avg_paycheck": 3198.01
+      },
+      "180d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.8628,
+        "cash_buffer_months": 8.87,
+        "pay_frequency": "variable",
+        "num_paychecks": 37,
+        "avg_paycheck": 2575.84
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "High Utilization",
+    "criteria_met": {
+      "interest_charges": true
+    },
+    "all_checks": {
+      "High Utilization": {
+        "interest_charges": true
+      },
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {
+        "recurring_count": 6,
+        "monthly_spend": 230.12
+      },
+      "Savings Builder": {
+        "net_inflow": 619.7
+      }
+    },
+    "timestamp": "2025-11-04T23:54:40.322354"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-05T10:34:17.542343",
+    "persona": "High Utilization",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": false,
+    "reason": "consent_not_granted",
+    "message": "Consent not granted. Opt in from your profile to unlock personalized guidance."
+  }
+}

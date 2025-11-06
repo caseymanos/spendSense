@@ -13,6 +13,7 @@ class PersonaTarget(str, Enum):
     HIGH_UTILIZATION = "High Utilization"
     VARIABLE_INCOME = "Variable Income Budgeter"
     SUBSCRIPTION_HEAVY = "Subscription-Heavy"
+    CASH_FLOW_OPTIMIZER = "Cash Flow Optimizer"
     SAVINGS_BUILDER = "Savings Builder"
     GENERAL = "General"
 
@@ -389,5 +390,33 @@ PRESET_CONFIGS = {
             "monthly": 0.30,
             "irregular": 0.40,
         },
+    ),
+    "cash_flow_optimizer_focus": OperatorControls(
+        target_personas=[PersonaTarget.CASH_FLOW_OPTIMIZER],
+        # Stable income pattern (differentiates from Variable Income)
+        payroll_pattern_distribution={
+            "weekly": 0.20,
+            "biweekly": 0.50,  # Most common
+            "monthly": 0.25,
+            "irregular": 0.05,  # Very low - stable income is key
+        },
+        irregular_income_volatility=0.2,  # Low volatility
+        # Very low savings activity - need low cash buffer
+        savings_adoption_rate=0.15,  # Very low - many users won't save at all
+        savings_transfer_range=(20.0, 80.0),  # Minimal transfers when they do save
+        savings_growth_target_pct=0.1,  # Near-zero growth - minimal savings accumulation
+        # High spending to drain cash reserves
+        high_spender_probability=0.75,  # Most users are high spenders
+        # Moderate credit utilization (not the primary concern)
+        credit_utilization_distribution={
+            "low": 0.50,
+            "medium": 0.30,
+            "high": 0.15,
+            "critical": 0.05,
+        },
+        # Normal subscription behavior
+        subscription_adoption_rate=0.50,  # Default level
+        subscription_count_min=2,
+        subscription_count_max=5,
     ),
 }

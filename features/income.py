@@ -12,13 +12,17 @@ from ingest.constants import INCOME_DETECTION, TIME_WINDOWS
 
 
 def detect_income_signals(
-    transactions_df: pd.DataFrame, user_id: str, window_days: int = TIME_WINDOWS["long_term_days"]
+    transactions_df: pd.DataFrame,
+    accounts_df: pd.DataFrame,
+    user_id: str,
+    window_days: int = TIME_WINDOWS["long_term_days"],
 ) -> Dict[str, any]:
     """
     Detect income stability patterns from payroll transactions.
 
     Args:
         transactions_df: DataFrame with transaction data
+        accounts_df: DataFrame with account data
         user_id: User ID to analyze
         window_days: Time window in days (30 or 180)
 
@@ -114,22 +118,30 @@ def detect_income_signals(
     std_paycheck = np.std(paycheck_amounts)
     income_variability = (std_paycheck / avg_paycheck) if avg_paycheck > 0 else 0.0
 
-    # Calculate cash buffer
-    # Get user's checking account balance and monthly expenses
-    user_expenses = user_txns[user_txns["amount"] > 0]  # Debits only
-    if len(user_expenses) > 0:
-        total_expenses = user_expenses["amount"].sum()
-        avg_monthly_expenses = total_expenses * (30 / window_days)
+    # Calculate cash buffer using actual checking account balance
+    # Get user's checking accounts
+    checking_accounts = accounts_df[
+        (accounts_df["user_id"] == user_id)
+        & (accounts_df["account_type"] == "depository")
+        & (accounts_df["account_subtype"] == "checking")
+    ]
 
-        # Estimate checking balance from recent activity (simplified)
-        # In real implementation, we'd query accounts table
-        # For now, use total income - total expenses as proxy
-        total_income = abs(payroll_txns["amount"].sum())
-        estimated_balance = total_income - total_expenses
+    if len(checking_accounts) > 0:
+        # Get current checking balance (sum all checking accounts)
+        checking_balance = checking_accounts["balance_current"].sum()
 
-        cash_buffer_months = (
-            (estimated_balance / avg_monthly_expenses) if avg_monthly_expenses > 0 else 0.0
-        )
+        # Calculate average monthly expenses
+        user_expenses = user_txns[user_txns["amount"] > 0]  # Debits only
+        if len(user_expenses) > 0:
+            total_expenses = user_expenses["amount"].sum()
+            avg_monthly_expenses = total_expenses * (30 / window_days)
+
+            # Calculate months of runway based on current balance
+            cash_buffer_months = (
+                (checking_balance / avg_monthly_expenses) if avg_monthly_expenses > 0 else 0.0
+            )
+        else:
+            cash_buffer_months = 0.0
     else:
         cash_buffer_months = 0.0
 
@@ -143,23 +155,26 @@ def detect_income_signals(
     }
 
 
-def compute_income_signals(transactions_df: pd.DataFrame, user_id: str) -> Dict[str, any]:
+def compute_income_signals(
+    transactions_df: pd.DataFrame, accounts_df: pd.DataFrame, user_id: str
+) -> Dict[str, any]:
     """
     Compute income stability signals for both 30-day and 180-day windows.
 
     Args:
         transactions_df: DataFrame with transaction data
+        accounts_df: DataFrame with account data
         user_id: User ID to analyze
 
     Returns:
         Dictionary with signals for both windows
     """
     signals_30d = detect_income_signals(
-        transactions_df, user_id, window_days=TIME_WINDOWS["short_term_days"]
+        transactions_df, accounts_df, user_id, window_days=TIME_WINDOWS["short_term_days"]
     )
 
     signals_180d = detect_income_signals(
-        transactions_df, user_id, window_days=TIME_WINDOWS["long_term_days"]
+        transactions_df, accounts_df, user_id, window_days=TIME_WINDOWS["long_term_days"]
     )
 
     return {"30d": signals_30d, "180d": signals_180d}

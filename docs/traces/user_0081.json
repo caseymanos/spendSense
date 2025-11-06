@@ -1,6 +1,6 @@
 {
   "user_id": "user_0081",
-  "timestamp": "2025-11-04T00:34:44.326263",
+  "timestamp": "2025-11-06T14:24:05.993880",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -19,36 +19,43 @@
     },
     "savings": {
       "30d": {
-        "net_inflow": 127.19,
-        "growth_rate_pct": 0.58,
-        "emergency_fund_months": 4.46,
-        "savings_balance": 22135.02
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 1.87,
+        "savings_balance": 10174.71
       },
       "180d": {
-        "net_inflow": 763.12,
-        "growth_rate_pct": 3.57,
-        "emergency_fund_months": 3.73,
-        "savings_balance": 22135.02
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 1.64,
+        "savings_balance": 10174.71
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 16.72,
-        "avg_utilization_pct": 16.72,
-        "flag_30": false,
-        "flag_50": false,
+        "max_utilization_pct": 72.25,
+        "avg_utilization_pct": 66.25,
+        "flag_30": true,
+        "flag_50": true,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 1,
+        "num_credit_cards": 2,
         "utilization_by_card": [
           {
-            "account_id": "acc_000227",
-            "mask": "3060",
-            "balance": 2507.352668052938,
-            "limit": 15000.0,
-            "utilization_pct": 16.72
+            "account_id": "acc_000236",
+            "mask": "4337",
+            "balance": 18062.109745486367,
+            "limit": 25000.0,
+            "utilization_pct": 72.25
+          },
+          {
+            "account_id": "acc_000237",
+            "mask": "2375",
+            "balance": 15060.403005362958,
+            "limit": 25000.0,
+            "utilization_pct": 60.24
           }
         ],
         "interest_charges_present": false,
@@ -57,54 +64,54 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 2,
-        "income_variability": 0.9435,
-        "cash_buffer_months": 1.72,
-        "pay_frequency": "variable",
-        "num_paychecks": 6,
-        "avg_paycheck": 2251.29
+        "median_pay_gap_days": 7,
+        "income_variability": 0.555,
+        "cash_buffer_months": 1.16,
+        "pay_frequency": "weekly",
+        "num_paychecks": 4,
+        "avg_paycheck": 2864.26
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.8643,
-        "cash_buffer_months": 12.46,
-        "pay_frequency": "variable",
-        "num_paychecks": 40,
-        "avg_paycheck": 2738.49
+        "median_pay_gap_days": 4,
+        "income_variability": 0.4758,
+        "cash_buffer_months": 1.02,
+        "pay_frequency": "weekly",
+        "num_paychecks": 44,
+        "avg_paycheck": 3759.12
       }
     }
   },
   "persona_assignment": {
-    "persona": "Savings Builder",
+    "persona": "High Utilization",
     "criteria_met": {
-      "growth_rate_pct": 3.57,
-      "net_inflow": 763.12,
-      "low_utilization": 16.72
+      "high_utilization": 72.25
     },
     "all_checks": {
-      "High Utilization": {},
+      "High Utilization": {
+        "high_utilization": 72.25
+      },
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
-        "stable_income_pay_gap_days": 3
+        "cash_buffer_months": 1.02,
+        "low_growth_rate_pct": 0.0,
+        "low_net_inflow": 0.0,
+        "stable_income_pay_gap_days": 4
       },
-      "Savings Builder": {
-        "growth_rate_pct": 3.57,
-        "net_inflow": 763.12,
-        "low_utilization": 16.72
-      }
+      "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T07:57:48.725319"
+    "timestamp": "2025-11-06T14:24:06.988459"
   },
   "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.856854",
-    "persona": "general",
+    "timestamp": "2025-11-06T14:29:36.776396",
+    "persona": "High Utilization",
     "education_count": 0,
     "offer_count": 0,
     "total_recommendations": 0,
     "recommendations": [],
     "consent_granted": true,
-    "reason": "general_persona_no_recommendations",
-    "message": "You're doing great - no recommendations at this time."
+    "reason": "insufficient_data",
+    "message": "You're doing great - no recommendations at this time.",
+    "education_shortfall": 3
   }
 }

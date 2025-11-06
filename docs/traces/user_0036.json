@@ -1,45 +1,40 @@
 {
   "user_id": "user_0036",
-  "timestamp": "2025-11-04T00:34:43.692059",
+  "timestamp": "2025-11-06T14:24:04.324001",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 51.3,
-        "subscription_share_pct": 0.92,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 4,
-        "monthly_recurring_spend": 51.08,
-        "subscription_share_pct": 0.87,
-        "recurring_merchants": [
-          "Hulu",
-          "NYT Subscription",
-          "Netflix",
-          "Planet Fitness"
-        ]
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.63,
-        "savings_balance": 25722.02
+        "net_inflow": 61.53,
+        "growth_rate_pct": 0.13,
+        "emergency_fund_months": 7.29,
+        "savings_balance": 46310.38
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.36,
-        "savings_balance": 25722.02
+        "net_inflow": 369.17,
+        "growth_rate_pct": 0.8,
+        "emergency_fund_months": 7.9,
+        "savings_balance": 46310.38
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 11.98,
-        "avg_utilization_pct": 11.98,
+        "max_utilization_pct": 6.22,
+        "avg_utilization_pct": 6.22,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
@@ -49,11 +44,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000100",
-            "mask": "6669",
-            "balance": 1198.458465984909,
-            "limit": 10000.0,
-            "utilization_pct": 11.98
+            "account_id": "acc_000109",
+            "mask": "1332",
+            "balance": 310.8730903923141,
+            "limit": 5000.0,
+            "utilization_pct": 6.22
           }
         ],
         "interest_charges_present": false,
@@ -62,65 +57,42 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 2,
-        "income_variability": 0.6191,
-        "cash_buffer_months": 4.27,
-        "pay_frequency": "variable",
-        "num_paychecks": 7,
-        "avg_paycheck": 4184.12
+        "median_pay_gap_days": 4,
+        "income_variability": 0.7603,
+        "cash_buffer_months": 1.91,
+        "pay_frequency": "weekly",
+        "num_paychecks": 4,
+        "avg_paycheck": 3612.91
       },
       "180d": {
         "median_pay_gap_days": 3,
-        "income_variability": 0.5004,
-        "cash_buffer_months": 22.17,
+        "income_variability": 0.8838,
+        "cash_buffer_months": 2.07,
         "pay_frequency": "variable",
         "num_paychecks": 41,
-        "avg_paycheck": 4054.81
+        "avg_paycheck": 2572.98
       }
     }
   },
   "persona_assignment": {
-    "persona": "Subscription-Heavy",
+    "persona": "Savings Builder",
     "criteria_met": {
-      "recurring_count": 4,
-      "monthly_spend": 51.3
+      "net_inflow": 369.17,
+      "low_utilization": 6.22
     },
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {},
-      "Subscription-Heavy": {
-        "recurring_count": 4,
-        "monthly_spend": 51.3
-      },
+      "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
-        "low_growth_rate_pct": 0.0,
-        "low_net_inflow": 0.0,
+        "low_growth_rate_pct": 0.8,
         "stable_income_pay_gap_days": 3
       },
       "Savings Builder": {
-        "low_utilization": 11.98
+        "net_inflow": 369.17,
+        "low_utilization": 6.22
       }
     },
-    "timestamp": "2025-11-06T07:57:48.678984"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.408174",
-    "persona": "savings_builder",
-    "education_count": 1,
-    "offer_count": 0,
-    "total_recommendations": 1,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Certificates of Deposit (CDs): Locking In Higher Rates",
-        "description": "When CDs make sense for part of your savings. Covers laddering strategies, penalty-free CDs, and how to balance liquidity with returns.",
-        "category": "savings_optimization",
-        "rationale": "With 4.4 months of emergency savings, you may have excess funds that could earn higher rates in CDs.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "education_shortfall": 2
+    "timestamp": "2025-11-06T14:24:06.980422"
   }
 }

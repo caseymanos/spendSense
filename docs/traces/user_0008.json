@@ -1,6 +1,6 @@
 {
   "user_id": "user_0008",
-  "timestamp": "2025-11-04T00:34:43.295626",
+  "timestamp": "2025-11-06T14:24:03.282215",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -19,24 +19,24 @@
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.74,
-        "savings_balance": 16206.4
+        "net_inflow": 52.4,
+        "growth_rate_pct": 0.13,
+        "emergency_fund_months": 6.12,
+        "savings_balance": 41444.58
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.49,
-        "savings_balance": 16206.4
+        "net_inflow": 314.43,
+        "growth_rate_pct": 0.76,
+        "emergency_fund_months": 6.29,
+        "savings_balance": 41444.58
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 62.81,
-        "avg_utilization_pct": 62.81,
-        "flag_30": true,
-        "flag_50": true,
+        "max_utilization_pct": 12.55,
+        "avg_utilization_pct": 12.55,
+        "flag_30": false,
+        "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
@@ -44,11 +44,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000026",
-            "mask": "9287",
-            "balance": 15703.100926301775,
+            "account_id": "acc_000025",
+            "mask": "5126",
+            "balance": 3137.0461965155723,
             "limit": 25000.0,
-            "utilization_pct": 62.81
+            "utilization_pct": 12.55
           }
         ],
         "interest_charges_present": false,
@@ -57,87 +57,44 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.4541,
-        "cash_buffer_months": 4.19,
-        "pay_frequency": "variable",
-        "num_paychecks": 7,
-        "avg_paycheck": 4388.67
+        "median_pay_gap_days": 13,
+        "income_variability": 0.6863,
+        "cash_buffer_months": 1.05,
+        "pay_frequency": "biweekly",
+        "num_paychecks": 3,
+        "avg_paycheck": 1778.39
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.4346,
-        "cash_buffer_months": 19.14,
-        "pay_frequency": "weekly",
-        "num_paychecks": 44,
-        "avg_paycheck": 3724.41
+        "median_pay_gap_days": 2,
+        "income_variability": 0.7446,
+        "cash_buffer_months": 1.08,
+        "pay_frequency": "variable",
+        "num_paychecks": 32,
+        "avg_paycheck": 3003.75
       }
     }
   },
   "persona_assignment": {
-    "persona": "High Utilization",
+    "persona": "Cash Flow Optimizer",
     "criteria_met": {
-      "high_utilization": 62.81
+      "cash_buffer_months": 1.08,
+      "low_growth_rate_pct": 0.76,
+      "stable_income_pay_gap_days": 2
     },
     "all_checks": {
-      "High Utilization": {
-        "high_utilization": 62.81
-      },
+      "High Utilization": {},
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
-        "low_growth_rate_pct": 0.0,
-        "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 4
+        "cash_buffer_months": 1.08,
+        "low_growth_rate_pct": 0.76,
+        "stable_income_pay_gap_days": 2
       },
-      "Savings Builder": {}
+      "Savings Builder": {
+        "net_inflow": 314.43,
+        "low_utilization": 12.55
+      }
     },
-    "timestamp": "2025-11-06T07:57:48.650471"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.069762",
-    "persona": "savings_builder",
-    "education_count": 0,
-    "offer_count": 0,
-    "total_recommendations": 0,
-    "recommendations": [],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "message": "You're doing great - no recommendations at this time.",
-    "education_shortfall": 3
-  },
-  "guardrail_decisions": [
-    {
-      "timestamp": "2025-11-04T10:10:17.853034",
-      "decision_type": "operator_override",
-      "operator": "Casey",
-      "action": "approve",
-      "reason": "Approved by operator",
-      "recommendation_title": "0% Balance Transfer Credit Card"
-    },
-    {
-      "timestamp": "2025-11-04T10:10:50.916494",
-      "decision_type": "operator_override",
-      "operator": "Casey",
-      "action": "approve",
-      "reason": "Approved by operator",
-      "recommendation_title": "Understanding Credit Utilization and Your Score"
-    },
-    {
-      "timestamp": "2025-11-04T10:11:26.256040",
-      "decision_type": "operator_override",
-      "operator": "Casey",
-      "action": "override",
-      "reason": "likely to increase utilization on the card",
-      "recommendation_title": "Balance Transfer Cards: When They Help and When They Hurt"
-    },
-    {
-      "timestamp": "2025-11-04T10:11:50.868326",
-      "decision_type": "operator_override",
-      "operator": "Casey",
-      "action": "flag",
-      "reason": "not necessary",
-      "recommendation_title": "How Interest Charges Work: APR, Compounding, and Grace Periods"
-    }
-  ]
+    "timestamp": "2025-11-06T14:24:06.975541"
+  }
 }

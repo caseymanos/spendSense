@@ -1,0 +1,99 @@
+{
+  "user_id": "user_0055",
+  "timestamp": "2025-11-04T23:54:38.597388",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 37.85,
+        "subscription_share_pct": 0.67,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 3,
+        "monthly_recurring_spend": 37.99,
+        "subscription_share_pct": 0.68,
+        "recurring_merchants": [
+          "Amazon Prime",
+          "Microsoft 365",
+          "Netflix"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 7.4,
+        "savings_balance": 40844.81
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 7.34,
+        "savings_balance": 40844.81
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
+        "flag_30": false,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": false,
+        "is_overdue": false,
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.5943,
+        "cash_buffer_months": 4.01,
+        "pay_frequency": "variable",
+        "num_paychecks": 6,
+        "avg_paycheck": 4613.17
+      },
+      "180d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.6707,
+        "cash_buffer_months": 16.15,
+        "pay_frequency": "variable",
+        "num_paychecks": 37,
+        "avg_paycheck": 3330.01
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "General",
+    "criteria_met": {},
+    "all_checks": {
+      "High Utilization": {},
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {
+        "recurring_count": 3
+      },
+      "Savings Builder": {
+        "low_utilization": 0.0
+      }
+    },
+    "timestamp": "2025-11-04T23:54:40.327246"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-05T10:34:17.862449",
+    "persona": "General",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": false,
+    "reason": "consent_not_granted",
+    "message": "Consent not granted. Opt in from your profile to unlock personalized guidance."
+  }
+}

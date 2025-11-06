@@ -355,7 +355,7 @@ def test_edge_case_no_transactions():
     assert credit_result["num_credit_cards"] == 0, "Should return 0 cards"
 
     # Test income signals
-    income_result = detect_income_signals(empty_transactions, user_id, window_days=30)
+    income_result = detect_income_signals(empty_transactions, empty_accounts, user_id, window_days=30)
     assert income_result["num_paychecks"] == 0, "Should return 0 paychecks"
     assert income_result["median_pay_gap_days"] == 0, "Should return 0 pay gap"
 

@@ -1,0 +1,102 @@
+{
+  "user_id": "user_0042",
+  "timestamp": "2025-11-04T23:54:38.156961",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 371.8,
+        "growth_rate_pct": 2.13,
+        "emergency_fund_months": 3.82,
+        "savings_balance": 17821.33
+      },
+      "180d": {
+        "net_inflow": 2230.82,
+        "growth_rate_pct": 14.31,
+        "emergency_fund_months": 2.96,
+        "savings_balance": 17821.33
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 38.84,
+        "avg_utilization_pct": 38.84,
+        "flag_30": true,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000128",
+            "mask": "5527",
+            "balance": 3883.8340470871203,
+            "limit": 10000.0,
+            "utilization_pct": 38.84
+          }
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 11,
+        "income_variability": 0.5162,
+        "cash_buffer_months": -0.13,
+        "pay_frequency": "biweekly",
+        "num_paychecks": 3,
+        "avg_paycheck": 1361.14
+      },
+      "180d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.8442,
+        "cash_buffer_months": 11.82,
+        "pay_frequency": "variable",
+        "num_paychecks": 40,
+        "avg_paycheck": 2685.89
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "General",
+    "criteria_met": {},
+    "all_checks": {
+      "High Utilization": {},
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {},
+      "Savings Builder": {
+        "growth_rate_pct": 14.31,
+        "net_inflow": 2230.82
+      }
+    },
+    "timestamp": "2025-11-04T23:54:40.325414"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-05T10:34:17.740053",
+    "persona": "General",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": true,
+    "reason": "general_persona_no_recommendations",
+    "message": "You're doing great - no recommendations at this time."
+  }
+}

@@ -1,41 +1,47 @@
 {
   "user_id": "user_0030",
-  "timestamp": "2025-11-04T00:34:43.605951",
+  "timestamp": "2025-11-06T14:24:04.109436",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 93.32,
+        "subscription_share_pct": 1.31,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 5,
+        "monthly_recurring_spend": 93.77,
+        "subscription_share_pct": 1.54,
+        "recurring_merchants": [
+          "Adobe Creative Cloud",
+          "Amazon Prime",
+          "Apple Music",
+          "Disney+",
+          "Microsoft 365"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.66,
-        "savings_balance": 14911.51
+        "emergency_fund_months": 3.82,
+        "savings_balance": 25442.03
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 2.44,
-        "savings_balance": 14911.51
+        "emergency_fund_months": 4.18,
+        "savings_balance": 25442.03
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 34.96,
-        "avg_utilization_pct": 34.96,
-        "flag_30": true,
+        "max_utilization_pct": 27.93,
+        "avg_utilization_pct": 27.93,
+        "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
@@ -44,11 +50,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000086",
-            "mask": "1957",
-            "balance": 699.1162624958832,
-            "limit": 2000.0,
-            "utilization_pct": 34.96
+            "account_id": "acc_000091",
+            "mask": "1944",
+            "balance": 2793.3441813791906,
+            "limit": 10000.0,
+            "utilization_pct": 27.93
           }
         ],
         "interest_charges_present": false,
@@ -57,71 +63,50 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 2,
-        "income_variability": 1.1848,
-        "cash_buffer_months": 0.46,
-        "pay_frequency": "variable",
-        "num_paychecks": 4,
-        "avg_paycheck": 2051.42
+        "median_pay_gap_days": 4,
+        "income_variability": 0.3561,
+        "cash_buffer_months": 0.82,
+        "pay_frequency": "weekly",
+        "num_paychecks": 7,
+        "avg_paycheck": 3905.79
       },
       "180d": {
         "median_pay_gap_days": 4,
-        "income_variability": 0.7835,
-        "cash_buffer_months": 7.27,
+        "income_variability": 0.5931,
+        "cash_buffer_months": 0.89,
         "pay_frequency": "weekly",
-        "num_paychecks": 27,
-        "avg_paycheck": 3008.03
+        "num_paychecks": 28,
+        "avg_paycheck": 3382.15
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "Cash Flow Optimizer",
+    "criteria_met": {
+      "cash_buffer_months": 0.89,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 4
+    },
     "all_checks": {
       "High Utilization": {},
-      "Variable Income Budgeter": {},
-      "Subscription-Heavy": {},
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.89
+      },
+      "Subscription-Heavy": {
+        "recurring_count": 5,
+        "monthly_spend": 93.32
+      },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 0.89,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
         "stable_income_pay_gap_days": 4
       },
-      "Savings Builder": {}
-    },
-    "timestamp": "2025-11-06T07:57:48.672814"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.339630",
-    "persona": "high_utilization",
-    "education_count": 3,
-    "offer_count": 0,
-    "total_recommendations": 3,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Understanding Credit Utilization and Your Score",
-        "description": "Learn how credit utilization affects your credit score and why keeping it below 30% is important. Includes strategies for paying down balances strategically.",
-        "category": "credit_basics",
-        "rationale": "Your credit card ending in 1944 is at 46% utilization ($4,628 of $10,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $69/month.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "How Interest Charges Work: APR, Compounding, and Grace Periods",
-        "description": "Demystify credit card interest calculations. Learn about daily periodic rates, grace periods, and how carrying a balance costs more than you think.",
-        "category": "credit_basics",
-        "rationale": "You're currently paying approximately $69/month per month in interest charges. Understanding how interest compounds can motivate faster paydown strategies.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      "Savings Builder": {
+        "low_utilization": 27.93
       }
-    ],
-    "consent_granted": true
+    },
+    "timestamp": "2025-11-06T14:24:06.979275"
   }
 }

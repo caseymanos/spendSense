@@ -1,24 +1,21 @@
 {
   "user_id": "user_0037",
-  "timestamp": "2025-11-04T00:34:43.706365",
+  "timestamp": "2025-11-06T14:24:04.357835",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 116.91,
-        "subscription_share_pct": 1.86,
+        "monthly_recurring_spend": 85.48,
+        "subscription_share_pct": 1.87,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 4,
-        "monthly_recurring_spend": 117.26,
-        "subscription_share_pct": 1.91,
+        "recurring_count": 1,
+        "monthly_recurring_spend": 87.55,
+        "subscription_share_pct": 1.44,
         "recurring_merchants": [
-          "Adobe Creative Cloud",
-          "Hulu",
-          "LinkedIn Premium",
-          "Netflix"
+          "Credit Card Interest"
         ]
       }
     },
@@ -26,106 +23,82 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.7,
-        "savings_balance": 35785.33
+        "emergency_fund_months": 10.33,
+        "savings_balance": 43407.37
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.81,
-        "savings_balance": 35785.33
+        "emergency_fund_months": 7.18,
+        "savings_balance": 43407.37
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 36.93,
-        "avg_utilization_pct": 22.19,
+        "max_utilization_pct": 51.47,
+        "avg_utilization_pct": 51.47,
         "flag_30": true,
-        "flag_50": false,
+        "flag_50": true,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 2,
+        "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000103",
-            "mask": "1631",
-            "balance": 1863.1285436520755,
-            "limit": 25000.0,
-            "utilization_pct": 7.45
-          },
-          {
-            "account_id": "acc_000104",
-            "mask": "1381",
-            "balance": 738.6204565905587,
-            "limit": 2000.0,
-            "utilization_pct": 36.93
+            "account_id": "acc_000112",
+            "mask": "9169",
+            "balance": 7720.336694204758,
+            "limit": 15000.0,
+            "utilization_pct": 51.47
           }
         ],
-        "interest_charges_present": false,
-        "interest_charges_amount_60d": 0.0
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 173.46
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 22,
-        "income_variability": 0.9439,
-        "cash_buffer_months": -0.19,
-        "pay_frequency": "variable",
-        "num_paychecks": 2,
-        "avg_paycheck": 2527.56
+        "median_pay_gap_days": 4,
+        "income_variability": 0.1411,
+        "cash_buffer_months": 2.58,
+        "pay_frequency": "weekly",
+        "num_paychecks": 5,
+        "avg_paycheck": 3782.02
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.7536,
-        "cash_buffer_months": 7.25,
-        "pay_frequency": "variable",
-        "num_paychecks": 28,
-        "avg_paycheck": 2911.3
+        "median_pay_gap_days": 4,
+        "income_variability": 0.5602,
+        "cash_buffer_months": 1.79,
+        "pay_frequency": "weekly",
+        "num_paychecks": 30,
+        "avg_paycheck": 3438.17
       }
     }
   },
   "persona_assignment": {
-    "persona": "Subscription-Heavy",
+    "persona": "High Utilization",
     "criteria_met": {
-      "recurring_count": 4,
-      "monthly_spend": 116.91
+      "high_utilization": 51.47,
+      "interest_charges": true
     },
     "all_checks": {
-      "High Utilization": {},
+      "High Utilization": {
+        "high_utilization": 51.47,
+        "interest_charges": true
+      },
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {
-        "recurring_count": 4,
-        "monthly_spend": 116.91
+        "monthly_spend": 85.48
       },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 1.79,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "stable_income_pay_gap_days": 4
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T07:57:48.679991"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.418494",
-    "persona": "savings_builder",
-    "education_count": 1,
-    "offer_count": 0,
-    "total_recommendations": 1,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Certificates of Deposit (CDs): Locking In Higher Rates",
-        "description": "When CDs make sense for part of your savings. Covers laddering strategies, penalty-free CDs, and how to balance liquidity with returns.",
-        "category": "savings_optimization",
-        "rationale": "With 5.8 months of emergency savings, you may have excess funds that could earn higher rates in CDs.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "education_shortfall": 2
+    "timestamp": "2025-11-06T14:24:06.980593"
   }
 }

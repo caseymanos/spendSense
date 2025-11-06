@@ -1,24 +1,24 @@
 {
   "user_id": "user_0013",
-  "timestamp": "2025-11-04T00:34:43.358824",
+  "timestamp": "2025-11-06T14:24:03.457275",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 123.35,
-        "subscription_share_pct": 1.33,
+        "monthly_recurring_spend": 92.44,
+        "subscription_share_pct": 1.36,
         "recurring_merchants": []
       },
       "180d": {
         "recurring_count": 4,
-        "monthly_recurring_spend": 122.86,
-        "subscription_share_pct": 1.33,
+        "monthly_recurring_spend": 92.48,
+        "subscription_share_pct": 1.49,
         "recurring_merchants": [
           "Adobe Creative Cloud",
-          "Dropbox",
-          "LA Fitness",
-          "WSJ"
+          "Amazon Prime",
+          "Disney+",
+          "Netflix"
         ]
       }
     },
@@ -26,14 +26,14 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.64,
-        "savings_balance": 5981.92
+        "emergency_fund_months": 0.44,
+        "savings_balance": 2967.41
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.65,
-        "savings_balance": 5981.92
+        "emergency_fund_months": 0.48,
+        "savings_balance": 2967.41
       }
     },
     "credit": {
@@ -54,103 +54,48 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 6,
-        "income_variability": 0.345,
-        "cash_buffer_months": 1.8,
+        "median_pay_gap_days": 7,
+        "income_variability": 0.4584,
+        "cash_buffer_months": 1.57,
         "pay_frequency": "weekly",
-        "num_paychecks": 5,
-        "avg_paycheck": 5196.17
+        "num_paychecks": 4,
+        "avg_paycheck": 2765.22
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.6364,
-        "cash_buffer_months": 10.26,
-        "pay_frequency": "variable",
-        "num_paychecks": 42,
-        "avg_paycheck": 3587.35
+        "median_pay_gap_days": 5,
+        "income_variability": 0.7201,
+        "cash_buffer_months": 1.72,
+        "pay_frequency": "weekly",
+        "num_paychecks": 30,
+        "avg_paycheck": 2611.93
       }
     }
   },
   "persona_assignment": {
-    "persona": "Subscription-Heavy",
+    "persona": "Cash Flow Optimizer",
     "criteria_met": {
-      "recurring_count": 4,
-      "monthly_spend": 123.35
+      "cash_buffer_months": 1.72,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 5
     },
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {
         "recurring_count": 4,
-        "monthly_spend": 123.35
+        "monthly_spend": 92.44
       },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 1.72,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "stable_income_pay_gap_days": 5
       },
       "Savings Builder": {
         "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-06T07:57:48.656208"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.124668",
-    "persona": "subscription_heavy",
-    "education_count": 4,
-    "offer_count": 2,
-    "total_recommendations": 6,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "The Complete Subscription Audit Checklist",
-        "description": "Step-by-step process to identify all recurring charges, evaluate if you're still using them, and cancel unused subscriptions. Includes email templates for cancellation requests.",
-        "category": "subscription_management",
-        "rationale": "You have 4 recurring subscriptions totaling approximately $123 per month. A quarterly audit can identify unused services.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Subscription Sharing: Ethical Ways to Split Costs",
-        "description": "How to legally share family plans for streaming, music, and software. Covers terms of service, payment splitting apps, and what to watch out for.",
-        "category": "subscription_management",
-        "rationale": "Your $123/month in subscriptions could be reduced 30-50% through family plan sharing where allowed.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Free Alternatives to Popular Paid Subscriptions",
-        "description": "Comprehensive list of free alternatives to common paid services: streaming (library apps), productivity (Google Workspace), fitness (YouTube), and more.",
-        "category": "subscription_management",
-        "rationale": "Some of your 4 subscriptions may have free alternatives that meet 80% of your needs without the monthly cost.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Setting Up Bill Alerts to Catch Price Increases",
-        "description": "How to monitor recurring charges for sneaky price increases. Covers bank alerts, calendar reminders, and subscription tracking apps.",
-        "category": "subscription_management",
-        "rationale": "Subscriptions often increase prices after promotional periods. With 4 active subscriptions, alerts help you catch changes quickly.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Rocket Money (formerly Truebill) - Subscription Manager",
-        "description": "App that identifies all recurring charges, lets you cancel with one tap, and negotiates bills on your behalf. Free tier available.",
-        "category": "subscription_app",
-        "rationale": "With 4 recurring subscriptions totaling $123/month, Rocket Money can identify forgotten subscriptions and negotiate lower rates.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Mint Mobile Family Plan",
-        "description": "Ultra-low-cost cell phone service ($15-30/month). Share a family plan to reduce costs even further.",
-        "category": "phone_service",
-        "rationale": "Phone service is often one of the biggest recurring bills. Mint Mobile could cut your phone costs by 50-70% without sacrificing coverage.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true
+    "timestamp": "2025-11-06T14:24:06.976384"
   }
 }

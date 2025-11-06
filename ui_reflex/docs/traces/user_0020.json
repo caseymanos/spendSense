@@ -1,0 +1,134 @@
+{
+  "user_id": "user_0020",
+  "timestamp": "2025-11-04T23:54:37.400895",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 61.39,
+        "subscription_share_pct": 1.28,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 3,
+        "monthly_recurring_spend": 61.4,
+        "subscription_share_pct": 0.98,
+        "recurring_merchants": [
+          "Apple Music",
+          "LinkedIn Premium",
+          "Planet Fitness"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 4.63,
+        "savings_balance": 22139.49
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 3.54,
+        "savings_balance": 22139.49
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
+        "flag_30": false,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": false,
+        "is_overdue": false,
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 8,
+        "income_variability": 0.6153,
+        "cash_buffer_months": 1.13,
+        "pay_frequency": "weekly",
+        "num_paychecks": 4,
+        "avg_paycheck": 2540.54
+      },
+      "180d": {
+        "median_pay_gap_days": 5,
+        "income_variability": 0.7246,
+        "cash_buffer_months": 10.69,
+        "pay_frequency": "weekly",
+        "num_paychecks": 30,
+        "avg_paycheck": 3478.16
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "Subscription-Heavy",
+    "criteria_met": {
+      "recurring_count": 3,
+      "monthly_spend": 61.39
+    },
+    "all_checks": {
+      "High Utilization": {},
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {
+        "recurring_count": 3,
+        "monthly_spend": 61.39
+      },
+      "Savings Builder": {
+        "low_utilization": 0.0
+      }
+    },
+    "timestamp": "2025-11-04T23:54:40.322223"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-05T10:34:17.533019",
+    "persona": "Subscription-Heavy",
+    "education_count": 3,
+    "offer_count": 1,
+    "total_recommendations": 4,
+    "recommendations": [
+      {
+        "type": "education",
+        "title": "The Complete Subscription Audit Checklist",
+        "description": "Step-by-step process to identify all recurring charges, evaluate if you're still using them, and cancel unused subscriptions. Includes email templates for cancellation requests.",
+        "category": "subscription_management",
+        "rationale": "You have 3 recurring subscriptions totaling approximately $61 per month. A quarterly audit can identify unused services.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Subscription Sharing: Ethical Ways to Split Costs",
+        "description": "How to legally share family plans for streaming, music, and software. Covers terms of service, payment splitting apps, and what to watch out for.",
+        "category": "subscription_management",
+        "rationale": "Your $61/month in subscriptions could be reduced 30-50% through family plan sharing where allowed.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Setting Up Bill Alerts to Catch Price Increases",
+        "description": "How to monitor recurring charges for sneaky price increases. Covers bank alerts, calendar reminders, and subscription tracking apps.",
+        "category": "subscription_management",
+        "rationale": "Subscriptions often increase prices after promotional periods. With 3 active subscriptions, alerts help you catch changes quickly.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "partner_offer",
+        "title": "Mint Mobile Family Plan",
+        "description": "Ultra-low-cost cell phone service ($15-30/month). Share a family plan to reduce costs even further.",
+        "category": "phone_service",
+        "rationale": "Phone service is often one of the biggest recurring bills. Mint Mobile could cut your phone costs by 50-70% without sacrificing coverage.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      }
+    ],
+    "consent_granted": true
+  }
+}

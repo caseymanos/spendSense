@@ -1,48 +1,61 @@
 {
   "user_id": "user_0062",
-  "timestamp": "2025-11-04T00:34:44.059719",
+  "timestamp": "2025-11-06T14:24:05.281829",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 40.26,
+        "subscription_share_pct": 0.8,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 4,
+        "monthly_recurring_spend": 40.06,
+        "subscription_share_pct": 0.65,
+        "recurring_merchants": [
+          "Amazon Prime",
+          "Disney+",
+          "Microsoft 365",
+          "Spotify"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 6.75,
-        "savings_balance": 49291.47
+        "emergency_fund_months": 4.28,
+        "savings_balance": 21544.35
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.31,
-        "savings_balance": 49291.47
+        "emergency_fund_months": 3.49,
+        "savings_balance": 21544.35
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 0.0,
-        "avg_utilization_pct": 0.0,
-        "flag_30": false,
+        "max_utilization_pct": 40.4,
+        "avg_utilization_pct": 40.4,
+        "flag_30": true,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
-        "has_interest": false,
+        "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 0,
-        "utilization_by_card": [],
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000184",
+            "mask": "1112",
+            "balance": 10101.15033522997,
+            "limit": 25000.0,
+            "utilization_pct": 40.4
+          }
+        ],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
@@ -50,19 +63,19 @@
     "income": {
       "30d": {
         "median_pay_gap_days": 3,
-        "income_variability": 0.6976,
-        "cash_buffer_months": 2.87,
+        "income_variability": 0.9019,
+        "cash_buffer_months": 2.93,
         "pay_frequency": "variable",
-        "num_paychecks": 8,
-        "avg_paycheck": 3535.44
+        "num_paychecks": 7,
+        "avg_paycheck": 2096.88
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.6378,
-        "cash_buffer_months": 10.64,
-        "pay_frequency": "variable",
-        "num_paychecks": 46,
-        "avg_paycheck": 3357.91
+        "median_pay_gap_days": 4,
+        "income_variability": 0.7502,
+        "cash_buffer_months": 2.39,
+        "pay_frequency": "weekly",
+        "num_paychecks": 33,
+        "avg_paycheck": 2602.58
       }
     }
   },
@@ -72,28 +85,16 @@
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {},
-      "Subscription-Heavy": {},
+      "Subscription-Heavy": {
+        "recurring_count": 4
+      },
       "Cash Flow Optimizer": {
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "stable_income_pay_gap_days": 4
       },
-      "Savings Builder": {
-        "low_utilization": 0.0
-      }
+      "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T07:57:48.705700"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.674211",
-    "persona": "subscription_heavy",
-    "education_count": 0,
-    "offer_count": 0,
-    "total_recommendations": 0,
-    "recommendations": [],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "message": "You're doing great - no recommendations at this time.",
-    "education_shortfall": 3
+    "timestamp": "2025-11-06T14:24:06.985432"
   }
 }

@@ -147,6 +147,7 @@ class DataGeneratorUI:
                     "high_utilization_focus": "High Utilization Focus",
                     "variable_income_focus": "Variable Income Focus",
                     "subscription_heavy_focus": "Subscription Heavy Focus",
+                    "cash_flow_optimizer_focus": "Cash Flow Optimizer Focus",
                     "savings_builder_focus": "Savings Builder Focus",
                     "overlap_testing": "Overlap Testing (Multi-Persona)",
                 }
@@ -231,6 +232,7 @@ class DataGeneratorUI:
                     "High Utilization": "Credit utilization ≥50%, interest charges, overdue payments",
                     "Variable Income Budgeter": "Irregular income patterns, unstable cash flow",
                     "Subscription-Heavy": "3+ recurring subscriptions, significant monthly spend",
+                    "Cash Flow Optimizer": "Frequent transfers between accounts, cash management patterns, liquidity optimization",
                     "Savings Builder": "Regular savings transfers, low credit utilization",
                     "General": "No specific behavioral patterns (baseline)",
                 }

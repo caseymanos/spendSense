@@ -1,0 +1,114 @@
+{
+  "user_id": "user_0049",
+  "timestamp": "2025-11-04T23:54:38.391323",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 36.49,
+        "subscription_share_pct": 0.36,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 4,
+        "monthly_recurring_spend": 36.18,
+        "subscription_share_pct": 0.46,
+        "recurring_merchants": [
+          "Disney+",
+          "Hulu",
+          "Planet Fitness",
+          "Spotify"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 180.9,
+        "growth_rate_pct": 1.65,
+        "emergency_fund_months": 1.15,
+        "savings_balance": 11144.01
+      },
+      "180d": {
+        "net_inflow": 1085.41,
+        "growth_rate_pct": 10.79,
+        "emergency_fund_months": 1.42,
+        "savings_balance": 11144.01
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 5.07,
+        "avg_utilization_pct": 5.07,
+        "flag_30": false,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 1,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000147",
+            "mask": "4546",
+            "balance": 507.4731845366024,
+            "limit": 10000.0,
+            "utilization_pct": 5.07
+          }
+        ],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 4,
+        "income_variability": 0.671,
+        "cash_buffer_months": 2.45,
+        "pay_frequency": "weekly",
+        "num_paychecks": 9,
+        "avg_paycheck": 3725.99
+      },
+      "180d": {
+        "median_pay_gap_days": 2,
+        "income_variability": 0.8294,
+        "cash_buffer_months": 11.94,
+        "pay_frequency": "variable",
+        "num_paychecks": 52,
+        "avg_paycheck": 2706.03
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "Savings Builder",
+    "criteria_met": {
+      "growth_rate_pct": 10.79,
+      "net_inflow": 1085.41,
+      "low_utilization": 5.07
+    },
+    "all_checks": {
+      "High Utilization": {},
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {
+        "recurring_count": 4
+      },
+      "Savings Builder": {
+        "growth_rate_pct": 10.79,
+        "net_inflow": 1085.41,
+        "low_utilization": 5.07
+      }
+    },
+    "timestamp": "2025-11-04T23:54:40.326389"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-05T10:34:17.805806",
+    "persona": "Savings Builder",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": false,
+    "reason": "consent_not_granted",
+    "message": "Consent not granted. Opt in from your profile to unlock personalized guidance."
+  }
+}

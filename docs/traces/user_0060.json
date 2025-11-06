@@ -1,113 +1,110 @@
 {
   "user_id": "user_0060",
-  "timestamp": "2025-11-04T00:34:44.031392",
+  "timestamp": "2025-11-06T14:24:05.211128",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 111.65,
+        "subscription_share_pct": 1.99,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 4,
+        "monthly_recurring_spend": 110.63,
+        "subscription_share_pct": 1.84,
+        "recurring_merchants": [
+          "Credit Card Interest",
+          "LA Fitness",
+          "NYT Subscription",
+          "WSJ"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 7.94,
-        "savings_balance": 36314.1
+        "emergency_fund_months": 5.37,
+        "savings_balance": 30133.81
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.83,
-        "savings_balance": 36314.1
+        "emergency_fund_months": 5.0,
+        "savings_balance": 30133.81
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 29.89,
-        "avg_utilization_pct": 20.01,
-        "flag_30": false,
-        "flag_50": false,
+        "max_utilization_pct": 50.54,
+        "avg_utilization_pct": 50.54,
+        "flag_30": true,
+        "flag_50": true,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 2,
+        "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000168",
-            "mask": "8037",
-            "balance": 1520.2024804895511,
-            "limit": 15000.0,
-            "utilization_pct": 10.13
-          },
-          {
-            "account_id": "acc_000169",
-            "mask": "9652",
-            "balance": 4483.450666276108,
-            "limit": 15000.0,
-            "utilization_pct": 29.89
+            "account_id": "acc_000178",
+            "mask": "6971",
+            "balance": 2527.240815871546,
+            "limit": 5000.0,
+            "utilization_pct": 50.54
           }
         ],
-        "interest_charges_present": false,
-        "interest_charges_amount_60d": 0.0
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 68.16
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 7,
-        "income_variability": 0.7138,
-        "cash_buffer_months": 0.47,
-        "pay_frequency": "weekly",
-        "num_paychecks": 3,
-        "avg_paycheck": 2248.71
+        "median_pay_gap_days": 3,
+        "income_variability": 0.3696,
+        "cash_buffer_months": 0.22,
+        "pay_frequency": "variable",
+        "num_paychecks": 5,
+        "avg_paycheck": 4377.1
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.8708,
-        "cash_buffer_months": 5.95,
-        "pay_frequency": "weekly",
-        "num_paychecks": 35,
-        "avg_paycheck": 2127.28
+        "median_pay_gap_days": 3,
+        "income_variability": 0.5437,
+        "cash_buffer_months": 0.2,
+        "pay_frequency": "variable",
+        "num_paychecks": 44,
+        "avg_paycheck": 3932.75
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "High Utilization",
+    "criteria_met": {
+      "high_utilization": 50.54,
+      "interest_charges": true
+    },
     "all_checks": {
-      "High Utilization": {},
-      "Variable Income Budgeter": {},
-      "Subscription-Heavy": {},
+      "High Utilization": {
+        "high_utilization": 50.54,
+        "interest_charges": true
+      },
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.2
+      },
+      "Subscription-Heavy": {
+        "recurring_count": 4,
+        "monthly_spend": 111.65
+      },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 0.2,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 4
+        "stable_income_pay_gap_days": 3
       },
-      "Savings Builder": {
-        "low_utilization": 29.89
-      }
+      "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T07:57:48.703731"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.655210",
-    "persona": "general",
-    "education_count": 0,
-    "offer_count": 0,
-    "total_recommendations": 0,
-    "recommendations": [],
-    "consent_granted": true,
-    "reason": "general_persona_no_recommendations",
-    "message": "You're doing great - no recommendations at this time."
+    "timestamp": "2025-11-06T14:24:06.985088"
   }
 }

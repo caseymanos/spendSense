@@ -1,24 +1,22 @@
 {
   "user_id": "user_0000",
-  "timestamp": "2025-11-04T00:34:43.187939",
+  "timestamp": "2025-11-06T14:24:02.979546",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 49.17,
-        "subscription_share_pct": 0.8,
+        "monthly_recurring_spend": 23.81,
+        "subscription_share_pct": 0.59,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 4,
-        "monthly_recurring_spend": 49.05,
-        "subscription_share_pct": 0.78,
+        "recurring_count": 2,
+        "monthly_recurring_spend": 23.98,
+        "subscription_share_pct": 0.42,
         "recurring_merchants": [
-          "Amazon Prime",
-          "Dropbox",
-          "Microsoft 365",
-          "NYT Subscription"
+          "Disney+",
+          "Netflix"
         ]
       }
     },
@@ -26,22 +24,22 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.16,
-        "savings_balance": 25536.32
+        "emergency_fund_months": 11.03,
+        "savings_balance": 43175.23
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.04,
-        "savings_balance": 25536.32
+        "emergency_fund_months": 7.62,
+        "savings_balance": 43175.23
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 55.93,
-        "avg_utilization_pct": 55.93,
+        "max_utilization_pct": 31.9,
+        "avg_utilization_pct": 31.9,
         "flag_30": true,
-        "flag_50": true,
+        "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
@@ -50,10 +48,10 @@
         "utilization_by_card": [
           {
             "account_id": "acc_000002",
-            "mask": "1125",
-            "balance": 13982.999950098363,
-            "limit": 25000.0,
-            "utilization_pct": 55.93
+            "mask": "6596",
+            "balance": 638.0382992919739,
+            "limit": 2000.0,
+            "utilization_pct": 31.9
           }
         ],
         "interest_charges_present": false,
@@ -62,540 +60,112 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.5077,
-        "cash_buffer_months": 3.5,
-        "pay_frequency": "variable",
+        "median_pay_gap_days": 4,
+        "income_variability": 0.6299,
+        "cash_buffer_months": 0.88,
+        "pay_frequency": "weekly",
         "num_paychecks": 6,
-        "avg_paycheck": 4610.2
+        "avg_paycheck": 3731.05
       },
       "180d": {
-        "median_pay_gap_days": 5,
-        "income_variability": 0.6792,
-        "cash_buffer_months": 9.87,
+        "median_pay_gap_days": 4,
+        "income_variability": 0.6044,
+        "cash_buffer_months": 0.61,
         "pay_frequency": "weekly",
-        "num_paychecks": 30,
-        "avg_paycheck": 3346.56
+        "num_paychecks": 35,
+        "avg_paycheck": 3649.31
       }
     }
   },
   "persona_assignment": {
-    "persona": "High Utilization",
+    "persona": "Cash Flow Optimizer",
     "criteria_met": {
-      "high_utilization": 55.93
+      "cash_buffer_months": 0.61,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 4
     },
     "all_checks": {
-      "High Utilization": {
-        "high_utilization": 55.93
+      "High Utilization": {},
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.61
       },
-      "Variable Income Budgeter": {},
-      "Subscription-Heavy": {
-        "recurring_count": 4
-      },
+      "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 0.61,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 5
+        "stable_income_pay_gap_days": 4
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T07:57:48.639941"
+    "timestamp": "2025-11-06T14:24:06.973941"
   },
   "recommendations": {
-    "timestamp": "2025-11-04T21:52:49.978994",
-    "persona": "general",
-    "education_count": 0,
-    "offer_count": 0,
-    "total_recommendations": 0,
-    "recommendations": [],
-    "consent_granted": true,
-    "reason": "general_persona_no_recommendations",
-    "message": "You're doing great - no recommendations at this time."
-  },
-  "guardrail_decisions": [
-    {
-      "timestamp": "2025-11-04T00:57:54.930898",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
+    "timestamp": "2025-11-06T14:52:30.272974",
+    "persona": "Cash Flow Optimizer",
+    "education_count": 3,
+    "offer_count": 3,
+    "total_recommendations": 6,
+    "recommendations": [
+      {
+        "type": "education",
+        "title": "The 24-Hour Rule: Curbing Impulse Purchases",
+        "description": "Simple technique to reduce impulse spending: wait 24 hours before non-essential purchases. Includes strategies for online shopping and in-store temptations.",
+        "category": "spending_habits",
+        "topic": "impulse_control",
+        "partner_equivalent": false,
+        "rationale": "Small behavioral changes can significantly improve your cash buffer over time. The 24-hour rule reduces regrettable purchases.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Building a Cash Buffer: The First $1000",
+        "description": "Practical strategies for building your first $1000 emergency buffer. Covers small wins, expense cuts, and income boosts to accelerate savings.",
+        "category": "emergency_fund",
+        "topic": "starter_emergency_fund",
+        "partner_equivalent": true,
+        "rationale": "Your current buffer of 0.6 months can be strengthened with focused savings. This guide provides actionable steps to reach 1-2 months of expenses.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Pay Yourself First: Automating Savings Before Spending",
+        "description": "Learn how to set up automatic transfers to savings on payday, before discretionary spending occurs. Makes saving effortless and consistent.",
+        "category": "savings_automation",
+        "topic": "pay_yourself_first",
+        "partner_equivalent": false,
+        "rationale": "Automation removes willpower from the equation. Setting up automatic transfers can help grow your 0.6-month buffer consistently.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "partner_offer",
+        "title": "Mint Budget Tracker & Spending Analyzer",
+        "description": "Free app that automatically categorizes spending, tracks budgets, and identifies spending patterns. Helps visualize where money goes.",
+        "category": "budgeting_app",
+        "topic": "discretionary_tracking",
+        "rationale": "Understanding your spending patterns is the first step to improving cash flow. Mint provides automatic tracking and alerts when you exceed budget categories.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "partner_offer",
+        "title": "Chime Automatic Savings Account",
+        "description": "No-fee banking with automatic round-up savings. Every purchase rounds up to the nearest dollar and transfers the difference to savings.",
+        "category": "savings_account",
+        "topic": "pay_yourself_first",
+        "rationale": "With 0.6 months of buffer, automatic savings through round-ups can help you build reserves effortlessly without impacting your budget.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "partner_offer",
+        "title": "EveryDollar Zero-Based Budget App",
+        "description": "Simple budgeting app based on zero-based budgeting principles. Free version available, premium adds automatic transaction sync.",
+        "category": "budgeting_app",
+        "topic": "zero_based_budget",
+        "rationale": "Zero-based budgeting gives every dollar a job before the month begins. With your current cash buffer, this approach can help build consistent savings habits.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       }
-    },
-    {
-      "timestamp": "2025-11-04T00:57:54.932127",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T00:57:54.933432",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T00:57:54.933677",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:01:07.315309",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:01:07.316731",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:01:07.317967",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:01:07.318225",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:07:11.611049",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:07:11.612605",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:07:11.614087",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:07:11.614388",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:08:24.648522",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:08:24.649938",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:08:24.651485",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:08:24.651922",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:17:47.374451",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:17:47.375883",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:17:47.377354",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:17:47.377637",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:20:26.036015",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:20:26.037411",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:20:26.038889",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:20:26.039246",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:21:35.580525",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:21:35.581956",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:21:35.583589",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:21:35.583933",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:22:00.309089",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:22:00.310536",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:22:00.311837",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:22:00.312170",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:22:15.025753",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:22:15.027108",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:22:15.028505",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:22:15.028831",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:24:24.483322",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:24:24.484949",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:24:24.486429",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T01:24:24.486765",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    },
-    {
-      "timestamp": "2025-11-04T10:18:44.245522",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T10:18:44.246971",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 2,
-        "tone_passed": true,
-        "eligibility_blocks": 0
-      }
-    },
-    {
-      "timestamp": "2025-11-04T10:18:44.248351",
-      "decision_type": "offers_blocked",
-      "details": {
-        "blocked_count": 1,
-        "blocked_offers": [
-          {
-            "title": "Premium Rewards Card",
-            "reason": "Credit utilization too high (90%)",
-            "blocked_at": "product_eligibility"
-          }
-        ]
-      }
-    },
-    {
-      "timestamp": "2025-11-04T10:18:44.248733",
-      "decision_type": "guardrails_complete",
-      "details": {
-        "total_recommendations": 2,
-        "filtered_count": 1,
-        "tone_passed": true,
-        "eligibility_blocks": 1
-      }
-    }
-  ]
+    ],
+    "consent_granted": true
+  }
 }

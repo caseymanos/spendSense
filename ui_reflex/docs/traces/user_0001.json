@@ -1,0 +1,117 @@
+{
+  "user_id": "user_0001",
+  "timestamp": "2025-11-04T23:54:36.795809",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 83.44,
+        "subscription_share_pct": 1.49,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 1,
+        "monthly_recurring_spend": 79.72,
+        "subscription_share_pct": 1.27,
+        "recurring_merchants": [
+          "Credit Card Interest"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 307.88,
+        "growth_rate_pct": 0.65,
+        "emergency_fund_months": 8.8,
+        "savings_balance": 47985.13
+      },
+      "180d": {
+        "net_inflow": 1847.27,
+        "growth_rate_pct": 4.0,
+        "emergency_fund_months": 7.62,
+        "savings_balance": 47985.13
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 40.78,
+        "avg_utilization_pct": 36.17,
+        "flag_30": true,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": true,
+        "is_overdue": false,
+        "num_credit_cards": 2,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000005",
+            "mask": "6342",
+            "balance": 4078.0167754238864,
+            "limit": 10000.0,
+            "utilization_pct": 40.78
+          },
+          {
+            "account_id": "acc_000006",
+            "mask": "1451",
+            "balance": 7888.353822780979,
+            "limit": 25000.0,
+            "utilization_pct": 31.55
+          }
+        ],
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 162.17000000000002
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 4,
+        "income_variability": 0.8004,
+        "cash_buffer_months": 3.26,
+        "pay_frequency": "weekly",
+        "num_paychecks": 8,
+        "avg_paycheck": 2901.13
+      },
+      "180d": {
+        "median_pay_gap_days": 3,
+        "income_variability": 0.6345,
+        "cash_buffer_months": 19.58,
+        "pay_frequency": "variable",
+        "num_paychecks": 51,
+        "avg_paycheck": 3156.04
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "High Utilization",
+    "criteria_met": {
+      "interest_charges": true
+    },
+    "all_checks": {
+      "High Utilization": {
+        "interest_charges": true
+      },
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {
+        "monthly_spend": 83.44
+      },
+      "Savings Builder": {
+        "growth_rate_pct": 4.0,
+        "net_inflow": 1847.27
+      }
+    },
+    "timestamp": "2025-11-04T23:54:40.319417"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-05T10:34:17.346926",
+    "persona": "High Utilization",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": false,
+    "reason": "consent_not_granted",
+    "message": "Consent not granted. Opt in from your profile to unlock personalized guidance."
+  }
+}

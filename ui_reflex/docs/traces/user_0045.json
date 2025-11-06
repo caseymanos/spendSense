@@ -1,0 +1,104 @@
+{
+  "user_id": "user_0045",
+  "timestamp": "2025-11-04T23:54:38.256972",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 93.87,
+        "subscription_share_pct": 1.05,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 4,
+        "monthly_recurring_spend": 94.87,
+        "subscription_share_pct": 1.49,
+        "recurring_merchants": [
+          "Adobe Creative Cloud",
+          "Amazon Prime",
+          "NYT Subscription",
+          "Planet Fitness"
+        ]
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 5.8,
+        "savings_balance": 49740.39
+      },
+      "180d": {
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 7.8,
+        "savings_balance": 49740.39
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
+        "flag_30": false,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": false,
+        "is_overdue": false,
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 4,
+        "income_variability": 0.6737,
+        "cash_buffer_months": 1.37,
+        "pay_frequency": "weekly",
+        "num_paychecks": 5,
+        "avg_paycheck": 4059.54
+      },
+      "180d": {
+        "median_pay_gap_days": 5,
+        "income_variability": 0.585,
+        "cash_buffer_months": 7.12,
+        "pay_frequency": "weekly",
+        "num_paychecks": 24,
+        "avg_paycheck": 3489.07
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "Subscription-Heavy",
+    "criteria_met": {
+      "recurring_count": 4,
+      "monthly_spend": 93.87
+    },
+    "all_checks": {
+      "High Utilization": {},
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {
+        "recurring_count": 4,
+        "monthly_spend": 93.87
+      },
+      "Savings Builder": {
+        "low_utilization": 0.0
+      }
+    },
+    "timestamp": "2025-11-04T23:54:40.325800"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-05T10:34:17.768222",
+    "persona": "Subscription-Heavy",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": false,
+    "reason": "consent_not_granted",
+    "message": "Consent not granted. Opt in from your profile to unlock personalized guidance."
+  }
+}

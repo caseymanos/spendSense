@@ -1,99 +1,117 @@
 {
   "user_id": "user_0010",
-  "timestamp": "2025-11-04T00:34:43.319798",
+  "timestamp": "2025-11-06T14:24:03.355852",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 282.7,
+        "subscription_share_pct": 4.26,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 3,
+        "monthly_recurring_spend": 154.97,
+        "subscription_share_pct": 2.36,
+        "recurring_merchants": [
+          "Amazon Prime",
+          "Microsoft 365",
+          "Safeway"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.49,
-        "savings_balance": 34355.01
+        "emergency_fund_months": 7.54,
+        "savings_balance": 49956.13
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.68,
-        "savings_balance": 34355.01
+        "emergency_fund_months": 7.62,
+        "savings_balance": 49956.13
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 0.0,
-        "avg_utilization_pct": 0.0,
+        "max_utilization_pct": 27.43,
+        "avg_utilization_pct": 18.0,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
-        "has_interest": false,
+        "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 0,
-        "utilization_by_card": [],
+        "num_credit_cards": 2,
+        "utilization_by_card": [
+          {
+            "account_id": "acc_000030",
+            "mask": "6850",
+            "balance": 548.5166994483126,
+            "limit": 2000.0,
+            "utilization_pct": 27.43
+          },
+          {
+            "account_id": "acc_000031",
+            "mask": "8688",
+            "balance": 171.5109375833175,
+            "limit": 2000.0,
+            "utilization_pct": 8.58
+          }
+        ],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.832,
-        "cash_buffer_months": 1.11,
-        "pay_frequency": "weekly",
-        "num_paychecks": 6,
-        "avg_paycheck": 2684.8
+        "median_pay_gap_days": 1,
+        "income_variability": 0.9123,
+        "cash_buffer_months": 0.31,
+        "pay_frequency": "variable",
+        "num_paychecks": 3,
+        "avg_paycheck": 3191.29
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.8599,
-        "cash_buffer_months": 3.47,
+        "median_pay_gap_days": 5,
+        "income_variability": 0.6158,
+        "cash_buffer_months": 0.31,
         "pay_frequency": "weekly",
-        "num_paychecks": 23,
-        "avg_paycheck": 2487.6
+        "num_paychecks": 32,
+        "avg_paycheck": 3661.81
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "Cash Flow Optimizer",
+    "criteria_met": {
+      "cash_buffer_months": 0.31,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 5
+    },
     "all_checks": {
       "High Utilization": {},
-      "Variable Income Budgeter": {},
-      "Subscription-Heavy": {},
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.31
+      },
+      "Subscription-Heavy": {
+        "recurring_count": 3,
+        "monthly_spend": 282.7
+      },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 0.31,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 4
+        "stable_income_pay_gap_days": 5
       },
       "Savings Builder": {
-        "low_utilization": 0.0
+        "low_utilization": 27.43
       }
     },
-    "timestamp": "2025-11-06T07:57:48.652859"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.091843",
-    "persona": "high_utilization",
-    "education_count": 0,
-    "offer_count": 0,
-    "total_recommendations": 0,
-    "recommendations": [],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "message": "You're doing great - no recommendations at this time.",
-    "education_shortfall": 3
+    "timestamp": "2025-11-06T14:24:06.975876"
   }
 }

@@ -1,6 +1,6 @@
 {
   "user_id": "user_0051",
-  "timestamp": "2025-11-04T00:34:43.909488",
+  "timestamp": "2025-11-06T14:24:04.856726",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -21,20 +21,20 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.25,
-        "savings_balance": 20236.06
+        "emergency_fund_months": 6.92,
+        "savings_balance": 42218.98
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 3.53,
-        "savings_balance": 20236.06
+        "emergency_fund_months": 4.94,
+        "savings_balance": 42218.98
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 26.12,
-        "avg_utilization_pct": 26.12,
+        "max_utilization_pct": 17.0,
+        "avg_utilization_pct": 17.0,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
@@ -44,11 +44,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000144",
-            "mask": "7797",
-            "balance": 6529.928009642015,
-            "limit": 25000.0,
-            "utilization_pct": 26.12
+            "account_id": "acc_000152",
+            "mask": "3902",
+            "balance": 849.8292506888314,
+            "limit": 5000.0,
+            "utilization_pct": 17.0
           }
         ],
         "interest_charges_present": false,
@@ -57,59 +57,45 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 8,
-        "income_variability": 0.3388,
-        "cash_buffer_months": 0.07,
-        "pay_frequency": "weekly",
-        "num_paychecks": 3,
-        "avg_paycheck": 1706.65
+        "median_pay_gap_days": 2,
+        "income_variability": 0.7146,
+        "cash_buffer_months": 1.94,
+        "pay_frequency": "variable",
+        "num_paychecks": 7,
+        "avg_paycheck": 1510.71
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.7001,
-        "cash_buffer_months": 8.65,
-        "pay_frequency": "weekly",
-        "num_paychecks": 28,
-        "avg_paycheck": 2997.73
+        "median_pay_gap_days": 3,
+        "income_variability": 0.6323,
+        "cash_buffer_months": 1.38,
+        "pay_frequency": "variable",
+        "num_paychecks": 45,
+        "avg_paycheck": 3009.7
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "Cash Flow Optimizer",
+    "criteria_met": {
+      "cash_buffer_months": 1.38,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 3
+    },
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 1.38,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 4
+        "stable_income_pay_gap_days": 3
       },
       "Savings Builder": {
-        "low_utilization": 26.12
+        "low_utilization": 17.0
       }
     },
-    "timestamp": "2025-11-06T07:57:48.694732"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.563373",
-    "persona": "high_utilization",
-    "education_count": 1,
-    "offer_count": 0,
-    "total_recommendations": 1,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "education_shortfall": 2
+    "timestamp": "2025-11-06T14:24:06.983503"
   }
 }

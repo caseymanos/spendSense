@@ -1,23 +1,24 @@
 {
   "user_id": "user_0089",
-  "timestamp": "2025-11-04T00:34:44.441858",
+  "timestamp": "2025-11-06T14:24:06.297770",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 51.06,
-        "subscription_share_pct": 0.94,
+        "monthly_recurring_spend": 43.38,
+        "subscription_share_pct": 0.65,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 3,
-        "monthly_recurring_spend": 50.96,
-        "subscription_share_pct": 0.86,
+        "recurring_count": 4,
+        "monthly_recurring_spend": 43.05,
+        "subscription_share_pct": 0.45,
         "recurring_merchants": [
           "Apple Music",
-          "Dropbox",
-          "LA Fitness"
+          "Hulu",
+          "Microsoft 365",
+          "NYT Subscription"
         ]
       }
     },
@@ -25,36 +26,28 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.22,
-        "savings_balance": 1196.37
+        "emergency_fund_months": 2.15,
+        "savings_balance": 13087.34
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 0.2,
-        "savings_balance": 1196.37
+        "emergency_fund_months": 1.36,
+        "savings_balance": 13087.34
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 10.71,
-        "avg_utilization_pct": 10.71,
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
-        "has_interest": true,
+        "has_interest": false,
         "is_overdue": false,
-        "num_credit_cards": 1,
-        "utilization_by_card": [
-          {
-            "account_id": "acc_000252",
-            "mask": "9936",
-            "balance": 1071.0948898333093,
-            "limit": 10000.0,
-            "utilization_pct": 10.71
-          }
-        ],
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
@@ -62,86 +55,46 @@
     "income": {
       "30d": {
         "median_pay_gap_days": 3,
-        "income_variability": 0.5323,
-        "cash_buffer_months": 1.27,
+        "income_variability": 0.4234,
+        "cash_buffer_months": 2.14,
         "pay_frequency": "variable",
-        "num_paychecks": 4,
-        "avg_paycheck": 3089.53
+        "num_paychecks": 5,
+        "avg_paycheck": 4705.61
       },
       "180d": {
         "median_pay_gap_days": 3,
-        "income_variability": 0.6048,
-        "cash_buffer_months": 12.48,
+        "income_variability": 0.4858,
+        "cash_buffer_months": 1.35,
         "pay_frequency": "variable",
-        "num_paychecks": 34,
-        "avg_paycheck": 3222.09
+        "num_paychecks": 54,
+        "avg_paycheck": 3863.09
       }
     }
   },
   "persona_assignment": {
-    "persona": "Subscription-Heavy",
+    "persona": "Cash Flow Optimizer",
     "criteria_met": {
-      "recurring_count": 3,
-      "monthly_spend": 51.06
+      "cash_buffer_months": 1.35,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 3
     },
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {
-        "recurring_count": 3,
-        "monthly_spend": 51.06
+        "recurring_count": 4
       },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 1.35,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
         "stable_income_pay_gap_days": 3
       },
       "Savings Builder": {
-        "low_utilization": 10.71
+        "low_utilization": 0.0
       }
     },
-    "timestamp": "2025-11-06T07:57:48.734013"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.936992",
-    "persona": "subscription_heavy",
-    "education_count": 3,
-    "offer_count": 1,
-    "total_recommendations": 4,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "The Complete Subscription Audit Checklist",
-        "description": "Step-by-step process to identify all recurring charges, evaluate if you're still using them, and cancel unused subscriptions. Includes email templates for cancellation requests.",
-        "category": "subscription_management",
-        "rationale": "You have 3 recurring subscriptions totaling approximately $51 per month. A quarterly audit can identify unused services.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Subscription Sharing: Ethical Ways to Split Costs",
-        "description": "How to legally share family plans for streaming, music, and software. Covers terms of service, payment splitting apps, and what to watch out for.",
-        "category": "subscription_management",
-        "rationale": "Your $51/month in subscriptions could be reduced 30-50% through family plan sharing where allowed.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Setting Up Bill Alerts to Catch Price Increases",
-        "description": "How to monitor recurring charges for sneaky price increases. Covers bank alerts, calendar reminders, and subscription tracking apps.",
-        "category": "subscription_management",
-        "rationale": "Subscriptions often increase prices after promotional periods. With 3 active subscriptions, alerts help you catch changes quickly.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Mint Mobile Family Plan",
-        "description": "Ultra-low-cost cell phone service ($15-30/month). Share a family plan to reduce costs even further.",
-        "category": "phone_service",
-        "rationale": "Phone service is often one of the biggest recurring bills. Mint Mobile could cut your phone costs by 50-70% without sacrificing coverage.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true
+    "timestamp": "2025-11-06T14:24:06.989834"
   }
 }

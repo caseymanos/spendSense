@@ -1,24 +1,23 @@
 {
   "user_id": "user_0018",
-  "timestamp": "2025-11-04T00:34:43.424747",
+  "timestamp": "2025-11-06T14:24:03.655699",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 78.11,
-        "subscription_share_pct": 1.06,
+        "monthly_recurring_spend": 66.14,
+        "subscription_share_pct": 1.12,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 4,
-        "monthly_recurring_spend": 77.84,
-        "subscription_share_pct": 1.28,
+        "recurring_count": 3,
+        "monthly_recurring_spend": 66.93,
+        "subscription_share_pct": 1.11,
         "recurring_merchants": [
-          "Amazon Prime",
-          "NYT Subscription",
-          "Netflix",
-          "WSJ"
+          "Dropbox",
+          "LinkedIn Premium",
+          "NYT Subscription"
         ]
       }
     },
@@ -26,20 +25,20 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 3.71,
-        "savings_balance": 27236.3
+        "emergency_fund_months": 4.06,
+        "savings_balance": 21967.26
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.47,
-        "savings_balance": 27236.3
+        "emergency_fund_months": 3.65,
+        "savings_balance": 21967.26
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 38.07,
-        "avg_utilization_pct": 33.52,
+        "max_utilization_pct": 36.34,
+        "avg_utilization_pct": 25.78,
         "flag_30": true,
         "flag_50": false,
         "flag_80": false,
@@ -49,18 +48,18 @@
         "num_credit_cards": 2,
         "utilization_by_card": [
           {
-            "account_id": "acc_000052",
-            "mask": "6872",
-            "balance": 2897.2502422958305,
+            "account_id": "acc_000054",
+            "mask": "6711",
+            "balance": 1521.9577735717426,
             "limit": 10000.0,
-            "utilization_pct": 28.97
+            "utilization_pct": 15.22
           },
           {
-            "account_id": "acc_000053",
-            "mask": "1316",
-            "balance": 5710.528845594463,
-            "limit": 15000.0,
-            "utilization_pct": 38.07
+            "account_id": "acc_000055",
+            "mask": "9283",
+            "balance": 1817.0409113172377,
+            "limit": 5000.0,
+            "utilization_pct": 36.34
           }
         ],
         "interest_charges_present": false,
@@ -69,101 +68,48 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 9,
-        "income_variability": 0.6976,
-        "cash_buffer_months": 1.04,
+        "median_pay_gap_days": 8,
+        "income_variability": 0.918,
+        "cash_buffer_months": 0.91,
         "pay_frequency": "weekly",
         "num_paychecks": 4,
-        "avg_paycheck": 3736.69
+        "avg_paycheck": 3294.08
       },
       "180d": {
         "median_pay_gap_days": 4,
-        "income_variability": 0.6561,
-        "cash_buffer_months": 11.03,
+        "income_variability": 0.6492,
+        "cash_buffer_months": 0.82,
         "pay_frequency": "weekly",
-        "num_paychecks": 33,
-        "avg_paycheck": 3141.94
+        "num_paychecks": 32,
+        "avg_paycheck": 3783.5
       }
     }
   },
   "persona_assignment": {
-    "persona": "Subscription-Heavy",
+    "persona": "Cash Flow Optimizer",
     "criteria_met": {
-      "recurring_count": 4,
-      "monthly_spend": 78.11
+      "cash_buffer_months": 0.82,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 4
     },
     "all_checks": {
       "High Utilization": {},
-      "Variable Income Budgeter": {},
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.82
+      },
       "Subscription-Heavy": {
-        "recurring_count": 4,
-        "monthly_spend": 78.11
+        "recurring_count": 3,
+        "monthly_spend": 66.14
       },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 0.82,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
         "stable_income_pay_gap_days": 4
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T07:57:48.661157"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.172977",
-    "persona": "subscription_heavy",
-    "education_count": 4,
-    "offer_count": 2,
-    "total_recommendations": 6,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "The Complete Subscription Audit Checklist",
-        "description": "Step-by-step process to identify all recurring charges, evaluate if you're still using them, and cancel unused subscriptions. Includes email templates for cancellation requests.",
-        "category": "subscription_management",
-        "rationale": "You have 4 recurring subscriptions totaling approximately $78 per month. A quarterly audit can identify unused services.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Subscription Sharing: Ethical Ways to Split Costs",
-        "description": "How to legally share family plans for streaming, music, and software. Covers terms of service, payment splitting apps, and what to watch out for.",
-        "category": "subscription_management",
-        "rationale": "Your $78/month in subscriptions could be reduced 30-50% through family plan sharing where allowed.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Free Alternatives to Popular Paid Subscriptions",
-        "description": "Comprehensive list of free alternatives to common paid services: streaming (library apps), productivity (Google Workspace), fitness (YouTube), and more.",
-        "category": "subscription_management",
-        "rationale": "Some of your 4 subscriptions may have free alternatives that meet 80% of your needs without the monthly cost.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Setting Up Bill Alerts to Catch Price Increases",
-        "description": "How to monitor recurring charges for sneaky price increases. Covers bank alerts, calendar reminders, and subscription tracking apps.",
-        "category": "subscription_management",
-        "rationale": "Subscriptions often increase prices after promotional periods. With 4 active subscriptions, alerts help you catch changes quickly.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Rocket Money (formerly Truebill) - Subscription Manager",
-        "description": "App that identifies all recurring charges, lets you cancel with one tap, and negotiates bills on your behalf. Free tier available.",
-        "category": "subscription_app",
-        "rationale": "With 4 recurring subscriptions totaling $78/month, Rocket Money can identify forgotten subscriptions and negotiate lower rates.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Mint Mobile Family Plan",
-        "description": "Ultra-low-cost cell phone service ($15-30/month). Share a family plan to reduce costs even further.",
-        "category": "phone_service",
-        "rationale": "Phone service is often one of the biggest recurring bills. Mint Mobile could cut your phone costs by 50-70% without sacrificing coverage.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true
+    "timestamp": "2025-11-06T14:24:06.977220"
   }
 }

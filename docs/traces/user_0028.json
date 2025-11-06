@@ -1,24 +1,25 @@
 {
   "user_id": "user_0028",
-  "timestamp": "2025-11-04T00:34:43.574943",
+  "timestamp": "2025-11-06T14:24:04.011497",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 68.89,
-        "subscription_share_pct": 1.52,
+        "monthly_recurring_spend": 78.87,
+        "subscription_share_pct": 1.1,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 4,
-        "monthly_recurring_spend": 68.27,
-        "subscription_share_pct": 1.06,
+        "recurring_count": 5,
+        "monthly_recurring_spend": 79.73,
+        "subscription_share_pct": 1.14,
         "recurring_merchants": [
-          "Dropbox",
-          "Hulu",
-          "LinkedIn Premium",
-          "Planet Fitness"
+          "Amazon Prime",
+          "Disney+",
+          "NYT Subscription",
+          "Planet Fitness",
+          "WSJ"
         ]
       }
     },
@@ -26,20 +27,20 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.15,
-        "savings_balance": 23261.58
+        "emergency_fund_months": 0.56,
+        "savings_balance": 3847.32
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 3.61,
-        "savings_balance": 23261.58
+        "emergency_fund_months": 0.56,
+        "savings_balance": 3847.32
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 25.63,
-        "avg_utilization_pct": 25.63,
+        "max_utilization_pct": 26.11,
+        "avg_utilization_pct": 26.11,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
@@ -49,11 +50,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000081",
-            "mask": "3838",
-            "balance": 6408.6659202337,
-            "limit": 25000.0,
-            "utilization_pct": 25.63
+            "account_id": "acc_000086",
+            "mask": "5855",
+            "balance": 3916.7957748269496,
+            "limit": 15000.0,
+            "utilization_pct": 26.11
           }
         ],
         "interest_charges_present": false,
@@ -62,65 +63,48 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 6,
-        "income_variability": 0.5816,
-        "cash_buffer_months": 2.11,
+        "median_pay_gap_days": 7,
+        "income_variability": 0.9148,
+        "cash_buffer_months": 1.7,
         "pay_frequency": "weekly",
         "num_paychecks": 4,
-        "avg_paycheck": 3515.36
+        "avg_paycheck": 1961.34
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.5526,
-        "cash_buffer_months": 12.92,
-        "pay_frequency": "variable",
-        "num_paychecks": 32,
-        "avg_paycheck": 3804.85
+        "median_pay_gap_days": 7,
+        "income_variability": 0.6834,
+        "cash_buffer_months": 1.67,
+        "pay_frequency": "weekly",
+        "num_paychecks": 22,
+        "avg_paycheck": 3050.54
       }
     }
   },
   "persona_assignment": {
-    "persona": "Subscription-Heavy",
+    "persona": "Cash Flow Optimizer",
     "criteria_met": {
-      "recurring_count": 4,
-      "monthly_spend": 68.89
+      "cash_buffer_months": 1.67,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 7
     },
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {
-        "recurring_count": 4,
-        "monthly_spend": 68.89
+        "recurring_count": 5,
+        "monthly_spend": 78.87
       },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 1.67,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "stable_income_pay_gap_days": 7
       },
       "Savings Builder": {
-        "low_utilization": 25.63
+        "low_utilization": 26.11
       }
     },
-    "timestamp": "2025-11-06T07:57:48.670954"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.319133",
-    "persona": "high_utilization",
-    "education_count": 1,
-    "offer_count": 0,
-    "total_recommendations": 1,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "education_shortfall": 2
+    "timestamp": "2025-11-06T14:24:06.978952"
   }
 }

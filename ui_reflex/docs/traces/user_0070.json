@@ -1,0 +1,138 @@
+{
+  "user_id": "user_0070",
+  "timestamp": "2025-11-04T23:54:39.102751",
+  "phase": "behavioral_signals",
+  "signals": {
+    "subscriptions": {
+      "30d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      },
+      "180d": {
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
+      }
+    },
+    "savings": {
+      "30d": {
+        "net_inflow": 361.92,
+        "growth_rate_pct": 3.43,
+        "emergency_fund_months": 1.06,
+        "savings_balance": 10902.32
+      },
+      "180d": {
+        "net_inflow": 2171.5,
+        "growth_rate_pct": 24.87,
+        "emergency_fund_months": 1.22,
+        "savings_balance": 10902.32
+      }
+    },
+    "credit": {
+      "current": {
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
+        "flag_30": false,
+        "flag_50": false,
+        "flag_80": false,
+        "min_payment_only": false,
+        "has_interest": false,
+        "is_overdue": false,
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
+        "interest_charges_present": false,
+        "interest_charges_amount_60d": 0.0
+      }
+    },
+    "income": {
+      "30d": {
+        "median_pay_gap_days": 2,
+        "income_variability": 0.732,
+        "cash_buffer_months": 1.33,
+        "pay_frequency": "variable",
+        "num_paychecks": 10,
+        "avg_paycheck": 2394.22
+      },
+      "180d": {
+        "median_pay_gap_days": 2,
+        "income_variability": 0.7921,
+        "cash_buffer_months": 11.51,
+        "pay_frequency": "variable",
+        "num_paychecks": 53,
+        "avg_paycheck": 2962.48
+      }
+    }
+  },
+  "persona_assignment": {
+    "persona": "Savings Builder",
+    "criteria_met": {
+      "growth_rate_pct": 24.87,
+      "net_inflow": 2171.5,
+      "low_utilization": 0.0
+    },
+    "all_checks": {
+      "High Utilization": {},
+      "Variable Income Budgeter": {},
+      "Subscription-Heavy": {},
+      "Savings Builder": {
+        "growth_rate_pct": 24.87,
+        "net_inflow": 2171.5,
+        "low_utilization": 0.0
+      }
+    },
+    "timestamp": "2025-11-04T23:54:40.330149"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-05T10:34:18.014273",
+    "persona": "Savings Builder",
+    "education_count": 4,
+    "offer_count": 1,
+    "total_recommendations": 5,
+    "recommendations": [
+      {
+        "type": "education",
+        "title": "SMART Goal Setting for Financial Milestones",
+        "description": "Apply the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound) to savings goals. Includes templates for emergency funds, down payments, and retirement.",
+        "category": "goal_setting",
+        "rationale": "You've grown your savings by 24.9% recently, showing strong momentum. SMART goals help channel that discipline toward specific milestones.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "High-Yield Savings Accounts: Where to Find the Best Rates",
+        "description": "Comparison of online banks offering 4-5% APY vs. traditional banks at 0.01%. Covers FDIC insurance, account minimums, and transfer times.",
+        "category": "savings_optimization",
+        "rationale": "With $2,172 saved in the last 6 months, moving to a high-yield account could earn you an extra $50-150/year in interest.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Automating Your Savings: Set It and Forget It",
+        "description": "How to automate transfers from checking to savings on payday. Includes tips for starting small and gradually increasing amounts.",
+        "category": "savings_automation",
+        "rationale": "Your savings inflow of $2,172 over 6 months shows you're already saving consistently. Automation makes it effortless.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "The 50/30/20 Rule: Balancing Needs, Wants, and Savings",
+        "description": "Popular budgeting framework: 50% needs, 30% wants, 20% savings/debt. Includes how to adapt percentages to your situation and track progress.",
+        "category": "goal_setting",
+        "rationale": "You're already saving $2,172 per month. The 50/30/20 rule can help you optimize other spending categories too.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "partner_offer",
+        "title": "Ally Bank High-Yield Savings Account",
+        "description": "Top-rated online bank with competitive APY (4.0%+), no fees, no minimums, and excellent customer service. FDIC insured.",
+        "category": "savings_account",
+        "rationale": "You've saved $2,172 in the last 6 months. Moving to Ally's high-yield account could earn you an extra $100-300/year in interest.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      }
+    ],
+    "consent_granted": true
+  }
+}

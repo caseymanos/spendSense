@@ -138,7 +138,7 @@ def compute_all_signals(
     interest = _detect_interest_charges(transactions_df, accounts_df, user_id)
     credit_signals.setdefault("current", {})["interest_charges_present"] = bool(interest["present"])
     credit_signals["current"]["interest_charges_amount_60d"] = float(interest["amount_sum"])
-    income_signals = compute_income_signals(transactions_df, user_id)
+    income_signals = compute_income_signals(transactions_df, accounts_df, user_id)
 
     return {
         "user_id": user_id,

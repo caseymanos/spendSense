@@ -1,6 +1,6 @@
 {
   "user_id": "user_0082",
-  "timestamp": "2025-11-04T00:34:44.341017",
+  "timestamp": "2025-11-06T14:24:06.028628",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -21,20 +21,20 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 3.64,
-        "savings_balance": 34479.66
+        "emergency_fund_months": 6.06,
+        "savings_balance": 37791.09
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 3.75,
-        "savings_balance": 34479.66
+        "emergency_fund_months": 5.83,
+        "savings_balance": 37791.09
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 7.19,
-        "avg_utilization_pct": 7.19,
+        "max_utilization_pct": 28.09,
+        "avg_utilization_pct": 28.09,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
@@ -44,11 +44,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000230",
-            "mask": "3976",
-            "balance": 1077.842706466967,
+            "account_id": "acc_000240",
+            "mask": "5778",
+            "balance": 4214.187435349426,
             "limit": 15000.0,
-            "utilization_pct": 7.19
+            "utilization_pct": 28.09
           }
         ],
         "interest_charges_present": false,
@@ -57,59 +57,45 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 1,
-        "income_variability": 0.6143,
-        "cash_buffer_months": 1.81,
-        "pay_frequency": "variable",
-        "num_paychecks": 8,
-        "avg_paycheck": 3328.55
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 1,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.6558,
-        "cash_buffer_months": 9.56,
-        "pay_frequency": "variable",
-        "num_paychecks": 43,
-        "avg_paycheck": 3326.13
+        "median_pay_gap_days": 6,
+        "income_variability": 0.7818,
+        "cash_buffer_months": 1.85,
+        "pay_frequency": "weekly",
+        "num_paychecks": 22,
+        "avg_paycheck": 2821.24
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "Cash Flow Optimizer",
+    "criteria_met": {
+      "cash_buffer_months": 1.85,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 6
+    },
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 1.85,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "stable_income_pay_gap_days": 6
       },
       "Savings Builder": {
-        "low_utilization": 7.19
+        "low_utilization": 28.09
       }
     },
-    "timestamp": "2025-11-06T07:57:48.726530"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.866719",
-    "persona": "high_utilization",
-    "education_count": 1,
-    "offer_count": 0,
-    "total_recommendations": 1,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "education_shortfall": 2
+    "timestamp": "2025-11-06T14:24:06.988618"
   }
 }

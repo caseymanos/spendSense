@@ -1,6 +1,6 @@
 {
   "user_id": "user_0039",
-  "timestamp": "2025-11-04T00:34:43.733496",
+  "timestamp": "2025-11-06T14:24:04.425960",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
@@ -19,36 +19,43 @@
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.42,
-        "savings_balance": 29048.24
+        "net_inflow": 51.63,
+        "growth_rate_pct": 0.12,
+        "emergency_fund_months": 7.15,
+        "savings_balance": 42813.89
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.6,
-        "savings_balance": 29048.24
+        "net_inflow": 309.76,
+        "growth_rate_pct": 0.73,
+        "emergency_fund_months": 6.75,
+        "savings_balance": 42813.89
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 18.56,
-        "avg_utilization_pct": 18.56,
-        "flag_30": false,
+        "max_utilization_pct": 37.94,
+        "avg_utilization_pct": 22.53,
+        "flag_30": true,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 1,
+        "num_credit_cards": 2,
         "utilization_by_card": [
           {
-            "account_id": "acc_000109",
-            "mask": "4764",
-            "balance": 371.20836926324614,
-            "limit": 2000.0,
-            "utilization_pct": 18.56
+            "account_id": "acc_000118",
+            "mask": "2030",
+            "balance": 1896.940067747834,
+            "limit": 5000.0,
+            "utilization_pct": 37.94
+          },
+          {
+            "account_id": "acc_000119",
+            "mask": "8978",
+            "balance": 712.0289780894078,
+            "limit": 10000.0,
+            "utilization_pct": 7.12
           }
         ],
         "interest_charges_present": false,
@@ -57,20 +64,20 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 9,
-        "income_variability": 0.3474,
-        "cash_buffer_months": 1.17,
-        "pay_frequency": "weekly",
-        "num_paychecks": 4,
-        "avg_paycheck": 2899.55
+        "median_pay_gap_days": 2,
+        "income_variability": 0.9111,
+        "cash_buffer_months": 2.15,
+        "pay_frequency": "variable",
+        "num_paychecks": 5,
+        "avg_paycheck": 3226.39
       },
       "180d": {
-        "median_pay_gap_days": 6,
-        "income_variability": 0.7506,
-        "cash_buffer_months": 4.79,
-        "pay_frequency": "weekly",
-        "num_paychecks": 22,
-        "avg_paycheck": 3100.09
+        "median_pay_gap_days": 3,
+        "income_variability": 0.7222,
+        "cash_buffer_months": 2.03,
+        "pay_frequency": "variable",
+        "num_paychecks": 37,
+        "avg_paycheck": 3236.34
       }
     }
   },
@@ -82,34 +89,13 @@
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
-        "low_growth_rate_pct": 0.0,
-        "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 6
+        "low_growth_rate_pct": 0.73,
+        "stable_income_pay_gap_days": 3
       },
       "Savings Builder": {
-        "low_utilization": 18.56
+        "net_inflow": 309.76
       }
     },
-    "timestamp": "2025-11-06T07:57:48.681985"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.439010",
-    "persona": "high_utilization",
-    "education_count": 1,
-    "offer_count": 0,
-    "total_recommendations": 1,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "education_shortfall": 2
+    "timestamp": "2025-11-06T14:24:06.981367"
   }
 }

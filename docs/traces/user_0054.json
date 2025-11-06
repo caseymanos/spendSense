@@ -1,127 +1,116 @@
 {
   "user_id": "user_0054",
-  "timestamp": "2025-11-04T00:34:43.948362",
+  "timestamp": "2025-11-06T14:24:04.989906",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 528.45,
+        "subscription_share_pct": 6.18,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 6,
+        "monthly_recurring_spend": 222.72,
+        "subscription_share_pct": 3.52,
+        "recurring_merchants": [
+          "Costco",
+          "Credit Card Interest",
+          "Disney+",
+          "Dropbox",
+          "Hulu",
+          "Spotify"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.78,
-        "savings_balance": 42335.83
+        "emergency_fund_months": 5.15,
+        "savings_balance": 42815.1
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.65,
-        "savings_balance": 42335.83
+        "emergency_fund_months": 6.83,
+        "savings_balance": 42815.1
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 35.16,
-        "avg_utilization_pct": 35.16,
+        "max_utilization_pct": 63.63,
+        "avg_utilization_pct": 43.98,
         "flag_30": true,
-        "flag_50": false,
+        "flag_50": true,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 1,
+        "num_credit_cards": 2,
         "utilization_by_card": [
           {
-            "account_id": "acc_000151",
-            "mask": "8149",
-            "balance": 5273.871973621645,
+            "account_id": "acc_000161",
+            "mask": "9955",
+            "balance": 3648.5152055073154,
             "limit": 15000.0,
-            "utilization_pct": 35.16
+            "utilization_pct": 24.32
+          },
+          {
+            "account_id": "acc_000162",
+            "mask": "3288",
+            "balance": 3181.6861454479867,
+            "limit": 5000.0,
+            "utilization_pct": 63.63
           }
         ],
-        "interest_charges_present": false,
-        "interest_charges_amount_60d": 0.0
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 79.96000000000001
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.82,
-        "cash_buffer_months": 0.87,
-        "pay_frequency": "weekly",
+        "median_pay_gap_days": 3,
+        "income_variability": 0.572,
+        "cash_buffer_months": 1.54,
+        "pay_frequency": "variable",
         "num_paychecks": 5,
-        "avg_paycheck": 3311.17
+        "avg_paycheck": 3728.49
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.6392,
-        "cash_buffer_months": 9.81,
+        "median_pay_gap_days": 2,
+        "income_variability": 0.7246,
+        "cash_buffer_months": 2.05,
         "pay_frequency": "variable",
-        "num_paychecks": 42,
-        "avg_paycheck": 3426.98
+        "num_paychecks": 33,
+        "avg_paycheck": 3080.51
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "High Utilization",
+    "criteria_met": {
+      "high_utilization": 63.63,
+      "interest_charges": true
+    },
     "all_checks": {
-      "High Utilization": {},
+      "High Utilization": {
+        "high_utilization": 63.63,
+        "interest_charges": true
+      },
       "Variable Income Budgeter": {},
-      "Subscription-Heavy": {},
+      "Subscription-Heavy": {
+        "recurring_count": 6,
+        "monthly_spend": 528.45
+      },
       "Cash Flow Optimizer": {
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "stable_income_pay_gap_days": 2
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T07:57:48.697668"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:50.595618",
-    "persona": "high_utilization",
-    "education_count": 3,
-    "offer_count": 0,
-    "total_recommendations": 3,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Understanding Credit Utilization and Your Score",
-        "description": "Learn how credit utilization affects your credit score and why keeping it below 30% is important. Includes strategies for paying down balances strategically.",
-        "category": "credit_basics",
-        "rationale": "Your credit card ending in 9955 is at 85% utilization ($12,717 of $15,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $210/month.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "How Interest Charges Work: APR, Compounding, and Grace Periods",
-        "description": "Demystify credit card interest calculations. Learn about daily periodic rates, grace periods, and how carrying a balance costs more than you think.",
-        "category": "credit_basics",
-        "rationale": "You're currently paying approximately $210/month per month in interest charges. Understanding how interest compounds can motivate faster paydown strategies.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true
+    "timestamp": "2025-11-06T14:24:06.984084"
   }
 }

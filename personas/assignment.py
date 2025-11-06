@@ -233,9 +233,9 @@ def assign_persona(signals: pd.Series) -> Tuple[str, Dict]:
 
     Priority order:
     1. High Utilization (immediate credit strain)
-    2. Variable Income Budgeter (income stability)
-    3. Subscription-Heavy (spending optimization)
-    4. Cash Flow Optimizer (cash flow management)
+    2. Cash Flow Optimizer (cash flow emergency - < 2 months runway)
+    3. Variable Income Budgeter (income stability)
+    4. Subscription-Heavy (spending optimization)
     5. Savings Builder (positive reinforcement)
     6. General (default for users with minimal signals)
 

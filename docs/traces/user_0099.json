@@ -1,45 +1,46 @@
 {
   "user_id": "user_0099",
-  "timestamp": "2025-11-04T00:34:44.592976",
+  "timestamp": "2025-11-06T14:24:06.644120",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 136.69,
-        "subscription_share_pct": 2.96,
+        "monthly_recurring_spend": 86.37,
+        "subscription_share_pct": 0.73,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 4,
-        "monthly_recurring_spend": 132.88,
-        "subscription_share_pct": 2.3,
+        "recurring_count": 5,
+        "monthly_recurring_spend": 86.74,
+        "subscription_share_pct": 0.91,
         "recurring_merchants": [
-          "Adobe Creative Cloud",
-          "Amazon Prime",
-          "LinkedIn Premium",
-          "Starbucks"
+          "Apple Music",
+          "Disney+",
+          "Hulu",
+          "LA Fitness",
+          "WSJ"
         ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 8.44,
-        "savings_balance": 38955.93
+        "net_inflow": 34.8,
+        "growth_rate_pct": 0.04,
+        "emergency_fund_months": 7.53,
+        "savings_balance": 83309.29
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 6.73,
-        "savings_balance": 38955.93
+        "net_inflow": 208.8,
+        "growth_rate_pct": 0.25,
+        "emergency_fund_months": 8.79,
+        "savings_balance": 83309.29
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 29.72,
-        "avg_utilization_pct": 22.84,
+        "max_utilization_pct": 23.2,
+        "avg_utilization_pct": 21.81,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
@@ -49,18 +50,18 @@
         "num_credit_cards": 2,
         "utilization_by_card": [
           {
-            "account_id": "acc_000292",
-            "mask": "8115",
-            "balance": 2972.1348102269058,
-            "limit": 10000.0,
-            "utilization_pct": 29.72
+            "account_id": "acc_000293",
+            "mask": "5254",
+            "balance": 408.4422784794603,
+            "limit": 2000.0,
+            "utilization_pct": 20.42
           },
           {
-            "account_id": "acc_000283",
-            "mask": "2783",
-            "balance": 798.0926770568668,
-            "limit": 5000.0,
-            "utilization_pct": 15.96
+            "account_id": "acc_000290",
+            "mask": "2064",
+            "balance": 2319.608247421796,
+            "limit": 10000.0,
+            "utilization_pct": 23.2
           }
         ],
         "interest_charges_present": false,
@@ -69,81 +70,47 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.6466,
-        "cash_buffer_months": 1.79,
-        "pay_frequency": "weekly",
-        "num_paychecks": 5,
-        "avg_paycheck": 2574.26
+        "median_pay_gap_days": 3,
+        "income_variability": 1.2186,
+        "cash_buffer_months": 1.55,
+        "pay_frequency": "variable",
+        "num_paychecks": 4,
+        "avg_paycheck": 1393.57
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.6562,
-        "cash_buffer_months": 12.57,
-        "pay_frequency": "weekly",
-        "num_paychecks": 31,
-        "avg_paycheck": 3464.7
+        "median_pay_gap_days": 3,
+        "income_variability": 0.8978,
+        "cash_buffer_months": 1.81,
+        "pay_frequency": "variable",
+        "num_paychecks": 50,
+        "avg_paycheck": 2457.93
       }
     }
   },
   "persona_assignment": {
-    "persona": "Subscription-Heavy",
+    "persona": "Cash Flow Optimizer",
     "criteria_met": {
-      "recurring_count": 4,
-      "monthly_spend": 136.69
+      "cash_buffer_months": 1.81,
+      "low_growth_rate_pct": 0.25,
+      "stable_income_pay_gap_days": 3
     },
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {},
       "Subscription-Heavy": {
-        "recurring_count": 4,
-        "monthly_spend": 136.69
+        "recurring_count": 5,
+        "monthly_spend": 86.37
       },
       "Cash Flow Optimizer": {
-        "low_growth_rate_pct": 0.0,
-        "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 4
+        "cash_buffer_months": 1.81,
+        "low_growth_rate_pct": 0.25,
+        "stable_income_pay_gap_days": 3
       },
       "Savings Builder": {
-        "low_utilization": 29.72
+        "net_inflow": 208.8,
+        "low_utilization": 23.2
       }
     },
-    "timestamp": "2025-11-06T07:57:48.744471"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-04T21:52:51.036684",
-    "persona": "high_utilization",
-    "education_count": 2,
-    "offer_count": 1,
-    "total_recommendations": 3,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Debt Avalanche vs. Debt Snowball: Which Strategy is Right for You?",
-        "description": "Compare two proven debt paydown methods. Avalanche prioritizes highest interest rates, while Snowball focuses on smallest balances first for psychological wins.",
-        "category": "debt_paydown",
-        "rationale": "With 2 credit cards and total utilization of 23%, a structured paydown plan could save you hundreds in interest. This guide helps you choose the right approach.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 2 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Autopay Setup Service",
-        "description": "Free service to help you set up automatic payments across all your credit cards and bills.",
-        "category": "budgeting_app",
-        "rationale": "Managing 2 credit cards manually increases the risk of missed payments. Autopay ensures on-time payments every month.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "reason": "insufficient_data",
-    "education_shortfall": 1
+    "timestamp": "2025-11-06T14:24:06.991689"
   }
 }

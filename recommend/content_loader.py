@@ -282,18 +282,35 @@ def import_overrides(import_path: Path) -> None:
         json.dump(imported, f, indent=2)
 
 
+def _normalize_persona_key(persona: str) -> str:
+    """
+    Normalize persona name to match content catalog keys.
+
+    Converts "High Utilization" -> "high_utilization"
+    Converts "Cash Flow Optimizer" -> "cash_flow_optimizer"
+
+    Args:
+        persona: Persona name (can be title case with spaces or lowercase with underscores)
+
+    Returns:
+        Normalized persona key for content catalog lookup
+    """
+    return persona.lower().replace(" ", "_")
+
+
 def get_education_items(persona: str) -> List[Dict[str, Any]]:
     """
     Get educational content for a persona (with overrides applied).
 
     Args:
-        persona: Persona key
+        persona: Persona key (accepts both "High Utilization" and "high_utilization")
 
     Returns:
         List of educational items
     """
     catalog = load_content_catalog()
-    return catalog.get("educational", {}).get(persona, [])
+    persona_key = _normalize_persona_key(persona)
+    return catalog.get("educational", {}).get(persona_key, [])
 
 
 def get_partner_offers(persona: str) -> List[Dict[str, Any]]:
@@ -301,13 +318,14 @@ def get_partner_offers(persona: str) -> List[Dict[str, Any]]:
     Get partner offers for a persona (with overrides applied).
 
     Args:
-        persona: Persona key
+        persona: Persona key (accepts both "High Utilization" and "high_utilization")
 
     Returns:
         List of partner offers
     """
     catalog = load_content_catalog()
-    return catalog.get("offers", {}).get(persona, [])
+    persona_key = _normalize_persona_key(persona)
+    return catalog.get("offers", {}).get(persona_key, [])
 
 
 def get_all_personas() -> List[str]:
