@@ -28,13 +28,17 @@ from ingest.schemas import (
     RESTAURANT_MERCHANTS,
 )
 from ingest.constants import SUBSCRIPTION_PRICES
+from ingest.operator_controls import OperatorControls
 
 
 class SyntheticDataGenerator:
     """Generate realistic synthetic financial data"""
 
-    def __init__(self, config: DataGenerationConfig):
+    def __init__(self, config: DataGenerationConfig, operator_controls: OperatorControls = None):
         self.config = config
+        # Use provided controls or default to standard controls
+        self.controls = operator_controls if operator_controls is not None else OperatorControls()
+
         # Use instance-scoped randomness for determinism across multiple instances
         self.fake = Faker()
         # Seed only this Faker instance (avoid global state)
@@ -159,11 +163,21 @@ class SyntheticDataGenerator:
             num_credit_cards = min(num_accounts - 2, int(self.rng.integers(1, 3)))
             for _ in range(num_credit_cards):
                 credit_limit = float(self.rng.choice([2000, 5000, 10000, 15000, 25000]))
-                # Shape utilization: ~25% above 50%, rest below
-                if float(self.rng.random()) < 0.25:
-                    utilization = float(self.rng.uniform(0.5, 0.95))
-                else:
-                    utilization = float(self.rng.uniform(0.05, 0.5))
+                # Use operator controls to determine credit utilization distribution
+                dist = self.controls.credit_utilization_distribution
+                tier = str(self.rng.choice(
+                    list(dist.keys()),
+                    p=list(dist.values())
+                ))
+                # Map tier to utilization range
+                if tier == "low":
+                    utilization = float(self.rng.uniform(0.05, 0.30))
+                elif tier == "medium":
+                    utilization = float(self.rng.uniform(0.30, 0.50))
+                elif tier == "high":
+                    utilization = float(self.rng.uniform(0.50, 0.80))
+                else:  # critical
+                    utilization = float(self.rng.uniform(0.80, 0.95))
                 balance = credit_limit * utilization
 
                 credit_card = Account(
@@ -218,9 +232,13 @@ class SyntheticDataGenerator:
             # Optional: generate monthly savings transfers for a subset of users
             savings_accs = [a for a in user_accs if a.account_subtype == AccountSubtype.SAVINGS]
             has_savings_transfer = False
-            # Increase savings transfer adoption to improve savings behavior coverage
-            if primary_checking and savings_accs and float(self.rng.random()) < 0.40:
-                monthly_transfer = float(self.rng.uniform(100, 400))
+            # Use operator controls for savings behavior
+            if primary_checking and savings_accs and float(self.rng.random()) < self.controls.savings_adoption_rate:
+                # Use operator controls for transfer amount range
+                monthly_transfer = float(self.rng.uniform(
+                    self.controls.savings_transfer_range[0],
+                    self.controls.savings_transfer_range[1]
+                ))
                 has_savings_transfer = True
                 for month_offset in range(self.config.months_history):
                     trans_date = self.start_date + timedelta(
@@ -242,10 +260,14 @@ class SyntheticDataGenerator:
                     )
                     transaction_counter += 1
 
-            # Generate recurring subscriptions (increase adoption; still reduced if saving-focused)
-            has_subscriptions = float(self.rng.random()) < (0.35 if has_savings_transfer else 0.60)
+            # Generate recurring subscriptions based on operator controls
+            has_subscriptions = float(self.rng.random()) < self.controls.subscription_adoption_rate
             if has_subscriptions and primary_checking:
-                num_subs = int(self.rng.integers(3, 6))
+                # Use operator controls for subscription count range
+                num_subs = int(self.rng.integers(
+                    self.controls.subscription_count_min,
+                    self.controls.subscription_count_max + 1
+                ))
                 selected_subs = self.rng.choice(
                     RECURRING_MERCHANTS, size=min(num_subs, len(RECURRING_MERCHANTS)), replace=False
                 )
@@ -338,9 +360,10 @@ class SyntheticDataGenerator:
 
             # Generate payroll deposits with diversified patterns
             if primary_checking:
-                # Select pay pattern per user (increase irregular share)
-                patterns = ["weekly", "biweekly", "monthly", "irregular"]
-                probs = [0.15, 0.30, 0.25, 0.30]
+                # Use operator controls for payroll pattern distribution
+                dist = self.controls.payroll_pattern_distribution
+                patterns = list(dist.keys())
+                probs = list(dist.values())
                 pay_pattern = str(self.rng.choice(patterns, p=probs))
 
                 # If irregular pay, boost expenses to reduce cash buffer
@@ -536,9 +559,27 @@ def main():
     data_dir = Path("data")
     data_dir.mkdir(exist_ok=True)
 
-    # Generate data
-    config = DataGenerationConfig(seed=42, num_users=100, months_history=6)
-    generator = SyntheticDataGenerator(config)
+    # Check for operator config file (created by UI)
+    operator_config_path = data_dir / "operator_config.json"
+    controls = None
+
+    if operator_config_path.exists():
+        print(f"Loading operator configuration from {operator_config_path}")
+        with open(operator_config_path, "r") as f:
+            config_data = json.load(f)
+
+        # Load both config and controls from the file
+        config = DataGenerationConfig(**config_data.get("config", {}))
+        from ingest.operator_controls import OperatorControls
+        controls = OperatorControls(**config_data.get("controls", {}))
+        print(f"✓ Using preset configuration with {config.num_users} users, {config.months_history} months")
+    else:
+        # Fallback to default config
+        print("No operator config found, using defaults")
+        config = DataGenerationConfig(seed=42, num_users=100, months_history=6)
+
+    # Generate data with controls if provided
+    generator = SyntheticDataGenerator(config, operator_controls=controls)
     users, accounts, transactions, liabilities = generator.generate_all()
 
     # Save config

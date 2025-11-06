@@ -1136,3 +1136,67 @@
 **Note:** UI testing is manual/visual for MVP. App running at http://localhost:3000/
 
 ---
+
+## Preset System Integration & UX Improvements ✅ COMPLETED
+
+**Goal:** Connect operator preset system to data generator and improve UI consistency
+
+**Date:** 2025-01-XX
+
+### Tasks Completed:
+
+- [x] **Integrate OperatorControls with Data Generator**
+  - Modified `ingest/data_generator.py` to accept `OperatorControls` parameter
+  - Replaced hard-coded probabilities with preset-driven values:
+    - Credit utilization distribution (lines 166-181)
+    - Subscription adoption rate and count range (lines 262-268)
+    - Savings adoption rate and transfer amounts (lines 236-242)
+    - Payroll pattern distribution (lines 364-367)
+  - Updated CLI entry point to read `data/operator_config.json` if present
+  - **Result:** ✅ Presets now directly control data generation behavior
+
+- [x] **Fix Preset Comparison Display Ordering**
+  - Added `SECTION_ORDER` constant to define canonical section ordering (lines 21-30)
+  - Implemented `_get_sort_key()` method to preserve both section and insertion order (lines 750-769)
+  - Updated `_flatten_config()` to track insertion order during flattening (lines 734-748)
+  - Modified `_calculate_differences()` to use custom sort key (line 782)
+  - **Result:** ✅ Comparison table now displays items in same order as Current Config card
+
+### Testing Results:
+
+**High Utilization Focus Preset:**
+- 37% High Utilization personas (increased from default ~20-25%)
+- 2% Subscription-Heavy personas
+- 61% General personas
+
+**Subscription Heavy Focus Preset:**
+- 12% Subscription-Heavy personas (increased from 2%)
+- 29% High Utilization personas
+- 59% General personas
+
+### Files Modified:
+- `ingest/data_generator.py` (~100 lines changed)
+  - Added OperatorControls import and parameter
+  - Replaced 5 hard-coded probability blocks with preset-driven logic
+  - Updated main() to read operator_config.json
+- `ui/data_generator_ui.py` (~50 lines changed)
+  - Added SECTION_ORDER constant
+  - Added _get_sort_key() method
+  - Updated _flatten_config() to track insertion order
+  - Modified _calculate_differences() to use custom sorting
+
+### Integration Points:
+- UI saves `DataGenerationConfig` + `OperatorControls` to `data/operator_config.json`
+- CLI subprocess reads config file and applies presets
+- Generator uses preset values for all behavioral patterns
+- Full pipeline executes: generate → load → features → personas
+
+### UX Improvements:
+- Preset Comparison table now follows same visual order as Current Config
+- Credit Behavior items display as: low → medium → high → critical (natural dict order)
+- Previously displayed alphabetically: critical → high → low → medium
+- Visual comparison now flows naturally between the two displays
+
+**Note:** Presets now work end-to-end. Changing preset in UI produces expected persona distribution changes throughout the application.
+
+---

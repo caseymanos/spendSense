@@ -18,6 +18,18 @@ from ingest.operator_controls import (
 )
 
 
+# Canonical section order for consistent display across UI components
+SECTION_ORDER = [
+    "Persona Targeting",
+    "Income Patterns",
+    "Credit Behavior",
+    "Subscriptions",
+    "Savings",
+    "Spending",
+    "Account Structure",
+]
+
+
 class DataGeneratorUI:
     """
     Production-level data generator UI with granular controls.
@@ -719,27 +731,55 @@ class DataGeneratorUI:
         }
         return icons.get(title, "tune")
 
-    def _flatten_config(self, data: Dict[str, Any], prefix: str | None = None) -> Dict[str, Any]:
-        """Flatten nested configuration data for comparison."""
+    def _flatten_config(self, data: Dict[str, Any], prefix: str | None = None, order: list[str] = None) -> Dict[str, Any]:
+        """Flatten nested configuration data for comparison, preserving insertion order."""
+        if order is None:
+            order = []
+
         flat: Dict[str, Any] = {}
         for key, value in data.items():
             label = self._humanize_label(key)
             path = f"{prefix} > {label}" if prefix else label
             if isinstance(value, dict):
-                flat.update(self._flatten_config(value, path))
+                flat.update(self._flatten_config(value, path, order))
             else:
                 flat[path] = value
+                order.append(path)  # Track insertion order
         return flat
+
+    def _get_sort_key(self, key: str, insertion_order: list[str]) -> tuple:
+        """
+        Return sort key for consistent section ordering.
+
+        Ensures comparison table follows the same section order as Current Config display.
+        Returns (section_index, insertion_index) to preserve both section and insertion order.
+        """
+        section = key.split(" > ")[0]  # Extract top-level section name
+        try:
+            section_idx = SECTION_ORDER.index(section)
+        except ValueError:
+            section_idx = 999  # Unknown sections go to end
+
+        # Get insertion order index to preserve dict order within sections
+        try:
+            insertion_idx = insertion_order.index(key)
+        except ValueError:
+            insertion_idx = 999
+
+        return (section_idx, insertion_idx)
 
     def _calculate_differences(
         self, current_config: Dict[str, Any], preset_display: Dict[str, Any]
     ) -> list[Dict[str, Any]]:
         """Calculate human-readable differences between current and preset configs."""
+        # Flatten configs while tracking insertion order
+        preset_order = []
         current_flat = self._flatten_config(current_config)
-        preset_flat = self._flatten_config(preset_display)
+        preset_flat = self._flatten_config(preset_display, order=preset_order)
 
         differences: list[Dict[str, Any]] = []
-        for idx, key in enumerate(sorted(preset_flat.keys())):
+        # Use custom sorting to match Current Config display order (section + insertion order)
+        for idx, key in enumerate(sorted(preset_flat.keys(), key=lambda k: self._get_sort_key(k, preset_order))):
             preset_value = preset_flat[key]
             current_value = current_flat.get(key)
             if current_value is None:
