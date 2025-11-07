@@ -103,7 +103,7 @@
     "timestamp": "2025-11-06T14:24:06.975206"
   },
   "recommendations": {
-    "timestamp": "2025-11-06T16:38:34.197848",
+    "timestamp": "2025-11-06T18:31:14.778606",
     "persona": "High Utilization",
     "education_count": 4,
     "offer_count": 1,
@@ -117,6 +117,8 @@
         "topic": "credit_utilization",
         "partner_equivalent": false,
         "rationale": "Your credit card ending in 9878 is at 49% utilization ($7,354 of $15,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $110/month.",
+        "chart_path": "/Users/caseymanos/GauntletAI/SpendSense/data/images/credit_utilization.png",
+        "chart_html": "/Users/caseymanos/GauntletAI/SpendSense/data/images/credit_utilization.html",
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       },
       {
@@ -127,6 +129,8 @@
         "topic": "debt_paydown_strategy",
         "partner_equivalent": false,
         "rationale": "With 1 credit cards and total utilization of 49%, a structured paydown plan could save you hundreds in interest. This guide helps you choose the right approach.",
+        "chart_path": "/Users/caseymanos/GauntletAI/SpendSense/data/images/debt_avalanche.png",
+        "chart_html": "/Users/caseymanos/GauntletAI/SpendSense/data/images/debt_avalanche.html",
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       },
       {

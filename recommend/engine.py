@@ -18,6 +18,7 @@ Design Principles:
 """
 
 import json
+import logging
 import sqlite3
 from datetime import datetime
 from pathlib import Path
@@ -30,6 +31,7 @@ from ingest.constants import (
     PREDATORY_PRODUCTS,
     TRACE_CONFIG,
 )
+from recommend.chart_generator import ChartGenerator
 from recommend.content_loader import (
     get_education_items,
     get_partner_offers,
@@ -44,6 +46,12 @@ DB_PATH = _PROJECT_ROOT / "data" / "users.sqlite"
 SIGNALS_PATH = _PROJECT_ROOT / "features" / "signals.parquet"
 TRANSACTIONS_PATH = _PROJECT_ROOT / "data" / "transactions.parquet"
 
+# Logger
+logger = logging.getLogger(__name__)
+
+# Chart Generator (Plotly-based visualization)
+CHART_GENERATOR = ChartGenerator(output_dir=str(_PROJECT_ROOT / "data" / "images"))
+logger.info("Chart generator initialized (Plotly)")
 
 NO_CONSENT_MESSAGE = (
     "Consent not granted. Opt in from your profile to unlock personalized guidance."
@@ -315,17 +323,31 @@ def _select_education_items(persona: str, user_context: Dict[str, Any]) -> List[
         rationale = _format_rationale(
             item["rationale_template"], user_context, item.get("category")
         )
-        recommendations.append(
-            {
-                "type": "education",
-                "title": item["title"],
-                "description": item["description"],
-                "category": item.get("category", "general"),
-                "topic": item.get("topic", "general"),
-                "partner_equivalent": item.get("partner_equivalent", False),
-                "rationale": rationale,
-            }
-        )
+        rec = {
+            "type": "education",
+            "title": item["title"],
+            "description": item["description"],
+            "category": item.get("category", "general"),
+            "topic": item.get("topic", "general"),
+            "partner_equivalent": item.get("partner_equivalent", False),
+            "rationale": rationale,
+        }
+
+        # Generate chart for supported topics
+        topic = item.get("topic", "general")
+        if topic in ["credit_utilization", "debt_paydown_strategy", "emergency_fund", "subscription_audit", "automation"]:
+            try:
+                chart_result = _generate_chart_for_topic(topic, persona, user_context)
+                if chart_result.get("success"):
+                    rec["chart_path"] = chart_result["chart_path"]
+                    rec["chart_html"] = chart_result["html_path"]
+                    logger.info(f"Chart generated for {topic}: {chart_result['chart_path']}")
+                else:
+                    logger.warning(f"Chart generation failed for {topic}: {chart_result.get('error')}")
+            except Exception as e:
+                logger.warning(f"Chart generation exception for {topic}: {e}")
+
+        recommendations.append(rec)
 
     return recommendations
 
@@ -1022,3 +1044,79 @@ def generate_all_recommendations(output_path: Optional[str] = None) -> pd.DataFr
             recs_df.to_parquet(output_path, index=False)
 
     return recs_df
+
+
+def _generate_chart_for_topic(topic: str, persona: str, user_context: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Generate Plotly chart for a specific topic.
+
+    Args:
+        topic: Topic identifier (credit_utilization, debt_paydown_strategy, etc.)
+        persona: User's persona
+        user_context: User context with signals and account data
+
+    Returns:
+        Dict with success, chart_path, html_path, or error
+    """
+    signals = user_context.get("signals", {})
+
+    try:
+        if topic == "credit_utilization":
+            # Extract card data
+            card_mask = "XXXX"
+            liabilities = user_context.get("liabilities", [])
+            if liabilities:
+                highest_util_card = max(liabilities, key=lambda x: x.get("utilization_pct", 0))
+                account_number = highest_util_card.get("account_number", "")
+                if len(account_number) >= 4:
+                    card_mask = account_number[-4:]
+
+            utilization_pct = signals.get("credit_max_util_pct", 50)
+            return CHART_GENERATOR.generate_credit_utilization_gauge(
+                utilization_pct=utilization_pct,
+                card_mask=card_mask
+            )
+
+        elif topic == "debt_paydown_strategy":
+            # Use balance data from context
+            balance_high = "$7,500"  # Default
+            balance_low = "$2,100"   # Default
+
+            liabilities = user_context.get("liabilities", [])
+            if len(liabilities) >= 2:
+                # Sort by balance descending
+                sorted_liabs = sorted(liabilities, key=lambda x: x.get("balance", 0), reverse=True)
+                balance_high = f"${sorted_liabs[0].get('balance', 7500):,.0f}"
+                balance_low = f"${sorted_liabs[1].get('balance', 2100):,.0f}"
+
+            return CHART_GENERATOR.generate_debt_avalanche_comparison(
+                balance_high=balance_high,
+                balance_low=balance_low
+            )
+
+        elif topic == "emergency_fund":
+            # Calculate current emergency fund months
+            current_months = 0  # Could calculate from savings balance / monthly expenses
+            return CHART_GENERATOR.generate_emergency_fund_progress(
+                current_months=current_months,
+                target_months=6
+            )
+
+        elif topic == "subscription_audit":
+            monthly_savings = "$45"  # Default
+            # Could calculate from subscription data if available
+            return CHART_GENERATOR.generate_subscription_audit(
+                monthly_savings=monthly_savings
+            )
+
+        elif topic == "automation":
+            savings_pct = 10  # Default recommendation
+            return CHART_GENERATOR.generate_automated_savings_flow(
+                savings_pct=savings_pct
+            )
+
+        else:
+            return {"success": False, "error": f"Unsupported topic: {topic}"}
+
+    except Exception as e:
+        return {"success": False, "error": str(e)}

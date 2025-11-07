@@ -6,6 +6,8 @@ All values derived from PRD Parts 2-3 specifications.
 This is the single source of truth for tunable parameters.
 """
 
+import os
+
 # =============================================================================
 # PERSONA DETECTION THRESHOLDS (PRD Part 2, Section 6.1)
 # =============================================================================
@@ -240,4 +242,18 @@ TRACE_CONFIG = {
     "trace_format": "{user_id}.json",
     "include_timestamps": True,
     "include_raw_signals": True,
+}
+
+# =============================================================================
+# IMAGE GENERATION CONFIGURATION (DALL-E 3 Integration)
+# =============================================================================
+
+IMAGE_GENERATION_CONFIG = {
+    "enabled": os.getenv("IMAGE_GENERATION_ENABLED", "false").lower() == "true",
+    "api_key": os.getenv("OPENAI_API_KEY", ""),
+    "model": "dall-e-3",
+    "size": "1024x1024",  # 1024x1024 or 1024x1792
+    "quality": "standard",  # standard ($0.04-0.08) or hd ($0.08-0.12)
+    "storage_path": "data/images",
+    "fallback_image_url": "https://placeholder.co/1024x1024/png?text=Image+Unavailable",
 }

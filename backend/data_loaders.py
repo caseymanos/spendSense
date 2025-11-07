@@ -1,19 +1,15 @@
 """
-Data loading utilities for Reflex UI.
+Data loading utilities for FastAPI backend.
 
-Wraps existing backend modules to provide clean interface for Reflex state management.
+Provides clean interface for accessing user data, personas, and recommendations.
 All business logic, guardrails, and trace logging remain in the original modules.
 """
 
-import sys
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 import pandas as pd
 import sqlite3
 import json
-
-# Add parent directory to path to import existing modules
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from recommend.engine import generate_recommendations
 from guardrails.consent import (
@@ -26,8 +22,8 @@ from guardrails.consent import (
 # PATHS
 # =============================================================================
 
-# Get project root (go up from ui_reflex/user_app/utils to project root)
-PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+# Get project root (go up from backend to project root)
+PROJECT_ROOT = Path(__file__).parent.parent
 
 DB_PATH = PROJECT_ROOT / "data" / "users.sqlite"
 SIGNALS_PATH = PROJECT_ROOT / "features" / "signals.parquet"
@@ -53,7 +49,6 @@ def load_all_users() -> List[Dict[str, Any]]:
             "SELECT user_id, name, consent_granted FROM users ORDER BY user_id", conn
         )
 
-    # Convert to list of dicts for easy Reflex iteration
     return users_df.to_dict("records")
 
 
@@ -142,49 +137,6 @@ def load_behavioral_signals(user_id: str) -> Dict[str, Any]:
     return signals_dict
 
 
-def load_user_accounts(user_id: str) -> List[Dict[str, Any]]:
-    """Load user's accounts from database.
-
-    Args:
-        user_id: The user ID to load
-
-    Returns:
-        List of account dictionaries
-    """
-    if not DB_PATH.exists():
-        return []
-
-    with sqlite3.connect(DB_PATH) as conn:
-        accounts_df = pd.read_sql(
-            "SELECT * FROM accounts WHERE user_id = ?", conn, params=(user_id,)
-        )
-
-    return accounts_df.to_dict("records")
-
-
-def load_user_trace(user_id: str) -> Optional[Dict[str, Any]]:
-    """Load decision trace JSON for a specific user.
-
-    Args:
-        user_id: The user ID to load
-
-    Returns:
-        Dictionary with trace data or None if not found
-    """
-    trace_file = TRACES_DIR / f"{user_id}.json"
-
-    if not trace_file.exists():
-        return None
-
-    try:
-        with open(trace_file, "r") as f:
-            trace_data = json.load(f)
-        return trace_data
-    except Exception as e:
-        print(f"Error loading trace for {user_id}: {e}")
-        return None
-
-
 # =============================================================================
 # RECOMMENDATIONS
 # =============================================================================
@@ -250,102 +202,3 @@ def revoke_user_consent(user_id: str) -> bool:
     except Exception as e:
         print(f"Error revoking consent for {user_id}: {e}")
         return False
-
-
-def check_user_consent(user_id: str) -> bool:
-    """Check if a user has granted consent.
-
-    Args:
-        user_id: The user ID to check
-
-    Returns:
-        True if consent granted, False otherwise
-    """
-    try:
-        return _check_consent(user_id)
-    except Exception as e:
-        print(f"Error checking consent for {user_id}: {e}")
-        return False
-
-
-# =============================================================================
-# PERSONA DESCRIPTIONS
-# =============================================================================
-
-
-def get_persona_description(persona: str) -> Dict[str, str]:
-    """Get user-friendly description for each persona.
-
-    Args:
-        persona: The persona identifier
-
-    Returns:
-        Dictionary with title, description, icon, and color
-    """
-    descriptions = {
-        "high_utilization": {
-            "title": "Credit Optimizer",
-            "description": "You're focused on optimizing credit utilization and managing card balances effectively.",
-            "icon": "💳",
-            "color": "#FF6B6B",
-        },
-        "variable_income": {
-            "title": "Flexible Budgeter",
-            "description": "You're managing variable income with smart budgeting strategies.",
-            "icon": "📊",
-            "color": "#4ECDC4",
-        },
-        "subscription_heavy": {
-            "title": "Subscription Manager",
-            "description": "You're optimizing recurring expenses and subscription spending.",
-            "icon": "🔄",
-            "color": "#95E1D3",
-        },
-        "savings_builder": {
-            "title": "Savings Champion",
-            "description": "You're actively building savings and growing your financial cushion.",
-            "icon": "🎯",
-            "color": "#38B6FF",
-        },
-        "general": {
-            "title": "Getting Started",
-            "description": "Welcome to SpendSense! Your personalized financial insights will appear as you build your transaction history.",
-            "icon": "🌱",
-            "color": "#A8DADC",
-        },
-    }
-
-    return descriptions.get(persona, descriptions["general"])
-
-
-# =============================================================================
-# UTILITY FUNCTIONS
-# =============================================================================
-
-
-def get_database_stats() -> Dict[str, int]:
-    """Get basic statistics about the database.
-
-    Returns:
-        Dictionary with stats like user_count, persona_count, etc.
-    """
-    stats = {
-        "user_count": 0,
-        "consented_count": 0,
-        "has_signals": False,
-        "has_traces": False,
-    }
-
-    if DB_PATH.exists():
-        with sqlite3.connect(DB_PATH) as conn:
-            stats["user_count"] = pd.read_sql("SELECT COUNT(*) as cnt FROM users", conn)[
-                "cnt"
-            ].iloc[0]
-            stats["consented_count"] = pd.read_sql(
-                "SELECT COUNT(*) as cnt FROM users WHERE consent_granted = 1", conn
-            )["cnt"].iloc[0]
-
-    stats["has_signals"] = SIGNALS_PATH.exists()
-    stats["has_traces"] = TRACES_DIR.exists() and len(list(TRACES_DIR.glob("*.json"))) > 0
-
-    return stats
