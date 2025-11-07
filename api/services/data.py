@@ -17,8 +17,8 @@ from api.models import (
     UserRecommendationsResponse,
 )
 
-# Reuse robust loaders defined for Reflex UI
-from ui_reflex.user_app.utils.data_loaders import (
+# Use backend data loaders
+from backend.data_loaders import (
     load_all_users,
     load_user_data,
     load_persona_assignment,
