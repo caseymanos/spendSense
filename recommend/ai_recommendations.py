@@ -153,13 +153,15 @@ def generate_ai_recommendations(
             rec["disclaimer"] = MANDATORY_DISCLAIMER
 
         # Build response
-        return {
+        response_data = {
             "user_id": user_id,
             "persona": user_context.get("persona"),
             "recommendations": recommendations,
             "metadata": {
                 "timestamp": datetime.now().isoformat(),
                 "model": model,
+                "education_count": len([r for r in recommendations if r.get("type") == "education"]),
+                "offer_count": len([r for r in recommendations if r.get("type") == "partner_offer"]),
                 "total_count": len(recommendations),
                 "tone_check_passed": tone_scan["passed"],
                 "tone_violations_count": tone_scan.get("violations_found", 0),
@@ -169,8 +171,15 @@ def generate_ai_recommendations(
                     "total_tokens": response.usage.total_tokens,
                 },
                 "source": "ai_generated",
+                "consent_granted": user_context.get("consent_granted", False),
             },
         }
+
+        # Save to trace file
+        from recommend.engine import _save_trace
+        _save_trace(user_id, response_data, user_context)
+
+        return response_data
 
     except Exception as e:
         logger.error(f"OpenAI API call failed for user {user_id}: {e}")

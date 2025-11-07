@@ -40,6 +40,14 @@ from ui.utils.data_loaders import TRACES_DIR as _TRACES_DIR
 # Import recommendation engine for live generation
 from recommend.engine import generate_recommendations
 
+# Import AI recommendations
+try:
+    from recommend.ai_recommendations import generate_ai_recommendations, OPENAI_AVAILABLE
+    AI_RECOMMENDATIONS_AVAILABLE = True
+except ImportError:
+    AI_RECOMMENDATIONS_AVAILABLE = False
+    OPENAI_AVAILABLE = False
+
 # Import content management
 from recommend.content_loader import (
     load_content_catalog,
@@ -670,6 +678,7 @@ def render_recommendation_review_tab():
 
         recommendation_container = ui.column().classes("w-full")
         button_container = ui.row().classes("gap-2")
+        ai_config_state = {"api_key": "", "model": "gpt-4o-mini", "max_recs": 5}
 
         with ui.row().classes("w-full items-center gap-4 mb-4"):
             user_select = ui.select(
@@ -679,6 +688,39 @@ def render_recommendation_review_tab():
             ).classes("flex-grow")
 
             button_container
+
+        # AI Recommendations Section
+        if AI_RECOMMENDATIONS_AVAILABLE and OPENAI_AVAILABLE:
+            with ui.expansion("🤖 AI-Powered Recommendations (OpenAI)", icon="auto_awesome").classes("w-full mb-4 border-2 border-purple-300"):
+                ui.label("Generate AI-powered recommendations using OpenAI's GPT models").classes("text-sm text-gray-600 mb-3")
+
+                with ui.row().classes("w-full gap-4 items-end"):
+                    api_key_input = ui.input(
+                        label="OpenAI API Key",
+                        placeholder="sk-...",
+                        password=True,
+                        password_toggle_button=True,
+                    ).classes("flex-grow").bind_value(ai_config_state, "api_key")
+
+                    model_select = ui.select(
+                        label="Model",
+                        options=["gpt-4o-mini", "gpt-4o", "gpt-3.5-turbo"],
+                        value="gpt-4o-mini",
+                    ).classes("w-48").bind_value(ai_config_state, "model")
+
+                    max_recs_input = ui.number(
+                        label="Max Recommendations",
+                        value=5,
+                        min=1,
+                        max=10,
+                    ).classes("w-32").bind_value(ai_config_state, "max_recs")
+
+                ui.label("💡 Tip: gpt-4o-mini is recommended for cost efficiency").classes("text-xs text-blue-600 mt-2")
+        elif AI_RECOMMENDATIONS_AVAILABLE and not OPENAI_AVAILABLE:
+            with ui.card().classes("w-full bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4"):
+                with ui.row().classes("items-center gap-3"):
+                    ui.icon("warning", size="md").classes("text-yellow-600")
+                    ui.label("OpenAI library not installed. Run: uv pip install openai").classes("text-sm text-yellow-800")
 
         def load_existing_recommendations():
             """Load existing recommendations from trace file."""
@@ -762,6 +804,15 @@ def render_recommendation_review_tab():
                         with ui.column().classes("gap-1"):
                             ui.label("Total Recommendations:").classes("text-xs text-gray-600")
                             ui.label(str(len(recommendations_list))).classes("font-semibold")
+
+                        # Show source (AI vs Rule-Based)
+                        with ui.column().classes("gap-1"):
+                            ui.label("Source:").classes("text-xs text-gray-600")
+                            source = rec_data.get("source", "rule_based")
+                            if source == "ai_generated":
+                                ui.badge("🤖 AI Generated").props("color=purple")
+                            else:
+                                ui.badge("📋 Rule-Based").props("color=blue")
 
                 # Recommendations
                 if not recommendations_list:
@@ -871,7 +922,7 @@ def render_recommendation_review_tab():
                                 theme_classes=ThemeManager.get_button_classes(),
                             )
 
-        def generate_new_recommendations():
+        def generate_new_recommendations(use_ai=False):
             """Generate fresh recommendations for selected user."""
             recommendation_container.clear()
 
@@ -884,12 +935,56 @@ def render_recommendation_review_tab():
 
             # Show loading indicator
             with recommendation_container:
-                ui.spinner(size="lg")
-                ui.label("Generating recommendations...").classes("text-gray-600 mt-2")
+                if use_ai:
+                    ui.spinner(size="lg", color="purple")
+                    ui.label("🤖 Generating AI-powered recommendations using OpenAI...").classes("text-purple-600 mt-2 font-semibold")
+                else:
+                    ui.spinner(size="lg")
+                    ui.label("Generating rule-based recommendations...").classes("text-gray-600 mt-2")
 
             # Generate fresh recommendations (writes to trace automatically)
             try:
-                rec_response = generate_recommendations(selected_user_id)
+                if use_ai and AI_RECOMMENDATIONS_AVAILABLE:
+                    # Validate API key
+                    if not ai_config_state["api_key"]:
+                        recommendation_container.clear()
+                        with recommendation_container:
+                            ui.label("⚠️ Please enter your OpenAI API key first").classes("text-orange-600")
+                        return
+
+                    # Generate AI recommendations
+                    rec_response = generate_ai_recommendations(
+                        user_id=selected_user_id,
+                        api_key=ai_config_state["api_key"],
+                        model=ai_config_state["model"],
+                        max_recommendations=int(ai_config_state["max_recs"]),
+                    )
+
+                    # Check for errors
+                    if rec_response.get("metadata", {}).get("error"):
+                        recommendation_container.clear()
+                        with recommendation_container:
+                            with ui.card().classes("bg-red-50 border-l-4 border-red-500 p-4"):
+                                ui.label(f"❌ AI generation failed: {rec_response['metadata']['error']}").classes("text-red-800 font-semibold mb-2")
+                                ui.label("Falling back to rule-based recommendations...").classes("text-sm text-red-700")
+
+                        # Fallback to rule-based
+                        rec_response = generate_recommendations(selected_user_id)
+                        ui.notify("AI generation failed, using rule-based recommendations", type="warning")
+                    else:
+                        # Success! Show token usage
+                        token_usage = rec_response.get("metadata", {}).get("token_usage", {})
+                        if token_usage:
+                            ui.notify(
+                                f"✓ AI recommendations generated | Tokens: {token_usage.get('total_tokens', 0)} "
+                                f"({token_usage.get('prompt_tokens', 0)} prompt + {token_usage.get('completion_tokens', 0)} completion)",
+                                type="positive",
+                                timeout=5000
+                            )
+                else:
+                    # Standard rule-based generation
+                    rec_response = generate_recommendations(selected_user_id)
+
                 # Reload the existing recommendations view to show the new ones
                 load_existing_recommendations()
             except Exception as e:
@@ -913,13 +1008,25 @@ def render_recommendation_review_tab():
 
             with button_container:
                 if has_recommendations:
-                    ui.button("Regenerate Recommendations", icon="refresh", on_click=generate_new_recommendations).props(
+                    ui.button("Regenerate (Rule-Based)", icon="refresh", on_click=lambda: generate_new_recommendations(use_ai=False)).props(
                         "color=primary"
                     ).classes(ThemeManager.get_button_classes())
+
+                    # Add AI generation button if available
+                    if AI_RECOMMENDATIONS_AVAILABLE and OPENAI_AVAILABLE:
+                        ui.button("🤖 Generate with AI", icon="auto_awesome", on_click=lambda: generate_new_recommendations(use_ai=True)).props(
+                            "color=purple"
+                        ).classes(ThemeManager.get_button_classes())
                 else:
-                    ui.button("Generate Recommendations", icon="add", on_click=generate_new_recommendations).props(
+                    ui.button("Generate Recommendations", icon="add", on_click=lambda: generate_new_recommendations(use_ai=False)).props(
                         "color=primary"
                     ).classes(ThemeManager.get_button_classes())
+
+                    # Add AI generation button if available
+                    if AI_RECOMMENDATIONS_AVAILABLE and OPENAI_AVAILABLE:
+                        ui.button("🤖 Generate with AI", icon="auto_awesome", on_click=lambda: generate_new_recommendations(use_ai=True)).props(
+                            "color=purple"
+                        ).classes(ThemeManager.get_button_classes())
 
         def on_user_change():
             """Handle user selection change."""

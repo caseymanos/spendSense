@@ -17,32 +17,35 @@ SpendSense MVP V2 now supports AI-powered recommendation generation using OpenAI
 
 ### 1. Access the Operator Dashboard
 
-Launch the operator dashboard:
+Launch the NiceGUI operator dashboard:
 
 ```bash
-uv run streamlit run ui/app_operator.py
+uv run python ui/app_operator_nicegui.py
 ```
+
+The dashboard will open in your browser at http://localhost:8081
 
 ### 2. Navigate to Recommendation Review
 
-In the sidebar, select **"✅ Recommendation Review"**
+In the top tabs, select **"Recommendations"**
 
 ### 3. Enable AI Recommendations
 
 1. Select a user from the dropdown
-2. Expand the **"🤖 AI-Powered Recommendations (OpenAI)"** section
+2. Expand the **"🤖 AI-Powered Recommendations (OpenAI)"** expandable section
 3. Enter your OpenAI API key (get one at https://platform.openai.com/api-keys)
 4. Select the model (gpt-4o-mini recommended for cost efficiency)
 5. Set the maximum number of recommendations (default: 5)
-6. Click **"🤖 Generate AI Recommendations"**
+6. Click the **"🤖 Generate with AI"** button
 
 ### 4. Review AI Recommendations
 
 AI-generated recommendations will be displayed with:
-- Clear indication of AI source
-- Token usage statistics
+- Clear indication of AI source (🤖 AI Generated badge)
+- Token usage statistics (shown in notification)
 - Same approval/override/flag workflow as rule-based recommendations
 - Tone validation results
+- Expandable cards for each recommendation with full details
 
 ## API Key Security
 
@@ -144,7 +147,7 @@ Potential improvements for future versions:
 
 ### Module Location
 - **Implementation**: `recommend/ai_recommendations.py`
-- **UI Integration**: `ui/app_operator.py` (Recommendation Review tab)
+- **UI Integration**: `ui/app_operator_nicegui.py` (Recommendations tab)
 
 ### Key Functions
 - `generate_ai_recommendations(user_id, api_key, ...)`: Main entry point
