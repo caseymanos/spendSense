@@ -6,6 +6,7 @@ import { UserSwitcher } from '../../components/UserSwitcher'
 import { MetricCard } from '../../components/MetricCard'
 import { PersonaBadge } from '../../components/PersonaBadge'
 import { Card } from '../../components/ui/card'
+import { RecommendationCard } from '../../components/RecommendationCard'
 
 export default function DashboardPage() {
   const [userId, setUserId] = React.useState<string | undefined>();
@@ -46,10 +47,7 @@ export default function DashboardPage() {
           <Card className="p-3">
             <div className="font-bold">Your Recommendations</div>
             {(recs?.recommendations || []).slice(0, 3).map((r) => (
-              <Card key={r.recommendation_id} className="mt-2 p-3">
-                <div className="font-semibold">{r.title}</div>
-                <div className="mt-1 text-muted-foreground">{r.rationale}</div>
-              </Card>
+              <RecommendationCard key={r.recommendation_id} rec={r} />
             ))}
           </Card>
         </>

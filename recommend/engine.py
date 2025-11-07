@@ -337,13 +337,13 @@ def _select_education_items(persona: str, user_context: Dict[str, Any]) -> List[
         topic = item.get("topic", "general")
         if topic in ["credit_utilization", "debt_paydown_strategy", "emergency_fund", "subscription_audit", "automation"]:
             try:
-                chart_result = _generate_chart_for_topic(topic, persona, user_context)
-                if chart_result.get("success"):
-                    rec["chart_path"] = chart_result["chart_path"]
-                    rec["chart_html"] = chart_result["html_path"]
-                    logger.info(f"Chart generated for {topic}: {chart_result['chart_path']}")
+                chart_data = _generate_chart_for_topic(topic, persona, user_context)
+                # New ChartGenerator returns {"type": "...", "data": {...}}
+                if chart_data and "type" in chart_data:
+                    rec["content"] = chart_data
+                    logger.info(f"Chart data generated for {topic}: {chart_data['type']}")
                 else:
-                    logger.warning(f"Chart generation failed for {topic}: {chart_result.get('error')}")
+                    logger.warning(f"Chart generation failed for {topic}: {chart_data.get('error', 'Unknown error')}")
             except Exception as e:
                 logger.warning(f"Chart generation exception for {topic}: {e}")
 
@@ -1068,37 +1068,60 @@ def _generate_chart_for_topic(topic: str, persona: str, user_context: Dict[str, 
 
     try:
         if topic == "credit_utilization":
-            # Extract card data
+            # Extract card data from accounts
             card_mask = "XXXX"
-            liabilities = user_context.get("liabilities", [])
-            if liabilities:
-                highest_util_card = max(liabilities, key=lambda x: x.get("utilization_pct", 0))
-                account_number = highest_util_card.get("account_number", "")
-                if len(account_number) >= 4:
-                    card_mask = account_number[-4:]
+            highest_util_card = None
+            accounts = user_context.get("accounts", [])
+            credit_cards = [a for a in accounts if a.get("account_type") == "credit"]
+            if credit_cards:
+                # Calculate utilization per card
+                for card in credit_cards:
+                    balance = card.get("balance_current", 0)
+                    limit = card.get("balance_limit", 1)
+                    card["utilization"] = (balance / limit * 100) if limit > 0 else 0
+
+                highest_util_card = max(credit_cards, key=lambda x: x.get("utilization", 0))
+                card_mask = highest_util_card.get("mask", "XXXX")
 
             utilization_pct = signals.get("credit_max_util_pct", 50)
+
+            # Get enhanced data from highest utilization card
+            current_balance = None
+            credit_limit = None
+            apr = None
+            if highest_util_card:
+                current_balance = highest_util_card.get("balance_current")
+                credit_limit = highest_util_card.get("balance_limit")
+                apr = highest_util_card.get("apr")
+
             return CHART_GENERATOR.generate_credit_utilization_gauge(
-                utilization_pct=utilization_pct,
-                card_mask=card_mask
+                utilization=utilization_pct,
+                card_mask=card_mask,
+                current_balance=current_balance,
+                credit_limit=credit_limit,
+                apr=apr
             )
 
         elif topic == "debt_paydown_strategy":
-            # Use balance data from context
-            balance_high = "$7,500"  # Default
-            balance_low = "$2,100"   # Default
+            # Build debt objects for avalanche chart from credit card accounts
+            accounts = user_context.get("accounts", [])
+            credit_cards = [a for a in accounts if a.get("account_type") == "credit"]
+            debts = []
 
-            liabilities = user_context.get("liabilities", [])
-            if len(liabilities) >= 2:
-                # Sort by balance descending
-                sorted_liabs = sorted(liabilities, key=lambda x: x.get("balance", 0), reverse=True)
-                balance_high = f"${sorted_liabs[0].get('balance', 7500):,.0f}"
-                balance_low = f"${sorted_liabs[1].get('balance', 2100):,.0f}"
+            for card in credit_cards:
+                balance = card.get("balance_current", 0)
+                if balance > 0:
+                    mask = card.get("mask", "XXXX")
+                    apr = card.get("apr", 0)
 
-            return CHART_GENERATOR.generate_debt_avalanche_comparison(
-                balance_high=balance_high,
-                balance_low=balance_low
-            )
+                    debts.append({
+                        "name": f"credit (...{mask})",
+                        "balance": balance,
+                        "interestRate": apr,
+                        "monthlyInterest": (balance * apr / 100) / 12 if balance else 0
+                    })
+
+            return CHART_GENERATOR.generate_debt_avalanche_comparison(debts=debts)
 
         elif topic == "emergency_fund":
             # Calculate current emergency fund months

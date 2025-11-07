@@ -84,7 +84,7 @@ def get_recommendations(user_id: str) -> UserRecommendationsResponse:
                 title=rec.get("title", "Untitled"),
                 rationale=rec.get("rationale", ""),
                 disclaimer=rec.get("disclaimer", ""),
-                content=None,
+                content=rec.get("content"),
             )
         )
 
