@@ -62,6 +62,14 @@ except ImportError as e:
     MODULES_AVAILABLE = False
     st.error(f"Module import error: {e}")
 
+# Try to import AI recommendations module
+try:
+    from recommend.ai_recommendations import generate_ai_recommendations, OPENAI_AVAILABLE
+    AI_RECOMMENDATIONS_AVAILABLE = True
+except ImportError:
+    AI_RECOMMENDATIONS_AVAILABLE = False
+    OPENAI_AVAILABLE = False
+
 
 # =============================================================================
 # HELPER FUNCTIONS - DATA LOADING
@@ -882,7 +890,54 @@ def render_recommendations_tab():
     with col2:
         if st.button("Load Recommendations", type="primary"):
             st.session_state["review_loaded"] = True
+            st.session_state["use_ai"] = False  # Reset AI flag
             st.rerun()
+
+    # AI Recommendations Section
+    if AI_RECOMMENDATIONS_AVAILABLE and OPENAI_AVAILABLE:
+        with st.expander("🤖 AI-Powered Recommendations (OpenAI)", expanded=False):
+            st.markdown("**Generate AI-powered recommendations using OpenAI**")
+            st.caption("This feature uses OpenAI's API to generate personalized recommendations based on user data.")
+
+            # OpenAI API key input
+            openai_api_key = st.text_input(
+                "OpenAI API Key:",
+                type="password",
+                key="openai_api_key",
+                help="Enter your OpenAI API key. Get one at https://platform.openai.com/api-keys",
+            )
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                model_choice = st.selectbox(
+                    "Model:",
+                    ["gpt-4o-mini", "gpt-4o", "gpt-3.5-turbo"],
+                    key="openai_model",
+                    help="gpt-4o-mini is recommended for cost efficiency",
+                )
+
+            with col2:
+                max_recs = st.number_input(
+                    "Max Recommendations:",
+                    min_value=1,
+                    max_value=10,
+                    value=5,
+                    key="max_ai_recs",
+                )
+
+            if st.button("🤖 Generate AI Recommendations", type="secondary", use_container_width=True):
+                if not openai_api_key:
+                    st.warning("Please enter your OpenAI API key first")
+                else:
+                    st.session_state["review_loaded"] = True
+                    st.session_state["use_ai"] = True
+                    st.session_state["ai_api_key"] = openai_api_key
+                    st.session_state["ai_model"] = model_choice
+                    st.session_state["ai_max_recs"] = max_recs
+                    st.rerun()
+    elif AI_RECOMMENDATIONS_AVAILABLE and not OPENAI_AVAILABLE:
+        st.warning("⚠️ OpenAI library not installed. Run: `uv pip install openai`")
 
     if not st.session_state.get("review_loaded"):
         st.info("👆 Select a user and click 'Load Recommendations' to begin review")
@@ -898,8 +953,43 @@ def render_recommendations_tab():
         f"**Persona:** {user_data['persona'] or 'None'} | **Consent:** {'✅ Granted' if user_data['consent_granted'] else '⏸️ Not Granted'}"
     )
 
+    # Determine if we should use AI or rule-based recommendations
+    use_ai = st.session_state.get("use_ai", False)
+
     try:
-        recs = generate_recommendations(selected_user)
+        if use_ai and AI_RECOMMENDATIONS_AVAILABLE:
+            # Generate AI recommendations
+            st.info("🤖 Generating AI-powered recommendations using OpenAI...")
+
+            api_key = st.session_state.get("ai_api_key", "")
+            model = st.session_state.get("ai_model", "gpt-4o-mini")
+            max_recs = st.session_state.get("ai_max_recs", 5)
+
+            with st.spinner("Calling OpenAI API..."):
+                recs = generate_ai_recommendations(
+                    user_id=selected_user,
+                    api_key=api_key,
+                    model=model,
+                    max_recommendations=max_recs,
+                )
+
+            if recs.get("metadata", {}).get("error"):
+                st.error(f"AI generation failed: {recs['metadata']['error']}")
+                st.info("Falling back to rule-based recommendations...")
+                recs = generate_recommendations(selected_user)
+            else:
+                st.success(f"✅ AI recommendations generated using {model}")
+                # Display token usage
+                token_usage = recs.get("metadata", {}).get("token_usage", {})
+                if token_usage:
+                    st.caption(
+                        f"Token usage: {token_usage.get('total_tokens', 0)} tokens "
+                        f"({token_usage.get('prompt_tokens', 0)} prompt + "
+                        f"{token_usage.get('completion_tokens', 0)} completion)"
+                    )
+        else:
+            # Use rule-based recommendations
+            recs = generate_recommendations(selected_user)
     except Exception as e:
         st.error(f"Error generating recommendations: {e}")
         st.exception(e)
@@ -907,6 +997,13 @@ def render_recommendations_tab():
 
     # Display metadata
     metadata = recs.get("metadata", {})
+
+    # Show source indicator
+    source = metadata.get("source", "rule_based")
+    if source == "ai_generated":
+        st.info("🤖 **Source:** AI-Generated Recommendations")
+    else:
+        st.info("📋 **Source:** Rule-Based Recommendations")
 
     col1, col2, col3, col4 = st.columns(4)
 
