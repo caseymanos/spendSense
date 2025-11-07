@@ -908,6 +908,7 @@ def _save_trace(user_id: str, response: Dict[str, Any], user_context: Dict[str, 
         "total_recommendations": response["metadata"]["total_count"],
         "recommendations": response["recommendations"],
         "consent_granted": user_context.get("consent_granted", False),
+        "source": response["metadata"].get("source", "rule_based"),  # Track source (AI vs rule-based)
     }
     if "reason" in response["metadata"]:
         trace_data["recommendations"]["reason"] = response["metadata"]["reason"]
@@ -917,6 +918,11 @@ def _save_trace(user_id: str, response: Dict[str, Any], user_context: Dict[str, 
         trace_data["recommendations"]["education_shortfall"] = response["metadata"][
             "education_eligibility_shortfall"
         ]
+    # Include AI-specific metadata if available
+    if "token_usage" in response["metadata"]:
+        trace_data["recommendations"]["token_usage"] = response["metadata"]["token_usage"]
+    if "model" in response["metadata"]:
+        trace_data["recommendations"]["model"] = response["metadata"]["model"]
 
     # Save trace
     with open(trace_file, "w") as f:
