@@ -1799,7 +1799,7 @@ async def main_page():
 if __name__ in {"__main__", "__mp_main__"}:
     ui.run(
         title="SpendSense Operator Dashboard",
-        port=8081,
+        port=8085,
         reload=True,
         show=True,
         storage_secret="spendsense-operator-dashboard-secret-key-change-in-production",
