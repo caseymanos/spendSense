@@ -105,6 +105,14 @@ def get_recommendations(user_id: str) -> UserRecommendationsResponse:
     )
 
 
+def get_persona_transactions(user_id: str, limit: int = 10) -> List[Dict[str, Any]]:
+    """Get persona-specific transactions for a user."""
+    from backend.data_loaders import load_persona_transactions
+
+    transactions = load_persona_transactions(user_id, limit=limit)
+    return transactions if transactions else []
+
+
 def set_consent(user_id: str, granted: bool) -> Optional[UserSummary]:
     """Grant or revoke consent, returning updated user summary."""
     ok = grant_user_consent(user_id) if granted else revoke_user_consent(user_id)
