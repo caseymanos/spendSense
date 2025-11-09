@@ -55,7 +55,7 @@ export function VideoDialog({ video, open, onOpenChange }: VideoDialogProps) {
 
           {video.channel_name && (
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="font-normal">
+              <Badge variant="default" className="font-normal">
                 {video.channel_name}
               </Badge>
               <a
