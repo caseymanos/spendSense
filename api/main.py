@@ -17,6 +17,7 @@ from api.models import (
     EvaluationSummaryResponse,
     UserSummary,
     ConsentUpdateResponse,
+    VideoResponse,
 )
 
 from api.services.data import (
@@ -24,6 +25,12 @@ from api.services.data import (
     get_profile as svc_get_profile,
     get_recommendations as svc_get_recommendations,
     set_consent as svc_set_consent,
+)
+
+from api.services.videos import (
+    get_videos_by_topic,
+    get_all_videos,
+    get_topics_with_videos,
 )
 
 
@@ -92,6 +99,31 @@ async def submit_feedback(request: FeedbackRequest):
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
         detail="Feedback will be implemented in a future PR",
     )
+
+
+# Video endpoints
+@app.get("/videos/{topic}", response_model=list[VideoResponse], tags=["Videos"])
+async def get_videos(topic: str):
+    """Get educational videos for a specific topic."""
+    videos = get_videos_by_topic(topic)
+    if not videos:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No videos found for topic: {topic}",
+        )
+    return videos
+
+
+@app.get("/videos", response_model=list[VideoResponse], tags=["Videos"])
+async def get_all_videos_endpoint():
+    """Get all educational videos."""
+    return get_all_videos()
+
+
+@app.get("/videos/topics/list", response_model=list[str], tags=["Videos"])
+async def get_video_topics():
+    """Get list of all topics that have videos."""
+    return get_topics_with_videos()
 
 
 # Operator endpoints

@@ -18,5 +18,8 @@ export const api = {
   profile: (id: string) => request<import('./types').UserProfile>(`/profile/${encodeURIComponent(id)}`),
   recs: (id: string) => request<import('./types').RecommendationsResponse>(`/recommendations/${encodeURIComponent(id)}`),
   setConsent: (id: string, granted: boolean) => request<import('./types').ConsentUpdateResponse>(`/consent`, { method: 'POST', body: JSON.stringify({ user_id: id, consent_granted: granted }) }),
+  videos: (topic: string) => request<import('./types').Video[]>(`/videos/${encodeURIComponent(topic)}`),
+  allVideos: () => request<import('./types').Video[]>('/videos'),
+  videoTopics: () => request<string[]>('/videos/topics/list'),
 };
 

@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { MessageCircle, Bot, User } from "lucide-react"
+import { MessageCircle, Bot } from "lucide-react"
+import { nanoid } from "nanoid"
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,13 @@ import {
 } from "./ui/dialog"
 import { Button } from "./ui/button"
 import { PromptInput } from "./ui/prompt-input"
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "./ui/ai/conversation"
+import { Message, MessageAvatar, MessageContent } from "./ui/ai/message"
+import { Response } from "./ui/ai/response"
 import type { Recommendation } from "../lib/types"
 import { cn } from "@/lib/utils"
 
@@ -31,21 +39,13 @@ export function RecommendationChatDialog({
   const [isOpen, setIsOpen] = React.useState(false)
   const [messages, setMessages] = React.useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
-  const scrollRef = React.useRef<HTMLDivElement>(null)
-
-  // Auto-scroll on new messages
-  React.useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [messages])
 
   const handlePromptSubmit = async (value: string) => {
     if (!value.trim() || isLoading) return
 
     // Add user message
     const userMessage: ChatMessage = {
-      id: `user-${Date.now()}`,
+      id: nanoid(),
       role: "user",
       content: value,
     }
@@ -78,7 +78,7 @@ export function RecommendationChatDialog({
 
       const decoder = new TextDecoder()
       let assistantContent = ''
-      const assistantMessageId = `assistant-${Date.now()}`
+      const assistantMessageId = nanoid()
 
       // Add placeholder for assistant message
       setMessages((prev) => [
@@ -108,7 +108,7 @@ export function RecommendationChatDialog({
       setMessages((prev) => [
         ...prev,
         {
-          id: `error-${Date.now()}`,
+          id: nanoid(),
           role: "assistant",
           content: "Sorry, I encountered an error. Please try again.",
         },
@@ -142,72 +142,65 @@ export function RecommendationChatDialog({
         </DialogHeader>
 
         {/* Chat Messages Area */}
-        <div
-          ref={scrollRef}
-          className="flex-1 overflow-y-auto px-6 pb-4 space-y-4"
-        >
-          {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-              <Bot className="h-12 w-12 mb-4 opacity-50" />
-              <p className="text-sm">
-                Ask me anything about this recommendation!
-              </p>
-              <p className="text-xs mt-2 max-w-sm">
-                I can help explain the rationale, suggest next steps, or answer
-                questions about how to implement this advice.
-              </p>
-            </div>
-          ) : (
-            messages.map((message: ChatMessage) => (
-              <div
-                key={message.id}
-                className={cn(
-                  "flex gap-3 items-start",
-                  message.role === "user" && "flex-row-reverse"
-                )}
-              >
-                <div
-                  className={cn(
-                    "flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-full",
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  )}
-                >
-                  {message.role === "user" ? (
-                    <User className="h-4 w-4" />
-                  ) : (
-                    <Bot className="h-4 w-4" />
-                  )}
+        <Conversation className="flex-1">
+          <ConversationContent className="space-y-4">
+            {messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
+                <div className="rounded-full bg-muted p-4 mb-4">
+                  <Bot className="h-8 w-8" />
                 </div>
-                <div
-                  className={cn(
-                    "flex-1 space-y-2 overflow-hidden rounded-lg px-4 py-2.5 text-sm",
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  )}
-                >
-                  {message.content}
-                </div>
+                <p className="text-sm font-medium text-foreground">
+                  Ask me anything about this recommendation!
+                </p>
+                <p className="text-xs mt-2 max-w-sm opacity-75">
+                  I can help explain the rationale, suggest next steps, or answer
+                  questions about how to implement this advice.
+                </p>
               </div>
-            ))
-          )}
-          {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-            <div className="flex gap-3 items-start">
-              <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-full bg-muted">
-                <Bot className="h-4 w-4" />
-              </div>
-              <div className="flex-1 space-y-2 overflow-hidden rounded-lg px-4 py-2.5 text-sm bg-muted">
-                <div className="flex gap-1">
-                  <div className="h-2 w-2 rounded-full bg-foreground/40 animate-bounce [animation-delay:-0.3s]"></div>
-                  <div className="h-2 w-2 rounded-full bg-foreground/40 animate-bounce [animation-delay:-0.15s]"></div>
-                  <div className="h-2 w-2 rounded-full bg-foreground/40 animate-bounce"></div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+            ) : (
+              messages.map((message: ChatMessage) => (
+                <Message key={message.id} from={message.role}>
+                  <MessageContent
+                    className={cn(
+                      message.role === "user"
+                        ? "bg-primary text-primary-foreground border-primary/20"
+                        : "bg-muted/50 text-foreground border-border"
+                    )}
+                  >
+                    {message.role === "assistant" ? (
+                      <Response className="prose-invert:text-primary-foreground">
+                        {message.content}
+                      </Response>
+                    ) : (
+                      message.content
+                    )}
+                  </MessageContent>
+                  <MessageAvatar
+                    name={message.role === "user" ? "User" : "Assistant"}
+                    className={cn(
+                      message.role === "user"
+                        ? "bg-primary text-primary-foreground border-primary/20"
+                        : "bg-background border-border"
+                    )}
+                  />
+                </Message>
+              ))
+            )}
+            {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
+              <Message from="assistant">
+                <MessageContent className="bg-muted/50 text-foreground border-border">
+                  <div className="flex gap-1.5 items-center">
+                    <div className="h-2 w-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.3s]"></div>
+                    <div className="h-2 w-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.15s]"></div>
+                    <div className="h-2 w-2 rounded-full bg-primary/60 animate-bounce"></div>
+                  </div>
+                </MessageContent>
+                <MessageAvatar name="Assistant" className="bg-background border-border" />
+              </Message>
+            )}
+          </ConversationContent>
+          <ConversationScrollButton />
+        </Conversation>
 
         {/* Input Area */}
         <div className="border-t p-4 bg-muted/30">

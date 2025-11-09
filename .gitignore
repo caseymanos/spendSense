@@ -15,10 +15,15 @@ dist/
 build/
 # Data files
 data/*.sqlite
+data/*.db
+data/migrations/
 data/*.parquet
 data/*.csv
 data/*.json
 !data/config.json
+
+# NiceGUI storage (user session data)
+.nicegui/storage-user-*.json
 
 # IDE
 .vscode/

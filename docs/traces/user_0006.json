@@ -103,7 +103,7 @@
     "timestamp": "2025-11-06T14:24:06.975206"
   },
   "recommendations": {
-    "timestamp": "2025-11-06T18:31:14.778606",
+    "timestamp": "2025-11-07T19:45:18.977851",
     "persona": "High Utilization",
     "education_count": 4,
     "offer_count": 1,
@@ -117,8 +117,18 @@
         "topic": "credit_utilization",
         "partner_equivalent": false,
         "rationale": "Your credit card ending in 9878 is at 49% utilization ($7,354 of $15,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $110/month.",
-        "chart_path": "/Users/caseymanos/GauntletAI/SpendSense/data/images/credit_utilization.png",
-        "chart_html": "/Users/caseymanos/GauntletAI/SpendSense/data/images/credit_utilization.html",
+        "content": {
+          "type": "credit_utilization",
+          "data": {
+            "utilization": 49.02,
+            "cardMask": "9878",
+            "currentBalance": 7353.583980011524,
+            "creditLimit": 15000.0,
+            "availableCredit": 7646.416019988476,
+            "recommendedBalance": 4500.0,
+            "amountOverTarget": 2853.5839800115236
+          }
+        },
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       },
       {
@@ -129,8 +139,18 @@
         "topic": "debt_paydown_strategy",
         "partner_equivalent": false,
         "rationale": "With 1 credit cards and total utilization of 49%, a structured paydown plan could save you hundreds in interest. This guide helps you choose the right approach.",
-        "chart_path": "/Users/caseymanos/GauntletAI/SpendSense/data/images/debt_avalanche.png",
-        "chart_html": "/Users/caseymanos/GauntletAI/SpendSense/data/images/debt_avalanche.html",
+        "content": {
+          "type": "debt_avalanche",
+          "data": [
+            {
+              "name": "credit (...9878)",
+              "balance": 7353.583980011524,
+              "interestRate": 0,
+              "monthlyInterest": 0.0,
+              "priority": 1
+            }
+          ]
+        },
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       },
       {
@@ -163,6 +183,7 @@
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       }
     ],
-    "consent_granted": true
+    "consent_granted": true,
+    "source": "rule_based"
   }
 }

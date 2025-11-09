@@ -61,6 +61,7 @@ class RecommendationResponse(BaseModel):
     rationale: str
     disclaimer: str
     content: Optional[dict] = None
+    topic: Optional[str] = None
 
 
 class UserRecommendationsResponse(BaseModel):
@@ -96,3 +97,15 @@ class EvaluationSummaryResponse(BaseModel):
     fairness: dict
     auditability: float
     timestamp: datetime
+
+
+class VideoResponse(BaseModel):
+    """Educational video linked to a recommendation topic"""
+
+    video_id: str
+    youtube_id: str
+    title: str
+    channel_name: Optional[str] = None
+    duration_seconds: Optional[int] = None
+    thumbnail_url: str
+    description: Optional[str] = None
