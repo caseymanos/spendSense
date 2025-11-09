@@ -25,6 +25,7 @@
     "nanoid": "^5.1.6",
     "next": "14.2.10",
     "next-themes": "^0.3.0",
+    "player.style": "^0.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^10.1.0",
@@ -33,7 +34,8 @@
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "tailwind-merge": "^2.5.2",
-    "use-stick-to-bottom": "^1.1.1"
+    "use-stick-to-bottom": "^1.1.1",
+    "youtube-video-element": "^1.6.2"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",

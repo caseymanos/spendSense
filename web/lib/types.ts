@@ -18,6 +18,11 @@ export type Recommendation = {
   title: string;
   rationale: string;
   disclaimer: string;
+  content?: {
+    type: string;
+    data: any;
+  };
+  topic?: string;
 };
 
 export type RecommendationsResponse = {
@@ -30,5 +35,16 @@ export type RecommendationsResponse = {
 export type ConsentUpdateResponse = {
   success: boolean;
   user: UserSummary;
+};
+
+export type Video = {
+  video_id: string;
+  youtube_id: string;
+  title: string;
+  channel_name?: string | null;
+  duration_seconds?: number | null;
+  thumbnail_url: string;
+  description?: string | null;
+  topic?: string;
 };
 
