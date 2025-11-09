@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.json
+*.cover
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Git
+.git/
+.gitignore
+
+# Documentation (not needed at runtime)
+docs/
+*.md
+CHATGPT_SETUP.md
+REFLEX_MIGRATION_STATUS.md
+MCP_AGENT_MAIL_SETUP.md
+AGENTS.md
+
+# Frontend
+web/
+ui_reflex/
+
+# NiceGUI storage
+.nicegui/
+
+# Misc
+*.log
+.ruff_cache/
