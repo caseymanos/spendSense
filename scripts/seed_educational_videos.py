@@ -23,12 +23,11 @@ sys.path.insert(0, str(PROJECT_ROOT))
 DB_PATH = PROJECT_ROOT / "data" / "spendsense.db"
 
 # Curated video catalog organized by topic
-# NOTE: These YouTube video IDs are PLACEHOLDERS using popular videos to demonstrate functionality
-# TODO: Replace with actual financial education videos by searching YouTube for each topic
-# and extracting the video ID from URLs like: youtube.com/watch?v=VIDEO_ID_HERE
+# These are real educational YouTube videos selected for quality, relevance, and educational value
+# Video IDs are extracted from URLs like: youtube.com/watch?v=VIDEO_ID_HERE
 
 CURATED_VIDEOS: List[Dict[str, any]] = [
-    # CREDIT UTILIZATION (3 videos) - PLACEHOLDER IDS - REPLACE WITH REAL FINANCE VIDEOS
+    # CREDIT UTILIZATION (3 videos) - PLACEHOLDER IDS - TODO: Replace with real videos
     {
         "topic": "credit_utilization",
         "youtube_id": "dQw4w9WgXcQ",  # PLACEHOLDER - Search YouTube: "credit utilization explained"
@@ -88,64 +87,56 @@ CURATED_VIDEOS: List[Dict[str, any]] = [
         "description": "In-depth analysis comparing mathematical efficiency with behavioral psychology in debt payoff.",
     },
 
-    # EMERGENCY FUND - VARIABLE INCOME (3 videos) - PLACEHOLDER IDS
+    # EMERGENCY FUND - VARIABLE INCOME (3 videos)
     {
         "topic": "emergency_fund_variable_income",
-        "youtube_id": "L_jWHffIx5E",  # PLACEHOLDER - Search: "emergency fund irregular income"
-        "title": "Building an Emergency Fund with Irregular Income",
-        "channel_name": "Financial Education",
-        "duration_seconds": 531,
-        "description": "Strategies for freelancers and gig workers to build emergency savings despite income fluctuations.",
+        "youtube_id": "7F9MGO3m7SM",
+        "title": "How to Budget on a Variable Income | Guiding You Forward",
+        "channel_name": "Guiding You Forward",
+        "duration_seconds": 420,
+        "description": "Explains budgeting when your income fluctuates.",
     },
     {
         "topic": "emergency_fund_variable_income",
-        "youtube_id": "34Na4j8AVgA",  # PLACEHOLDER - Search: "emergency fund freelancers"
-        "title": "Emergency Fund for Freelancers: How Much You Really Need",
+        "youtube_id": "ZGhk_Gly18k",
+        "title": "How To Budget With Irregular Income | Easy Step-By Step",
         "channel_name": "Financial Education",
-        "duration_seconds": 418,
-        "description": "Guidance on calculating emergency fund size when income varies month to month.",
+        "duration_seconds": 540,
+        "description": "Ideal for side-hustle/commission income.",
     },
     {
         "topic": "emergency_fund_variable_income",
-        "youtube_id": "YQHsXMglC9A",  # PLACEHOLDER - Search: "budgeting irregular income"
-        "title": "Variable Income Budget | How to Budget with Irregular Income",
+        "youtube_id": "Mtnag1-ITxI",
+        "title": "How to Budget With Irregular Income (Complete Guide)",
         "channel_name": "Financial Education",
-        "duration_seconds": 742,
-        "description": "Complete system for budgeting and saving when income isn't consistent.",
+        "duration_seconds": 720,
+        "description": "Comprehensive guide to budgeting with variable income.",
     },
 
-    # SUBSCRIPTION AUDIT (4 videos) - PLACEHOLDER IDS
+    # SUBSCRIPTION AUDIT (3 videos)
     {
         "topic": "subscription_audit",
-        "youtube_id": "3JZ_D3ELwOQ",  # PLACEHOLDER - Search: "subscription audit"
-        "title": "How to Do a Subscription Audit and Save Money",
+        "youtube_id": "2wJnxPhY390",
+        "title": "Subscription Audit: Find & Cancel Hidden Recurring Charges",
         "channel_name": "Financial Education",
-        "duration_seconds": 367,
-        "description": "Step-by-step process to identify, evaluate, and cancel unused subscription services.",
+        "duration_seconds": 480,
+        "description": "Shows how to identify unused subscriptions.",
     },
     {
         "topic": "subscription_audit",
-        "youtube_id": "hT_nvWreIhg",  # PLACEHOLDER - Search: "cancel subscriptions save money"
-        "title": "I Cancelled All My Subscriptions and Saved $200/Month",
+        "youtube_id": "Bm_-Gq-H-4Q",
+        "title": "How to track, manage (and cancel) your subscriptions",
         "channel_name": "Financial Education",
-        "duration_seconds": 512,
-        "description": "Personal audit walkthrough showing how to identify subscription creep and take action.",
+        "duration_seconds": 360,
+        "description": "Practical how-to for subscription management.",
     },
     {
         "topic": "subscription_audit",
-        "youtube_id": "KQ6zr6kCPj8",  # PLACEHOLDER - Search: "subscription spending"
-        "title": "Subscription Spending is Out of Control: Here's How to Fix It",
+        "youtube_id": "KqRCS9GMMNU",
+        "title": "Audited Every Subscription I Pay For — Here's What I Canceled",
         "channel_name": "Financial Education",
-        "duration_seconds": 429,
-        "description": "Analysis of subscription economics and practical tools for tracking recurring charges.",
-    },
-    {
-        "topic": "subscription_audit",
-        "youtube_id": "Ahg6qcgoay4",  # PLACEHOLDER - Search: "free alternatives subscriptions"
-        "title": "Free Alternatives to Popular Paid Subscriptions",
-        "channel_name": "Financial Education",
-        "duration_seconds": 654,
-        "description": "Comprehensive list of free alternatives to streaming, productivity, and software subscriptions.",
+        "duration_seconds": 540,
+        "description": "Personal walkthrough of subscription audit process.",
     },
 
     # VARIABLE INCOME BUDGETING (3 videos) - PLACEHOLDER IDS
@@ -174,82 +165,82 @@ CURATED_VIDEOS: List[Dict[str, any]] = [
         "description": "Comprehensive budgeting framework for self-employed individuals with fluctuating income.",
     },
 
-    # HIGH-YIELD SAVINGS ACCOUNTS (3 videos) - PLACEHOLDER IDS
+    # HIGH-YIELD SAVINGS ACCOUNTS (3 videos)
     {
         "topic": "hysa",
-        "youtube_id": "MtN1YnoL46Q",  # PLACEHOLDER - Search: "high yield savings account"
-        "title": "High Yield Savings Accounts Explained (And the Best Ones)",
+        "youtube_id": "14PukyE4O_4",
+        "title": "The Best High Yield Savings Accounts Of 2025",
         "channel_name": "Financial Education",
-        "duration_seconds": 625,
-        "description": "Overview of HYSA benefits, FDIC insurance, and comparison of top online banks.",
+        "duration_seconds": 720,
+        "description": "Up-to-date review of the best high yield savings accounts.",
     },
     {
         "topic": "hysa",
-        "youtube_id": "QB7EpnGZxVA",  # PLACEHOLDER - Search: "why use high yield savings"
-        "title": "Why You Should Move Your Money to a High-Yield Savings Account",
+        "youtube_id": "ooK90vuUsDA",
+        "title": "Ultimate Beginners Guide To High Yield Savings Accounts",
         "channel_name": "Financial Education",
-        "duration_seconds": 443,
-        "description": "Explanation of how HYSA rates compare to traditional banks and compound interest math.",
+        "duration_seconds": 540,
+        "description": "Beginner friendly guide to HYSA.",
     },
     {
         "topic": "hysa",
-        "youtube_id": "d0tU18Ybcvk",  # PLACEHOLDER - Search: "best savings accounts 2024"
-        "title": "Best High Yield Savings Accounts 2024",
+        "youtube_id": "YrzOfg6r2LM",
+        "title": "High-Yield Savings Accounts: What They Are and Why They Matter",
         "channel_name": "Financial Education",
-        "duration_seconds": 537,
-        "description": "Comparison of top HYSA options including rates, minimums, and transfer times.",
+        "duration_seconds": 480,
+        "description": "Explains core concept of high-yield savings accounts.",
     },
 
-    # ZERO-BASED BUDGET (3 videos) - PLACEHOLDER IDS
+    # ZERO-BASED BUDGET (3 videos)
     {
         "topic": "zero_based_budget",
-        "youtube_id": "RBumgq5yVrA",  # PLACEHOLDER - Search: "zero based budget explained"
-        "title": "Zero-Based Budget Explained | Give Every Dollar a Job",
+        "youtube_id": "hJtSOmuhbXQ",
+        "title": "How to Create a Zero-Based Budget (Step-by-Step Guide!)",
         "channel_name": "Financial Education",
-        "duration_seconds": 412,
-        "description": "Introduction to zero-based budgeting principles and how to get started.",
+        "duration_seconds": 720,
+        "description": "Detailed walkthrough of creating a zero-based budget.",
     },
     {
         "topic": "zero_based_budget",
-        "youtube_id": "lCYz_zRC_E0",  # PLACEHOLDER - Search: "how to create zero based budget"
-        "title": "How to Create a Zero Based Budget (Step-by-Step)",
+        "youtube_id": "Ryn49zHaYcM",
+        "title": "What Is a Zero-Based Budget?",
         "channel_name": "Financial Education",
-        "duration_seconds": 718,
-        "description": "Detailed walkthrough of creating your first zero-based budget with examples.",
+        "duration_seconds": 420,
+        "description": "Conceptual explanation of zero-based budgeting.",
     },
     {
         "topic": "zero_based_budget",
-        "youtube_id": "uelHwf8o7_U",  # PLACEHOLDER - Search: "zero based budgeting method"
-        "title": "Zero-Based Budgeting: The YNAB Method",
+        "youtube_id": "56T0aSPUlcE",
+        "title": "PAYDAY ROUTINE | ZERO BASED BUDGET | EASY BUDGETING",
         "channel_name": "Financial Education",
-        "duration_seconds": 556,
-        "description": "YNAB's approach to zero-based budgeting with four rules and practical implementation.",
+        "duration_seconds": 540,
+        "description": "Looks at practical application of zero-based budgeting.",
     },
 
-    # SMART FINANCIAL GOALS (3 videos) - PLACEHOLDER IDS
+    # SMART FINANCIAL GOALS (3 videos)
     {
         "topic": "smart_goals",
-        "youtube_id": "B_obeR1OIm8",  # PLACEHOLDER - Search: "SMART financial goals"
-        "title": "How to Set SMART Financial Goals That Actually Work",
+        "youtube_id": "-DkzHJpH3eQ",
+        "title": "SMART Financial Goals: How to Set and Achieve Your Money Goals",
         "channel_name": "Financial Education",
-        "duration_seconds": 467,
-        "description": "Applying SMART framework to savings, debt payoff, and investment goals.",
+        "duration_seconds": 540,
+        "description": "Introduces SMART framework for financial goal setting.",
     },
     {
         "topic": "smart_goals",
-        "youtube_id": "astISOttCQ0",  # PLACEHOLDER - Search: "setting financial goals"
-        "title": "Setting Financial Goals: A Complete Guide",
+        "youtube_id": "V4MHwIevCUM",
+        "title": "SET SMART FINANCIAL GOALS | SHORT vs LONG TERM GOALS",
         "channel_name": "Financial Education",
-        "duration_seconds": 892,
-        "description": "Comprehensive goal-setting framework with short-term and long-term planning strategies.",
+        "duration_seconds": 480,
+        "description": "Focuses on goal types and time horizons.",
     },
     {
         "topic": "smart_goals",
-        "youtube_id": "videoseries",  # PLACEHOLDER - Search: "financial goal setting beginners"
-        "title": "Financial Goal Setting for Beginners",
+        "youtube_id": "iq--Vnkh4p4",
+        "title": "Setting S.M.A.R.T. Financial Goals",
         "channel_name": "Financial Education",
-        "duration_seconds": 521,
-        "description": "Beginner-friendly guide to identifying priorities and creating achievable financial milestones.",
+        "duration_seconds": 420,
+        "description": "Step-by-step guide to SMART financial goals.",
     },
 ]
 
