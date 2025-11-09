@@ -39,7 +39,12 @@ export function RecommendationCard({ rec }: { rec: Recommendation }) {
 
     switch (rec.content.type) {
       case 'credit_utilization':
-        return <CreditUtilizationMotion data={rec.content.data} className="mt-4" />
+        return <CreditUtilizationMotion
+          utilization={rec.content.data.utilization}
+          cardMask={rec.content.data.cardMask}
+          data={rec.content.data}
+          className="mt-4"
+        />
       case 'debt_avalanche':
         return <DebtAvalancheChart debts={rec.content.data} className="mt-4" />
       default:
