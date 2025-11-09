@@ -91,6 +91,15 @@ async def get_recommendations(user_id: str):
     return svc_get_recommendations(user_id)
 
 
+@app.get("/transactions/{user_id}", tags=["Users"])
+async def get_persona_transactions(user_id: str, limit: int = 10):
+    """Get persona-specific transactions for a user."""
+    from api.services.data import get_persona_transactions as svc_get_persona_transactions
+
+    transactions = svc_get_persona_transactions(user_id, limit)
+    return {"user_id": user_id, "transactions": transactions, "count": len(transactions)}
+
+
 @app.post("/feedback", tags=["Users"])
 async def submit_feedback(request: FeedbackRequest):
     """Submit feedback on a recommendation"""
