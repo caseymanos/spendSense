@@ -4,7 +4,7 @@
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
-from reportlab.lib.colors import Color, black, white
+from reportlab.lib.colors import Color
 import json
 
 # PEAK6 Brand Colors (as Color objects)

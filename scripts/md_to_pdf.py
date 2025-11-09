@@ -6,7 +6,6 @@ Convert markdown files to PDF using macOS built-in tools.
 import sys
 import subprocess
 from pathlib import Path
-import tempfile
 import re
 
 

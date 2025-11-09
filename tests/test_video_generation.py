@@ -11,15 +11,14 @@ Tests cover:
 
 import pytest
 import time
-from datetime import datetime
 
-from recommend.video_generator import SORAVideoGenerator, retry
+from recommend.video_generator import SORAVideoGenerator
 from recommend.prompt_templates import (
     build_video_prompt,
     get_template_metadata,
     list_available_templates
 )
-from tests.mocks.sora_mock import MockSORAClient, MockSORATimeout
+from tests.mocks.sora_mock import MockSORAClient
 
 
 # =============================================================================

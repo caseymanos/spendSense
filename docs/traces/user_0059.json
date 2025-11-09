@@ -99,6 +99,18 @@
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T14:24:06.984919"
+    "timestamp": "2025-11-09T16:54:00.408629"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-09T16:54:01.126190",
+    "persona": "High Utilization",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": false,
+    "source": "rule_based",
+    "reason": "consent_not_granted",
+    "message": "Consent not granted. Opt in from your profile to unlock personalized guidance."
   }
 }

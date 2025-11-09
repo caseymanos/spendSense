@@ -15,7 +15,6 @@ from recommend.engine import generate_recommendations
 from guardrails.consent import (
     grant_consent as _grant_consent,
     revoke_consent as _revoke_consent,
-    check_consent as _check_consent,
 )
 
 # =============================================================================

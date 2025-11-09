@@ -257,3 +257,17 @@ IMAGE_GENERATION_CONFIG = {
     "storage_path": "data/images",
     "fallback_image_url": "https://placeholder.co/1024x1024/png?text=Image+Unavailable",
 }
+
+# =============================================================================
+# VIDEO GENERATION CONFIGURATION (SORA Integration)
+# =============================================================================
+
+VIDEO_GENERATION_CONFIG = {
+    "enabled": os.getenv("VIDEO_GENERATION_ENABLED", "false").lower() == "true",
+    "api_key": os.getenv("OPENAI_API_KEY", ""),
+    "model": "sora",
+    "max_retries": 3,
+    "retry_backoff_seconds": 2.0,
+    "timeout_seconds": 300,
+    "storage_path": "data/videos",
+}

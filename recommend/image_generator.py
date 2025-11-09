@@ -15,7 +15,6 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 
 from openai import OpenAI
-from ingest.constants import IMAGE_GENERATION_CONFIG
 
 
 logger = logging.getLogger(__name__)

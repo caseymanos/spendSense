@@ -43,3 +43,4 @@ ui_reflex/.web/
 ui_reflex/.states/
 ui_reflex/__pycache__/
 ui_reflex/user_app/__pycache__/
+.vercel

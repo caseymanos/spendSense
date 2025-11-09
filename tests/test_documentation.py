@@ -7,13 +7,11 @@ appropriate content, and that all pipeline outputs are generated correctly.
 PR #10: Documentation & Final Polish
 """
 
-import os
 import json
 import sqlite3
 from pathlib import Path
 
 import pandas as pd
-import pytest
 
 # Project root directory
 PROJECT_ROOT = Path(__file__).parent.parent

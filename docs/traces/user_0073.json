@@ -100,10 +100,10 @@
         "net_inflow": 206.75
       }
     },
-    "timestamp": "2025-11-06T14:24:06.987199"
+    "timestamp": "2025-11-09T16:54:00.411733"
   },
   "recommendations": {
-    "timestamp": "2025-11-08T23:59:08.778364",
+    "timestamp": "2025-11-09T16:54:01.284562",
     "persona": "High Utilization",
     "education_count": 5,
     "offer_count": 0,

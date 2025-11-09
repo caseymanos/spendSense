@@ -6,7 +6,6 @@ Tests prompt building, error handling, and metadata tracking.
 """
 
 import pytest
-from recommend.image_generator import ImageGenerator
 from recommend.prompt_templates import (
     build_image_prompt,
     get_template_metadata,

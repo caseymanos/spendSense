@@ -99,10 +99,10 @@
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-06T14:24:06.973941"
+    "timestamp": "2025-11-09T16:54:00.393583"
   },
   "recommendations": {
-    "timestamp": "2025-11-09T00:14:05.610091",
+    "timestamp": "2025-11-09T16:54:00.448834",
     "persona": "Cash Flow Optimizer",
     "education_count": 3,
     "offer_count": 3,
@@ -168,5 +168,95 @@
     ],
     "consent_granted": true,
     "source": "rule_based"
-  }
+  },
+  "guardrail_decisions": [
+    {
+      "timestamp": "2025-11-09T16:53:23.599806",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-09T16:53:23.601256",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-09T16:53:23.602519",
+      "decision_type": "offers_blocked",
+      "details": {
+        "blocked_count": 1,
+        "blocked_offers": [
+          {
+            "title": "Premium Rewards Card",
+            "reason": "Credit utilization too high (90%)",
+            "blocked_at": "product_eligibility"
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2025-11-09T16:53:23.602750",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 1,
+        "tone_passed": true,
+        "eligibility_blocks": 1
+      }
+    },
+    {
+      "timestamp": "2025-11-09T16:53:59.010218",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-09T16:53:59.011994",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-09T16:53:59.013550",
+      "decision_type": "offers_blocked",
+      "details": {
+        "blocked_count": 1,
+        "blocked_offers": [
+          {
+            "title": "Premium Rewards Card",
+            "reason": "Credit utilization too high (90%)",
+            "blocked_at": "product_eligibility"
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2025-11-09T16:53:59.013794",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 1,
+        "tone_passed": true,
+        "eligibility_blocks": 1
+      }
+    }
+  ]
 }

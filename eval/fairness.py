@@ -546,7 +546,7 @@ This report analyzes fairness across three production-ready metrics to ensure re
 """
 
     if violations:
-        md += f"""
+        md += """
 ### ⚠️ Fairness Violations Detected
 
 The following violations require attention:
@@ -991,11 +991,11 @@ def calculate_fairness_metrics(
     print("FAIRNESS METRICS SUMMARY")
     print("=" * 70)
 
-    print(f"\n📊 Legacy Metric (Backwards Compatibility):")
+    print("\n📊 Legacy Metric (Backwards Compatibility):")
     print(f"   Overall persona assignment rate: {overall_rate*100:.2f}%")
     print(f"   Status: {'✅ PASS' if legacy_fairness['all_demographics_pass'] else '❌ FAIL'}")
 
-    print(f"\n🎯 Production Metrics (Regulatory Compliance):")
+    print("\n🎯 Production Metrics (Regulatory Compliance):")
     print(f"   [1] Persona Distribution Parity: {'✅ PASS' if persona_parity['all_personas_pass'] else '❌ FAIL'}")
     if persona_parity["violations"]:
         print(f"       Violations: {len(persona_parity['violations'])}")

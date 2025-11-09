@@ -331,8 +331,8 @@ class TestPersonaPriorityOrdering:
 
         persona, persona_data = assign_persona(signals)
 
-        # Verify: subscription_heavy wins
-        assert persona == "Subscription-Heavy"
+        # Verify: Cash Flow Optimizer wins (higher priority than Subscription-Heavy per constants.py)
+        assert persona == "Cash Flow Optimizer"
 
     def test_cash_flow_optimizer_wins_over_savings_builder(self):
         """Test: Cash Flow Optimizer has higher priority than Savings Builder."""

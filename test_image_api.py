@@ -112,7 +112,7 @@ def test_real_api():
             )
 
             if result.get("image_url"):
-                print(f"✓ SUCCESS")
+                print("✓ SUCCESS")
                 print(f"  Image URL: {result['image_url']}")
                 print(f"  Generated: {result['generated_at']}")
                 print(f"  DALL-E revised prompt: {result['revised_prompt'][:100]}...")

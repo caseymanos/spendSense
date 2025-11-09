@@ -10,7 +10,7 @@ This mock simulates:
 
 import time
 import hashlib
-from typing import Dict, Optional
+from typing import Optional
 from datetime import datetime
 
 

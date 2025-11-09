@@ -7,8 +7,8 @@ import json
 import asyncio
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Any, Optional
-from nicegui import ui, app
+from typing import Dict, Any
+from nicegui import ui
 
 from ingest.schemas import DataGenerationConfig
 from ingest.operator_controls import (
@@ -856,7 +856,7 @@ class DataGeneratorUI:
             self.status_progress.set_value(0.4)
 
             if process.returncode == 0:
-                self.status_label.set_text(f"Step 2/4: Loading data into database...")
+                self.status_label.set_text("Step 2/4: Loading data into database...")
                 ui.notify("Data generation successful! Loading data...", type="positive")
 
                 # Step 2: Run the loader
@@ -870,7 +870,7 @@ class DataGeneratorUI:
                 loader_stdout, loader_stderr = await loader_process.communicate()
 
                 if loader_process.returncode == 0:
-                    self.status_label.set_text(f"Step 3/4: Detecting behavioral signals...")
+                    self.status_label.set_text("Step 3/4: Detecting behavioral signals...")
                     self.status_progress.set_value(0.6)
 
                     # Step 3: Generate behavioral signals
@@ -883,7 +883,7 @@ class DataGeneratorUI:
                     features_stdout, features_stderr = await features_process.communicate()
 
                     if features_process.returncode == 0:
-                        self.status_label.set_text(f"Step 4/4: Assigning behavioral personas...")
+                        self.status_label.set_text("Step 4/4: Assigning behavioral personas...")
                         self.status_progress.set_value(0.8)
 
                         # Step 4: Assign personas
@@ -897,7 +897,7 @@ class DataGeneratorUI:
                         self.status_progress.set_value(1.0)
 
                         if personas_process.returncode == 0:
-                            self.status_label.set_text(f"✓ Complete! Data generated, loaded, and personas assigned.")
+                            self.status_label.set_text("✓ Complete! Data generated, loaded, and personas assigned.")
                             ui.notify("Full pipeline complete! Dashboard will auto-refresh.", type="positive", timeout=5000)
                         else:
                             error_msg = personas_stderr.decode() if personas_stderr else "Unknown error"

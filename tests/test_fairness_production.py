@@ -10,7 +10,6 @@ These metrics detect disparate impact that the legacy metric (persona assignment
 """
 
 import pandas as pd
-import pytest
 
 from eval.fairness import (
     calculate_persona_distribution_parity,

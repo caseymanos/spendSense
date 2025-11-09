@@ -258,8 +258,27 @@ def generate_thumbnail_url(youtube_id: str) -> str:
 
 def seed_videos():
     """Insert curated videos into the database."""
+    # Ensure DB directory and schema exist
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
+
+    # Create table if it does not exist
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS educational_videos (
+            video_id TEXT PRIMARY KEY,
+            topic TEXT NOT NULL,
+            youtube_id TEXT NOT NULL,
+            title TEXT NOT NULL,
+            channel_name TEXT NOT NULL,
+            duration_seconds INTEGER NOT NULL,
+            thumbnail_url TEXT,
+            description TEXT,
+            added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
 
     # Clear existing videos (for re-seeding)
     cursor.execute("DELETE FROM educational_videos")

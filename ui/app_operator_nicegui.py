@@ -13,10 +13,10 @@ Features:
 Run with: uv run python ui/app_operator_nicegui.py
 """
 
-import asyncio
 from datetime import datetime
-from pathlib import Path
 import pandas as pd
+import os
+import hashlib
 
 from nicegui import ui, app
 
@@ -30,8 +30,6 @@ from ui.utils.data_loaders import (
     load_user_trace,
     load_persona_distribution,
     load_guardrail_summary,
-    load_config,
-    save_config,
 )
 from ui.utils.data_loaders import DB_PATH as _DB_PATH
 from ui.utils.data_loaders import SIGNALS_PATH as _SIGNALS_PATH
@@ -1688,6 +1686,78 @@ def render_content_management_tab():
 
 
 # =============================================================================
+# AUTHENTICATION
+# =============================================================================
+
+# Load authentication credentials from environment
+OPERATOR_USERNAME = os.getenv("OPERATOR_USERNAME", "operator")
+OPERATOR_PASSWORD_HASH = os.getenv("OPERATOR_PASSWORD_HASH", "")  # SHA256 hash
+OPERATOR_PASSWORD = os.getenv("OPERATOR_PASSWORD", "")  # Plain password for local dev
+AUTH_ENABLED = os.getenv("AUTH_ENABLED", "true").lower() == "true"
+
+
+def hash_password(password: str) -> str:
+    """Create SHA256 hash of password."""
+    return hashlib.sha256(password.encode()).hexdigest()
+
+
+def check_auth():
+    """Check if user is authenticated."""
+    if not AUTH_ENABLED:
+        return True
+
+    # Check if already authenticated in session
+    if app.storage.user.get("authenticated", False):
+        return True
+
+    return False
+
+
+def verify_credentials(username: str, password: str) -> bool:
+    """Verify username and password."""
+    if username != OPERATOR_USERNAME:
+        return False
+
+    # Check against hashed password if available
+    if OPERATOR_PASSWORD_HASH:
+        return hash_password(password) == OPERATOR_PASSWORD_HASH
+
+    # Fallback to plain password for local dev
+    if OPERATOR_PASSWORD:
+        return password == OPERATOR_PASSWORD
+
+    # No password set - deny access in production
+    return False
+
+
+@ui.page("/login")
+def login_page():
+    """Login page with authentication form."""
+
+    def try_login():
+        """Attempt to log in with provided credentials."""
+        if verify_credentials(username.value, password.value):
+            app.storage.user["authenticated"] = True
+            ui.navigate.to("/")
+        else:
+            ui.notify("Invalid credentials", type="negative")
+            password.value = ""
+
+    with ui.column().classes("absolute-center items-center"):
+        ui.icon("engineering", size="64px").classes("mb-4 text-primary")
+        ui.label("SpendSense Operator Dashboard").classes("text-2xl font-bold mb-2")
+        ui.label("Please log in to continue").classes("text-gray-600 mb-6")
+
+        with ui.card().classes("p-6"):
+            username = ui.input("Username", placeholder="operator").props("autofocus").classes("w-64")
+            password = ui.input("Password", password=True, password_toggle_button=True).props(
+                "clearable"
+            ).classes("w-64").on("keydown.enter", try_login)
+
+            ui.button("Log In", icon="login", on_click=try_login).props("color=primary").classes("w-full mt-4")
+
+
+# =============================================================================
 # MAIN PAGE
 # =============================================================================
 
@@ -1695,6 +1765,11 @@ def render_content_management_tab():
 @ui.page("/")
 async def main_page():
     """Main operator dashboard page."""
+    # Check authentication
+    if AUTH_ENABLED and not check_auth():
+        ui.navigate.to("/login")
+        return
+
     # Initialize themes
     ThemeManager.initialize_themes()
     # Always use Clean & Minimal theme
@@ -1797,10 +1872,18 @@ async def main_page():
 # =============================================================================
 
 if __name__ in {"__main__", "__mp_main__"}:
+    import os
+
+    # Production configuration
+    PORT = int(os.getenv("PORT", 8085))
+    RELOAD = os.getenv("RELOAD", "false").lower() == "true"
+    SHOW = os.getenv("SHOW", "false").lower() == "true"
+    STORAGE_SECRET = os.getenv("STORAGE_SECRET", "spendsense-operator-dashboard-secret-key-change-in-production")
+
     ui.run(
         title="SpendSense Operator Dashboard",
-        port=8085,
-        reload=True,
-        show=True,
-        storage_secret="spendsense-operator-dashboard-secret-key-change-in-production",
+        port=PORT,
+        reload=RELOAD,
+        show=SHOW,
+        storage_secret=STORAGE_SECRET,
     )

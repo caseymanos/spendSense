@@ -36,6 +36,8 @@ build/
 # Documentation (not needed at runtime)
 docs/
 *.md
+# But keep package README for build metadata
+!README.md
 CHATGPT_SETUP.md
 REFLEX_MIGRATION_STATUS.md
 MCP_AGENT_MAIL_SETUP.md

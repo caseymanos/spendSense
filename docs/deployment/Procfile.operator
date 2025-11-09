@@ -1,0 +1,1 @@
+web: python ui/app_operator_nicegui.py

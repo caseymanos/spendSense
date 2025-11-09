@@ -8,9 +8,6 @@ Usage:
     uv run python test_sora_integration.py
 """
 
-import os
-import sys
-import json
 from recommend.engine import generate_recommendations
 from ingest.constants import VIDEO_GENERATION_CONFIG
 

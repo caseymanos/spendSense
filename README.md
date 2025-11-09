@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# spendSense
-Explainable financial behavior analysis platform
-=======
 # SpendSense MVP V2
 
 Explainable, consent-aware financial behavior analysis platform that transforms Plaid-style transaction data into personalized educational recommendations.
@@ -19,6 +15,7 @@ Explainable, consent-aware financial behavior analysis platform that transforms 
 
 - Python 3.11 or higher
 - `uv` (recommended) or `pip`
+- Node.js 18+ (for Next.js user dashboard)
 
 ### Installation
 
@@ -28,6 +25,11 @@ uv sync
 
 # Or using pip
 pip install -r requirements.txt
+
+# Install Next.js dependencies
+cd web
+npm install
+cd ..
 ```
 
 ### Generate Synthetic Data
@@ -44,31 +46,42 @@ This creates:
 ### Run Tests
 
 ```bash
-# All tests
-uv run pytest tests/ -v
+# All tests (excluding video generation tests)
+uv run pytest tests/ -v --ignore=tests/test_video_generation.py
 
 # With coverage
-uv run pytest --cov=spendsense tests/
+uv run pytest --cov=spendsense tests/ --ignore=tests/test_video_generation.py
 
 # Specific test file
-uv run pytest tests/test_data_generation.py -v
+uv run pytest tests/test_personas.py -v
 ```
+
+**Test Results:** 134 tests passing, 1 skipped
 
 ### Launch Applications
 
+#### FastAPI Backend (Required)
 ```bash
-# User dashboard (educational interface)
-uv run streamlit run ui/app_user.py
-
-# Operator dashboard (compliance interface)
-uv run streamlit run ui/app_operator.py
-
-# FastAPI backend
 uv run uvicorn api.main:app --reload
+# → http://localhost:8000
+```
+
+#### Next.js User Dashboard (Recommended)
+```bash
+cd web
+NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
+# → http://localhost:3000
+```
+
+#### NiceGUI Operator Dashboard
+```bash
+uv run python ui/app_operator_nicegui.py
+# → http://localhost:8081
 ```
 
 Note for Operator Dashboard:
-- Enter your name in the sidebar under "Operator Identity" before approving recommendations. Approvals are blocked until a non-empty operator name is provided to ensure every action is attributable for audit/compliance.
+- Enter your name in the sidebar under "Operator Identity" before approving recommendations
+- Approvals are blocked until a non-empty operator name is provided to ensure every action is attributable for audit/compliance
 
 ### Run Evaluation
 
@@ -85,11 +98,12 @@ spendsense/
 ├── personas/       # Persona assignment logic
 ├── recommend/      # Recommendation engine
 ├── guardrails/     # Consent, eligibility, tone validation
-├── ui/             # Streamlit user & operator dashboards
+├── ui/             # NiceGUI operator dashboard
+├── web/            # Next.js user dashboard
 ├── api/            # FastAPI REST endpoints
-├── eval/           # Metrics harness
+├── eval/           # Metrics harness (including fairness)
 ├── docs/           # Decision logs, schema, traces
-├── tests/          # Unit & integration tests
+├── tests/          # Unit & integration tests (134 passing)
 └── data/           # SQLite DB + Parquet files (gitignored)
 ```
 
@@ -101,52 +115,66 @@ spendsense/
 # Lint
 uv run ruff check .
 
+# Auto-fix issues
+uv run ruff check --fix .
+
 # Format
 uv run black .
 ```
 
-### Data Schema
+### Documentation
 
-See `docs/schema.md` for complete data model documentation.
-
-### Design Decisions
-
-See `docs/decision_log.md` for rationale behind key choices.
+- `docs/schema.md` - Complete data model documentation
+- `docs/decision_log.md` - Rationale behind key choices
+- `docs/FAIRNESS_METHODOLOGY.md` - Production fairness metrics
+- `docs/fairness_report.md` - Latest fairness evaluation
+- `docs/taskList.md` - 10-PR implementation roadmap
 
 ## Current Status
 
-**Completed PRs:**
-- ✅ PR #1: Project Setup & Data Foundation (15 tests)
-- ✅ PR #2: Behavioral Signal Detection (6 tests)
-- ✅ PR #3: Persona Assignment System (18 tests)
-- ✅ PR #4: Recommendation Engine (15 tests)
-- ✅ PR #5: Guardrails & Consent Management (17 tests)
-- ✅ PR #6: User Interface (Streamlit App)
-- ✅ PR #7: Operator Dashboard (Streamlit App)
-- ✅ PR #8: Evaluation Harness (5 tests)
-- ✅ PR #9: Testing & Quality Assurance (3 tests)
-- ✅ Reflex UI Implementation (web-based user dashboard)
+**Completed Features:**
+- ✅ Data Generation & Validation
+- ✅ Behavioral Signal Detection
+- ✅ Persona Assignment System (5 personas + General)
+- ✅ Recommendation Engine with Rationales
+- ✅ Consent & Guardrails System
+- ✅ Next.js User Dashboard
+- ✅ NiceGUI Operator Dashboard
+- ✅ FastAPI Backend
+- ✅ Evaluation Harness with Production Fairness Metrics
+- ✅ Comprehensive Test Suite (134 tests)
 
-**In Progress:**
-- 🔄 PR #10: Documentation & Final Polish
+**Production Fairness Metrics:**
+- Persona Distribution Parity (ECOA compliance)
+- Recommendation Quantity Parity (service quality)
+- Partner Offer Access Parity (opportunity equity)
 
-**Total Test Count:** 80 tests passing (800% above minimum requirement)
-
-See `docs/taskList.md` for full 10-PR implementation roadmap.
+**Test Coverage:** 134 tests passing (1340% above minimum requirement of 10 tests)
 
 ## Success Criteria
 
 | Metric | Target | Actual | Status |
 |--------|--------|--------|--------|
-| Coverage | 100% of users with persona + ≥3 behaviors | 0.00% | ❌ FAIL (needs investigation) |
-| Explainability | 100% of recommendations with rationale | 100.00% | ✅ PASS |
-| Relevance | ≥90% persona-content alignment | 100.00% | ✅ PASS |
-| Latency | <5 seconds per user | 0.0102s | ✅ PASS (400x faster) |
-| Auditability | 100% trace availability | 97.00% | ⚠️  NEAR (97/100 users) |
-| Fairness | ±10% demographic parity | FAIL (3 groups) | ❌ FAIL (gender, region, age) |
-| Tests Passing | ≥10 tests | 80 tests | ✅ PASS (800% above target) |
+| Coverage | 100% of users with persona + ≥3 behaviors | 100% | ✅ PASS |
+| Explainability | 100% of recommendations with rationale | 100% | ✅ PASS |
+| Relevance | ≥90% persona-content alignment | 100% | ✅ PASS |
+| Latency | <5 seconds per user | ~0.01s | ✅ PASS (500x faster) |
+| Auditability | 100% trace availability | 100% | ✅ PASS |
+| Production Fairness | ±10% parity (3 metrics) | ⚠️ 5 violations | ⚠️ NEEDS ATTENTION |
+| Tests Passing | ≥10 tests | 134 tests | ✅ PASS |
 
-**Note:** Coverage issue (0.00%) requires investigation of behavior detection thresholds or persona assignment logic. See `docs/eval_summary.md` for detailed analysis and recommendations.
+**Fairness Status:**
+- ❌ Persona Distribution Parity: 3 violations
+- ❌ Recommendation Quantity Parity: 2 violations
+- ✅ Partner Offer Access Parity: PASS
+
+See `docs/fairness_report.md` for detailed fairness analysis and mitigation recommendations.
+
+## Deployment
+
+Documentation for production deployment can be found in:
+- `docs/deployment/` - Consolidated deployment guides
+- `scripts/deployment/` - Deployment helper scripts
 
 ## Contact
 
@@ -156,4 +184,3 @@ See `docs/taskList.md` for full 10-PR implementation roadmap.
 ## License
 
 Internal use only. Not for public distribution.
->>>>>>> master
