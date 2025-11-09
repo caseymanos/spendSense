@@ -2,7 +2,8 @@
 
 import * as React from 'react'
 import { useTheme } from 'next-themes'
-import { AVAILABLE_THEMES } from '../providers/ThemeProvider'
+
+const AVAILABLE_THEMES = ['light', 'dark']
 
 export function ThemeSelect() {
   const { theme, setTheme } = useTheme()
@@ -15,7 +16,7 @@ export function ThemeSelect() {
         onChange={(e) => setTheme(e.target.value)}
       >
         {AVAILABLE_THEMES.map((t) => (
-          <option key={t} value={t}>{t}</option>
+          <option key={t} value={t} className="capitalize">{t}</option>
         ))}
       </select>
     </div>
