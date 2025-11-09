@@ -7,6 +7,7 @@ import { MetricCard } from '../../components/MetricCard'
 import { PersonaBadge } from '../../components/PersonaBadge'
 import { Card } from '../../components/ui/card'
 import { RecommendationCard } from '../../components/RecommendationCard'
+import { PersonaTransactionsTable } from '../../components/PersonaTransactionsTable'
 
 export default function DashboardPage() {
   const [userId, setUserId] = React.useState<string | undefined>();
@@ -44,6 +45,9 @@ export default function DashboardPage() {
             <MetricCard label="Subscriptions" value={String(profile?.signals?.sub_180d_recurring_count ?? '0')} help="Recurring services" />
             <MetricCard label="Savings (6mo)" value={`$${Number(profile?.signals?.sav_180d_net_inflow ?? 0).toLocaleString()}`} help="Net inflow" />
           </div>
+          {userId && profile?.persona && (
+            <PersonaTransactionsTable userId={userId} persona={profile.persona} limit={10} />
+          )}
           <Card className="p-3">
             <div className="font-bold">Your Recommendations</div>
             {(recs?.recommendations || []).slice(0, 3).map((r) => (

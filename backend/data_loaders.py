@@ -202,3 +202,100 @@ def revoke_user_consent(user_id: str) -> bool:
     except Exception as e:
         print(f"Error revoking consent for {user_id}: {e}")
         return False
+
+
+# =============================================================================
+# PERSONA TRANSACTIONS
+# =============================================================================
+
+
+def load_persona_transactions(user_id: str, limit: int = 10) -> List[Dict[str, Any]]:
+    """Load transactions relevant to user's persona from database.
+
+    Args:
+        user_id: The user ID to load
+        limit: Maximum number of transactions to return
+
+    Returns:
+        List of transaction dictionaries
+    """
+    if not DB_PATH.exists():
+        return []
+
+    persona_assignment = load_persona_assignment(user_id)
+    persona = persona_assignment.get("persona", "General") if persona_assignment else "General"
+
+    with sqlite3.connect(DB_PATH) as conn:
+        # Get user's accounts
+        accounts_df = pd.read_sql(
+            "SELECT account_id, account_type, account_subtype FROM accounts WHERE user_id = ?",
+            conn,
+            params=(user_id,),
+        )
+
+        if len(accounts_df) == 0:
+            return []
+
+        account_ids = accounts_df["account_id"].tolist()
+        placeholders = ",".join(["?"] * len(account_ids))
+
+        # Build query based on persona
+        if persona == "High Utilization":
+            query = f"""
+                SELECT t.*, a.account_subtype, a.name as account_name, a.mask
+                FROM transactions t
+                JOIN accounts a ON t.account_id = a.account_id
+                WHERE t.account_id IN ({placeholders}) AND a.account_type = 'credit'
+                ORDER BY t.date DESC LIMIT ?
+            """
+        elif persona == "Subscription-Heavy":
+            recurring_merchants = ["Netflix", "Spotify", "Amazon Prime", "Hulu", "Disney+"]
+            merchant_conditions = " OR ".join(["t.merchant_name LIKE ?" for _ in recurring_merchants])
+            query = f"""
+                SELECT t.*, a.account_subtype, a.name as account_name, a.mask
+                FROM transactions t
+                JOIN accounts a ON t.account_id = a.account_id
+                WHERE t.account_id IN ({placeholders}) AND ({merchant_conditions})
+                ORDER BY t.date DESC LIMIT ?
+            """
+            account_ids = (*account_ids, *[f"%{m}%" for m in recurring_merchants])
+        elif persona == "Variable Income Budgeter":
+            query = f"""
+                SELECT t.*, a.account_subtype, a.name as account_name, a.mask
+                FROM transactions t
+                JOIN accounts a ON t.account_id = a.account_id
+                WHERE t.account_id IN ({placeholders})
+                AND (t.personal_finance_category = 'INCOME' OR t.merchant_name LIKE '%Payroll%')
+                ORDER BY t.date DESC LIMIT ?
+            """
+        elif persona == "Savings Builder":
+            query = f"""
+                SELECT t.*, a.account_subtype, a.name as account_name, a.mask
+                FROM transactions t
+                JOIN accounts a ON t.account_id = a.account_id
+                WHERE t.account_id IN ({placeholders})
+                AND (a.account_subtype = 'savings' OR t.personal_finance_category = 'TRANSFER_IN')
+                ORDER BY t.date DESC LIMIT ?
+            """
+        elif persona == "Cash Flow Optimizer":
+            query = f"""
+                SELECT t.*, a.account_subtype, a.name as account_name, a.mask
+                FROM transactions t
+                JOIN accounts a ON t.account_id = a.account_id
+                WHERE t.account_id IN ({placeholders}) AND t.amount > 0
+                AND t.personal_finance_category NOT IN ('INCOME', 'TRANSFER_IN')
+                ORDER BY t.date DESC LIMIT ?
+            """
+        else:
+            query = f"""
+                SELECT t.*, a.account_subtype, a.name as account_name, a.mask
+                FROM transactions t
+                JOIN accounts a ON t.account_id = a.account_id
+                WHERE t.account_id IN ({placeholders})
+                ORDER BY t.date DESC LIMIT ?
+            """
+
+        params = (*account_ids, limit)
+        transactions_df = pd.read_sql(query, conn, params=params)
+
+    return transactions_df.to_dict("records") if len(transactions_df) > 0 else []
