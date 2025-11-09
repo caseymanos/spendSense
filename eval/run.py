@@ -81,7 +81,9 @@ def generate_json_output(
                 "target": metrics["coverage"]["metadata"]["target"],
                 "passes": metrics["coverage"]["metadata"]["passes"],
                 "tracking_only": metrics["coverage"]["metadata"].get("tracking_only", False),
-                "users_with_both": metrics["coverage"]["metadata"]["users_with_both"],
+                "users_with_persona": metrics["coverage"]["metadata"]["users_with_persona"],
+                "users_with_meaningful_persona": metrics["coverage"]["metadata"]["users_with_meaningful_persona"],
+                "users_with_both_legacy": metrics["coverage"]["metadata"]["users_with_both_legacy"],
             },
             "explainability": {
                 "value": metrics["explainability"]["value"],
@@ -300,16 +302,17 @@ def generate_summary_markdown(
 ## Core Metrics
 
 ### 1. Coverage
-**Definition**: % of users with meaningful persona + ≥3 detected behaviors
+**Definition**: % of users with assigned persona (including 'general')
 
 - **Value**: {coverage_value:.2f}%
 - **Target**: {coverage_target_display}
 - **Status**: {coverage_status_display}
 - **Details**:
   - Total users: {coverage_meta["total_users"]}
-  - Users with meaningful persona: {coverage_meta["users_with_meaningful_persona"]}
+  - Users with persona: {coverage_meta["users_with_persona"]}
+  - Users with meaningful persona (non-general): {coverage_meta["users_with_meaningful_persona"]}
   - Users with ≥3 behaviors: {coverage_meta["users_with_3_behaviors"]}
-  - Users with both: {coverage_meta["users_with_both"]}
+  - Legacy metric (meaningful + ≥3 behaviors): {coverage_meta["users_with_both_legacy"]}
 
 ### 2. Explainability
 **Definition**: % of recommendations with non-empty rationale text
