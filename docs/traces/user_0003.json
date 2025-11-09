@@ -89,5 +89,18 @@
       "Savings Builder": {}
     },
     "timestamp": "2025-11-06T14:24:06.974693"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-08T23:59:08.031342",
+    "persona": "General",
+    "education_count": 0,
+    "offer_count": 0,
+    "total_recommendations": 0,
+    "recommendations": [],
+    "consent_granted": true,
+    "source": "rule_based",
+    "reason": "insufficient_data",
+    "message": "You're doing great - no recommendations at this time.",
+    "education_shortfall": 3
   }
 }

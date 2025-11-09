@@ -115,11 +115,19 @@ def generate_json_output(
                 ],
             },
             "fairness": {
+                # Legacy metric (backwards compatibility)
                 "value": fairness["all_demographics_pass"],
                 "target": True,
                 "passes": fairness["all_demographics_pass"],
                 "overall_persona_rate": fairness["overall_persona_rate"],
                 "failing_demographics": fairness["failing_demographics"],
+
+                # Production-ready metrics (regulatory compliance)
+                "production_fairness_passes": fairness["production_fairness_passes"],
+                "persona_distribution_parity": fairness["persona_distribution_parity"]["all_personas_pass"],
+                "recommendation_quantity_parity": fairness["recommendation_quantity_parity"]["passes"],
+                "partner_offer_parity": fairness["partner_offer_parity"]["passes"],
+                "total_violations": len(fairness["production_violations"]),
             },
         },
         "detailed_results": {
@@ -131,10 +139,11 @@ def generate_json_output(
             "fairness": fairness,
         },
         "summary": {
+            # Use production fairness for overall pass/fail
             "all_metrics_pass": metrics["summary"]["all_metrics_pass"]
-            and fairness["all_demographics_pass"],
+            and fairness["production_fairness_passes"],
             "metrics_passing": sum(
-                1 for flag in (metrics["summary"]["metric_pass_flags"] + [fairness["all_demographics_pass"]]) if flag
+                1 for flag in (metrics["summary"]["metric_pass_flags"] + [fairness["production_fairness_passes"]]) if flag
             ),
             "metrics_total": len(metrics["summary"]["metric_pass_flags"]) + 1,
             "tracking_metrics": [
@@ -142,6 +151,9 @@ def generate_json_output(
                 for metric_name in ["coverage", "explainability", "relevance", "latency", "auditability"]
                 if metrics[metric_name]["metadata"].get("tracking_only", False)
             ],
+            # Fairness detail
+            "fairness_legacy_passes": fairness["all_demographics_pass"],
+            "fairness_production_passes": fairness["production_fairness_passes"],
         },
     }
 

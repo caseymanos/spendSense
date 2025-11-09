@@ -1,0 +1,206 @@
+{
+  "metadata": {
+    "timestamp": "2025-11-08T21-52-34",
+    "version": "PR #8 Evaluation Harness",
+    "total_users": 100,
+    "total_personas": 100,
+    "total_traces": 101
+  },
+  "metrics": {
+    "coverage": {
+      "value": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "tracking_only": false,
+      "users_with_persona": 100,
+      "users_with_meaningful_persona": 100,
+      "users_with_both_legacy": 57
+    },
+    "explainability": {
+      "value": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "total_recommendations": 496
+    },
+    "relevance": {
+      "value": 0.0,
+      "target": 90.0,
+      "passes": false,
+      "total_recommendations": 0
+    },
+    "latency": {
+      "value": 0.010657754201984613,
+      "target": 5.0,
+      "passes": true,
+      "mean_seconds": 0.0107,
+      "p95_seconds": 0.0117
+    },
+    "auditability": {
+      "value": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "completeness_percentage": 100.0
+    },
+    "fairness": {
+      "value": true,
+      "target": true,
+      "passes": true,
+      "overall_persona_rate": 1.0,
+      "failing_demographics": []
+    }
+  },
+  "detailed_results": {
+    "coverage": {
+      "total_users": 100,
+      "users_with_persona": 100,
+      "users_with_meaningful_persona": 100,
+      "users_with_3_behaviors": 57,
+      "users_with_both_legacy": 57,
+      "coverage_percentage": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "tracking_only": false,
+      "note": "Coverage now counts all users with assigned persona (including 'general')"
+    },
+    "explainability": {
+      "total_recommendations": 496,
+      "recommendations_with_rationale": 496,
+      "recommendations_without_rationale": 0,
+      "explainability_percentage": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "missing_rationales_sample": []
+    },
+    "relevance": {
+      "total_recommendations": 0,
+      "relevant_recommendations": 0,
+      "irrelevant_recommendations": 0,
+      "relevance_percentage": 0.0,
+      "target": 90.0,
+      "passes": false,
+      "irrelevant_sample": []
+    },
+    "latency": {
+      "users_tested": 99,
+      "mean_seconds": 0.0107,
+      "median_seconds": 0.0105,
+      "p95_seconds": 0.0117,
+      "p99_seconds": 0.0126,
+      "min_seconds": 0.0093,
+      "max_seconds": 0.0197,
+      "target": 5.0,
+      "passes": true
+    },
+    "auditability": {
+      "total_users": 100,
+      "users_with_trace_file": 100,
+      "users_with_complete_trace": 100,
+      "auditability_percentage": 100.0,
+      "completeness_percentage": 100.0,
+      "target": 100.0,
+      "passes": true,
+      "incomplete_traces_sample": []
+    },
+    "fairness": {
+      "overall_persona_rate": 1.0,
+      "tolerance": 0.1,
+      "demographics": {
+        "gender": {
+          "passes": true,
+          "max_deviation": 0.0,
+          "group_rates": {
+            "female": 1.0,
+            "male": 1.0,
+            "non_binary": 1.0,
+            "prefer_not_to_say": 1.0
+          },
+          "group_counts": {
+            "prefer_not_to_say": 25,
+            "female": 25,
+            "male": 25,
+            "non_binary": 25
+          },
+          "deviations": {
+            "female": 0.0,
+            "male": 0.0,
+            "non_binary": 0.0,
+            "prefer_not_to_say": 0.0
+          }
+        },
+        "income_tier": {
+          "passes": true,
+          "max_deviation": 0.0,
+          "group_rates": {
+            "high": 1.0,
+            "low": 1.0,
+            "medium": 1.0
+          },
+          "group_counts": {
+            "low": 34,
+            "high": 33,
+            "medium": 33
+          },
+          "deviations": {
+            "high": 0.0,
+            "low": 0.0,
+            "medium": 0.0
+          }
+        },
+        "region": {
+          "passes": true,
+          "max_deviation": 0.0,
+          "group_rates": {
+            "midwest": 1.0,
+            "northeast": 1.0,
+            "south": 1.0,
+            "west": 1.0
+          },
+          "group_counts": {
+            "midwest": 25,
+            "west": 25,
+            "south": 25,
+            "northeast": 25
+          },
+          "deviations": {
+            "midwest": 0.0,
+            "northeast": 0.0,
+            "south": 0.0,
+            "west": 0.0
+          }
+        },
+        "age": {
+          "passes": true,
+          "max_deviation": 0.0,
+          "group_rates": {
+            "18-30": 1.0,
+            "31-50": 1.0,
+            "51+": 1.0
+          },
+          "group_counts": {
+            "18-30": 34,
+            "51+": 33,
+            "31-50": 33
+          },
+          "deviations": {
+            "18-30": 0.0,
+            "31-50": 0.0,
+            "51+": 0.0
+          },
+          "buckets": [
+            "18-30",
+            "31-50",
+            "51-100"
+          ]
+        }
+      },
+      "all_demographics_pass": true,
+      "failing_demographics": []
+    }
+  },
+  "summary": {
+    "all_metrics_pass": false,
+    "metrics_passing": 5,
+    "metrics_total": 6,
+    "tracking_metrics": []
+  }
+}

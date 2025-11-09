@@ -16,7 +16,8 @@ SpendSense MVP V2 is an explainable, consent-aware financial behavior analysis s
 
 - **Environment Manager:** `uv` (modern Python environment management)
 - **Language:** Python 3.11+
-- **Frameworks:** `streamlit` (UI), `fastapi` (REST endpoints)
+- **Frontend:** Next.js 14 (React) user dashboard, NiceGUI operator dashboard
+- **Backend:** FastAPI (REST API)
 - **Data Tools:** `pandas`, `pyarrow`, `faker`, `numpy`
 - **Storage:** SQLite (relational), Parquet (analytics), JSON (logs)
 - **Testing:** `pytest` with deterministic seeding (`seed=42`)
@@ -52,11 +53,23 @@ uv run pytest tests/test_data_generation.py -v
 
 ### User Interfaces
 ```bash
-# Launch end-user educational dashboard
-uv run streamlit run ui/app_user.py
+# Launch FastAPI backend (REQUIRED for all UIs)
+uv run uvicorn api.main:app --reload
+# → http://localhost:8000
 
-# Launch operator/compliance dashboard
-uv run streamlit run ui/app_operator.py
+# Launch Next.js user dashboard (RECOMMENDED)
+cd web
+npm install
+NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
+# → http://localhost:3000
+
+# Launch NiceGUI operator dashboard (data generation & compliance)
+uv run python ui/app_operator_nicegui.py
+# → http://localhost:8081
+
+# Legacy Streamlit dashboards (deprecated, reference only)
+# uv run streamlit run ui/app_user.py
+# uv run streamlit run ui/app_operator.py
 ```
 
 ### Evaluation
@@ -126,23 +139,70 @@ Prohibited phrases (shaming language):
 Preferred alternatives:
 - "consider reducing", "optimize your spending"
 
+### Fairness Framework (Production-Ready Compliance)
+
+**Regulatory Context**: ECOA/Regulation B compliance to avoid disparate impact
+
+**3-Tier Production Metrics**:
+1. **Persona Distribution Parity** (Primary - ECOA compliance)
+   - Detects if specific persona TYPES are assigned equitably across demographics
+   - Example violation: 48% of females get "High Utilization" vs 27% overall
+   - Tolerance: ±10% deviation from overall assignment rate for each persona
+   - File: `eval/fairness.py::calculate_persona_distribution_parity()`
+
+2. **Recommendation Quantity Parity** (Service Quality)
+   - Ensures all demographic groups receive similar numbers of recommendations
+   - Example violation: Females get 5.5 avg recs vs 5.0 overall (10.5% deviation)
+   - Tolerance: ±10% deviation from overall mean
+   - File: `eval/fairness.py::calculate_recommendation_quantity_parity()`
+
+3. **Partner Offer Access Parity** (Opportunity Equity)
+   - Prevents "redlining" where premium offers withheld from protected groups
+   - Measures: % of users receiving partner offers by demographic
+   - Tolerance: ±10% deviation from overall offer access rate
+   - File: `eval/fairness.py::calculate_partner_offer_parity()`
+
+**Key Principle**: Demographics NEVER used in persona assignment or recommendation logic. They are collected ONLY for retrospective fairness monitoring.
+
+**Documentation**:
+- Methodology: `docs/FAIRNESS_METHODOLOGY.md`
+- Latest Report: `docs/fairness_report.md`
+- Tests: `tests/test_fairness_production.py` (12 comprehensive tests)
+
+**Running Fairness Checks**:
+```bash
+# Full evaluation with production fairness metrics
+uv run python -m eval.run
+# → Generates docs/fairness_report.md with violations
+
+# Run fairness tests
+uv run pytest tests/test_fairness_production.py -v
+```
+
 ### Testing Philosophy
 - All tests use deterministic data (`seed=42`)
 - Unit tests verify component isolation
 - Integration tests verify end-to-end flows
-- Target: 100% coverage, explainability, auditability
+- **Fairness tests**: 12 tests covering all 3 production metrics + edge cases
+- Target: 100% coverage, explainability, auditability, fairness compliance
 - UI testing is manual for MVP
 
 ## Success Criteria (MVP Targets)
 
-| Metric | Target |
-|--------|--------|
-| Coverage | 100% (users with persona + ≥3 behaviors) |
-| Explainability | 100% (recommendations with rationale) |
-| Latency | <5 seconds per user |
-| Auditability | 100% (trace JSONs for all recommendations) |
-| Fairness | ±10% demographic parity |
-| Tests Passing | ≥10 (31 planned) |
+| Metric | Target | Status |
+|--------|--------|--------|
+| Coverage | 100% (users with persona + ≥3 behaviors) | ✅ 100% |
+| Explainability | 100% (recommendations with rationale) | ✅ 100% |
+| Latency | <5 seconds per user | ✅ 0.011s |
+| Auditability | 100% (trace JSONs for all recommendations) | ✅ 100% |
+| **Production Fairness** | **±10% parity (3 metrics)** | **⚠️ 5 violations** |
+| Tests Passing | ≥31 tests | ✅ 43+ tests (12 fairness tests added) |
+
+**Fairness Status Details**:
+- ❌ Persona Distribution Parity: 3 violations
+- ❌ Recommendation Quantity Parity: 2 violations
+- ✅ Partner Offer Access Parity: PASS
+- Note: Legacy fairness metric (100% assignment) kept for backwards compatibility
 
 ## Development Workflow
 

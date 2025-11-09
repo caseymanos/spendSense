@@ -94,5 +94,66 @@
       }
     },
     "timestamp": "2025-11-06T14:24:06.976544"
+  },
+  "recommendations": {
+    "timestamp": "2025-11-08T23:59:08.158182",
+    "persona": "Savings Builder",
+    "education_count": 5,
+    "offer_count": 0,
+    "total_recommendations": 5,
+    "recommendations": [
+      {
+        "type": "education",
+        "title": "SMART Goal Setting for Financial Milestones",
+        "description": "Apply the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound) to savings goals. Includes templates for emergency funds, down payments, and retirement.",
+        "category": "goal_setting",
+        "topic": "smart_goals",
+        "partner_equivalent": false,
+        "rationale": "You've been building your savings and SMART goals can help channel that discipline toward specific milestones.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "High-Yield Savings Accounts: Where to Find the Best Rates",
+        "description": "Comparison of online banks offering 4-5% APY vs. traditional banks at 0.01%. Covers FDIC insurance, account minimums, and transfer times.",
+        "category": "savings_optimization",
+        "topic": "hysa",
+        "partner_equivalent": true,
+        "rationale": "With your savings balance, moving to a high-yield account could earn you extra interest each year.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Automating Your Savings: Set It and Forget It",
+        "description": "How to automate transfers from checking to savings on payday. Includes tips for starting small and gradually increasing amounts.",
+        "category": "savings_automation",
+        "topic": "savings_automation",
+        "partner_equivalent": false,
+        "rationale": "Automating your savings makes building wealth effortless and helps you reach your financial goals faster.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "Certificates of Deposit (CDs): Locking In Higher Rates",
+        "description": "When CDs make sense for part of your savings. Covers laddering strategies, penalty-free CDs, and how to balance liquidity with returns.",
+        "category": "savings_optimization",
+        "topic": "cd_accounts",
+        "partner_equivalent": true,
+        "rationale": "With 4.8 months of emergency savings, you may have excess funds that could earn higher rates in CDs.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      },
+      {
+        "type": "education",
+        "title": "The 50/30/20 Rule: Balancing Needs, Wants, and Savings",
+        "description": "Popular budgeting framework: 50% needs, 30% wants, 20% savings/debt. Includes how to adapt percentages to your situation and track progress.",
+        "category": "goal_setting",
+        "topic": "50_30_20_rule",
+        "partner_equivalent": false,
+        "rationale": "The 50/30/20 rule can help you optimize your budget and balance spending with saving.",
+        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      }
+    ],
+    "consent_granted": true,
+    "source": "rule_based"
   }
 }

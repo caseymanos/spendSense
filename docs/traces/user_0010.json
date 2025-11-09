@@ -115,7 +115,7 @@
     "timestamp": "2025-11-06T14:24:06.975876"
   },
   "recommendations": {
-    "timestamp": "2025-11-06T19:03:15.682822",
+    "timestamp": "2025-11-09T00:14:05.596304",
     "persona": "Cash Flow Optimizer",
     "education_count": 3,
     "offer_count": 3,
@@ -179,6 +179,7 @@
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       }
     ],
-    "consent_granted": true
+    "consent_granted": true,
+    "source": "rule_based"
   }
 }
