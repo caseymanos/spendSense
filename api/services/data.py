@@ -155,3 +155,59 @@ def set_consent(user_id: str, granted: bool) -> Optional[UserSummary]:
         consent_granted=bool(user.get("consent_granted", False)),
     )
 
+
+def list_profiles_batch() -> List[UserProfileResponse]:
+    """Return all user profiles with personas in a single batch call."""
+    users = load_all_users() or []
+    profiles = []
+
+    for u in users:
+        user_id = u.get("user_id", "")
+        persona = load_persona_assignment(user_id)
+        signals = load_behavioral_signals(user_id)
+
+        profiles.append(
+            UserProfileResponse(
+                user_id=user_id,
+                name=u.get("name", "Unknown"),
+                consent_granted=bool(u.get("consent_granted", False)),
+                persona=(persona or {}).get("persona"),
+                signals=signals or {},
+            )
+        )
+
+    return profiles
+
+
+def get_recommendations_summary() -> Dict[str, Any]:
+    """Get aggregate recommendation counts for all users."""
+    import sqlite3
+    from pathlib import Path
+
+    db_path = Path(__file__).parent.parent.parent / "data" / "users.sqlite"
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+
+    # Count total recommendations across all users
+    cursor.execute("""
+        SELECT
+            COUNT(*) as total_users,
+            SUM(json_array_length(recommendations_json, '$.recommendations')) as total_recommendations
+        FROM recommendations
+    """)
+    result = cursor.fetchone()
+
+    # Count users with consent
+    cursor.execute("SELECT COUNT(*) FROM users WHERE consent_granted = 1")
+    users_with_consent = cursor.fetchone()[0]
+
+    conn.close()
+
+    return {
+        "total_users": result[0] if result else 0,
+        "total_recommendations": result[1] if result and result[1] else 0,
+        "users_with_consent": users_with_consent,
+        "tone_violations": [],  # Placeholder - would need guardrail log analysis
+        "blocked_offers": [],   # Placeholder - would need guardrail log analysis
+    }
+

@@ -25,6 +25,8 @@ from api.services.data import (
     get_profile as svc_get_profile,
     get_recommendations as svc_get_recommendations,
     set_consent as svc_set_consent,
+    list_profiles_batch,
+    get_recommendations_summary,
 )
 
 from api.services.videos import (
@@ -85,10 +87,22 @@ async def get_user_profile(user_id: str):
     return profile
 
 
+@app.get("/profiles/batch", response_model=list[UserProfileResponse], tags=["Users"])
+async def get_all_profiles():
+    """Get all user profiles with personas in a single batch call (optimized for operator dashboard)."""
+    return list_profiles_batch()
+
+
 @app.get("/recommendations/{user_id}", response_model=UserRecommendationsResponse, tags=["Users"])
 async def get_recommendations(user_id: str):
     """Get personalized recommendations for a user."""
     return svc_get_recommendations(user_id)
+
+
+@app.get("/recommendations/summary/all", tags=["Users"])
+async def get_all_recommendations_summary():
+    """Get aggregate recommendation counts for all users (optimized for operator dashboard)."""
+    return get_recommendations_summary()
 
 
 @app.get("/transactions/{user_id}", tags=["Users"])

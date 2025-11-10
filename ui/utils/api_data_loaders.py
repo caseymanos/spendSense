@@ -18,29 +18,28 @@ API_URL = os.getenv("API_URL", "http://localhost:8000")
 
 def load_all_users() -> pd.DataFrame:
     """
-    Load all users from API /users endpoint.
+    Load all users from API /profiles/batch endpoint (optimized batch call).
 
     Returns:
-        DataFrame with columns: user_id, name, consent_granted
+        DataFrame with columns: user_id, name, consent_granted, persona, etc.
     """
     try:
-        response = requests.get(f"{API_URL}/users", timeout=10)
+        # Use batch endpoint to get all profiles in one call (instead of 100+ calls)
+        response = requests.get(f"{API_URL}/profiles/batch", timeout=30)
         response.raise_for_status()
-        users_data = response.json()
+        profiles_data = response.json()
 
-        if not users_data:
+        if not profiles_data:
             return pd.DataFrame()
 
         # Convert to DataFrame
-        users_df = pd.DataFrame(users_data)
+        users_df = pd.DataFrame(profiles_data)
 
         # Ensure consent_granted is boolean
         if "consent_granted" in users_df.columns:
             users_df["consent_granted"] = users_df["consent_granted"].astype(bool)
 
-        # Add placeholder columns that operator dashboard expects
-        if "persona" not in users_df.columns:
-            users_df["persona"] = None
+        # Add placeholder columns that operator dashboard expects (if not present)
         if "age" not in users_df.columns:
             users_df["age"] = None
         if "gender" not in users_df.columns:
@@ -55,21 +54,6 @@ def load_all_users() -> pd.DataFrame:
             users_df["consent_timestamp"] = None
         if "revoked_timestamp" not in users_df.columns:
             users_df["revoked_timestamp"] = None
-
-        # Fetch profile for each user to get persona (expensive but necessary)
-        personas = []
-        for user_id in users_df["user_id"]:
-            try:
-                profile_resp = requests.get(f"{API_URL}/profile/{user_id}", timeout=5)
-                if profile_resp.status_code == 200:
-                    profile = profile_resp.json()
-                    personas.append(profile.get("persona"))
-                else:
-                    personas.append(None)
-            except:
-                personas.append(None)
-
-        users_df["persona"] = personas
 
         return users_df
     except Exception as e:
@@ -157,7 +141,7 @@ def load_persona_distribution() -> Dict[str, int]:
 
 def load_guardrail_summary() -> Dict[str, Any]:
     """
-    Aggregate guardrail decisions from recommendation traces.
+    Aggregate guardrail decisions from recommendation summary endpoint (optimized batch call).
 
     Returns:
         Dictionary with summary metrics:
@@ -167,30 +151,21 @@ def load_guardrail_summary() -> Dict[str, Any]:
         - blocked_offers: List of all blocked offers
         - total_recommendations: Total recommendations generated
     """
-    summary = {
-        "total_users": 0,
-        "users_with_consent": 0,
-        "tone_violations": [],
-        "blocked_offers": [],
-        "total_recommendations": 0,
-    }
-
     try:
-        users_df = load_all_users()
-        summary["total_users"] = len(users_df)
-        summary["users_with_consent"] = int(users_df["consent_granted"].sum())
-
-        # Load recommendations for each user to count total
-        for user_id in users_df["user_id"]:
-            trace = load_user_trace(user_id)
-            if trace and "recommendations" in trace:
-                recs = trace["recommendations"]
-                summary["total_recommendations"] += len(recs)
-
+        # Use batch endpoint to get summary in one call (instead of 100+ calls)
+        response = requests.get(f"{API_URL}/recommendations/summary/all", timeout=30)
+        response.raise_for_status()
+        summary = response.json()
         return summary
     except Exception as e:
         print(f"Error loading guardrail summary: {e}")
-        return summary
+        return {
+            "total_users": 0,
+            "users_with_consent": 0,
+            "tone_violations": [],
+            "blocked_offers": [],
+            "total_recommendations": 0,
+        }
 
 
 def load_config() -> Dict[str, Any]:

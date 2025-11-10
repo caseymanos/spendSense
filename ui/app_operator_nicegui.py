@@ -1919,8 +1919,10 @@ if __name__ in {"__main__", "__mp_main__"}:
 
     ui.run(
         title="SpendSense Operator Dashboard",
+        host="0.0.0.0",  # Required for Railway deployment
         port=PORT,
         reload=RELOAD,
         show=SHOW,
         storage_secret=STORAGE_SECRET,
+        reconnect_timeout=60,  # Increase websocket timeout for slower initial loads
     )
