@@ -31,6 +31,7 @@ def main():
         ("python -m features", "Step 3: Generate behavioral signals"),
         ("python personas/assignment.py", "Step 4: Assign personas"),
         ("python scripts/seed_educational_videos.py", "Step 5: Seed educational videos"),
+        ("python recommend/store_recommendations.py", "Step 6: Generate and store recommendations"),
     ]
 
     for cmd, description in steps:

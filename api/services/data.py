@@ -70,8 +70,31 @@ def _slugify(text: str) -> str:
 
 
 def get_recommendations(user_id: str) -> UserRecommendationsResponse:
-    """Adapt the engine output to API model."""
-    payload = _engine_get_recommendations(user_id)
+    """Fetch pre-generated recommendations from database."""
+    import json
+    import sqlite3
+    from pathlib import Path
+
+    # Connect to database
+    db_path = Path(__file__).parent.parent.parent / "data" / "users.sqlite"
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+
+    # Fetch pre-generated recommendations
+    cursor.execute(
+        "SELECT recommendations_json, generated_at FROM recommendations WHERE user_id = ?",
+        (user_id,)
+    )
+    result = cursor.fetchone()
+    conn.close()
+
+    # If no pre-generated recommendations found, fall back to on-the-fly generation
+    if not result:
+        payload = _engine_get_recommendations(user_id)
+    else:
+        recommendations_json, generated_at_str = result
+        payload = json.loads(recommendations_json)
+
     recs = payload.get("recommendations", [])
 
     items: List[RecommendationResponse] = []
@@ -89,13 +112,20 @@ def get_recommendations(user_id: str) -> UserRecommendationsResponse:
             )
         )
 
-    ts = payload.get("metadata", {}).get("timestamp")
-    try:
-        generated_at = (
-            datetime.fromisoformat(ts.replace("Z", "+00:00")) if isinstance(ts, str) else datetime.now()
-        )
-    except Exception:
-        generated_at = datetime.now()
+    # Parse timestamp
+    if result:
+        try:
+            generated_at = datetime.fromisoformat(generated_at_str.replace("Z", "+00:00"))
+        except Exception:
+            generated_at = datetime.now()
+    else:
+        ts = payload.get("metadata", {}).get("timestamp")
+        try:
+            generated_at = (
+                datetime.fromisoformat(ts.replace("Z", "+00:00")) if isinstance(ts, str) else datetime.now()
+            )
+        except Exception:
+            generated_at = datetime.now()
 
     return UserRecommendationsResponse(
         user_id=user_id,
