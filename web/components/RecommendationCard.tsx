@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import type { Recommendation, Video } from '../lib/types'
 import { Card, CardContent } from './ui/card'
-import { Badge } from './ui/badge'
 import { RecommendationChatDialog } from './RecommendationChatDialog'
 import { CreditUtilizationMotion } from './charts/CreditUtilizationMotion'
 import { DebtAvalancheChart } from './charts/DebtAvalancheChart'
@@ -58,20 +57,11 @@ export function RecommendationCard({ rec }: { rec: Recommendation }) {
     setDialogOpen(true)
   }
 
-  const isOperatorManaged = rec.source && rec.source !== 'auto_generated'
-
   return (
     <>
       <Card className="mt-3">
         <CardContent className="py-4">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <div className="font-semibold flex-1">{rec.title}</div>
-            {isOperatorManaged && (
-              <Badge variant="outline" className="text-xs text-blue-600 border-blue-300 shrink-0">
-                👤 {rec.created_by || 'Operator'}
-              </Badge>
-            )}
-          </div>
+          <div className="font-semibold">{rec.title}</div>
           <div className="mt-1 text-sm text-muted-foreground">{rec.rationale}</div>
 
           {/* Videos Section - Show only the best video (first one) */}

@@ -28,7 +28,6 @@ def main():
     steps = [
         ("python -m ingest.data_generator", "Step 1: Generate synthetic data"),
         ("python -m ingest.loader", "Step 2: Load data into SQLite/Parquet"),
-        ("python scripts/migrate_operator_recs.py", "Step 2.5: Run operator recommendations migration"),
         ("python -m features", "Step 3: Generate behavioral signals"),
         ("python personas/assignment.py", "Step 4: Assign personas"),
         ("python scripts/seed_educational_videos.py", "Step 5: Seed educational videos"),
