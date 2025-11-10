@@ -1,31 +1,30 @@
-# Python backend
-api/
-backend/
-features/
-personas/
-recommend/
-guardrails/
-eval/
-ingest/
-scripts/
-ui/
+# Python backend (exclude from root, not web/)
+/api/
+/backend/
+/features/
+/personas/
+/recommend/
+/guardrails/
+/eval/
+/ingest/
+/scripts/
+/ui/
 
 # Data files
-data/
+/data/
 *.parquet
 *.sqlite
 *.db
 
 # Docs
-docs/
+/docs/
 
 # Tests
-tests/
+/tests/
 
 # Python
-*.py
-__pycache__/
 *.pyc
-.venv/
-venv/
+__pycache__/
+/.venv/
+/venv/
 .pytest_cache/
