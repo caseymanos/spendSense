@@ -1802,11 +1802,6 @@ def login_page():
 @ui.page("/")
 async def main_page():
     """Main operator dashboard page."""
-    # Check authentication
-    if AUTH_ENABLED and not check_auth():
-        ui.navigate.to("/login")
-        return
-
     # Initialize themes
     ThemeManager.initialize_themes()
     # Always use Clean & Minimal theme
