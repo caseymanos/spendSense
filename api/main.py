@@ -135,6 +135,21 @@ async def get_video_topics():
     return get_topics_with_videos()
 
 
+# Data generation endpoint (for Railway ephemeral storage)
+@app.post("/generate-data", tags=["System"])
+async def generate_data():
+    """Generate synthetic user data (for ephemeral deployments)"""
+    import subprocess
+    try:
+        subprocess.run(["python", "-m", "ingest.data_generator"], check=True)
+        return {"status": "success", "message": "Data generated successfully"}
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Data generation failed: {str(e)}"
+        )
+
+
 # Operator endpoints
 @app.get("/operator/review", tags=["Operator"])
 async def get_pending_reviews():
