@@ -23,17 +23,31 @@ from nicegui import ui, app
 # Import theme system
 from ui.themes import ThemeManager, Theme
 
-# Import utilities
-from ui.utils.data_loaders import (
-    load_all_users,
-    load_all_signals,
-    load_user_trace,
-    load_persona_distribution,
-    load_guardrail_summary,
-)
-from ui.utils.data_loaders import DB_PATH as _DB_PATH
-from ui.utils.data_loaders import SIGNALS_PATH as _SIGNALS_PATH
-from ui.utils.data_loaders import TRACES_DIR as _TRACES_DIR
+# Import utilities - use API loaders if API_URL is set (production), else use file loaders (local dev)
+USE_API = bool(os.getenv("API_URL"))
+
+if USE_API:
+    from ui.utils.api_data_loaders import (
+        load_all_users,
+        load_all_signals,
+        load_user_trace,
+        load_persona_distribution,
+        load_guardrail_summary,
+    )
+    _DB_PATH = None
+    _SIGNALS_PATH = None
+    _TRACES_DIR = None
+else:
+    from ui.utils.data_loaders import (
+        load_all_users,
+        load_all_signals,
+        load_user_trace,
+        load_persona_distribution,
+        load_guardrail_summary,
+    )
+    from ui.utils.data_loaders import DB_PATH as _DB_PATH
+    from ui.utils.data_loaders import SIGNALS_PATH as _SIGNALS_PATH
+    from ui.utils.data_loaders import TRACES_DIR as _TRACES_DIR
 
 # Import recommendation engine for live generation
 from recommend.engine import generate_recommendations
@@ -105,20 +119,25 @@ def refresh_data():
 
 
 def _get_data_mtime() -> float:
-    """Return latest mtime among core data files/dirs."""
+    """Return latest mtime among core data files/dirs (file mode only)."""
+    if USE_API:
+        # In API mode, we can't check file mtimes, so return current time
+        # This effectively disables stale data detection in production
+        return datetime.now().timestamp()
+
     mtimes = []
     try:
-        if _DB_PATH.exists():
+        if _DB_PATH and _DB_PATH.exists():
             mtimes.append(_DB_PATH.stat().st_mtime)
     except Exception:
         pass
     try:
-        if _SIGNALS_PATH.exists():
+        if _SIGNALS_PATH and _SIGNALS_PATH.exists():
             mtimes.append(_SIGNALS_PATH.stat().st_mtime)
     except Exception:
         pass
     try:
-        if _TRACES_DIR.exists():
+        if _TRACES_DIR and _TRACES_DIR.exists():
             latest = max((p.stat().st_mtime for p in _TRACES_DIR.glob("*.json")), default=0)
             mtimes.append(latest)
     except Exception:
@@ -128,6 +147,11 @@ def _get_data_mtime() -> float:
 
 def _is_data_stale() -> bool:
     """Check if data has changed since last refresh."""
+    if USE_API:
+        # In API mode, always return False since we can't detect file changes
+        # User must manually refresh
+        return False
+
     try:
         last_seen = app.storage.user.get('last_data_mtime', 0)
         return _get_data_mtime() > last_seen
