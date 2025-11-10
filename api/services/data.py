@@ -211,3 +211,29 @@ def get_recommendations_summary() -> Dict[str, Any]:
         "blocked_offers": [],   # Placeholder - would need guardrail log analysis
     }
 
+
+def get_all_signals() -> List[Dict[str, Any]]:
+    """Load all behavioral signals from parquet file."""
+    import pandas as pd
+    from pathlib import Path
+
+    signals_path = Path(__file__).parent.parent.parent / "features" / "signals.parquet"
+    if not signals_path.exists():
+        return []
+
+    try:
+        signals_df = pd.read_parquet(signals_path)
+
+        # Convert to list of dicts, handling NaN values
+        signals_list = []
+        for _, row in signals_df.iterrows():
+            signal_dict = row.to_dict()
+            # Convert NaN to None for JSON serialization
+            signal_dict = {k: (None if pd.isna(v) else v) for k, v in signal_dict.items()}
+            signals_list.append(signal_dict)
+
+        return signals_list
+    except Exception as e:
+        print(f"Error loading signals from parquet: {e}")
+        return []
+

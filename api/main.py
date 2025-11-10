@@ -18,6 +18,7 @@ from api.models import (
     UserSummary,
     ConsentUpdateResponse,
     VideoResponse,
+    BehavioralSignalsResponse,
 )
 
 from api.services.data import (
@@ -27,6 +28,7 @@ from api.services.data import (
     set_consent as svc_set_consent,
     list_profiles_batch,
     get_recommendations_summary,
+    get_all_signals,
 )
 
 from api.services.videos import (
@@ -103,6 +105,12 @@ async def get_recommendations(user_id: str):
 async def get_all_recommendations_summary():
     """Get aggregate recommendation counts for all users (optimized for operator dashboard)."""
     return get_recommendations_summary()
+
+
+@app.get("/signals", response_model=list[BehavioralSignalsResponse], tags=["Users"])
+async def get_signals():
+    """Get behavioral signals for all users (optimized for operator dashboard)."""
+    return get_all_signals()
 
 
 @app.get("/transactions/{user_id}", tags=["Users"])

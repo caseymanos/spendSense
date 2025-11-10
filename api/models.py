@@ -109,3 +109,51 @@ class VideoResponse(BaseModel):
     duration_seconds: Optional[int] = None
     thumbnail_url: str
     description: Optional[str] = None
+
+
+class BehavioralSignalsResponse(BaseModel):
+    """Behavioral signals for a user"""
+
+    user_id: str
+
+    # Subscription signals
+    sub_30d_recurring_count: Optional[int] = None
+    sub_30d_monthly_spend: Optional[float] = None
+    sub_30d_share_pct: Optional[float] = None
+    sub_180d_recurring_count: Optional[int] = None
+    sub_180d_monthly_spend: Optional[float] = None
+    sub_180d_share_pct: Optional[float] = None
+
+    # Savings signals
+    sav_30d_net_inflow: Optional[float] = None
+    sav_30d_growth_rate_pct: Optional[float] = None
+    sav_30d_emergency_fund_months: Optional[float] = None
+    sav_30d_balance: Optional[float] = None
+    sav_180d_net_inflow: Optional[float] = None
+    sav_180d_growth_rate_pct: Optional[float] = None
+    sav_180d_emergency_fund_months: Optional[float] = None
+    sav_180d_balance: Optional[float] = None
+
+    # Credit signals
+    credit_max_util_pct: Optional[float] = None
+    credit_avg_util_pct: Optional[float] = None
+    credit_flag_30: Optional[bool] = None
+    credit_flag_50: Optional[bool] = None
+    credit_flag_80: Optional[bool] = None
+    credit_min_payment_only: Optional[bool] = None
+    credit_has_interest: Optional[bool] = None
+    credit_interest_charges: Optional[bool] = None
+    credit_is_overdue: Optional[bool] = None
+    credit_num_cards: Optional[int] = None
+
+    # Income signals
+    inc_30d_median_pay_gap_days: Optional[int] = None
+    inc_30d_variability: Optional[float] = None
+    inc_30d_cash_buffer_months: Optional[float] = None
+    inc_30d_num_paychecks: Optional[int] = None
+    inc_30d_avg_paycheck: Optional[float] = None
+    inc_180d_median_pay_gap_days: Optional[int] = None
+    inc_180d_variability: Optional[float] = None
+    inc_180d_cash_buffer_months: Optional[float] = None
+    inc_180d_num_paychecks: Optional[int] = None
+    inc_180d_avg_paycheck: Optional[float] = None

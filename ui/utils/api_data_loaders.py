@@ -63,12 +63,25 @@ def load_all_users() -> pd.DataFrame:
 
 def load_all_signals() -> pd.DataFrame:
     """
-    Load behavioral signals from API.
+    Load behavioral signals from API /signals endpoint.
 
-    Note: This is not yet implemented in the API, so returns empty DataFrame.
+    Returns:
+        DataFrame with all user behavioral signals (subscriptions, savings, credit, income)
     """
-    # TODO: Add /signals endpoint to API
-    return pd.DataFrame()
+    try:
+        response = requests.get(f"{API_URL}/signals", timeout=30)
+        response.raise_for_status()
+        signals_data = response.json()
+
+        if not signals_data:
+            return pd.DataFrame()
+
+        # Convert to DataFrame
+        signals_df = pd.DataFrame(signals_data)
+        return signals_df
+    except Exception as e:
+        print(f"Error loading signals from API: {e}")
+        return pd.DataFrame()
 
 
 def load_transactions() -> pd.DataFrame:
