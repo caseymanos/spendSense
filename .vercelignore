@@ -28,3 +28,10 @@ __pycache__/
 /.venv/
 /venv/
 .pytest_cache/
+
+# Next.js build cache (can be huge)
+web/.next/cache/
+
+# SQLite databases
+users.sqlite
+spendsense.db
