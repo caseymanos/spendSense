@@ -181,6 +181,9 @@ def create_theme_switcher():
 @ui.refreshable
 def render_overview_tab():
     """Render Overview tab with system health metrics."""
+    # Show stale data warning if data has been updated
+    _render_stale_data_banner()
+
     users_df = data_cache["users"]
     persona_dist = data_cache["persona_distribution"]
     guardrail_summary = data_cache["guardrail_summary"]
@@ -287,6 +290,9 @@ def render_overview_tab():
 @ui.refreshable
 def render_user_management_tab():
     """Render User Management tab with filtering."""
+    # Show stale data warning if data has been updated
+    _render_stale_data_banner()
+
     users_df = data_cache["users"]
 
     if users_df is None or users_df.empty:
@@ -985,6 +991,13 @@ def render_recommendation_review_tab():
 
                 # Reload the existing recommendations view to show the new ones
                 load_existing_recommendations()
+
+                # Refresh all cached data to update overview metrics
+                refresh_data()
+                app.storage.user["last_data_mtime"] = _get_data_mtime()
+
+                # Refresh overview tab to show updated recommendation count
+                render_overview_tab.refresh()
             except Exception as e:
                 recommendation_container.clear()
                 with recommendation_container:
