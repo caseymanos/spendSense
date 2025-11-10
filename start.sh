@@ -6,6 +6,8 @@ if [ "$SERVICE_TYPE" = "operator" ]; then
     exec python ui/app_operator_nicegui.py
 else
     echo "Starting backend API..."
-    python scripts/seed_educational_videos.py
+    echo "Initializing database and data..."
+    python scripts/initialize_railway.py
+    echo "Starting uvicorn server..."
     exec uvicorn api.main:app --host 0.0.0.0 --port $PORT
 fi

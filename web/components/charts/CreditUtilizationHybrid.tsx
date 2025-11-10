@@ -186,23 +186,23 @@ export function CreditUtilizationHybrid(props: CreditUtilizationHybridProps) {
             >
               <GlassMetricCard
                 label="Current Balance"
-                value={`$${data.currentBalance?.toLocaleString()}`}
+                value={data.currentBalance != null ? `$${data.currentBalance.toLocaleString()}` : 'N/A'}
                 color="blue"
               />
               <GlassMetricCard
                 label="Credit Limit"
-                value={`$${data.creditLimit?.toLocaleString()}`}
+                value={data.creditLimit != null ? `$${data.creditLimit.toLocaleString()}` : 'N/A'}
                 color="purple"
               />
               <GlassMetricCard
                 label="Available Credit"
-                value={`$${data.availableCredit?.toLocaleString()}`}
+                value={data.availableCredit != null ? `$${data.availableCredit.toLocaleString()}` : 'N/A'}
                 color="emerald"
               />
               <GlassMetricCard
                 label="Monthly Interest"
-                value={`$${data.monthlyInterest?.toFixed(2)}`}
-                description={`${data.apr?.toFixed(2)}% APR`}
+                value={data.monthlyInterest != null ? `$${data.monthlyInterest.toFixed(2)}` : 'N/A'}
+                description={data.apr != null ? `${data.apr.toFixed(2)}% APR` : 'APR unavailable'}
                 color="rose"
               />
             </motion.div>
@@ -238,7 +238,7 @@ export function CreditUtilizationHybrid(props: CreditUtilizationHybridProps) {
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}
             >
-              Pay down <span className="font-bold text-rose-600">${data.amountOverTarget?.toLocaleString()}</span> to reach the recommended 30% utilization
+              Pay down <span className="font-bold text-rose-600">{data.amountOverTarget != null ? `$${data.amountOverTarget.toLocaleString()}` : '$0'}</span> to reach the recommended 30% utilization
             </motion.p>
           </motion.div>
         )}

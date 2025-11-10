@@ -198,23 +198,23 @@ export function CreditUtilizationGlass(props: CreditUtilizationGlassProps) {
             >
               <GlassMetricCard
                 label="Current Balance"
-                value={`$${data.currentBalance?.toLocaleString()}`}
+                value={`$${(data.currentBalance ?? 0).toLocaleString()}`}
                 color="blue"
               />
               <GlassMetricCard
                 label="Credit Limit"
-                value={`$${data.creditLimit?.toLocaleString()}`}
+                value={`$${(data.creditLimit ?? 0).toLocaleString()}`}
                 color="purple"
               />
               <GlassMetricCard
                 label="Available Credit"
-                value={`$${data.availableCredit?.toLocaleString()}`}
+                value={`$${(data.availableCredit ?? 0).toLocaleString()}`}
                 color="emerald"
               />
               <GlassMetricCard
                 label="Monthly Interest"
-                value={`$${data.monthlyInterest?.toFixed(2)}`}
-                description={`${data.apr?.toFixed(2)}% APR`}
+                value={`$${(data.monthlyInterest ?? 0).toFixed(2)}`}
+                description={`${(data.apr ?? 0).toFixed(2)}% APR`}
                 color="rose"
               />
             </motion.div>

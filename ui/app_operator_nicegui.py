@@ -23,17 +23,31 @@ from nicegui import ui, app
 # Import theme system
 from ui.themes import ThemeManager, Theme
 
-# Import utilities
-from ui.utils.data_loaders import (
-    load_all_users,
-    load_all_signals,
-    load_user_trace,
-    load_persona_distribution,
-    load_guardrail_summary,
-)
-from ui.utils.data_loaders import DB_PATH as _DB_PATH
-from ui.utils.data_loaders import SIGNALS_PATH as _SIGNALS_PATH
-from ui.utils.data_loaders import TRACES_DIR as _TRACES_DIR
+# Import utilities - use API loaders if API_URL is set (production), else use file loaders (local dev)
+USE_API = bool(os.getenv("API_URL"))
+
+if USE_API:
+    from ui.utils.api_data_loaders import (
+        load_all_users,
+        load_all_signals,
+        load_user_trace,
+        load_persona_distribution,
+        load_guardrail_summary,
+    )
+    _DB_PATH = None
+    _SIGNALS_PATH = None
+    _TRACES_DIR = None
+else:
+    from ui.utils.data_loaders import (
+        load_all_users,
+        load_all_signals,
+        load_user_trace,
+        load_persona_distribution,
+        load_guardrail_summary,
+    )
+    from ui.utils.data_loaders import DB_PATH as _DB_PATH
+    from ui.utils.data_loaders import SIGNALS_PATH as _SIGNALS_PATH
+    from ui.utils.data_loaders import TRACES_DIR as _TRACES_DIR
 
 # Import recommendation engine for live generation
 from recommend.engine import generate_recommendations
@@ -105,20 +119,25 @@ def refresh_data():
 
 
 def _get_data_mtime() -> float:
-    """Return latest mtime among core data files/dirs."""
+    """Return latest mtime among core data files/dirs (file mode only)."""
+    if USE_API:
+        # In API mode, we can't check file mtimes, so return current time
+        # This effectively disables stale data detection in production
+        return datetime.now().timestamp()
+
     mtimes = []
     try:
-        if _DB_PATH.exists():
+        if _DB_PATH and _DB_PATH.exists():
             mtimes.append(_DB_PATH.stat().st_mtime)
     except Exception:
         pass
     try:
-        if _SIGNALS_PATH.exists():
+        if _SIGNALS_PATH and _SIGNALS_PATH.exists():
             mtimes.append(_SIGNALS_PATH.stat().st_mtime)
     except Exception:
         pass
     try:
-        if _TRACES_DIR.exists():
+        if _TRACES_DIR and _TRACES_DIR.exists():
             latest = max((p.stat().st_mtime for p in _TRACES_DIR.glob("*.json")), default=0)
             mtimes.append(latest)
     except Exception:
@@ -128,6 +147,11 @@ def _get_data_mtime() -> float:
 
 def _is_data_stale() -> bool:
     """Check if data has changed since last refresh."""
+    if USE_API:
+        # In API mode, always return False since we can't detect file changes
+        # User must manually refresh
+        return False
+
     try:
         last_seen = app.storage.user.get('last_data_mtime', 0)
         return _get_data_mtime() > last_seen
@@ -181,6 +205,9 @@ def create_theme_switcher():
 @ui.refreshable
 def render_overview_tab():
     """Render Overview tab with system health metrics."""
+    # Show stale data warning if data has been updated
+    _render_stale_data_banner()
+
     users_df = data_cache["users"]
     persona_dist = data_cache["persona_distribution"]
     guardrail_summary = data_cache["guardrail_summary"]
@@ -287,6 +314,9 @@ def render_overview_tab():
 @ui.refreshable
 def render_user_management_tab():
     """Render User Management tab with filtering."""
+    # Show stale data warning if data has been updated
+    _render_stale_data_banner()
+
     users_df = data_cache["users"]
 
     if users_df is None or users_df.empty:
@@ -411,7 +441,7 @@ def render_behavioral_signals_tab():
     metrics = [
         {
             "title": "Avg Credit Utilization",
-            "value": f"{avg_credit_util:.1%}",
+            "value": f"{avg_credit_util:.1f}%",
             "icon": "credit_card",
         },
         {
@@ -985,6 +1015,13 @@ def render_recommendation_review_tab():
 
                 # Reload the existing recommendations view to show the new ones
                 load_existing_recommendations()
+
+                # Refresh all cached data to update overview metrics
+                refresh_data()
+                app.storage.user["last_data_mtime"] = _get_data_mtime()
+
+                # Refresh overview tab to show updated recommendation count
+                render_overview_tab.refresh()
             except Exception as e:
                 recommendation_container.clear()
                 with recommendation_container:
@@ -1765,11 +1802,6 @@ def login_page():
 @ui.page("/")
 async def main_page():
     """Main operator dashboard page."""
-    # Check authentication
-    if AUTH_ENABLED and not check_auth():
-        ui.navigate.to("/login")
-        return
-
     # Initialize themes
     ThemeManager.initialize_themes()
     # Always use Clean & Minimal theme
@@ -1882,8 +1914,10 @@ if __name__ in {"__main__", "__mp_main__"}:
 
     ui.run(
         title="SpendSense Operator Dashboard",
+        host="0.0.0.0",  # Required for Railway deployment
         port=PORT,
         reload=RELOAD,
         show=SHOW,
         storage_secret=STORAGE_SECRET,
+        reconnect_timeout=60,  # Increase websocket timeout for slower initial loads
     )

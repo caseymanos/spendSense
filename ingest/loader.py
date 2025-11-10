@@ -122,6 +122,19 @@ class DataLoader:
         """
         )
 
+        # Recommendations table (stores pre-generated recommendations)
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS recommendations (
+                user_id TEXT PRIMARY KEY,
+                persona TEXT NOT NULL,
+                recommendations_json TEXT NOT NULL,
+                generated_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users (user_id)
+            )
+        """
+        )
+
         # Create indexes for common queries
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_accounts_user ON accounts(user_id)")
         cursor.execute(

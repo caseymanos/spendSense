@@ -337,7 +337,7 @@ def _select_education_items(persona: str, user_context: Dict[str, Any]) -> List[
         topic = item.get("topic", "general")
         if topic in ["credit_utilization", "debt_paydown_strategy", "emergency_fund", "subscription_audit", "automation"]:
             try:
-                chart_data = _generate_chart_for_topic(topic, persona, user_context)
+                chart_data = _generate_chart_for_topic(topic, persona, user_context, user_id)
                 # New ChartGenerator returns {"type": "...", "data": {...}}
                 if chart_data and "type" in chart_data:
                     rec["content"] = chart_data
@@ -1052,76 +1052,35 @@ def generate_all_recommendations(output_path: Optional[str] = None) -> pd.DataFr
     return recs_df
 
 
-def _generate_chart_for_topic(topic: str, persona: str, user_context: Dict[str, Any]) -> Dict[str, Any]:
+def _generate_chart_for_topic(topic: str, persona: str, user_context: Dict[str, Any], user_id: str) -> Dict[str, Any]:
     """
-    Generate Plotly chart for a specific topic.
+    Generate chart data for a specific topic.
 
     Args:
         topic: Topic identifier (credit_utilization, debt_paydown_strategy, etc.)
         persona: User's persona
         user_context: User context with signals and account data
+        user_id: User identifier for fetching actual data
 
     Returns:
-        Dict with success, chart_path, html_path, or error
+        Dict with type and data fields
     """
     signals = user_context.get("signals", {})
 
     try:
         if topic == "credit_utilization":
-            # Extract card data from accounts
-            card_mask = "XXXX"
-            highest_util_card = None
-            accounts = user_context.get("accounts", [])
-            credit_cards = [a for a in accounts if a.get("account_type") == "credit"]
-            if credit_cards:
-                # Calculate utilization per card
-                for card in credit_cards:
-                    balance = card.get("balance_current", 0)
-                    limit = card.get("balance_limit", 1)
-                    card["utilization"] = (balance / limit * 100) if limit > 0 else 0
-
-                highest_util_card = max(credit_cards, key=lambda x: x.get("utilization", 0))
-                card_mask = highest_util_card.get("mask", "XXXX")
-
-            utilization_pct = signals.get("credit_max_util_pct", 50)
-
-            # Get enhanced data from highest utilization card
-            current_balance = None
-            credit_limit = None
-            apr = None
-            if highest_util_card:
-                current_balance = highest_util_card.get("balance_current")
-                credit_limit = highest_util_card.get("balance_limit")
-                apr = highest_util_card.get("apr")
-
-            return CHART_GENERATOR.generate_credit_utilization_gauge(
-                utilization=utilization_pct,
-                card_mask=card_mask,
-                current_balance=current_balance,
-                credit_limit=credit_limit,
-                apr=apr
+            # Use new chart generator that fetches actual credit card data
+            return CHART_GENERATOR.generate_credit_utilization_chart(
+                user_id=user_id,
+                signals=signals
             )
 
         elif topic == "debt_paydown_strategy":
-            # Build debt objects for avalanche chart from credit card accounts
-            accounts = user_context.get("accounts", [])
-            credit_cards = [a for a in accounts if a.get("account_type") == "credit"]
-            debts = []
-
-            for card in credit_cards:
-                balance = card.get("balance_current", 0)
-                if balance > 0:
-                    mask = card.get("mask", "XXXX")
-                    apr = card.get("apr", 0)
-
-                    debts.append({
-                        "name": f"credit (...{mask})",
-                        "balance": balance,
-                        "interestRate": apr,
-                        "monthlyInterest": (balance * apr / 100) / 12 if balance else 0
-                    })
-
-            return CHART_GENERATOR.generate_debt_avalanche_comparison(debts=debts)
+            # Use new chart generator that fetches actual credit card data
+            return CHART_GENERATOR.generate_debt_avalanche_chart(
+                user_id=user_id,
+                signals=signals
+            )
 
         elif topic == "emergency_fund":
             # Calculate current emergency fund months

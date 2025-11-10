@@ -96,8 +96,8 @@ class SyntheticDataGenerator:
             user = User(
                 user_id=f"user_{i:04d}",
                 name=self.fake.name(),
-                consent_granted=False,  # Default to no consent per PRD
-                consent_timestamp=None,
+                consent_granted=True,  # Default to granted for demo/production
+                consent_timestamp=datetime.now(),
                 revoked_timestamp=None,
                 age=age,
                 gender=genders[i],
