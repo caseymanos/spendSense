@@ -99,10 +99,10 @@
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-09T21:32:32.304303"
+    "timestamp": "2025-11-10T04:06:34.414760"
   },
   "recommendations": {
-    "timestamp": "2025-11-09T21:32:37.339094",
+    "timestamp": "2025-11-10T04:24:48.267245",
     "persona": "Cash Flow Optimizer",
     "education_count": 3,
     "offer_count": 3,
@@ -250,6 +250,50 @@
     },
     {
       "timestamp": "2025-11-09T16:53:59.013794",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 1,
+        "tone_passed": true,
+        "eligibility_blocks": 1
+      }
+    },
+    {
+      "timestamp": "2025-11-10T04:06:33.015236",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-10T04:06:33.017277",
+      "decision_type": "guardrails_complete",
+      "details": {
+        "total_recommendations": 2,
+        "filtered_count": 2,
+        "tone_passed": true,
+        "eligibility_blocks": 0
+      }
+    },
+    {
+      "timestamp": "2025-11-10T04:06:33.019197",
+      "decision_type": "offers_blocked",
+      "details": {
+        "blocked_count": 1,
+        "blocked_offers": [
+          {
+            "title": "Premium Rewards Card",
+            "reason": "Credit utilization too high (90%)",
+            "blocked_at": "product_eligibility"
+          }
+        ]
+      }
+    },
+    {
+      "timestamp": "2025-11-10T04:06:33.019510",
       "decision_type": "guardrails_complete",
       "details": {
         "total_recommendations": 2,

@@ -40,6 +40,32 @@ export function RecommendationChatDialog({
   const [messages, setMessages] = React.useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = React.useState(false)
 
+  // Generate sample question based on recommendation title
+  const sampleQuestion = React.useMemo(() => {
+    const title = recommendation.title.toLowerCase()
+    if (title.includes('credit') || title.includes('utilization')) {
+      return "How can I lower my credit utilization quickly?"
+    } else if (title.includes('interest') || title.includes('apr')) {
+      return "What's the best way to avoid paying interest?"
+    } else if (title.includes('subscription')) {
+      return "How do I identify subscriptions I don't need?"
+    } else if (title.includes('savings') || title.includes('hysa')) {
+      return "What's a good high-yield savings rate right now?"
+    } else if (title.includes('budget')) {
+      return "How do I get started with this budgeting approach?"
+    } else if (title.includes('goal')) {
+      return "Can you help me set a realistic financial goal?"
+    } else if (title.includes('autopay')) {
+      return "Is autopay safe for all my bills?"
+    } else if (title.includes('balance transfer')) {
+      return "What fees should I watch out for?"
+    } else if (title.includes('emergency fund')) {
+      return "How much should I save for emergencies?"
+    } else {
+      return "Can you explain this recommendation in simpler terms?"
+    }
+  }, [recommendation.title])
+
   const handlePromptSubmit = async (value: string) => {
     if (!value.trim() || isLoading) return
 
@@ -156,6 +182,14 @@ export function RecommendationChatDialog({
                   I can help explain the rationale, suggest next steps, or answer
                   questions about how to implement this advice.
                 </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-4"
+                  onClick={() => handlePromptSubmit(sampleQuestion)}
+                >
+                  {sampleQuestion}
+                </Button>
               </div>
             ) : (
               messages.map((message: ChatMessage) => (

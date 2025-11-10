@@ -35,6 +35,8 @@ export function VideoDialog({ video, open, onOpenChange }: VideoDialogProps) {
               {
                 "--media-primary-color": "#1e1a1a",
                 width: "100%",
+                height: "100%",
+                aspectRatio: "16/9",
               } as React.CSSProperties
             }
           >
@@ -43,6 +45,7 @@ export function VideoDialog({ video, open, onOpenChange }: VideoDialogProps) {
               src={youtubeVideoUrl}
               playsInline
               crossOrigin="anonymous"
+              style={{ width: "100%", height: "100%", aspectRatio: "16/9" }}
             />
           </MediaThemeSutro>
         </div>

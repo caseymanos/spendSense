@@ -106,14 +106,14 @@
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-09T21:32:32.311578"
+    "timestamp": "2025-11-10T04:06:34.422766"
   },
   "recommendations": {
-    "timestamp": "2025-11-09T21:32:37.632906",
+    "timestamp": "2025-11-10T04:24:48.535072",
     "persona": "High Utilization",
-    "education_count": 4,
+    "education_count": 3,
     "offer_count": 1,
-    "total_recommendations": 5,
+    "total_recommendations": 4,
     "recommendations": [
       {
         "type": "education",
@@ -123,47 +123,6 @@
         "topic": "credit_utilization",
         "partner_equivalent": false,
         "rationale": "Your credit card ending in 9901 is at 47% utilization ($11,695 of $25,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $236/month.",
-        "content": {
-          "type": "credit_utilization",
-          "data": {
-            "utilization": 46.78,
-            "cardMask": "9901",
-            "currentBalance": 11695.348654408568,
-            "creditLimit": 25000.0,
-            "availableCredit": 13304.651345591432,
-            "recommendedBalance": 7500.0,
-            "amountOverTarget": 4195.348654408568
-          }
-        },
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Debt Avalanche vs. Debt Snowball: Which Strategy is Right for You?",
-        "description": "Compare two proven debt paydown methods. Avalanche prioritizes highest interest rates, while Snowball focuses on smallest balances first for psychological wins.",
-        "category": "debt_paydown",
-        "topic": "debt_paydown_strategy",
-        "partner_equivalent": false,
-        "rationale": "With 2 credit cards and total utilization of 31%, a structured paydown plan could save you hundreds in interest. This guide helps you choose the right approach.",
-        "content": {
-          "type": "debt_avalanche",
-          "data": [
-            {
-              "name": "credit (...9901)",
-              "balance": 11695.348654408568,
-              "interestRate": 0,
-              "monthlyInterest": 0.0,
-              "priority": 1
-            },
-            {
-              "name": "credit (...8585)",
-              "balance": 4051.535082839694,
-              "interestRate": 0,
-              "monthlyInterest": 0.0,
-              "priority": 2
-            }
-          ]
-        },
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       },
       {
