@@ -105,7 +105,7 @@ def load_user_trace(user_id: str) -> Optional[Dict[str, Any]]:
         user_id: User ID to load trace for
 
     Returns:
-        Dictionary containing trace data, or None if not found
+        Dictionary containing trace data in expected format, or None if not found
     """
     try:
         response = requests.get(f"{API_URL}/recommendations/{user_id}", timeout=10)
@@ -113,9 +113,23 @@ def load_user_trace(user_id: str) -> Optional[Dict[str, Any]]:
             return None
         response.raise_for_status()
 
-        # The recommendations endpoint returns the full recommendation response
-        # which includes the trace information
-        return response.json()
+        api_response = response.json()
+
+        # Transform API response to match trace file format expected by operator dashboard
+        # API format: {user_id, persona, recommendations: [...], generated_at}
+        # Expected format: {recommendations: {recommendations: [...], persona, consent_granted, timestamp}}
+        trace = {
+            "user_id": api_response.get("user_id"),
+            "recommendations": {
+                "recommendations": api_response.get("recommendations", []),
+                "persona": api_response.get("persona"),
+                "consent_granted": api_response.get("consent_granted"),  # May be None
+                "timestamp": api_response.get("generated_at", datetime.now().isoformat()),
+                "source": "rule_based"  # Default to rule-based
+            }
+        }
+
+        return trace
     except Exception as e:
         print(f"Error loading trace for {user_id} from API: {e}")
         return None
