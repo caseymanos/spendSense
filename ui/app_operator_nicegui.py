@@ -441,7 +441,7 @@ def render_behavioral_signals_tab():
     metrics = [
         {
             "title": "Avg Credit Utilization",
-            "value": f"{avg_credit_util:.1%}",
+            "value": f"{avg_credit_util:.1f}%",
             "icon": "credit_card",
         },
         {
