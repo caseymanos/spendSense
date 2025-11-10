@@ -7,12 +7,11 @@ All charts are rendered client-side using Tremor React components.
 
 import sqlite3
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 
 # Direct database access to avoid circular imports
 def _load_credit_cards_direct(user_id: str):
     """Load credit card data directly from database to avoid circular imports."""
-    import sqlite3
     from pathlib import Path
     
     db_path = Path(__file__).parent.parent / "data" / "users.sqlite"
