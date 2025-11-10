@@ -156,21 +156,21 @@ export function DebtAvalancheChart({ debts: legacyDebts, data, className = '' }:
           >
             <AnimatedMetricCard
               label="Total Debt"
-              value={`$${data.summary.totalDebt.toLocaleString()}`}
-              description={`${data.summary.debtCount} ${data.summary.debtCount === 1 ? 'account' : 'accounts'}`}
+              value={`$${(data.summary.totalDebt ?? 0).toLocaleString()}`}
+              description={`${data.summary.debtCount ?? 0} ${(data.summary.debtCount ?? 0) === 1 ? 'account' : 'accounts'}`}
               variant="rose"
               delay={0.2}
             />
             <AnimatedMetricCard
               label="Monthly Interest"
-              value={`$${data.summary.totalMonthlyInterest.toFixed(2)}`}
-              description={`${data.summary.averageAPR.toFixed(2)}% Avg APR`}
+              value={`$${(data.summary.totalMonthlyInterest ?? 0).toFixed(2)}`}
+              description={`${(data.summary.averageAPR ?? 0).toFixed(2)}% Avg APR`}
               variant="orange"
               delay={0.3}
             />
             <AnimatedMetricCard
               label="Minimum Payment"
-              value={`$${data.summary.totalMinimumPayment.toFixed(2)}`}
+              value={`$${(data.summary.totalMinimumPayment ?? 0).toFixed(2)}`}
               description="per month"
               variant="amber"
               delay={0.4}
@@ -410,7 +410,7 @@ export function DebtAvalancheChart({ debts: legacyDebts, data, className = '' }:
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.3 }}
                           >
-                            ${debt.monthlyInterest.toFixed(2)}/mo interest
+                            ${(debt.monthlyInterest ?? 0).toFixed(2)}/mo interest
                           </motion.span>
                         )}
                       </div>
@@ -525,7 +525,7 @@ export function DebtAvalancheChart({ debts: legacyDebts, data, className = '' }:
               </motion.div>
               <div className="ml-3">
                 <p className="text-sm text-emerald-800 dark:text-emerald-200">
-                  <span className="font-semibold">💰 Potential Savings:</span> By paying an extra ${data.payoffScenarios?.[data.payoffScenarios.length - 1]?.extraPayment}/month, you could save <span className="font-bold text-emerald-900 dark:text-emerald-100">${data.interestSavings.toLocaleString()}</span> in interest charges and become debt-free <span className="font-bold text-emerald-900 dark:text-emerald-100">{data.timeSavingsYears?.toFixed(1)} years faster</span>!
+                  <span className="font-semibold">💰 Potential Savings:</span> By paying an extra ${data.payoffScenarios?.[data.payoffScenarios.length - 1]?.extraPayment ?? 0}/month, you could save <span className="font-bold text-emerald-900 dark:text-emerald-100">${(data.interestSavings ?? 0).toLocaleString()}</span> in interest charges and become debt-free <span className="font-bold text-emerald-900 dark:text-emerald-100">{(data.timeSavingsYears ?? 0).toFixed(1)} years faster</span>!
                 </p>
               </div>
             </div>

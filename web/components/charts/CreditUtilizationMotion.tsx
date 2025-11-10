@@ -170,26 +170,26 @@ export function CreditUtilizationMotion(props: CreditUtilizationMotionProps) {
             >
               <AnimatedMetricCard
                 label="Current Balance"
-                value={`$${data.currentBalance?.toLocaleString()}`}
+                value={`$${(data.currentBalance ?? 0).toLocaleString()}`}
                 variant="blue"
                 delay={0.4}
               />
               <AnimatedMetricCard
                 label="Credit Limit"
-                value={`$${data.creditLimit?.toLocaleString()}`}
+                value={`$${(data.creditLimit ?? 0).toLocaleString()}`}
                 variant="purple"
                 delay={0.5}
               />
               <AnimatedMetricCard
                 label="Available Credit"
-                value={`$${data.availableCredit?.toLocaleString()}`}
+                value={`$${(data.availableCredit ?? 0).toLocaleString()}`}
                 variant="emerald"
                 delay={0.6}
               />
               <AnimatedMetricCard
                 label="Monthly Interest"
-                value={`$${data.monthlyInterest?.toFixed(2)}`}
-                description={`${data.apr?.toFixed(2)}% APR`}
+                value={`$${(data.monthlyInterest ?? 0).toFixed(2)}`}
+                description={`${(data.apr ?? 0).toFixed(2)}% APR`}
                 variant="rose"
                 delay={0.7}
               />
