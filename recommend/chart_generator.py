@@ -51,6 +51,49 @@ def _load_credit_cards_direct(user_id: str):
     conn.close()
     return cards
 
+# Direct database access to avoid circular imports
+def _load_credit_cards_direct(user_id: str):
+    """Load credit card data directly from database to avoid circular imports."""
+    import sqlite3
+    from pathlib import Path
+    
+    db_path = Path(__file__).parent.parent / "data" / "users.sqlite"
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        SELECT
+            a.account_id,
+            a.mask,
+            a.balance_current,
+            a.balance_limit,
+            l.apr,
+            l.minimum_payment
+        FROM accounts a
+        LEFT JOIN liabilities l ON a.account_id = l.account_id
+        WHERE a.user_id = ? AND a.account_type = 'credit'
+    """, (user_id,))
+    
+    class CreditCard:
+        def __init__(self, account_id, mask, balance, credit_limit, apr, minimum_payment):
+            self.account_id = account_id
+            self.mask = mask or ""
+            self.balance = balance or 0
+            self.credit_limit = credit_limit or 0
+            self.available_credit = self.credit_limit - self.balance
+            self.utilization = round((self.balance / self.credit_limit * 100) if self.credit_limit > 0 else 0, 2)
+            self.apr = apr
+            self.monthly_interest = (self.balance * (apr / 100)) / 12 if apr and self.balance > 0 else None
+            self.minimum_payment = minimum_payment
+    
+    cards = []
+    for row in cursor.fetchall():
+        account_id, mask, balance, credit_limit, apr, minimum_payment = row
+        cards.append(CreditCard(account_id, mask, balance, credit_limit, apr, minimum_payment))
+    
+    conn.close()
+    return cards
+
 
 class ChartGenerator:
     """Generates chart data structures for frontend visualization."""
