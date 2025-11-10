@@ -5,8 +5,52 @@ This module generates structured chart data for the Next.js frontend components.
 All charts are rendered client-side using Tremor React components.
 """
 
+import sqlite3
 from pathlib import Path
 from typing import Dict, Any, List, Optional
+
+# Direct database access to avoid circular imports
+def _load_credit_cards_direct(user_id: str):
+    """Load credit card data directly from database to avoid circular imports."""
+    import sqlite3
+    from pathlib import Path
+    
+    db_path = Path(__file__).parent.parent / "data" / "users.sqlite"
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        SELECT
+            a.account_id,
+            a.mask,
+            a.balance_current,
+            a.balance_limit,
+            l.apr,
+            l.minimum_payment
+        FROM accounts a
+        LEFT JOIN liabilities l ON a.account_id = l.account_id
+        WHERE a.user_id = ? AND a.account_type = 'credit'
+    """, (user_id,))
+    
+    class CreditCard:
+        def __init__(self, account_id, mask, balance, credit_limit, apr, minimum_payment):
+            self.account_id = account_id
+            self.mask = mask or ""
+            self.balance = balance or 0
+            self.credit_limit = credit_limit or 0
+            self.available_credit = self.credit_limit - self.balance
+            self.utilization = round((self.balance / self.credit_limit * 100) if self.credit_limit > 0 else 0, 2)
+            self.apr = apr
+            self.monthly_interest = (self.balance * (apr / 100)) / 12 if apr and self.balance > 0 else None
+            self.minimum_payment = minimum_payment
+    
+    cards = []
+    for row in cursor.fetchall():
+        account_id, mask, balance, credit_limit, apr, minimum_payment = row
+        cards.append(CreditCard(account_id, mask, balance, credit_limit, apr, minimum_payment))
+    
+    conn.close()
+    return cards
 
 
 class ChartGenerator:
@@ -22,73 +66,109 @@ class ChartGenerator:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
-    def generate_credit_utilization_gauge(
+    def generate_credit_utilization_chart(
         self,
-        utilization: float,
-        card_mask: str,
-        current_balance: Optional[float] = None,
-        credit_limit: Optional[float] = None,
-        apr: Optional[float] = None
+        user_id: str,
+        signals: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Generate credit utilization gauge chart data.
+        Generate credit utilization chart with actual financial data.
 
         Args:
-            utilization: Utilization percentage (0-100)
-            card_mask: Last 4 digits of card
-            current_balance: Current balance amount
-            credit_limit: Credit limit amount
-            apr: Annual percentage rate
+            user_id: User identifier to fetch credit card data
+            signals: User behavioral signals
 
         Returns:
-            Chart data structure for CreditUtilizationGauge component
+            Chart data structure with populated credit card financial data
         """
-        data = {
-            "utilization": round(utilization, 2),
-            "cardMask": card_mask
-        }
+        # Fetch real credit card data
+        credit_cards = _load_credit_cards_direct(user_id)
 
-        # Add enhanced data if available
-        if current_balance is not None:
-            data["currentBalance"] = current_balance
-        if credit_limit is not None:
-            data["creditLimit"] = credit_limit
-            data["availableCredit"] = credit_limit - (current_balance or 0)
-        if apr is not None:
-            data["apr"] = apr
-            if current_balance:
-                data["monthlyInterest"] = (current_balance * apr / 100) / 12
+        if not credit_cards:
+            return {
+                "type": "credit_utilization",
+                "data": None
+            }
 
-        # Calculate recommended balance (30% of limit)
-        if credit_limit is not None:
-            recommended = credit_limit * 0.30
-            data["recommendedBalance"] = recommended
-            if current_balance is not None:
-                over_target = max(0, current_balance - recommended)
-                data["amountOverTarget"] = over_target
+        # Build cards data from actual credit cards
+        cards_data = []
+        total_balance = 0
+        total_limit = 0
+
+        for card in credit_cards:
+            cards_data.append({
+                "name": f"Card ending in {card.mask}",
+                "mask": card.mask,
+                "utilization": card.utilization,
+                "balance": card.balance,
+                "credit_limit": card.credit_limit,
+                "apr": card.apr,
+                "monthly_interest": card.monthly_interest,
+                "minimum_payment": card.minimum_payment,
+                "available_credit": card.available_credit,
+            })
+            total_balance += card.balance
+            total_limit += card.credit_limit
+
+        # Calculate aggregate metrics
+        avg_utilization = (total_balance / total_limit * 100) if total_limit > 0 else 0
+
+        # Get highest utilization card for primary display
+        highest_util_card = max(credit_cards, key=lambda c: c.utilization)
 
         return {
             "type": "credit_utilization",
-            "data": data
+            "data": {
+                "cards": cards_data,
+                "avg_utilization": round(avg_utilization, 2),
+                "total_balance": total_balance,
+                "total_limit": total_limit,
+                # Primary card data (highest utilization)
+                "utilization": highest_util_card.utilization,
+                "card_mask": highest_util_card.mask,
+                "balance": highest_util_card.balance,
+                "credit_limit": highest_util_card.credit_limit,
+                "apr": highest_util_card.apr,
+                "monthly_interest": highest_util_card.monthly_interest,
+                "minimum_payment": highest_util_card.minimum_payment,
+                "available_credit": highest_util_card.available_credit,
+            }
         }
 
-    def generate_debt_avalanche_comparison(
+    def generate_debt_avalanche_chart(
         self,
-        debts: List[Dict[str, Any]]
+        user_id: str,
+        signals: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Generate debt avalanche priority chart data.
+        Generate debt avalanche priority chart with actual debt data.
 
         Args:
-            debts: List of debt objects with balance, interestRate, name
+            user_id: User identifier to fetch credit card data
+            signals: User behavioral signals
 
         Returns:
-            Chart data structure for DebtAvalancheChart component
+            Chart data structure with populated debt information
         """
-        # Sort by interest rate descending (avalanche method)
+        # Fetch real credit card data
+        credit_cards = _load_credit_cards_direct(user_id)
+
+        # Build debt objects from credit cards with balances
+        debts = []
+        for card in credit_cards:
+            if card.balance > 0:
+                debts.append({
+                    "name": f"Card ending in {card.mask}",
+                    "balance": card.balance,
+                    "apr": card.apr or 0,
+                    "monthly_interest": card.monthly_interest or 0,
+                    "minimum_payment": card.minimum_payment or 0,
+                })
+
+        # Sort by APR descending (avalanche method - highest interest first)
         sorted_debts = sorted(
             debts,
-            key=lambda d: d.get("interestRate", 0),
+            key=lambda d: d.get("apr", 0),
             reverse=True
         )
 
@@ -98,7 +178,7 @@ class ChartGenerator:
 
         return {
             "type": "debt_avalanche",
-            "data": sorted_debts
+            "data": sorted_debts if sorted_debts else None
         }
 
     def generate_emergency_fund_progress(
