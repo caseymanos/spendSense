@@ -31,15 +31,6 @@ EDUCATIONAL_CONTENT: Dict[str, List[Dict[str, Any]]] = {
             "eligibility": {},  # Removed min_utilization to ensure content shows
         },
         {
-            "title": "Debt Avalanche vs. Debt Snowball: Which Strategy is Right for You?",
-            "description": "Compare two proven debt paydown methods. Avalanche prioritizes highest interest rates, while Snowball focuses on smallest balances first for psychological wins.",
-            "category": "debt_paydown",
-            "topic": "debt_paydown_strategy",
-            "partner_equivalent": False,
-            "rationale_template": "With {num_cards} credit cards and total utilization of {avg_utilization_pct}%, a structured paydown plan could save you hundreds in interest. This guide helps you choose the right approach.",
-            "eligibility": {},  # Removed min_cards to ensure content shows
-        },
-        {
             "title": "Setting Up Autopay to Avoid Late Fees and Interest",
             "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
             "category": "payment_automation",

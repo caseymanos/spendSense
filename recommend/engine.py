@@ -335,7 +335,7 @@ def _select_education_items(persona: str, user_context: Dict[str, Any]) -> List[
 
         # Generate chart for supported topics
         topic = item.get("topic", "general")
-        if topic in ["credit_utilization", "debt_paydown_strategy", "emergency_fund", "subscription_audit", "automation"]:
+        if topic in ["credit_utilization", "emergency_fund", "subscription_audit", "automation"]:
             try:
                 chart_data = _generate_chart_for_topic(topic, persona, user_context, user_id)
                 # New ChartGenerator returns {"type": "...", "data": {...}}
@@ -1071,13 +1071,6 @@ def _generate_chart_for_topic(topic: str, persona: str, user_context: Dict[str, 
         if topic == "credit_utilization":
             # Use new chart generator that fetches actual credit card data
             return CHART_GENERATOR.generate_credit_utilization_chart(
-                user_id=user_id,
-                signals=signals
-            )
-
-        elif topic == "debt_paydown_strategy":
-            # Use new chart generator that fetches actual credit card data
-            return CHART_GENERATOR.generate_debt_avalanche_chart(
                 user_id=user_id,
                 signals=signals
             )

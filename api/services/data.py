@@ -243,18 +243,20 @@ def get_recommendations_summary() -> Dict[str, Any]:
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
 
-    # Count total recommendations across all users
-    cursor.execute("""
-        SELECT
-            COUNT(*) as total_users,
-            SUM(json_array_length(recommendations_json, '$.recommendations')) as total_recommendations
-        FROM recommendations
-    """)
-    result = cursor.fetchone()
-
     # Count users with consent
     cursor.execute("SELECT COUNT(*) FROM users WHERE consent_granted = 1")
     users_with_consent = cursor.fetchone()[0]
+
+    # Count total recommendations ONLY for users with consent
+    cursor.execute("""
+        SELECT
+            COUNT(DISTINCT r.user_id) as total_users,
+            SUM(json_array_length(r.recommendations_json, '$.recommendations')) as total_recommendations
+        FROM recommendations r
+        INNER JOIN users u ON r.user_id = u.user_id
+        WHERE u.consent_granted = 1
+    """)
+    result = cursor.fetchone()
 
     conn.close()
 

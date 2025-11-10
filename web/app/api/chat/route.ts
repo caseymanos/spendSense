@@ -41,7 +41,7 @@ TONE:
 - Professional but friendly`
     }
 
-    const result = streamText({
+    const result = await streamText({
       model: openai('gpt-4-turbo'),
       messages: [systemMessage, ...messages],
       temperature: 0.7,
