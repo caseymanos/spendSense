@@ -1,8 +1,13 @@
 import './globals.css';
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { ReactQueryProvider } from '../providers/ReactQueryProvider';
 import { HeaderNav } from '../components/HeaderNav';
-import { PasswordGate } from '../components/PasswordGate';
+
+const PasswordGate = dynamic(
+  () => import('../components/PasswordGate').then((mod) => ({ default: mod.PasswordGate })),
+  { ssr: false }
+);
 
 export const metadata = {
   title: 'SpendSense Web',
