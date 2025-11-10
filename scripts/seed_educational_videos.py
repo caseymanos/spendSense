@@ -27,30 +27,30 @@ DB_PATH = PROJECT_ROOT / "data" / "spendsense.db"
 # Video IDs are extracted from URLs like: youtube.com/watch?v=VIDEO_ID_HERE
 
 CURATED_VIDEOS: List[Dict[str, any]] = [
-    # CREDIT UTILIZATION (3 videos) - PLACEHOLDER IDS - TODO: Replace with real videos
+    # CREDIT UTILIZATION (3 videos)
     {
         "topic": "credit_utilization",
-        "youtube_id": "dQw4w9WgXcQ",  # PLACEHOLDER - Search YouTube: "credit utilization explained"
+        "youtube_id": "pNbgVEzjeq8",
         "title": "Credit Utilization Explained: The 30% Rule",
-        "channel_name": "Financial Education",
-        "duration_seconds": 378,
-        "description": "Clear explanation of how credit utilization affects your credit score and practical strategies to improve it.",
+        "channel_name": "Humphrey Yang",
+        "duration_seconds": 60,
+        "description": "A very fast, clear, and direct explanation of what the 30% credit utilization rule is and how it's calculated.",
     },
     {
         "topic": "credit_utilization",
-        "youtube_id": "jNQXAC9IVRw",  # PLACEHOLDER - Search YouTube: "how to lower credit utilization"
+        "youtube_id": "DVpQsScLBQc",
         "title": "How to Lower Credit Card Utilization Fast",
-        "channel_name": "Financial Education",
-        "duration_seconds": 425,
-        "description": "Tactical guide to reducing credit utilization quickly including payment timing strategies.",
+        "channel_name": "Money Mel Jr",
+        "duration_seconds": 360,
+        "description": "This video provides three simple, actionable methods you can use to lower your credit utilization.",
     },
     {
         "topic": "credit_utilization",
-        "youtube_id": "kJQP7kiw5Fk",  # PLACEHOLDER - Search YouTube: "credit utilization ratio"
+        "youtube_id": "vLyfRt3lqmc",
         "title": "Credit Utilization Ratio: What You Need to Know",
-        "channel_name": "Financial Education",
-        "duration_seconds": 512,
-        "description": "Comprehensive overview of utilization ratios, per-card vs overall, and impact on scores.",
+        "channel_name": "Joshua Butler",
+        "duration_seconds": 540,
+        "description": "Comprehensive overview that covers the ins and outs of credit utilization, including common myths and what you actually need to focus on.",
     },
 
     # DEBT PAYDOWN STRATEGY (4 videos) - PLACEHOLDER IDS

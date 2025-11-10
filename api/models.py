@@ -42,6 +42,20 @@ class HealthResponse(BaseModel):
     version: str = "0.1.0"
 
 
+class CreditCardInfo(BaseModel):
+    """Credit card financial details"""
+
+    account_id: str
+    mask: str
+    balance: float
+    credit_limit: float
+    available_credit: float
+    utilization: float
+    apr: Optional[float] = None
+    monthly_interest: Optional[float] = None
+    minimum_payment: Optional[float] = None
+
+
 class UserProfileResponse(BaseModel):
     """User profile with persona and signals"""
 
@@ -50,6 +64,7 @@ class UserProfileResponse(BaseModel):
     consent_granted: bool
     persona: Optional[str] = None
     signals: Optional[dict] = None
+    credit_cards: Optional[List["CreditCardInfo"]] = None
 
 
 class RecommendationResponse(BaseModel):

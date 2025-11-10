@@ -13,6 +13,7 @@ from typing import List, Optional
 from api.models import (
     UserSummary,
     UserProfileResponse,
+    CreditCardInfo,
     RecommendationResponse,
     UserRecommendationsResponse,
 )
@@ -42,6 +43,58 @@ def list_users() -> List[UserSummary]:
     ]
 
 
+def load_credit_cards(user_id: str) -> List[CreditCardInfo]:
+    """Load credit card financial details for a user."""
+    import sqlite3
+    from pathlib import Path
+
+    db_path = Path(__file__).parent.parent.parent / "data" / "users.sqlite"
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+
+    # Get credit cards with APR from liabilities
+    cursor.execute("""
+        SELECT
+            a.account_id,
+            a.mask,
+            a.balance_current,
+            a.balance_limit,
+            l.apr,
+            l.minimum_payment
+        FROM accounts a
+        LEFT JOIN liabilities l ON a.account_id = l.account_id
+        WHERE a.user_id = ? AND a.account_type = 'credit'
+    """, (user_id,))
+
+    cards = []
+    for row in cursor.fetchall():
+        account_id, mask, balance, credit_limit, apr, minimum_payment = row
+
+        # Calculate derived values
+        available_credit = (credit_limit or 0) - (balance or 0)
+        utilization = (balance / credit_limit * 100) if credit_limit and credit_limit > 0 else 0
+
+        # Calculate monthly interest: (balance * APR/100) / 12
+        monthly_interest = None
+        if apr and balance and balance > 0:
+            monthly_interest = (balance * (apr / 100)) / 12
+
+        cards.append(CreditCardInfo(
+            account_id=account_id,
+            mask=mask or "",
+            balance=balance or 0,
+            credit_limit=credit_limit or 0,
+            available_credit=available_credit,
+            utilization=round(utilization, 2),
+            apr=apr,
+            monthly_interest=monthly_interest,
+            minimum_payment=minimum_payment
+        ))
+
+    conn.close()
+    return cards
+
+
 def get_profile(user_id: str) -> Optional[UserProfileResponse]:
     """Compose profile from user row, persona assignment, and signals."""
     user = load_user_data(user_id)
@@ -50,6 +103,7 @@ def get_profile(user_id: str) -> Optional[UserProfileResponse]:
 
     persona = load_persona_assignment(user_id)
     signals = load_behavioral_signals(user_id)
+    credit_cards = load_credit_cards(user_id)
 
     return UserProfileResponse(
         user_id=user.get("user_id", user_id),
@@ -57,6 +111,7 @@ def get_profile(user_id: str) -> Optional[UserProfileResponse]:
         consent_granted=bool(user.get("consent_granted", False)),
         persona=(persona or {}).get("persona"),
         signals=signals or {},
+        credit_cards=credit_cards if credit_cards else None,
     )
 
 
