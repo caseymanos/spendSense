@@ -1,41 +1,47 @@
 {
   "user_id": "user_0003",
-  "timestamp": "2025-11-06T14:24:03.085805",
+  "timestamp": "2025-11-10T09:04:13.248762",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 128.09,
+        "subscription_share_pct": 0.94,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 5,
+        "monthly_recurring_spend": 127.65,
+        "subscription_share_pct": 1.2,
+        "recurring_merchants": [
+          "Adobe Creative Cloud",
+          "Apple Music",
+          "LinkedIn Premium",
+          "Microsoft 365",
+          "NYT Subscription"
+        ]
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 1.28,
-        "savings_balance": 6738.07
+        "emergency_fund_months": 1.18,
+        "savings_balance": 16042.66
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 1.12,
-        "savings_balance": 6738.07
+        "emergency_fund_months": 1.5,
+        "savings_balance": 16042.66
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 38.37,
-        "avg_utilization_pct": 38.37,
-        "flag_30": true,
+        "max_utilization_pct": 12.61,
+        "avg_utilization_pct": 12.61,
+        "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
@@ -44,11 +50,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000012",
-            "mask": "9293",
-            "balance": 767.4433203161518,
-            "limit": 2000.0,
-            "utilization_pct": 38.37
+            "account_id": "acc_000011",
+            "mask": "9683",
+            "balance": 3151.5880446299216,
+            "limit": 25000.0,
+            "utilization_pct": 12.61
           }
         ],
         "interest_charges_present": false,
@@ -57,50 +63,50 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.5573,
-        "cash_buffer_months": 2.66,
-        "pay_frequency": "variable",
-        "num_paychecks": 7,
-        "avg_paycheck": 4243.94
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 1,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.5893,
-        "cash_buffer_months": 2.33,
-        "pay_frequency": "weekly",
-        "num_paychecks": 38,
-        "avg_paycheck": 3684.9
+        "median_pay_gap_days": 30,
+        "income_variability": 0.2476,
+        "cash_buffer_months": 0.15,
+        "pay_frequency": "monthly",
+        "num_paychecks": 6,
+        "avg_paycheck": 4578.63
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "Cash Flow Optimizer",
+    "criteria_met": {
+      "cash_buffer_months": 0.15,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 30
+    },
     "all_checks": {
       "High Utilization": {},
-      "Variable Income Budgeter": {},
-      "Subscription-Heavy": {},
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.15
+      },
+      "Subscription-Heavy": {
+        "recurring_count": 5,
+        "monthly_spend": 128.09
+      },
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 0.15,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 4
+        "stable_income_pay_gap_days": 30
       },
-      "Savings Builder": {}
+      "Savings Builder": {
+        "low_utilization": 12.61
+      }
     },
-    "timestamp": "2025-11-10T04:06:34.416426"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-10T04:24:48.304817",
-    "persona": "General",
-    "education_count": 0,
-    "offer_count": 0,
-    "total_recommendations": 0,
-    "recommendations": [],
-    "consent_granted": true,
-    "source": "rule_based",
-    "reason": "insufficient_data",
-    "message": "You're doing great - no recommendations at this time.",
-    "education_shortfall": 3
+    "timestamp": "2025-11-10T09:04:16.845068"
   }
 }

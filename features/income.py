@@ -66,13 +66,14 @@ def detect_income_signals(
     ].copy()
 
     # Also check personal_finance_category for income indicators
-    income_category_pattern = "INCOME|TRANSFER_IN"
+    # NOTE: Only INCOME category, NOT TRANSFER_IN (savings transfers aren't paychecks)
+    income_category_pattern = "^INCOME$"  # Exact match to avoid catching TRANSFER_IN
     income_txns = user_txns[
         (user_txns["amount"] < 0)  # Credits only
         & (
             user_txns["personal_finance_category"]
             .astype("string")
-            .str.contains(income_category_pattern, case=False, na=False)
+            .str.contains(income_category_pattern, case=False, na=False, regex=True)
         )
     ]
 

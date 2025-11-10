@@ -1,61 +1,57 @@
 {
   "user_id": "user_0066",
-  "timestamp": "2025-11-06T14:24:05.439511",
+  "timestamp": "2025-11-10T09:04:15.424391",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 20.08,
+        "subscription_share_pct": 0.31,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 2,
+        "monthly_recurring_spend": 19.95,
+        "subscription_share_pct": 0.29,
+        "recurring_merchants": [
+          "Dropbox",
+          "Planet Fitness"
+        ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 36.02,
-        "growth_rate_pct": 0.59,
-        "emergency_fund_months": 0.85,
-        "savings_balance": 6126.14
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 2.65,
+        "savings_balance": 17067.99
       },
       "180d": {
-        "net_inflow": 216.11,
-        "growth_rate_pct": 3.66,
-        "emergency_fund_months": 1.0,
-        "savings_balance": 6126.14
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 2.5,
+        "savings_balance": 17067.99
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 32.0,
-        "avg_utilization_pct": 31.23,
-        "flag_30": true,
+        "max_utilization_pct": 7.18,
+        "avg_utilization_pct": 7.18,
+        "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
         "has_interest": true,
         "is_overdue": false,
-        "num_credit_cards": 2,
+        "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000194",
-            "mask": "8789",
-            "balance": 4799.587431482189,
-            "limit": 15000.0,
-            "utilization_pct": 32.0
-          },
-          {
-            "account_id": "acc_000195",
-            "mask": "2892",
-            "balance": 1523.1400945819464,
-            "limit": 5000.0,
-            "utilization_pct": 30.46
+            "account_id": "acc_000198",
+            "mask": "2019",
+            "balance": 143.57965158124216,
+            "limit": 2000.0,
+            "utilization_pct": 7.18
           }
         ],
         "interest_charges_present": false,
@@ -64,52 +60,47 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 2,
-        "income_variability": 0.8155,
-        "cash_buffer_months": 1.22,
-        "pay_frequency": "variable",
-        "num_paychecks": 12,
-        "avg_paycheck": 2237.01
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 1,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.6603,
-        "cash_buffer_months": 1.43,
-        "pay_frequency": "variable",
-        "num_paychecks": 53,
-        "avg_paycheck": 2794.23
+        "median_pay_gap_days": 14,
+        "income_variability": 0.2384,
+        "cash_buffer_months": 0.17,
+        "pay_frequency": "biweekly",
+        "num_paychecks": 12,
+        "avg_paycheck": 4542.57
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "Cash Flow Optimizer",
+    "criteria_met": {
+      "cash_buffer_months": 0.17,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 14
+    },
     "all_checks": {
       "High Utilization": {},
-      "Variable Income Budgeter": {},
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.17
+      },
       "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
-        "cash_buffer_months": 1.43,
-        "stable_income_pay_gap_days": 3
+        "cash_buffer_months": 0.17,
+        "low_growth_rate_pct": 0.0,
+        "low_net_inflow": 0.0,
+        "stable_income_pay_gap_days": 14
       },
       "Savings Builder": {
-        "growth_rate_pct": 3.66,
-        "net_inflow": 216.11
+        "low_utilization": 7.18
       }
     },
-    "timestamp": "2025-11-10T04:06:34.436191"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-10T04:24:48.998579",
-    "persona": "General",
-    "education_count": 0,
-    "offer_count": 0,
-    "total_recommendations": 0,
-    "recommendations": [],
-    "consent_granted": true,
-    "source": "rule_based",
-    "reason": "insufficient_data",
-    "message": "You're doing great - no recommendations at this time.",
-    "education_shortfall": 3
+    "timestamp": "2025-11-10T09:04:16.856338"
   }
 }

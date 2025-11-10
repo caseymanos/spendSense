@@ -1,25 +1,23 @@
 {
   "user_id": "user_0072",
-  "timestamp": "2025-11-06T14:24:05.658354",
+  "timestamp": "2025-11-10T09:04:15.627927",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 119.62,
-        "subscription_share_pct": 2.54,
+        "monthly_recurring_spend": 32.24,
+        "subscription_share_pct": 0.34,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 5,
-        "monthly_recurring_spend": 119.65,
-        "subscription_share_pct": 1.89,
+        "recurring_count": 3,
+        "monthly_recurring_spend": 32.03,
+        "subscription_share_pct": 0.32,
         "recurring_merchants": [
-          "Adobe Creative Cloud",
-          "Apple Music",
-          "LA Fitness",
-          "Netflix",
-          "Planet Fitness"
+          "Amazon Prime",
+          "Dropbox",
+          "Microsoft 365"
         ]
       }
     },
@@ -27,143 +25,75 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 9.32,
-        "savings_balance": 43958.83
+        "emergency_fund_months": 0.2,
+        "savings_balance": 1923.8
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 6.93,
-        "savings_balance": 43958.83
+        "emergency_fund_months": 0.19,
+        "savings_balance": 1923.8
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 94.74,
-        "avg_utilization_pct": 94.74,
-        "flag_30": true,
-        "flag_50": true,
-        "flag_80": true,
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
+        "flag_30": false,
+        "flag_50": false,
+        "flag_80": false,
         "min_payment_only": false,
-        "has_interest": true,
+        "has_interest": false,
         "is_overdue": false,
-        "num_credit_cards": 1,
-        "utilization_by_card": [
-          {
-            "account_id": "acc_000211",
-            "mask": "4193",
-            "balance": 23683.875061641997,
-            "limit": 25000.0,
-            "utilization_pct": 94.74
-          }
-        ],
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 6,
-        "income_variability": 0.9569,
-        "cash_buffer_months": 1.01,
-        "pay_frequency": "weekly",
-        "num_paychecks": 5,
-        "avg_paycheck": 2875.67
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 1,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.7251,
-        "cash_buffer_months": 0.75,
+        "median_pay_gap_days": 56,
+        "income_variability": 0.1756,
+        "cash_buffer_months": 0.43,
         "pay_frequency": "variable",
-        "num_paychecks": 34,
-        "avg_paycheck": 3283.26
+        "num_paychecks": 4,
+        "avg_paycheck": 1406.52
       }
     }
   },
   "persona_assignment": {
-    "persona": "High Utilization",
+    "persona": "Variable Income Budgeter",
     "criteria_met": {
-      "high_utilization": 94.74
+      "median_pay_gap_days": 56,
+      "cash_buffer_months": 0.43
     },
     "all_checks": {
-      "High Utilization": {
-        "high_utilization": 94.74
-      },
+      "High Utilization": {},
       "Variable Income Budgeter": {
-        "cash_buffer_months": 0.75
+        "median_pay_gap_days": 56,
+        "cash_buffer_months": 0.43
       },
       "Subscription-Heavy": {
-        "recurring_count": 5,
-        "monthly_spend": 119.62
+        "recurring_count": 3
       },
       "Cash Flow Optimizer": {
-        "cash_buffer_months": 0.75,
+        "cash_buffer_months": 0.43,
         "low_growth_rate_pct": 0.0,
-        "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "low_net_inflow": 0.0
       },
-      "Savings Builder": {}
-    },
-    "timestamp": "2025-11-10T04:06:34.437889"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-10T04:24:49.070599",
-    "persona": "High Utilization",
-    "education_count": 4,
-    "offer_count": 1,
-    "total_recommendations": 5,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "Understanding Credit Utilization and Your Score",
-        "description": "Learn how credit utilization affects your credit score and why keeping it below 30% is important. Includes strategies for paying down balances strategically.",
-        "category": "credit_basics",
-        "topic": "credit_utilization",
-        "partner_equivalent": false,
-        "rationale": "Your credit card ending in 4193 is at 95% utilization ($23,684 of $25,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $355/month.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "How Interest Charges Work: APR, Compounding, and Grace Periods",
-        "description": "Demystify credit card interest calculations. Learn about daily periodic rates, grace periods, and how carrying a balance costs more than you think.",
-        "category": "credit_basics",
-        "topic": "credit_interest",
-        "partner_equivalent": false,
-        "rationale": "You're currently paying approximately $355/month per month in interest charges. Understanding how interest compounds can motivate faster paydown strategies.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Balance Transfer Cards: When They Help and When They Hurt",
-        "description": "Evaluate if a balance transfer makes sense for your situation. Covers transfer fees, promotional periods, and the math behind potential savings.",
-        "category": "debt_paydown",
-        "topic": "balance_transfer",
-        "partner_equivalent": true,
-        "rationale": "With your current utilization of 95%, a 0% balance transfer could save you $4263 over 12-18 months. This article helps you evaluate if it's the right move.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Setting Up Autopay to Avoid Late Fees and Interest",
-        "description": "Step-by-step guide to setting up automatic minimum payments or full-balance autopay. Includes tips for avoiding overdrafts and managing payment dates.",
-        "category": "payment_automation",
-        "topic": "autopay",
-        "partner_equivalent": true,
-        "rationale": "Automating your credit card payments can help you avoid late fees and build consistent payment history. With 1 cards to manage, automation reduces mental overhead.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Credit Counseling (Non-Profit)",
-        "description": "Free or low-cost counseling from NFCC-certified advisors. Includes debt management plan options if needed.",
-        "category": "counseling",
-        "topic": "credit_counseling",
-        "rationale": "With utilization at 95%, a certified credit counselor can help you create a personalized paydown strategy.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      "Savings Builder": {
+        "low_utilization": 0.0
       }
-    ],
-    "consent_granted": true,
-    "source": "rule_based"
+    },
+    "timestamp": "2025-11-10T09:04:16.857284"
   }
 }

@@ -1000,18 +1000,33 @@ def render_recommendation_review_tab():
                         rec_response = generate_recommendations(selected_user_id)
                         ui.notify("AI generation failed, using rule-based recommendations", type="warning")
                     else:
-                        # Success! Show token usage
+                        # Success! Show token usage and trace file info
                         token_usage = rec_response.get("metadata", {}).get("token_usage", {})
+                        trace_path = f"docs/traces/{selected_user_id}.json"
                         if token_usage:
                             ui.notify(
                                 f"✓ AI recommendations generated | Tokens: {token_usage.get('total_tokens', 0)} "
-                                f"({token_usage.get('prompt_tokens', 0)} prompt + {token_usage.get('completion_tokens', 0)} completion)",
+                                f"({token_usage.get('prompt_tokens', 0)} prompt + {token_usage.get('completion_tokens', 0)} completion) | "
+                                f"Saved to {trace_path}",
+                                type="positive",
+                                timeout=6000
+                            )
+                        else:
+                            ui.notify(
+                                f"✓ AI recommendations generated and saved to {trace_path}",
                                 type="positive",
                                 timeout=5000
                             )
                 else:
                     # Standard rule-based generation
                     rec_response = generate_recommendations(selected_user_id)
+                    trace_path = f"docs/traces/{selected_user_id}.json"
+                    num_recs = len(rec_response.get("recommendations", []))
+                    ui.notify(
+                        f"✓ Generated {num_recs} rule-based recommendations | Saved to {trace_path}",
+                        type="positive",
+                        timeout=5000
+                    )
 
                 # Reload the existing recommendations view to show the new ones
                 load_existing_recommendations()

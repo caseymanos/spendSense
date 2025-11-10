@@ -1,45 +1,43 @@
 {
   "user_id": "user_0088",
-  "timestamp": "2025-11-06T14:24:06.261214",
+  "timestamp": "2025-11-10T09:04:16.179254",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 54.47,
-        "subscription_share_pct": 0.71,
+        "monthly_recurring_spend": 167.25,
+        "subscription_share_pct": 2.82,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 3,
-        "monthly_recurring_spend": 54.17,
-        "subscription_share_pct": 0.81,
+        "recurring_count": 1,
+        "monthly_recurring_spend": 168.36,
+        "subscription_share_pct": 2.54,
         "recurring_merchants": [
-          "LA Fitness",
-          "Microsoft 365",
-          "NYT Subscription"
+          "Credit Card Interest"
         ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.56,
-        "savings_balance": 33707.01
+        "net_inflow": 51.66,
+        "growth_rate_pct": 0.78,
+        "emergency_fund_months": 1.12,
+        "savings_balance": 6660.27
       },
       "180d": {
-        "net_inflow": 0.0,
-        "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.13,
-        "savings_balance": 33707.01
+        "net_inflow": 309.95,
+        "growth_rate_pct": 4.88,
+        "emergency_fund_months": 1.01,
+        "savings_balance": 6660.27
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 13.16,
-        "avg_utilization_pct": 13.16,
-        "flag_30": false,
+        "max_utilization_pct": 47.92,
+        "avg_utilization_pct": 47.92,
+        "flag_30": true,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
@@ -48,131 +46,60 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000258",
-            "mask": "6965",
-            "balance": 1974.5506600191745,
+            "account_id": "acc_000260",
+            "mask": "3251",
+            "balance": 7188.437076314612,
             "limit": 15000.0,
-            "utilization_pct": 13.16
+            "utilization_pct": 47.92
           }
         ],
-        "interest_charges_present": false,
-        "interest_charges_amount_60d": 0.0
+        "interest_charges_present": true,
+        "interest_charges_amount_60d": 341.16999999999996
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 25,
-        "income_variability": 0.1129,
-        "cash_buffer_months": 0.25,
-        "pay_frequency": "monthly",
-        "num_paychecks": 2,
-        "avg_paycheck": 2056.95
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 1,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 5,
-        "income_variability": 0.5824,
-        "cash_buffer_months": 0.28,
-        "pay_frequency": "weekly",
-        "num_paychecks": 26,
-        "avg_paycheck": 3470.84
+        "median_pay_gap_days": 51,
+        "income_variability": 0.2231,
+        "cash_buffer_months": 0.36,
+        "pay_frequency": "variable",
+        "num_paychecks": 4,
+        "avg_paycheck": 2306.04
       }
     }
   },
   "persona_assignment": {
-    "persona": "Cash Flow Optimizer",
+    "persona": "High Utilization",
     "criteria_met": {
-      "cash_buffer_months": 0.28,
-      "low_growth_rate_pct": 0.0,
-      "low_net_inflow": 0.0,
-      "stable_income_pay_gap_days": 5
+      "interest_charges": true
     },
     "all_checks": {
-      "High Utilization": {},
+      "High Utilization": {
+        "interest_charges": true
+      },
       "Variable Income Budgeter": {
-        "cash_buffer_months": 0.28
+        "median_pay_gap_days": 51,
+        "cash_buffer_months": 0.36
       },
       "Subscription-Heavy": {
-        "recurring_count": 3,
-        "monthly_spend": 54.47
+        "monthly_spend": 167.25
       },
       "Cash Flow Optimizer": {
-        "cash_buffer_months": 0.28,
-        "low_growth_rate_pct": 0.0,
-        "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 5
+        "cash_buffer_months": 0.36
       },
       "Savings Builder": {
-        "low_utilization": 13.16
+        "growth_rate_pct": 4.88,
+        "net_inflow": 309.95
       }
     },
-    "timestamp": "2025-11-10T04:06:34.444955"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-10T04:24:49.236551",
-    "persona": "Cash Flow Optimizer",
-    "education_count": 3,
-    "offer_count": 3,
-    "total_recommendations": 6,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "The 24-Hour Rule: Curbing Impulse Purchases",
-        "description": "Simple technique to reduce impulse spending: wait 24 hours before non-essential purchases. Includes strategies for online shopping and in-store temptations.",
-        "category": "spending_habits",
-        "topic": "impulse_control",
-        "partner_equivalent": false,
-        "rationale": "Small behavioral changes can significantly improve your cash buffer over time. The 24-hour rule reduces regrettable purchases.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Building a Cash Buffer: The First $1000",
-        "description": "Practical strategies for building your first $1000 emergency buffer. Covers small wins, expense cuts, and income boosts to accelerate savings.",
-        "category": "emergency_fund",
-        "topic": "starter_emergency_fund",
-        "partner_equivalent": true,
-        "rationale": "Your current buffer of 0.3 months can be strengthened with focused savings. This guide provides actionable steps to reach 1-2 months of expenses.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Pay Yourself First: Automating Savings Before Spending",
-        "description": "Learn how to set up automatic transfers to savings on payday, before discretionary spending occurs. Makes saving effortless and consistent.",
-        "category": "savings_automation",
-        "topic": "pay_yourself_first",
-        "partner_equivalent": false,
-        "rationale": "Automation removes willpower from the equation. Setting up automatic transfers can help grow your 0.3-month buffer consistently.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Mint Budget Tracker & Spending Analyzer",
-        "description": "Free app that automatically categorizes spending, tracks budgets, and identifies spending patterns. Helps visualize where money goes.",
-        "category": "budgeting_app",
-        "topic": "discretionary_tracking",
-        "rationale": "Understanding your spending patterns is the first step to improving cash flow. Mint provides automatic tracking and alerts when you exceed budget categories.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Chime Automatic Savings Account",
-        "description": "No-fee banking with automatic round-up savings. Every purchase rounds up to the nearest dollar and transfers the difference to savings.",
-        "category": "savings_account",
-        "topic": "pay_yourself_first",
-        "rationale": "With 0.3 months of buffer, automatic savings through round-ups can help you build reserves effortlessly without impacting your budget.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "EveryDollar Zero-Based Budget App",
-        "description": "Simple budgeting app based on zero-based budgeting principles. Free version available, premium adds automatic transaction sync.",
-        "category": "budgeting_app",
-        "topic": "zero_based_budget",
-        "rationale": "Zero-based budgeting gives every dollar a job before the month begins. With your current cash buffer, this approach can help build consistent savings habits.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "source": "rule_based"
+    "timestamp": "2025-11-10T09:04:16.861093"
   }
 }

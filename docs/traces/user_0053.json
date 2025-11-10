@@ -1,22 +1,23 @@
 {
   "user_id": "user_0053",
-  "timestamp": "2025-11-06T14:24:04.951926",
+  "timestamp": "2025-11-10T09:04:14.983803",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 24.15,
-        "subscription_share_pct": 0.24,
+        "monthly_recurring_spend": 22.73,
+        "subscription_share_pct": 0.33,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 2,
-        "monthly_recurring_spend": 24.2,
-        "subscription_share_pct": 0.26,
+        "recurring_count": 3,
+        "monthly_recurring_spend": 22.91,
+        "subscription_share_pct": 0.34,
         "recurring_merchants": [
           "Disney+",
-          "Netflix"
+          "Hulu",
+          "Microsoft 365"
         ]
       }
     },
@@ -24,149 +25,70 @@
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 1.17,
-        "savings_balance": 10227.78
+        "emergency_fund_months": 6.66,
+        "savings_balance": 45899.93
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 1.09,
-        "savings_balance": 10227.78
+        "emergency_fund_months": 6.86,
+        "savings_balance": 45899.93
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 34.83,
-        "avg_utilization_pct": 34.83,
-        "flag_30": true,
+        "max_utilization_pct": 0.0,
+        "avg_utilization_pct": 0.0,
+        "flag_30": false,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
-        "has_interest": true,
+        "has_interest": false,
         "is_overdue": false,
-        "num_credit_cards": 1,
-        "utilization_by_card": [
-          {
-            "account_id": "acc_000158",
-            "mask": "1995",
-            "balance": 696.6555634956343,
-            "limit": 2000.0,
-            "utilization_pct": 34.83
-          }
-        ],
+        "num_credit_cards": 0,
+        "utilization_by_card": [],
         "interest_charges_present": false,
         "interest_charges_amount_60d": 0.0
       }
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 6,
-        "income_variability": 0.5785,
-        "cash_buffer_months": 0.07,
-        "pay_frequency": "weekly",
-        "num_paychecks": 6,
-        "avg_paycheck": 3102.37
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 0,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 4,
-        "income_variability": 0.6531,
-        "cash_buffer_months": 0.07,
-        "pay_frequency": "weekly",
-        "num_paychecks": 39,
-        "avg_paycheck": 3462.98
+        "median_pay_gap_days": 62,
+        "income_variability": 0.3201,
+        "cash_buffer_months": 2.08,
+        "pay_frequency": "variable",
+        "num_paychecks": 3,
+        "avg_paycheck": 1841.03
       }
     }
   },
   "persona_assignment": {
-    "persona": "Cash Flow Optimizer",
-    "criteria_met": {
-      "cash_buffer_months": 0.07,
-      "low_growth_rate_pct": 0.0,
-      "low_net_inflow": 0.0,
-      "stable_income_pay_gap_days": 4
-    },
+    "persona": "General",
+    "criteria_met": {},
     "all_checks": {
       "High Utilization": {},
       "Variable Income Budgeter": {
-        "cash_buffer_months": 0.07
+        "median_pay_gap_days": 62
       },
-      "Subscription-Heavy": {},
+      "Subscription-Heavy": {
+        "recurring_count": 3
+      },
       "Cash Flow Optimizer": {
-        "cash_buffer_months": 0.07,
         "low_growth_rate_pct": 0.0,
-        "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 4
+        "low_net_inflow": 0.0
       },
-      "Savings Builder": {}
-    },
-    "timestamp": "2025-11-10T04:06:34.432730"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-10T04:24:48.864715",
-    "persona": "Cash Flow Optimizer",
-    "education_count": 3,
-    "offer_count": 3,
-    "total_recommendations": 6,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "The 24-Hour Rule: Curbing Impulse Purchases",
-        "description": "Simple technique to reduce impulse spending: wait 24 hours before non-essential purchases. Includes strategies for online shopping and in-store temptations.",
-        "category": "spending_habits",
-        "topic": "impulse_control",
-        "partner_equivalent": false,
-        "rationale": "Small behavioral changes can significantly improve your cash buffer over time. The 24-hour rule reduces regrettable purchases.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Building a Cash Buffer: The First $1000",
-        "description": "Practical strategies for building your first $1000 emergency buffer. Covers small wins, expense cuts, and income boosts to accelerate savings.",
-        "category": "emergency_fund",
-        "topic": "starter_emergency_fund",
-        "partner_equivalent": true,
-        "rationale": "Your current buffer of 0.1 months can be strengthened with focused savings. This guide provides actionable steps to reach 1-2 months of expenses.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Pay Yourself First: Automating Savings Before Spending",
-        "description": "Learn how to set up automatic transfers to savings on payday, before discretionary spending occurs. Makes saving effortless and consistent.",
-        "category": "savings_automation",
-        "topic": "pay_yourself_first",
-        "partner_equivalent": false,
-        "rationale": "Automation removes willpower from the equation. Setting up automatic transfers can help grow your 0.1-month buffer consistently.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Mint Budget Tracker & Spending Analyzer",
-        "description": "Free app that automatically categorizes spending, tracks budgets, and identifies spending patterns. Helps visualize where money goes.",
-        "category": "budgeting_app",
-        "topic": "discretionary_tracking",
-        "rationale": "Understanding your spending patterns is the first step to improving cash flow. Mint provides automatic tracking and alerts when you exceed budget categories.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "Chime Automatic Savings Account",
-        "description": "No-fee banking with automatic round-up savings. Every purchase rounds up to the nearest dollar and transfers the difference to savings.",
-        "category": "savings_account",
-        "topic": "pay_yourself_first",
-        "rationale": "With 0.1 months of buffer, automatic savings through round-ups can help you build reserves effortlessly without impacting your budget.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "partner_offer",
-        "title": "EveryDollar Zero-Based Budget App",
-        "description": "Simple budgeting app based on zero-based budgeting principles. Free version available, premium adds automatic transaction sync.",
-        "category": "budgeting_app",
-        "topic": "zero_based_budget",
-        "rationale": "Zero-based budgeting gives every dollar a job before the month begins. With your current cash buffer, this approach can help build consistent savings habits.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
+      "Savings Builder": {
+        "low_utilization": 0.0
       }
-    ],
-    "consent_granted": true,
-    "source": "rule_based"
+    },
+    "timestamp": "2025-11-10T09:04:16.854245"
   }
 }

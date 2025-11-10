@@ -198,6 +198,8 @@ class DataGenerationConfig(BaseModel):
 
 
 # Category mappings for transaction generation
+# NOTE: INCOME/Payroll is intentionally EXCLUDED here because it's generated
+# separately with controlled paycheck patterns (weekly/biweekly/monthly/irregular)
 TRANSACTION_CATEGORIES = [
     ("FOOD_AND_DRINK", "Restaurants"),
     ("FOOD_AND_DRINK", "Groceries"),
@@ -211,7 +213,6 @@ TRANSACTION_CATEGORIES = [
     ("GENERAL_SERVICES", "Subscription Services"),
     ("HOME_IMPROVEMENT", "Hardware"),
     ("MEDICAL", "Pharmacies"),
-    ("INCOME", "Payroll"),
     ("TRANSFER_IN", "Deposit"),
     ("TRANSFER_OUT", "Transfer"),
 ]

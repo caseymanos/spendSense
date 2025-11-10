@@ -386,12 +386,12 @@ class SyntheticDataGenerator:
                             yield self.start_date + timedelta(
                                 days=30 * i + int(self.rng.integers(0, 3))
                             )
-                    else:  # irregular: variable gaps 20-60 days
+                    else:  # irregular: variable gaps 35-75 days (median ~55 days, well above 45-day threshold)
                         day = 0
                         total_days = self.config.months_history * 30
                         while day < total_days:
                             yield self.start_date + timedelta(days=day)
-                            day += int(self.rng.integers(20, 61))
+                            day += int(self.rng.integers(35, 76))
 
                 for paycheck_date in paycheck_dates():
                     # Smaller, more variable paychecks for irregular pattern to lower cash buffer

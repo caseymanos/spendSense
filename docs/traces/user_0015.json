@@ -1,45 +1,41 @@
 {
   "user_id": "user_0015",
-  "timestamp": "2025-11-06T14:24:03.530142",
+  "timestamp": "2025-11-10T09:04:13.676827",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 48.57,
-        "subscription_share_pct": 0.71,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 3,
-        "monthly_recurring_spend": 48.18,
-        "subscription_share_pct": 0.8,
-        "recurring_merchants": [
-          "Hulu",
-          "LA Fitness",
-          "Spotify"
-        ]
+        "recurring_count": 0,
+        "monthly_recurring_spend": 0.0,
+        "subscription_share_pct": 0.0,
+        "recurring_merchants": []
       }
     },
     "savings": {
       "30d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 4.5,
-        "savings_balance": 30965.64
+        "emergency_fund_months": 3.94,
+        "savings_balance": 43228.49
       },
       "180d": {
         "net_inflow": 0.0,
         "growth_rate_pct": 0.0,
-        "emergency_fund_months": 5.2,
-        "savings_balance": 30965.64
+        "emergency_fund_months": 4.19,
+        "savings_balance": 43228.49
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 27.1,
-        "avg_utilization_pct": 27.1,
-        "flag_30": false,
+        "max_utilization_pct": 36.17,
+        "avg_utilization_pct": 36.17,
+        "flag_30": true,
         "flag_50": false,
         "flag_80": false,
         "min_payment_only": false,
@@ -48,11 +44,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000044",
-            "mask": "6546",
-            "balance": 542.0728556834085,
-            "limit": 2000.0,
-            "utilization_pct": 27.1
+            "account_id": "acc_000045",
+            "mask": "3675",
+            "balance": 1808.4103942799466,
+            "limit": 5000.0,
+            "utilization_pct": 36.17
           }
         ],
         "interest_charges_present": false,
@@ -61,54 +57,45 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 2,
-        "income_variability": 0.4452,
-        "cash_buffer_months": 2.14,
-        "pay_frequency": "variable",
-        "num_paychecks": 4,
-        "avg_paycheck": 4347.57
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 0,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 3,
-        "income_variability": 0.6756,
-        "cash_buffer_months": 2.47,
+        "median_pay_gap_days": 43,
+        "income_variability": 0.4295,
+        "cash_buffer_months": 0.41,
         "pay_frequency": "variable",
-        "num_paychecks": 26,
-        "avg_paycheck": 3436.35
+        "num_paychecks": 4,
+        "avg_paycheck": 1683.97
       }
     }
   },
   "persona_assignment": {
-    "persona": "General",
-    "criteria_met": {},
+    "persona": "Cash Flow Optimizer",
+    "criteria_met": {
+      "cash_buffer_months": 0.41,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 43
+    },
     "all_checks": {
       "High Utilization": {},
-      "Variable Income Budgeter": {},
-      "Subscription-Heavy": {
-        "recurring_count": 3
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.41
       },
+      "Subscription-Heavy": {},
       "Cash Flow Optimizer": {
+        "cash_buffer_months": 0.41,
         "low_growth_rate_pct": 0.0,
         "low_net_inflow": 0.0,
-        "stable_income_pay_gap_days": 3
+        "stable_income_pay_gap_days": 43
       },
-      "Savings Builder": {
-        "low_utilization": 27.1
-      }
+      "Savings Builder": {}
     },
-    "timestamp": "2025-11-10T04:06:34.419159"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-10T04:24:48.437655",
-    "persona": "General",
-    "education_count": 0,
-    "offer_count": 0,
-    "total_recommendations": 0,
-    "recommendations": [],
-    "consent_granted": true,
-    "source": "rule_based",
-    "reason": "insufficient_data",
-    "message": "You're doing great - no recommendations at this time.",
-    "education_shortfall": 3
+    "timestamp": "2025-11-10T09:04:16.847501"
   }
 }

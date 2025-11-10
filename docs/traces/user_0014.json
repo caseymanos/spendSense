@@ -1,40 +1,45 @@
 {
   "user_id": "user_0014",
-  "timestamp": "2025-11-06T14:24:03.494940",
+  "timestamp": "2025-11-10T09:04:13.631610",
   "phase": "behavioral_signals",
   "signals": {
     "subscriptions": {
       "30d": {
         "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
+        "monthly_recurring_spend": 65.85,
+        "subscription_share_pct": 0.81,
         "recurring_merchants": []
       },
       "180d": {
-        "recurring_count": 0,
-        "monthly_recurring_spend": 0.0,
-        "subscription_share_pct": 0.0,
-        "recurring_merchants": []
+        "recurring_count": 4,
+        "monthly_recurring_spend": 66.03,
+        "subscription_share_pct": 0.96,
+        "recurring_merchants": [
+          "Netflix",
+          "Planet Fitness",
+          "Spotify",
+          "WSJ"
+        ]
       }
     },
     "savings": {
       "30d": {
-        "net_inflow": 65.69,
-        "growth_rate_pct": 0.21,
-        "emergency_fund_months": 5.75,
-        "savings_balance": 31870.58
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 3.44,
+        "savings_balance": 28012.55
       },
       "180d": {
-        "net_inflow": 394.15,
-        "growth_rate_pct": 1.25,
-        "emergency_fund_months": 4.76,
-        "savings_balance": 31870.58
+        "net_inflow": 0.0,
+        "growth_rate_pct": 0.0,
+        "emergency_fund_months": 4.07,
+        "savings_balance": 28012.55
       }
     },
     "credit": {
       "current": {
-        "max_utilization_pct": 23.37,
-        "avg_utilization_pct": 23.37,
+        "max_utilization_pct": 12.86,
+        "avg_utilization_pct": 12.86,
         "flag_30": false,
         "flag_50": false,
         "flag_80": false,
@@ -44,11 +49,11 @@
         "num_credit_cards": 1,
         "utilization_by_card": [
           {
-            "account_id": "acc_000041",
-            "mask": "1477",
-            "balance": 5841.3818245947605,
+            "account_id": "acc_000042",
+            "mask": "9940",
+            "balance": 3214.063580691122,
             "limit": 25000.0,
-            "utilization_pct": 23.37
+            "utilization_pct": 12.86
           }
         ],
         "interest_charges_present": false,
@@ -57,103 +62,50 @@
     },
     "income": {
       "30d": {
-        "median_pay_gap_days": 7,
-        "income_variability": 0.7616,
-        "cash_buffer_months": 1.41,
-        "pay_frequency": "weekly",
-        "num_paychecks": 5,
-        "avg_paycheck": 1438.87
+        "median_pay_gap_days": 0,
+        "income_variability": 0.0,
+        "cash_buffer_months": 0.0,
+        "pay_frequency": "unknown",
+        "num_paychecks": 1,
+        "avg_paycheck": 0.0
       },
       "180d": {
-        "median_pay_gap_days": 5,
-        "income_variability": 0.8955,
-        "cash_buffer_months": 1.17,
-        "pay_frequency": "weekly",
-        "num_paychecks": 37,
-        "avg_paycheck": 2437.17
+        "median_pay_gap_days": 14,
+        "income_variability": 0.2693,
+        "cash_buffer_months": 0.69,
+        "pay_frequency": "biweekly",
+        "num_paychecks": 12,
+        "avg_paycheck": 4007.93
       }
     }
   },
   "persona_assignment": {
-    "persona": "Savings Builder",
+    "persona": "Cash Flow Optimizer",
     "criteria_met": {
-      "net_inflow": 394.15,
-      "low_utilization": 23.37
+      "cash_buffer_months": 0.69,
+      "low_growth_rate_pct": 0.0,
+      "low_net_inflow": 0.0,
+      "stable_income_pay_gap_days": 14
     },
     "all_checks": {
       "High Utilization": {},
-      "Variable Income Budgeter": {},
-      "Subscription-Heavy": {},
+      "Variable Income Budgeter": {
+        "cash_buffer_months": 0.69
+      },
+      "Subscription-Heavy": {
+        "recurring_count": 4,
+        "monthly_spend": 65.85
+      },
       "Cash Flow Optimizer": {
-        "cash_buffer_months": 1.17,
-        "stable_income_pay_gap_days": 5
+        "cash_buffer_months": 0.69,
+        "low_growth_rate_pct": 0.0,
+        "low_net_inflow": 0.0,
+        "stable_income_pay_gap_days": 14
       },
       "Savings Builder": {
-        "net_inflow": 394.15,
-        "low_utilization": 23.37
+        "low_utilization": 12.86
       }
     },
-    "timestamp": "2025-11-10T04:06:34.418939"
-  },
-  "recommendations": {
-    "timestamp": "2025-11-10T04:24:48.426962",
-    "persona": "Savings Builder",
-    "education_count": 5,
-    "offer_count": 0,
-    "total_recommendations": 5,
-    "recommendations": [
-      {
-        "type": "education",
-        "title": "SMART Goal Setting for Financial Milestones",
-        "description": "Apply the SMART framework (Specific, Measurable, Achievable, Relevant, Time-bound) to savings goals. Includes templates for emergency funds, down payments, and retirement.",
-        "category": "goal_setting",
-        "topic": "smart_goals",
-        "partner_equivalent": false,
-        "rationale": "You've been building your savings and SMART goals can help channel that discipline toward specific milestones.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "High-Yield Savings Accounts: Where to Find the Best Rates",
-        "description": "Comparison of online banks offering 4-5% APY vs. traditional banks at 0.01%. Covers FDIC insurance, account minimums, and transfer times.",
-        "category": "savings_optimization",
-        "topic": "hysa",
-        "partner_equivalent": true,
-        "rationale": "With your savings balance, moving to a high-yield account could earn you extra interest each year.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Automating Your Savings: Set It and Forget It",
-        "description": "How to automate transfers from checking to savings on payday. Includes tips for starting small and gradually increasing amounts.",
-        "category": "savings_automation",
-        "topic": "savings_automation",
-        "partner_equivalent": false,
-        "rationale": "Automating your savings makes building wealth effortless and helps you reach your financial goals faster.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "Certificates of Deposit (CDs): Locking In Higher Rates",
-        "description": "When CDs make sense for part of your savings. Covers laddering strategies, penalty-free CDs, and how to balance liquidity with returns.",
-        "category": "savings_optimization",
-        "topic": "cd_accounts",
-        "partner_equivalent": true,
-        "rationale": "With 4.8 months of emergency savings, you may have excess funds that could earn higher rates in CDs.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      },
-      {
-        "type": "education",
-        "title": "The 50/30/20 Rule: Balancing Needs, Wants, and Savings",
-        "description": "Popular budgeting framework: 50% needs, 30% wants, 20% savings/debt. Includes how to adapt percentages to your situation and track progress.",
-        "category": "goal_setting",
-        "topic": "50_30_20_rule",
-        "partner_equivalent": false,
-        "rationale": "The 50/30/20 rule can help you optimize your budget and balance spending with saving.",
-        "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
-      }
-    ],
-    "consent_granted": true,
-    "source": "rule_based"
+    "timestamp": "2025-11-10T09:04:16.847334"
   }
 }
