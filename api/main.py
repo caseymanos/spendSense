@@ -141,13 +141,12 @@ async def generate_data():
     """Generate synthetic user data (for ephemeral deployments)"""
     import subprocess
     try:
-        subprocess.run(["python", "-m", "ingest.data_generator"], check=True)
-        subprocess.run(["python", "-m", "ingest.loader"], check=True)
-        return {"status": "success", "message": "Data generated and loaded successfully"}
+        subprocess.run(["python", "scripts/initialize_railway.py"], check=True)
+        return {"status": "success", "message": "Full pipeline completed successfully"}
     except subprocess.CalledProcessError as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Data generation failed: {str(e)}"
+            detail=f"Pipeline failed: {str(e)}"
         )
 
 
