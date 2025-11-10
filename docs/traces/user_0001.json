@@ -111,10 +111,10 @@
       },
       "Savings Builder": {}
     },
-    "timestamp": "2025-11-09T21:32:32.304882"
+    "timestamp": "2025-11-10T04:06:34.415853"
   },
   "recommendations": {
-    "timestamp": "2025-11-09T21:32:37.352416",
+    "timestamp": "2025-11-10T04:06:34.498434",
     "persona": "High Utilization",
     "education_count": 4,
     "offer_count": 1,
@@ -128,18 +128,6 @@
         "topic": "credit_utilization",
         "partner_equivalent": false,
         "rationale": "Your credit card ending in 6342 is at 46% utilization ($4,590 of $10,000). Reducing below 30% could improve your credit score and may reduce interest charges of approximately $143/month.",
-        "content": {
-          "type": "credit_utilization",
-          "data": {
-            "utilization": 45.9,
-            "cardMask": "6342",
-            "currentBalance": 4590.229677966172,
-            "creditLimit": 10000.0,
-            "availableCredit": 5409.770322033828,
-            "recommendedBalance": 3000.0,
-            "amountOverTarget": 1590.229677966172
-          }
-        },
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       },
       {
@@ -150,25 +138,6 @@
         "topic": "debt_paydown_strategy",
         "partner_equivalent": false,
         "rationale": "With 2 credit cards and total utilization of 33%, a structured paydown plan could save you hundreds in interest. This guide helps you choose the right approach.",
-        "content": {
-          "type": "debt_avalanche",
-          "data": [
-            {
-              "name": "credit (...6342)",
-              "balance": 4590.229677966172,
-              "interestRate": 0,
-              "monthlyInterest": 0.0,
-              "priority": 1
-            },
-            {
-              "name": "credit (...1451)",
-              "balance": 4937.974345989432,
-              "interestRate": 0,
-              "monthlyInterest": 0.0,
-              "priority": 2
-            }
-          ]
-        },
         "disclaimer": "This is educational content, not financial advice. Consult a licensed advisor for personalized guidance."
       },
       {
