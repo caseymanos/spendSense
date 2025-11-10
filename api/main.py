@@ -142,7 +142,8 @@ async def generate_data():
     import subprocess
     try:
         subprocess.run(["python", "-m", "ingest.data_generator"], check=True)
-        return {"status": "success", "message": "Data generated successfully"}
+        subprocess.run(["python", "-m", "ingest.loader"], check=True)
+        return {"status": "success", "message": "Data generated and loaded successfully"}
     except subprocess.CalledProcessError as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
