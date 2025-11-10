@@ -242,6 +242,84 @@ CURATED_VIDEOS: List[Dict[str, any]] = [
         "duration_seconds": 420,
         "description": "Step-by-step guide to SMART financial goals.",
     },
+
+    # IMPULSE CONTROL (3 videos)
+    {
+        "topic": "impulse_control",
+        "youtube_id": "XnBsY7Z0TJU",
+        "title": "How to Stop Impulse Buying (7 Practical Tips)",
+        "channel_name": "Financial Education",
+        "duration_seconds": 480,
+        "description": "Practical strategies to curb impulse spending habits.",
+    },
+    {
+        "topic": "impulse_control",
+        "youtube_id": "kgSS1pDkMgQ",
+        "title": "The Psychology of Impulse Buying",
+        "channel_name": "Financial Education",
+        "duration_seconds": 540,
+        "description": "Understanding the psychology behind impulse purchases.",
+    },
+    {
+        "topic": "impulse_control",
+        "youtube_id": "tBigdKB75y8",
+        "title": "30-Day Rule to Stop Impulse Spending",
+        "channel_name": "Financial Education",
+        "duration_seconds": 420,
+        "description": "Using the 30-day waiting period to reduce impulse buying.",
+    },
+
+    # STARTER EMERGENCY FUND (3 videos)
+    {
+        "topic": "starter_emergency_fund",
+        "youtube_id": "YFvEgV0NG1Y",
+        "title": "How to Build a $1000 Emergency Fund FAST",
+        "channel_name": "Financial Education",
+        "duration_seconds": 600,
+        "description": "Practical strategies to quickly build your first emergency fund.",
+    },
+    {
+        "topic": "starter_emergency_fund",
+        "youtube_id": "jES7j35hxnE",
+        "title": "Emergency Fund 101: Why You Need One and How to Start",
+        "channel_name": "Financial Education",
+        "duration_seconds": 480,
+        "description": "Introduction to emergency funds and why they're critical.",
+    },
+    {
+        "topic": "starter_emergency_fund",
+        "youtube_id": "g3hza3_CuPQ",
+        "title": "Baby Steps: Building Your First Emergency Fund",
+        "channel_name": "Financial Education",
+        "duration_seconds": 540,
+        "description": "Step-by-step guide to establishing your first emergency fund.",
+    },
+
+    # PAY YOURSELF FIRST (3 videos)
+    {
+        "topic": "pay_yourself_first",
+        "youtube_id": "9JbMV5t-hGE",
+        "title": "Pay Yourself First: The #1 Rule of Personal Finance",
+        "channel_name": "Financial Education",
+        "duration_seconds": 420,
+        "description": "Understanding the pay yourself first principle and how to implement it.",
+    },
+    {
+        "topic": "pay_yourself_first",
+        "youtube_id": "4rF3h5iKlz4",
+        "title": "How to Automate Paying Yourself First",
+        "channel_name": "Financial Education",
+        "duration_seconds": 480,
+        "description": "Setting up automatic transfers to ensure you pay yourself first.",
+    },
+    {
+        "topic": "pay_yourself_first",
+        "youtube_id": "vVMPTFKT6V0",
+        "title": "Why 'Pay Yourself First' Actually Works",
+        "channel_name": "Financial Education",
+        "duration_seconds": 540,
+        "description": "The psychology and math behind why paying yourself first is so effective.",
+    },
 ]
 
 
