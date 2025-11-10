@@ -70,66 +70,63 @@ def _slugify(text: str) -> str:
 
 
 def get_recommendations(user_id: str) -> UserRecommendationsResponse:
-    """Fetch pre-generated recommendations from database."""
+    """Fetch merged (auto + operator) recommendations from database."""
     import json
     import sqlite3
     from pathlib import Path
+    from api.services.operator_recs import get_merged_recommendations
 
-    # Connect to database
+    # Get merged recommendations (auto + operator)
+    merged_recs = get_merged_recommendations(user_id)
+
+    items: List[RecommendationResponse] = []
+    for rec in merged_recs:
+        # Generate stable ID for auto-generated recs if needed
+        rec_id = rec.get('recommendation_id')
+        if not rec_id:
+            idx = len(items)
+            rec_id = f"{idx}-{rec.get('type','item')}-{_slugify(rec.get('title',''))}"
+
+        items.append(
+            RecommendationResponse(
+                recommendation_id=rec_id,
+                type=rec.get("type", "education"),
+                title=rec.get("title", "Untitled"),
+                rationale=rec.get("rationale", ""),
+                disclaimer=rec.get("disclaimer", "This is educational content, not financial advice."),
+                content=rec.get("content"),
+                topic=rec.get("topic"),
+                source=rec.get("source", "auto_generated"),
+                created_by=rec.get("created_by"),
+            )
+        )
+
+    # Get timestamp from recommendations table
     db_path = Path(__file__).parent.parent.parent / "data" / "users.sqlite"
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
-
-    # Fetch pre-generated recommendations
     cursor.execute(
-        "SELECT recommendations_json, generated_at FROM recommendations WHERE user_id = ?",
+        "SELECT generated_at FROM recommendations WHERE user_id = ?",
         (user_id,)
     )
     result = cursor.fetchone()
     conn.close()
 
-    # If no pre-generated recommendations found, fall back to on-the-fly generation
-    if not result:
-        payload = _engine_get_recommendations(user_id)
-    else:
-        recommendations_json, generated_at_str = result
-        payload = json.loads(recommendations_json)
-
-    recs = payload.get("recommendations", [])
-
-    items: List[RecommendationResponse] = []
-    for idx, rec in enumerate(recs):
-        rid = f"{idx}-{rec.get('type','item')}-{_slugify(rec.get('title',''))}"
-        items.append(
-            RecommendationResponse(
-                recommendation_id=rid,
-                type=rec.get("type", "education"),
-                title=rec.get("title", "Untitled"),
-                rationale=rec.get("rationale", ""),
-                disclaimer=rec.get("disclaimer", ""),
-                content=rec.get("content"),
-                topic=rec.get("topic"),
-            )
-        )
-
-    # Parse timestamp
     if result:
         try:
-            generated_at = datetime.fromisoformat(generated_at_str.replace("Z", "+00:00"))
+            generated_at = datetime.fromisoformat(result[0].replace("Z", "+00:00"))
         except Exception:
             generated_at = datetime.now()
     else:
-        ts = payload.get("metadata", {}).get("timestamp")
-        try:
-            generated_at = (
-                datetime.fromisoformat(ts.replace("Z", "+00:00")) if isinstance(ts, str) else datetime.now()
-            )
-        except Exception:
-            generated_at = datetime.now()
+        generated_at = datetime.now()
+
+    # Get persona
+    user = load_user_data(user_id)
+    persona = (load_persona_assignment(user_id) or {}).get("persona")
 
     return UserRecommendationsResponse(
         user_id=user_id,
-        persona=payload.get("persona"),
+        persona=persona,
         recommendations=items,
         generated_at=generated_at,
     )

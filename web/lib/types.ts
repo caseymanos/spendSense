@@ -23,6 +23,8 @@ export type Recommendation = {
     data: any;
   };
   topic?: string;
+  source?: 'auto_generated' | 'operator_created' | 'operator_override';
+  created_by?: string;
 };
 
 export type RecommendationsResponse = {

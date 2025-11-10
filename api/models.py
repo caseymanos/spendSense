@@ -62,6 +62,8 @@ class RecommendationResponse(BaseModel):
     disclaimer: str
     content: Optional[dict] = None
     topic: Optional[str] = None
+    source: Optional[str] = None  # auto_generated, operator_created, operator_override
+    created_by: Optional[str] = None  # operator name if applicable
 
 
 class UserRecommendationsResponse(BaseModel):
@@ -109,3 +111,55 @@ class VideoResponse(BaseModel):
     duration_seconds: Optional[int] = None
     thumbnail_url: str
     description: Optional[str] = None
+
+
+# Operator Recommendation Models
+class CreateOperatorRecommendationRequest(BaseModel):
+    """Request to create operator recommendation"""
+
+    user_id: str
+    type: str  # education or partner_offer
+    title: str
+    description: str
+    category: str
+    topic: str
+    rationale: str
+    disclaimer: Optional[str] = None
+    content: Optional[dict] = None
+    operator_name: str
+
+
+class UpdateOperatorRecommendationRequest(BaseModel):
+    """Request to update operator recommendation"""
+
+    title: str
+    description: str
+    category: str
+    topic: str
+    rationale: str
+    disclaimer: Optional[str] = None
+    content: Optional[dict] = None
+    operator_name: str
+
+
+class OverrideRecommendationRequest(BaseModel):
+    """Request to override auto-generated recommendation"""
+
+    user_id: str
+    type: str
+    title: str
+    description: str
+    category: str
+    topic: str
+    rationale: str
+    disclaimer: Optional[str] = None
+    content: Optional[dict] = None
+    operator_name: str
+
+
+class BulkEditRequest(BaseModel):
+    """Request for bulk editing recommendations"""
+
+    recommendation_ids: List[str]
+    updates: dict  # Fields to update
+    operator_name: str

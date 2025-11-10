@@ -18,6 +18,10 @@ from api.models import (
     UserSummary,
     ConsentUpdateResponse,
     VideoResponse,
+    CreateOperatorRecommendationRequest,
+    UpdateOperatorRecommendationRequest,
+    OverrideRecommendationRequest,
+    BulkEditRequest,
 )
 
 from api.services.data import (
@@ -169,6 +173,137 @@ async def submit_review(request: OperatorReviewRequest):
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
         detail="Operator review will be implemented in PR #7",
     )
+
+
+# Operator Recommendation Management Endpoints
+@app.get("/operator/recommendations/{user_id}", tags=["Operator"])
+async def get_operator_recommendations(user_id: str):
+    """Get all operator-managed recommendations for a user (active + overridden for audit)"""
+    from api.services.operator_recs import get_operator_recs
+    return get_operator_recs(user_id)
+
+
+@app.post("/operator/recommendations", tags=["Operator"])
+async def create_operator_recommendation(request: CreateOperatorRecommendationRequest):
+    """Create new operator recommendation"""
+    from api.services.operator_recs import create_operator_rec
+    try:
+        result = create_operator_rec(
+            user_id=request.user_id,
+            rec_type=request.type,
+            title=request.title,
+            description=request.description,
+            category=request.category,
+            topic=request.topic,
+            rationale=request.rationale,
+            operator_name=request.operator_name,
+            disclaimer=request.disclaimer,
+            content=request.content,
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create recommendation: {str(e)}"
+        )
+
+
+@app.put("/operator/recommendations/{recommendation_id}", tags=["Operator"])
+async def update_operator_recommendation(
+    recommendation_id: str,
+    request: UpdateOperatorRecommendationRequest
+):
+    """Update existing operator recommendation"""
+    from api.services.operator_recs import update_operator_rec
+    try:
+        result = update_operator_rec(
+            recommendation_id=recommendation_id,
+            title=request.title,
+            description=request.description,
+            category=request.category,
+            topic=request.topic,
+            rationale=request.rationale,
+            operator_name=request.operator_name,
+            disclaimer=request.disclaimer,
+            content=request.content,
+        )
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update recommendation: {str(e)}"
+        )
+
+
+@app.delete("/operator/recommendations/{recommendation_id}", tags=["Operator"])
+async def delete_operator_recommendation(recommendation_id: str, operator_name: str):
+    """Soft-delete operator recommendation"""
+    from api.services.operator_recs import delete_operator_rec
+    try:
+        result = delete_operator_rec(recommendation_id, operator_name)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to delete recommendation: {str(e)}"
+        )
+
+
+@app.post("/operator/recommendations/{recommendation_id}/override", tags=["Operator"])
+async def override_auto_recommendation(
+    recommendation_id: str,
+    request: OverrideRecommendationRequest
+):
+    """Override an auto-generated recommendation"""
+    from api.services.operator_recs import override_auto_rec
+    try:
+        result = override_auto_rec(
+            user_id=request.user_id,
+            original_rec_id=recommendation_id,
+            rec_type=request.type,
+            title=request.title,
+            description=request.description,
+            category=request.category,
+            topic=request.topic,
+            rationale=request.rationale,
+            operator_name=request.operator_name,
+            disclaimer=request.disclaimer,
+            content=request.content,
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to override recommendation: {str(e)}"
+        )
+
+
+@app.get("/operator/recommendations/bulk/{user_ids}", tags=["Operator"])
+async def bulk_get_recommendations(user_ids: str):
+    """Get recommendations for multiple users (comma-separated)"""
+    from api.services.operator_recs import bulk_get_recs
+    user_id_list = [uid.strip() for uid in user_ids.split(',')]
+    return bulk_get_recs(user_id_list)
+
+
+@app.post("/operator/recommendations/bulk/edit", tags=["Operator"])
+async def bulk_edit_recommendations(request: BulkEditRequest):
+    """Bulk edit multiple recommendations"""
+    from api.services.operator_recs import bulk_edit_recs
+    try:
+        result = bulk_edit_recs(
+            recommendation_ids=request.recommendation_ids,
+            updates=request.updates,
+            operator_name=request.operator_name
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to bulk edit: {str(e)}"
+        )
 
 
 # Evaluation endpoint
