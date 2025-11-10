@@ -1,5 +1,11 @@
 {
   "buildCommand": "cd web && npm run build",
   "outputDirectory": "web/.next",
-  "installCommand": "cd web && npm install"
+  "installCommand": "cd web && npm install",
+  "ignoreCommand": "git diff HEAD^ HEAD --quiet .",
+  "functions": {
+    "web/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  }
 }

@@ -1,0 +1,31 @@
+# Python backend
+api/
+backend/
+features/
+personas/
+recommend/
+guardrails/
+eval/
+ingest/
+scripts/
+ui/
+
+# Data files
+data/
+*.parquet
+*.sqlite
+*.db
+
+# Docs
+docs/
+
+# Tests
+tests/
+
+# Python
+*.py
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
